@@ -1,0 +1,168 @@
+import 'dart:async';
+import 'package:dive_ui/blocs/inputs_controller.dart';
+// import 'package:camera_with_rtmp/camera.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
+
+class PanelProperties {
+  final Color backgroundColor;
+  final double previewBorderWidth;
+  final Color previewBorderColor;
+  final double programBorderWidth;
+  final Color programBorderColor;
+  final double aspectRatio;
+  final Duration clockTimerDuration;
+
+  PanelProperties({
+    this.backgroundColor = Colors.black,
+    this.previewBorderColor = Colors.green,
+    this.previewBorderWidth = 4.0,
+    this.programBorderColor = Colors.red,
+    this.programBorderWidth = 4.0,
+    this.aspectRatio = 16.0 / 9.0,
+    this.clockTimerDuration = const Duration(milliseconds: 900),
+  });
+}
+
+class PanelTheme {
+  static PanelTheme _singleton = PanelTheme._internal();
+  PanelTheme._internal();
+
+  final PanelProperties properties = PanelProperties();
+
+  factory PanelTheme() {
+    return _singleton;
+  }
+}
+
+class BasePanel extends StatelessWidget {
+  final Widget child;
+
+  BasePanel({
+    Key key,
+    this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: PanelTheme().properties.backgroundColor,
+      child: child,
+    );
+  }
+}
+
+class ClockPanel extends StatefulWidget {
+  @override
+  _ClockPanelState createState() => _ClockPanelState();
+}
+
+class _ClockPanelState extends State<ClockPanel> {
+  String _currentTime;
+  @override
+  void initState() {
+    super.initState();
+
+    _handleTimeout(null);
+    _startTimeout();
+  }
+
+  _startTimeout() {
+    return Timer.periodic(
+        PanelTheme().properties.clockTimerDuration, _handleTimeout);
+  }
+
+  void _handleTimeout(Timer timer) {
+    setState(() {
+      _currentTime = _currentTimeFormatted();
+    });
+  }
+
+  String _currentTimeFormatted() {
+    final fmt = DateFormat.jms();
+    final now = fmt.format(DateTime.now());
+    return now;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BasePanel(
+        child: Center(
+      child: Text(
+        _currentTime,
+        style: TextStyle(fontSize: 56, color: Colors.white),
+      ),
+    ));
+  }
+}
+
+class VideoPanel extends StatelessWidget {
+  final InputController<VideoPlayerController> controller;
+
+  VideoPanel({Key key, @required this.controller}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (controller == null || controller.controller == null) return BasePanel();
+
+    return AspectRatio(
+      aspectRatio: controller.controller.value.aspectRatio,
+      child: BasePanel(child: VideoPlayer(controller.controller)),
+    );
+  }
+}
+
+class CameraPanel extends StatelessWidget {
+  // final InputController<CameraController> controller;
+  // CameraPanel({Key key, @required this.controller}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // if (controller == null || controller.controller == null) return BasePanel();
+
+    // return AspectRatio(
+    //   aspectRatio: controller.controller.value.aspectRatio,
+    //   child: BasePanel(child: CameraPreview(controller.controller)),
+    // );
+  }
+}
+
+class ProgramPanel extends StatelessWidget {
+  final borderColor;
+  final Widget child;
+
+  ProgramPanel({Key key, @required this.child, this.borderColor})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final borderSide = BorderSide(
+        width: PanelTheme().properties.programBorderWidth,
+        color: this.borderColor ?? PanelTheme().properties.programBorderColor);
+    return AspectRatio(
+        aspectRatio: PanelTheme().properties.aspectRatio,
+        child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: borderSide,
+                left: borderSide,
+                right: borderSide,
+                bottom: borderSide,
+              ),
+            ),
+            child: child));
+  }
+}
+
+class PreviewPanel extends ProgramPanel {
+  final Widget child;
+
+  PreviewPanel({
+    Key key,
+    @required this.child,
+  }) : super(
+            key: key,
+            child: child,
+            borderColor: PanelTheme().properties.previewBorderColor);
+}

@@ -1,0 +1,104 @@
+// import 'package:camera_with_rtmp/camera.dart';
+import 'package:video_player/video_player.dart';
+import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
+
+/// The empty input controller used when no other input controller is used.
+class EmptyController extends Equatable {
+  const EmptyController();
+
+  @override
+  List<Object> get props => [];
+}
+
+enum InputControllerType {
+  camera,
+  video,
+  empty,
+}
+
+class InputController<ControllerType> extends Equatable {
+  final ControllerType controller;
+  final InputControllerType type;
+
+  const InputController({@required this.controller, @required this.type});
+
+  @override
+  List<Object> get props => [controller, type];
+
+  InputController copyWith({
+    ControllerType controller,
+  }) {
+    return InputController<ControllerType>(
+      controller: controller ?? this.controller,
+      type: type,
+    );
+  }
+}
+
+class InputsController extends Equatable {
+  // final CameraController cameraController;
+  final VideoPlayerController videoController;
+  // final List<CameraDescription> cameras;
+
+  final List<InputController> inputControllers;
+
+  /// A panel input is the assigned input to a panel, which may be an
+  /// `EmptyController`. It should never be null.
+  final List<InputController> panelInputs;
+
+  /// A preview controller is the assigned input to the preview panel.
+  final InputController previewController;
+
+  /// A program controller is the assigned input to the program panel.
+  final InputController programController;
+
+  @override
+  List<Object> get props => [
+        // cameraController,
+        videoController,
+        // cameras,
+        inputControllers,
+        panelInputs,
+        previewController,
+        programController
+      ];
+
+  InputsController copyWith(
+      {
+      // cameraController,
+      videoController,
+      // cameras,
+      inputControllers,
+      panelInputs,
+      previewController,
+      programController}) {
+    return InputsController(
+      // cameraController: cameraController ?? this.cameraController,
+      videoController: videoController ?? this.videoController,
+      // cameras: cameras ?? this.cameras,
+      inputControllers: inputControllers ?? this.inputControllers,
+      panelInputs: panelInputs ?? this.panelInputs,
+      previewController: previewController ?? this.previewController,
+      programController: programController ?? this.programController,
+    );
+  }
+
+  InputsController(
+      {
+      // this.cameraController,
+      this.videoController,
+      // this.cameras,
+      this.inputControllers,
+      this.panelInputs,
+      this.previewController,
+      this.programController});
+
+  factory InputsController.defaults() => InputsController(
+      inputControllers: List<InputController>(),
+      panelInputs: List<InputController>(),
+      previewController: InputController<EmptyController>(
+          type: InputControllerType.empty, controller: EmptyController()),
+      programController: InputController<EmptyController>(
+          type: InputControllerType.empty, controller: EmptyController()));
+}

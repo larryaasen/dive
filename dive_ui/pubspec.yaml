@@ -1,0 +1,41 @@
+name: dive_ui
+description: A new Flutter package project.
+version: 0.0.1
+author:
+homepage:
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.17.0 <2.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  dive_core:
+    path: ../dive_core
+
+    # From bloclibrary.dev: easy to implement the BLoC Design Pattern
+  bloc: ^6.0.3
+  flutter_bloc: ^6.0.5
+  
+  #From: flutter.dev: A Flutter plugin for iOS and Android allowing access to the device cameras.
+  camera: ^0.5.8+10
+
+  # From fluttetcommunity.dev: Simplify Dart Equality Comparisons
+  equatable: ^1.2.5
+
+  # From Dart Team: provides internationalization and localization facilities, including message translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
+  intl: ^0.16.0
+
+  # From Dart team:
+  path_provider: ^1.6.18
+
+  # From flutter.dev: Flutter plugin for playing back video on a Widget surface.
+  video_player: '>=0.10.12+3 <2.0.0'
+
+flutter:

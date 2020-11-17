@@ -1,0 +1,28 @@
+PODS:
+  - dive_core (0.0.1):
+    - FlutterMacOS
+    - obslib
+  - FlutterMacOS (1.0.0)
+  - obslib (26.0.2)
+
+DEPENDENCIES:
+  - dive_core (from `Flutter/ephemeral/.symlinks/plugins/dive_core/macos`)
+  - FlutterMacOS (from `Flutter/ephemeral/.symlinks/flutter/darwin-x64`)
+  - obslib (from `/Users/larry/Projects/obslib-framework`)
+
+EXTERNAL SOURCES:
+  dive_core:
+    :path: Flutter/ephemeral/.symlinks/plugins/dive_core/macos
+  FlutterMacOS:
+    :path: Flutter/ephemeral/.symlinks/flutter/darwin-x64
+  obslib:
+    :path: "/Users/larry/Projects/obslib-framework"
+
+SPEC CHECKSUMS:
+  dive_core: 35684099ffe7b34595c9515a6c67115c9adcd14b
+  FlutterMacOS: 15bea8a44d2fa024068daa0140371c020b4b6ff9
+  obslib: d6d97c8d3d139f28ff2156b4942b750a8bd6e8b6
+
+PODFILE CHECKSUM: ad451df10528956b99ef9524d430fa4cfb24b8d4
+
+COCOAPODS: 1.10.0

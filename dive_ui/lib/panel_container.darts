@@ -1,0 +1,134 @@
+import 'package:dive_ui/blocs/inputs_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:dive_ui/video_panel.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dive_ui/blocs/inputs_bloc.dart';
+
+class PanelContainer extends StatelessWidget {
+  const PanelContainer({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<InputsBloc, InputsController>(
+        builder: (context, inputsController) {
+      // ignore: close_sinks
+      final inputsBloc = BlocProvider.of<InputsBloc>(context);
+
+      final inputs = Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: Row(
+              children: [
+                Expanded(
+                    child: PanelChild(
+                  VideoPanel(
+                      controller: inputsController.inputControllers.length > 1
+                          ? inputsController.inputControllers[1]
+                          : null),
+                  onTap: () => inputsBloc.assignInputToPreview(
+                      controller: inputsBloc.state.inputControllers[1] ?? null),
+                )),
+                Expanded(child: PanelChild(ClockPanel()))
+              ],
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+            ),
+          ),
+          Expanded(
+              child: Row(
+            children: [
+              Expanded(
+                  child: PanelChild(
+                CameraPanel(
+                    // controller: inputsController.inputControllers.length > 0
+                    //     ? inputsController.inputControllers[0]
+                    //     : null,
+                    ),
+                onTap: () => inputsBloc.assignInputToPreview(
+                    controller: inputsBloc.state.inputControllers[0] ?? null),
+              )),
+              Expanded(child: PanelChild(BasePanel()))
+            ],
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+          ))
+        ],
+      );
+
+      final getPanel = (InputController controller) {
+        switch (controller.type) {
+          case InputControllerType.camera:
+            return CameraPanel(); //controller: controller);
+          case InputControllerType.video:
+            return VideoPanel(controller: controller);
+          case InputControllerType.empty:
+            return BasePanel();
+        }
+      };
+      final previewChild = getPanel(inputsBloc.state.previewController);
+      final programChild = getPanel(inputsBloc.state.programController);
+
+      final main = Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+              child: Row(
+            children: [
+              Expanded(child: inputs),
+              Expanded(
+                  child: PanelChild(
+                ProgramPanel(child: programChild),
+                onTap: () {
+                  final temp = inputsBloc.state.previewController;
+                  inputsBloc.assignInputToPreview(
+                      controller: inputsBloc.state.programController);
+                  inputsBloc.assignInputToProgram(controller: temp);
+                },
+              ))
+            ],
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+          )),
+          Expanded(
+              child: Row(
+            children: [
+              Expanded(child: PanelChild(BasePanel())),
+              Expanded(
+                  child: PanelChild(
+                PreviewPanel(child: previewChild),
+                onTap: () {
+                  final temp = inputsBloc.state.programController;
+                  inputsBloc.assignInputToProgram(
+                      controller: inputsBloc.state.previewController);
+                  inputsBloc.assignInputToPreview(controller: temp);
+                },
+              ))
+            ],
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+          ))
+        ],
+      );
+      return main;
+    });
+  }
+}
+
+class PanelChild extends StatelessWidget {
+  final Widget child;
+  final GestureTapCallback onTap;
+  const PanelChild(this.child, {Key key, this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final tap = GestureDetector(
+        onTap: () {
+          // final snackBar = SnackBar(content: Text("Tap"));
+          // Scaffold.of(context).showSnackBar(snackBar);
+          if (onTap != null) onTap();
+        },
+        child: child);
+    return Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Align(alignment: Alignment.center, child: tap));
+  }
+}

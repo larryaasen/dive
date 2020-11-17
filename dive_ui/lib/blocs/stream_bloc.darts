@@ -1,0 +1,41 @@
+import 'dart:async';
+
+import 'package:bloc/bloc.dart';
+// import 'package:camera_with_rtmp/camera.dart';
+import 'package:dive_ui/blocs/bloc_event_properties.dart';
+import 'package:dive_ui/blocs/inputs_controller.dart';
+import 'package:dive_ui/blocs/stream_controller.dart';
+
+enum StreamBlocEventType {
+  startStreaming,
+}
+
+class StreamBloc
+    extends Bloc<BlocEventProperties<StreamBlocEventType>, StreamController> {
+  bool _initialized = false;
+  bool get initialized => _initialized;
+
+  StreamBloc() : super(StreamController.defaults());
+
+  @override
+  Stream<StreamController> mapEventToState(
+      BlocEventProperties<StreamBlocEventType> event) async* {
+    print("StreamBloc.mapEventToState: event type=${event.type}");
+
+    if (event.type == StreamBlocEventType.startStreaming) {
+      // final InputController<CameraController> controller =
+      //     event.properties["controller"];
+      // if (controller.type == InputControllerType.camera) {
+      //   controller..controller.startVideoStreaming(state.streamUrl);
+      //   yield state;
+      // }
+    }
+  }
+}
+
+extension StreamBlocEvents on StreamBloc {
+  /// Initialize the camera and video controllers
+  // void startStreaming(InputController<CameraController> controller) =>
+  //     add(BlocEventProperties(StreamBlocEventType.startStreaming,
+  //         properties: {"controller": controller}));
+}

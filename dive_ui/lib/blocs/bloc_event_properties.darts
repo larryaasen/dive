@@ -1,0 +1,11 @@
+import 'package:equatable/equatable.dart';
+
+class BlocEventProperties<T> extends Equatable {
+  const BlocEventProperties(this.type, {this.properties});
+
+  final T type;
+  final Map properties;
+
+  @override
+  List<Object> get props => [properties];
+}

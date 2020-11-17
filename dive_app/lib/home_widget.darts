@@ -1,0 +1,76 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dive_ui/blocs/inputs_bloc.dart';
+import 'package:dive_ui/blocs/stream_bloc.dart';
+import 'package:dive_ui/panel_container.dart';
+
+class HomeWidget extends StatefulWidget {
+  HomeWidget({Key key, this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  _HomeWidgetState createState() => _HomeWidgetState();
+}
+
+class _HomeWidgetState extends State<HomeWidget> {
+  // ignore: close_sinks
+  final _inputsBloc = InputsBloc();
+  final _streamBloc = StreamBloc();
+  bool _setupCompleted = false;
+
+  @override
+  void initState() {
+    _setupInputs();
+    super.initState();
+  }
+
+  void _setupInputs() {
+    _inputsBloc.listen((inputsController) {
+      print("_setupInputs.state $inputsController");
+      if (!_inputsBloc.initialized) return;
+      if (_setupCompleted) return;
+
+      _setupCompleted = true;
+
+      print("_setupInputs setup");
+      _inputsBloc.assignInputToPanel(
+          controller: _inputsBloc.state.inputControllers[0], panelIndex: 0);
+      _inputsBloc.assignInputToPanel(
+          controller: _inputsBloc.state.inputControllers[1], panelIndex: 1);
+      _inputsBloc.playInput(controller: _inputsBloc.state.inputControllers[1]);
+      _inputsBloc.assignInputToPreview(
+          controller: _inputsBloc.state.inputControllers[0]);
+      _inputsBloc.assignInputToProgram(
+          controller: _inputsBloc.state.inputControllers[0]);
+    });
+    _inputsBloc.initialize();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // _streamBloc.startStreaming(_inputsBloc.state.inputControllers[0]);
+        },
+        child: Icon(Icons.navigation),
+        backgroundColor: Colors.green[300],
+      ),
+      body: MultiBlocProvider(
+        child: PanelContainer(),
+        providers: [
+          BlocProvider<InputsBloc>(
+            create: (BuildContext context) => _inputsBloc,
+          ),
+          BlocProvider<StreamBloc>(
+            create: (BuildContext context) => _streamBloc,
+          ),
+        ],
+      ),
+    );
+  }
+}

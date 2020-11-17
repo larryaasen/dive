@@ -1,0 +1,33 @@
+PODS:
+  - dive_core (0.0.1):
+    - FlutterMacOS
+    - HaishinKit (~> 1.1.0)
+  - FlutterMacOS (1.0.0)
+  - HaishinKit (1.1.0):
+    - Logboard (~> 2.2.0)
+  - Logboard (2.2.0)
+
+DEPENDENCIES:
+  - dive_core (from `Flutter/ephemeral/.symlinks/plugins/dive_core/macos`)
+  - FlutterMacOS (from `Flutter/ephemeral/.symlinks/flutter/darwin-x64`)
+
+SPEC REPOS:
+  trunk:
+    - HaishinKit
+    - Logboard
+
+EXTERNAL SOURCES:
+  dive_core:
+    :path: Flutter/ephemeral/.symlinks/plugins/dive_core/macos
+  FlutterMacOS:
+    :path: Flutter/ephemeral/.symlinks/flutter/darwin-x64
+
+SPEC CHECKSUMS:
+  dive_core: 2249be6df622aa78a359818d49d76074dae9fe5e
+  FlutterMacOS: 15bea8a44d2fa024068daa0140371c020b4b6ff9
+  HaishinKit: e74d7d7ae19045ca47472c41304d82001a23b39f
+  Logboard: b185f536297db9defd75b78ff75a7371769700d8
+
+PODFILE CHECKSUM: d8ba9b3e9e93c62c74a660b46c6fcb09f03991a7
+
+COCOAPODS: 1.9.1

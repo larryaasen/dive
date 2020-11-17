@@ -1,0 +1,117 @@
+import 'dart:async';
+
+import 'package:bloc/bloc.dart';
+// import 'package:camera_with_rtmp/camera.dart';
+import 'package:dive_ui/blocs/inputs_controller.dart';
+import 'package:dive_ui/blocs/bloc_event_properties.dart';
+import 'package:video_player/video_player.dart';
+
+enum InputsBlocEventType {
+  initialize,
+  assignInputToPanel,
+  assignInputToPreview,
+  assignInputToProgram,
+  playInput,
+}
+
+class InputsBloc
+    extends Bloc<BlocEventProperties<InputsBlocEventType>, InputsController> {
+  bool _initialized = false;
+  bool get initialized => _initialized;
+
+  InputsBloc() : super(InputsController.defaults());
+
+  @override
+  Stream<InputsController> mapEventToState(
+      BlocEventProperties<InputsBlocEventType> event) async* {
+    print("InputsBloc.mapEventToState: event type=${event.type}");
+
+    if (event.type == InputsBlocEventType.initialize) {
+      //   // Default to four panel controllers
+      final panelInputs = List<InputController>();
+      panelInputs.add(InputController<EmptyController>(
+          type: InputControllerType.empty, controller: EmptyController()));
+      panelInputs.add(InputController<EmptyController>(
+          type: InputControllerType.empty, controller: EmptyController()));
+      panelInputs.add(InputController<EmptyController>(
+          type: InputControllerType.empty, controller: EmptyController()));
+      panelInputs.add(InputController<EmptyController>(
+          type: InputControllerType.empty, controller: EmptyController()));
+
+      // final cameras = await availableCameras();
+      // print("InputsBloc: camera count: ${cameras.length}");
+      // cameras.forEach((element) {
+      //   print("InputsBloc: camera: $element");
+      // });
+
+      // final cameraController =
+      //     CameraController(cameras[0], ResolutionPreset.medium);
+      // await cameraController.initialize();
+      print("InputsBloc: camera 0 initialized");
+
+      final url =
+          'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+      final videoController = VideoPlayerController.network(url);
+      await videoController.initialize();
+
+      // final newState = state.copyWith(
+      //     cameras: cameras,
+      //     cameraController: cameraController,
+      //     videoController: videoController,
+      //     panelInputs: panelInputs);
+
+      // Add the camera to the input controllers list
+      // newState.inputControllers.add(InputController<CameraController>(
+      //     type: InputControllerType.camera, controller: cameraController));
+
+      // Add the video player to the input controllers list
+      // newState.inputControllers.add(InputController<VideoPlayerController>(
+      //     type: InputControllerType.video, controller: videoController));
+
+      _initialized = true;
+      // yield newState;
+    } else if (event.type == InputsBlocEventType.assignInputToPanel) {
+      final controller = event.properties["controller"];
+      final panelIndex = event.properties["panelIndex"];
+      state.panelInputs[panelIndex] = controller;
+      yield state;
+    } else if (event.type == InputsBlocEventType.assignInputToPreview) {
+      final controller = event.properties["controller"];
+      var newState = state.copyWith(previewController: controller);
+      yield newState;
+    } else if (event.type == InputsBlocEventType.assignInputToProgram) {
+      final controller = event.properties["controller"];
+      var newState = state.copyWith(programController: controller);
+      yield newState;
+    } else if (event.type == InputsBlocEventType.playInput) {
+      state.videoController.play();
+      print("InputsBloc: playing video");
+      yield state;
+    }
+  }
+}
+
+extension InputsBlocEvents on InputsBloc {
+  /// Initialize the camera and video controllers
+  void initialize() => add(BlocEventProperties(InputsBlocEventType.initialize));
+
+  /// Assign the input controller to the panel input
+  void assignInputToPanel({InputController controller, int panelIndex}) =>
+      add(BlocEventProperties(InputsBlocEventType.assignInputToPanel,
+          properties: {"controller": controller, "panelIndex": panelIndex}));
+
+  /// Assign the input controller to preview input
+  void assignInputToPreview({InputController controller}) =>
+      add(BlocEventProperties(InputsBlocEventType.assignInputToPreview,
+          properties: {"controller": controller}));
+
+  /// Assign the input controller to program input
+  void assignInputToProgram({InputController controller}) =>
+      add(BlocEventProperties(InputsBlocEventType.assignInputToProgram,
+          properties: {"controller": controller}));
+
+  /// Play the input controller
+  void playInput({InputController controller}) =>
+      add(BlocEventProperties(InputsBlocEventType.playInput,
+          properties: {"controller": controller}));
+}
