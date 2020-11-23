@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:dive_core/dive_core.dart';
+import 'package:dive_core/preview_controller.dart';
+import 'package:dive_core/dive_plugin.dart';
+import 'package:dive_core/dive_device.dart';
+import 'package:dive_ui/dive_ui.dart';
 // import 'package:dive_app/home_widget.dart';
 
 class AppWidget extends StatelessWidget {
+  // TODO: wish this controller was not exposed outside of TexturePreview().
+  final TextureController controller = TextureController();
+
   @override
   Widget build(BuildContext context) {
-    DiveCore.platformVersion.then((value) => print("$value"));
-    // DiveCore.devicesDescription.then((value) => print("$value"));
-    DiveCore.devices.then((List<DiveDevice> devices) {
+    controller.initialize();
+
+    DivePlugin.platformVersion().then((value) => print("$value"));
+    DivePlugin.devicesDescription().then((value) => print("$value"));
+    DivePlugin.devices().then((List<DiveDevice> devices) {
+      if (devices == null) {
+        return;
+      }
       devices.forEach((device) {
         print("device: $device");
         if (device.mediaType == "video") {}
@@ -24,7 +36,12 @@ class AppWidget extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Text('Dive App'),
+      home: Column(
+        children: [
+          Text('Dive App'),
+          TexturePreview(controller),
+        ],
+      ),
     );
   }
 }

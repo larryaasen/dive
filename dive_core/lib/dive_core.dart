@@ -2,7 +2,9 @@ library dive_core;
 
 import 'dart:async';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
+import 'package:dive_core/dive_plugin.dart';
+
+export 'preview_controller.dart';
 
 abstract class FrameProducer {
   final FrameStream outputStream = FrameStream();
@@ -21,8 +23,7 @@ class ImageFrameProducer extends FrameProducer {
   ImageFrameProducer({FrameStream stream});
   Future<String> loadImage() async {
     final args = {'instance': _instance};
-    return await DiveCore.channel
-        .invokeMethod('ImageFrameProducer.loadImage', args);
+    return await DivePlugin.loadImage(args);
   }
 }
 
@@ -119,43 +120,4 @@ class SourceTextureController extends SourceController {
 
   int get textureId => _textureId;
   int _textureId;
-}
-
-class DiveCore {
-  static const MethodChannel _channel = const MethodChannel('dive_core');
-  static MethodChannel get channel => _channel;
-
-  static Future<String> get platformVersion async {
-    return await _channel.invokeMethod('getPlatformVersion');
-  }
-
-  static Future<String> get devicesDescription async {
-    return await _channel.invokeMethod('getDevicesDescription');
-  }
-
-  static Future<List<DiveDevice>> get devices async {
-    final List<dynamic> devices = await _channel.invokeMethod('getDevices');
-    return devices.map(DiveDevice.fromJson).toList();
-  }
-}
-
-class DiveDevice {
-  final String id;
-  final String mediaType;
-  final String name;
-
-  DiveDevice({this.id, this.mediaType, this.name});
-
-  static DiveDevice fromJson(dynamic json) {
-    return DiveDevice(
-      id: json['id'],
-      mediaType: json['mediaType'],
-      name: json['name'],
-    );
-  }
-
-  @override
-  String toString() {
-    return "name: $name, id: $id, mediaType: $mediaType";
-  }
 }

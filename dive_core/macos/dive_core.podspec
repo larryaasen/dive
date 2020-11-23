@@ -26,18 +26,4 @@ A new flutter plugin project.
       '/Users/larry/Projects/obslib-framework/build/obslib.framework/Versions/A/Libraries'
     ]
   }
-
-  # s.vendored_libraries = 'libobs-frontend-api.dylib', 'libobs-scripting.dylib', 'libobs.0.dylib', 'libobsglad.0.dylib'
-  # s.xcconfig  =   {
-  #   'LIBRARY_SEARCH_PATHS' => [
-  #     '/Users/larry/Projects/obslib-framework/build/obslib.framework/Versions/A/Frameworks',
-  #     '/Users/larry/Projects/obslib-framework/build/obslib.framework/Versions/A/Libraries']
-  # }
-  # s.pod_target_xcconfig = {
-  #   'LIBRARY_SEARCH_PATHS' => [
-  #     '/Users/larry/Projects/obslib-framework/build/obslib.framework/Versions/A/Frameworks',
-  #     '/Users/larry/Projects/obslib-framework/build/obslib.framework/Versions/A/Libraries'],
-  #   'OTHER_LDFLAGS' => '-lobs-frontend-api -lobs-scripting -lobs.0 -lobsglad.0'
-  # }
-
 end

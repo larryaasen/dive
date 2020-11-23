@@ -16,6 +16,17 @@
 #include "obslib/obs-output.h"
 #include "obslib/obs-properties.h"
 
+#include "TextureSource.h"
+NSMutableArray *sources = [NSMutableArray new];
+
+void addFrameCapture(TextureSource *textureSource) {
+    [sources addObject:textureSource];
+}
+
+void removeFrameCapture(TextureSource *textureSource) {
+    [sources removeObject:textureSource];
+}
+
 static const int cx = 1280;
 static const int cy = 720;
 
@@ -44,11 +55,13 @@ bool obs_started = false;
 
 DisplayContext display;
 
-static DisplayContext CreateDisplay(NSView *view);
-static void frame_callback(void *param, obs_source_t *source);
+static void frame_callback(void *param, obs_source_t *source, struct obs_source_frame *frame);
 
+void test_function() {
+    printf("test function\n");
+}
 
-extern "C" bool create_obs()
+extern "C" bool create_obs(void)
 {
     if (obs_started) return true;
 
@@ -152,7 +165,7 @@ extern "C" bool create_obs()
     // return true;
 
     // Load camera
-    obs_source *source = obs_source_create("av_capture_input", "camera", camerSettings, nullptr);
+    obs_source_t *source = obs_source_create("av_capture_input", "camera", camerSettings, nullptr);
     if (!source)
         throw "Couldn't create camera source";
     SourceContext cameraSource{source};
@@ -223,22 +236,53 @@ extern "C" bool create_obs()
     return true;
 }
 
-static void frame_callback(void *param, obs_source_t *source)
+static void copy_frame_to_source(struct obs_source_frame *frame, TextureSource *textureSource)
 {
-    printf("frame_callback called !!!!!!\n");
+//    uint8_t *data[MAX_AV_PLANES];
+//    uint32_t linesize[MAX_AV_PLANES];
+//    uint32_t width;
+//    uint32_t height;
+//    uint64_t timestamp;
+//
+//    enum video_format format;
+//    float color_matrix[16];
+//    bool full_range;
+//    float color_range_min[3];
+//    float color_range_max[3];
+//    bool flip;
+
+
+    CVPixelBufferRef pxbuffer = NULL;
+    CVReturn status = CVPixelBufferCreateWithBytes(kCFAllocatorDefault,
+                                                   frame->width,
+                                                   frame->height,
+                                                   kCVPixelFormatType_32ARGB,
+                                                   frame->data[0],
+                                                   frame->width * 4,
+                                                   NULL,
+                                                   NULL,
+                                                   NULL,
+                                                   &pxbuffer);
+    if (status != kCVReturnSuccess) {
+        NSLog(@"copy_frame_to_source: Operation failed");
+        return;
+    }
+
+    CVPixelBufferLockBaseAddress(pxbuffer, 0);
+    void *pxdata = CVPixelBufferGetBaseAddress(pxbuffer);
+    
+    [textureSource captureSample: pxbuffer];
 }
 
-#define GREY_COLOR_BACKGROUND 0xFF4C4C4C
-uint32_t backgroundColor = GREY_COLOR_BACKGROUND;
-
-static DisplayContext CreateDisplay(NSView *view)
+static void frame_callback(void *param, obs_source_t *source, struct obs_source_frame *frame)
 {
-	gs_init_data info = {};
-	info.cx = cx;
-	info.cy = cy;
-	info.format = GS_BGRA;
-	info.zsformat = GS_ZS_NONE;
-	info.window.view = view;
+    obs_data_t *settings = obs_source_get_settings(source);
+    const char *device = obs_data_get_string(settings, "device");
+    printf("frame_callback called for device %s\n", device);
 
-	return DisplayContext{obs_display_create(&info, backgroundColor)};
+    @synchronized (sources) {
+        for (TextureSource *textureSource in sources) {
+            copy_frame_to_source(frame, textureSource);
+        }
+    }
 }
