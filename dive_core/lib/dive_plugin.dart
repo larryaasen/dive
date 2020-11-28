@@ -30,8 +30,9 @@ class DivePlugin {
         .invokeMethod(_methodDisposeTexture, {"texture_id": textureId});
   }
 
-  static Future<int> initializeTexture() async {
-    return await _channel.invokeMethod(_methodInitializeTexture, {});
+  static Future<int> initializeTexture({String name, String sourceId}) async {
+    return await _channel.invokeMethod(
+        _methodInitializeTexture, {'name': name, 'source_id': sourceId});
   }
 
   static Future<List<DiveDevice>> devices() async {

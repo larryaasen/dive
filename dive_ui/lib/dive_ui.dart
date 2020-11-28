@@ -1,5 +1,6 @@
 library dive_ui;
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:dive_core/dive_core.dart';
 
@@ -28,8 +29,10 @@ class TexturePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return controller != null && controller.value.isInitialized
+    final texture = controller != null && controller.value.isInitialized
         ? Texture(textureId: controller.textureId)
-        : Container();
+        : Container(color: Colors.blue);
+
+    return texture;
   }
 }

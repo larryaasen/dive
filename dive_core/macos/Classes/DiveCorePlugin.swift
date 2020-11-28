@@ -23,6 +23,9 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         let channel = FlutterMethodChannel(name: _channelName, binaryMessenger: registrar.messenger)
         let instance = DiveCorePlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
+        
+        create_obs()
+
         print("DiveCorePlugin registered.")
     }
     
@@ -58,10 +61,14 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
     }
 
     private func initializeTexture(_ arguments: [String: Any]?) -> Int64 {
-        return 0
-        if let source = TextureSource(name: "camera", registry: DiveCorePlugin.textureRegistry) {
+        guard let args = arguments, let name = args["name"] as! String?, let sourceID = args["source_id"] as! String? else {
+            return 0
+        }
+        if let source = TextureSource(name: name, registry: DiveCorePlugin.textureRegistry) {
             if let texturedId = DiveCorePlugin.textureRegistry?.register(source) {
                 source.textureId = texturedId
+                source.source_id = sourceID
+                addFrameCapture(source);
                 return texturedId
             }
         }
@@ -79,7 +86,6 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
     }
     
     private func getDevices() -> [[String: Any]] {
-        create_obs()
         let devices = captureDevices()
         var deviceList = [[String: Any]]()
         for device in devices {
@@ -124,12 +130,4 @@ public class ImageFrameProducer {
         let path = "/Users/larry/Downloads/Nicholas-Nationals-Play-Ball.jpg"
         print(path)
     }
-}
-
-public class LibObs {
-
-  func CreateOBS() -> Bool {
-    return true
-//    create_obs()
-  }
 }

@@ -27,3 +27,6 @@ input:
 
 YAML Config File:
 - max_channels: 64
+
+## OBS Video Format
+MacBook Pro Camera: OBS video_format VIDEO_FORMAT_UYVY
