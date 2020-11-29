@@ -27,8 +27,8 @@ extern "C" void addFrameCapture(TextureSource *textureSource) {
     }
         
     @synchronized (_textureSources) {
-        for (TextureSource *textureSource in _textureSources) {
-            if ([textureSource.source_id isEqualToString: textureSource.source_id]) {
+        for (TextureSource *source in _textureSources) {
+            if ([source.source_id isEqualToString: textureSource.source_id]) {
                 printf("addFrameCapture: duplicate source_id: %s\n", textureSource.source_id.UTF8String);
                 return;
             }
@@ -254,11 +254,15 @@ static void copy_frame_to_source(struct obs_source_frame *frame, TextureSource *
 
 static void frame_callback(void *param, obs_source_t *source, struct obs_source_frame *frame)
 {
-    const char *id = obs_source_get_unversioned_id(source);
+    obs_data_t *settings = obs_source_get_settings(source);
+    const char *device = obs_data_get_string(settings, "device");
+    const char *device_name = obs_data_get_string(settings, "device_name");
+    printf("frame_callback: %s\n", device_name);
 
     @synchronized (_textureSources) {
         for (TextureSource *textureSource in _textureSources) {
-            if (strcmp(textureSource.source_id.UTF8String, id)) {
+            if (strcmp(textureSource.source_id.UTF8String, device) == 0 &&
+                strcmp(textureSource.name.UTF8String, device_name) == 0) {
                 copy_frame_to_source(frame, textureSource);
             }
         }

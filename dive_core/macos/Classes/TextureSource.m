@@ -4,7 +4,6 @@
 #import "TextureSource.h"
 
 @interface TextureSource ()
-@property NSString *name;
 @property NSObject<FlutterTextureRegistry> *registry;
 @property(readonly) CVPixelBufferRef volatile latestPixelBuffer;
 @property unsigned long _sampleCount;
@@ -34,7 +33,7 @@
         pixelBuffer = _latestPixelBuffer;
     }
 
-    printf("copyPixelBuffer\n");
+    printf("copyPixelBuffer %s\n", self.name.UTF8String);
     return pixelBuffer;
 }
 
@@ -49,7 +48,7 @@
         CFRelease(old);
     }
     [self.registry textureFrameAvailable:self.textureId];
-    printf("captureSample: count: %ld\n", self._sampleCount);
+    printf("captureSample: %s: count=%ld\n", self.name.UTF8String, self._sampleCount);
 }
 
 @end

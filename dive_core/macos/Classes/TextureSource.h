@@ -2,6 +2,7 @@
 
 @interface TextureSource : NSObject <FlutterTexture>
 
+@property NSString *name;
 @property int64_t textureId;
 @property NSString *source_id;
 

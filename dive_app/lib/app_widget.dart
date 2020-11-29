@@ -14,8 +14,8 @@ class AppWidget extends StatefulWidget {
 }
 
 class _AppWidgetState extends State<AppWidget> {
-  TextureController controller1 = TextureController(
-      name: "FaceTime HD Camera (Built-in)", sourceId: "0x8020000005ac8514");
+  TextureController controller1 =
+      TextureController(name: "mmhmm Camera", sourceId: "mmhmmCameraDevice");
   TextureController controller2 = TextureController(
       name: "FaceTime HD Camera (Built-in)", sourceId: "0x8020000005ac8514");
 
@@ -50,9 +50,9 @@ class _AppWidgetState extends State<AppWidget> {
     final rowCount = 4;
     final colCount = 4;
 
-    final box1 = TexturePreview(controller2);
+    final box1 = TexturePreview(controller1);
     final box2 = TexturePreview(controller2);
-    final box3 = TexturePreview(controller2);
+    final box3 = TexturePreview(controller1);
     final box4 = TexturePreview(controller2);
 
     final content = Center(
