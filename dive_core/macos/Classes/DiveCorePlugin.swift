@@ -2,7 +2,7 @@ import AVFoundation
 import Cocoa
 import FlutterMacOS
 
-let _imageProducer = ImageFrameProducer()
+// let _imageProducer = ImageFrameProducer()
 
 public class DiveCorePlugin: NSObject, FlutterPlugin {
     struct Method {
@@ -12,6 +12,9 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         static let DisposeTexture = "disposeTexture"
         static let InitializeTexture = "initializeTexture"
         static let GetDevices = "getDevices"
+        static let GetInputTypes = "getInputTypes"
+        static let GetVideoInputs = "getVideoInputs"
+        static let CreateSource = "createSource"
     }
     
     static let _channelName = "dive_core.io/plugin"
@@ -36,7 +39,7 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         case Method.InitializeTexture:
             result(initializeTexture(arguments))
         case Method.LoadImage:
-            _imageProducer.loadImage()
+//            _imageProducer.loadImage()
             result("done")
         case Method.GetDevicesDescription:
             result(getDevicesDescription())
@@ -44,6 +47,12 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
             result(getDevices())
         case Method.GetPlatformVersion:
             result(getPlatformVersion())
+        case Method.GetInputTypes:
+            result(getInputTypes())
+        case Method.GetVideoInputs:
+            result(getVideoInputs())
+        case Method.CreateSource:
+            result(createSource(arguments))
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -68,7 +77,7 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
             if let texturedId = DiveCorePlugin.textureRegistry?.register(source) {
                 source.textureId = texturedId
                 source.source_id = sourceID
-                addFrameCapture(source);
+                addFrameCapture(source)
                 return texturedId
             }
         }
@@ -97,7 +106,27 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         }
         return deviceList
     }
-    
+
+    private func getInputTypes() -> [[String: Any]] {
+        return bridge_input_types() as? [[String: Any]] ?? []
+    }
+
+    private func getVideoInputs() -> [[String: Any]] {
+        return bridge_video_inputs() as? [[String: Any]] ?? []
+    }
+
+    private func createSource(_ arguments: [String: Any]?) -> Bool {
+        guard let args = arguments,
+            let name = args["device_name"] as! String?,
+            let uid = args["device_uid"] as! String?,
+            let isFrameSource = args["is_frame_source"] as! Bool?
+            else {
+                return false
+        }
+        let uuid = UUID().uuidString
+        return bridge_create_source(uuid, name, uid, isFrameSource)
+    }
+
     private func captureDevices() -> [AVCaptureDevice] {
         let devices = AVCaptureDevice.devices()
         return devices
@@ -124,10 +153,10 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
     }
 }
 
-public class ImageFrameProducer {
+// public class ImageFrameProducer {
     
-    public func loadImage() {
-        let path = "/Users/larry/Downloads/Nicholas-Nationals-Play-Ball.jpg"
-        print(path)
-    }
-}
+//     public func loadImage() {
+//         let path = "/Users/larry/Downloads/Nicholas-Nationals-Play-Ball.jpg"
+//         print(path)
+//     }
+// }

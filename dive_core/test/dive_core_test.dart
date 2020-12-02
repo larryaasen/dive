@@ -18,6 +18,6 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    expect(await DivePlugin.platformVersion, '42');
+    expect(await DivePlugin.platformVersion(), '42');
   });
 }

@@ -4,6 +4,7 @@
 #include <time.h>
 
 #include <functional>
+#include <map>
 #include <memory>
 
 #import <Foundation/Foundation.h>
@@ -16,6 +17,7 @@
 #include "obslib/obs-output.h"
 #include "obslib/obs-properties.h"
 
+#include "obs_setup.h"
 #include "TextureSource.h"
 
 static NSMutableArray *_textureSources = [NSMutableArray new];
@@ -71,25 +73,24 @@ using DisplayContext =
 // obs is not designed for hot reload, so only start it once
 bool obs_started = false;
 
-DisplayContext display;
+//DisplayContext display;
+static SceneContext scene1;
 
 static void frame_callback(void *param, obs_source_t *source, struct obs_source_frame *frame);
-static void print_input_types();
-static void print_video_inputs();
 
 SceneContext _add_scene() {
-    const char *scene_name = "scene 1";
-    SceneContext scene1{obs_scene_create(scene_name)};
-    if (!scene1) {
+    const char *scene_name = "scene default";
+    SceneContext scene{obs_scene_create(scene_name)};
+    if (!scene) {
         printf("Couldn't create scene: %s\n", scene_name);
-        return scene1;
+        return scene;
     }
     
     /* set the scene as the primary draw source and go */
     uint32_t channel = 0;
-    obs_set_output_source(channel, obs_scene_get_source(scene1));
+    obs_set_output_source(channel, obs_scene_get_source(scene));
 
-    return scene1;
+    return scene;
 }
 
 
@@ -130,12 +131,13 @@ extern "C" bool create_obs(void)
     obs_load_all_modules();
     obs_post_load_modules();
     
-    print_input_types();
-    print_video_inputs();
+//    bridge_input_types();
+//    print_video_inputs();
 //    return true;
     
-    SceneContext scene1 = _add_scene();
+    scene1 = _add_scene();
     
+    /*
     // get list of regular cameras
     AVCaptureDeviceDiscoverySession *session = [AVCaptureDeviceDiscoverySession
         discoverySessionWithDeviceTypes:@[AVCaptureDeviceTypeBuiltInWideAngleCamera, AVCaptureDeviceTypeExternalUnknown]
@@ -163,6 +165,7 @@ extern "C" bool create_obs(void)
         obs_source_add_frame_callback(cameraSource, frame_callback, nullptr);
         obs_scene_add(scene1, cameraSource);
     }
+     */
     
     // Load video file
     obs_data_t *fileSettings = obs_data_create();
@@ -269,12 +272,13 @@ static void frame_callback(void *param, obs_source_t *source, struct obs_source_
     }
 }
 
-static void print_input_types() {
+NSArray *bridge_input_types() {
     const char *type_id;
     const char *unversioned_type_id;
     bool foundValues = false;
     bool foundDeprecated = false;
     size_t idx = 0;
+    NSMutableArray *list = [NSMutableArray new];
     
     while (obs_enum_input_types2(idx++, &type_id, &unversioned_type_id)) {
         const char *name = obs_source_get_display_name(type_id);
@@ -291,25 +295,64 @@ static void print_input_types() {
             foundDeprecated = true;
         }
         foundValues = true;
+        NSDictionary *typeDict = @{
+            @"id": [NSString stringWithUTF8String:unversioned_type_id],
+            @"name": [NSString stringWithUTF8String:name]
+        };
+        [list addObject:typeDict];
 
-        printf("input type: %s (%s) (%s)\n", name, unversioned_type_id, deprecated ? "deprectated" : "OK");
+//        printf("input type: %s (%s) (%s)\n", name, unversioned_type_id, deprecated ? "deprectated" : "OK");
     }
+    return [list copy];
 }
 
-static void print_video_inputs() {
-    const char *video_capture_device_type = "av_capture_input";
-    
-    obs_data_t *defaults = obs_get_source_defaults(video_capture_device_type);
-    if (defaults) {
-        obs_data_release(defaults);
+std::map<const char *, obs_source_t *> source_list;
+
+bool bridge_create_source(NSString *uuid, NSString *device_name, NSString *device_uid, bool frame_source) {
+    obs_data_t *camerSettings = obs_data_create();
+    obs_data_set_string(camerSettings, "device_name", device_name.UTF8String);
+    obs_data_set_string(camerSettings, "device", device_uid.UTF8String);
+
+    // Load camera
+    obs_source_t *source = obs_source_create("av_capture_input", "camera", camerSettings, nullptr);
+    if (!source) {
+        printf("Couldn't create source\n");
+        return false;
     }
+    
+    if (frame_source) {
+        obs_source_add_frame_callback(source, frame_callback, nullptr);
+    }
+
+    source_list[uuid.UTF8String] = source;
+    obs_scene_add(scene1, source);
+    return true;
+}
+
+bool bridge_release_source(NSString *uuid) {
+    obs_source_t *source = source_list[uuid.UTF8String];
+    if (!source) {
+        return false;
+    }
+    obs_source_release(source);
+    return true;
+}
+
+NSArray *bridge_video_inputs() {
+    const char *video_capture_device_type = "av_capture_input";
+    NSMutableArray *list = [NSMutableArray new];
+    
+//    obs_data_t *defaults = obs_get_source_defaults(video_capture_device_type);
+//    if (defaults) {
+//        obs_data_release(defaults);
+//    }
 
     obs_properties_t *video_props = obs_get_source_properties(video_capture_device_type);
 
     if (video_props) {
         obs_property_t *property = obs_properties_first(video_props);
         while (property != nullptr) {
-            const char *name = obs_property_name(property);
+//            const char *name = obs_property_name(property);
             obs_property_type type = obs_property_get_type(property);
             if (type == OBS_PROPERTY_LIST) {
                 size_t count = obs_property_list_item_count(property);
@@ -318,13 +361,19 @@ static void print_video_inputs() {
                     const char *name = obs_property_list_item_name(property, index);
                     const char *uid = obs_property_list_item_string(property, index);
                     if (!disabled && name != NULL && uid != NULL && strlen(name) > 0 && strlen(uid) > 0) {
-                        printf("video: %s - %s\n", name, uid);
+//                        printf("video: %s - %s\n", name, uid);
+                        NSDictionary *typeDict = @{
+                            @"id": [NSString stringWithUTF8String:uid],
+                            @"name": [NSString stringWithUTF8String:name]
+                        };
+                        [list addObject:typeDict];
                     }
                 }
             }
             obs_property_next(&property);
         }
-        obs_property_t *inputs = obs_properties_get(video_props, "device_id");
+//        obs_property_t *inputs = obs_properties_get(video_props, "device_id");
         obs_properties_destroy(video_props);
     }
+    return [list copy];
 }

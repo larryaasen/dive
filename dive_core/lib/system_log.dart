@@ -8,9 +8,9 @@ class SystemLog {
   }
 
   static void _output(String message, String group) {
-    final group_msg = "[$group]";
-    final time_msg = "11222020 11:01:49.371";
-    print("$time_msg $group_msg");
+    final groupMsg = "[$group]";
+    final timeMsg = "11222020 11:01:49.371";
+    print("$timeMsg $groupMsg");
   }
 }
 

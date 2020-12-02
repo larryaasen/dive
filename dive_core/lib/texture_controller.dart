@@ -126,20 +126,6 @@ class TextureController extends ValueNotifier<PreviewValue> {
     return _creatingCompleter.future;
   }
 
-  /// Listen to events from the native plugins.
-  void _listener(dynamic event) {
-    final Map<dynamic, dynamic> map = event;
-    if (_isDisposed) {
-      return;
-    }
-
-    switch (map['eventType']) {
-      case 'error':
-        value = value.copyWith(errorDescription: event['errorDescription']);
-        break;
-    }
-  }
-
   /// Releases the resources of this controller.
   @override
   Future<void> dispose() async {
