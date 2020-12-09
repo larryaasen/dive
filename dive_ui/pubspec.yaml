@@ -1,8 +1,11 @@
 name: dive_ui
 description: A new Flutter package project.
 version: 0.0.1
-author:
 homepage:
+
+  # This package cannot be published until dive_core is published and this 
+# package no longer uses a path to dive_core.
+publish_to: none
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -10,10 +13,6 @@ environment:
 
 dependencies:
   flutter:
-    sdk: flutter
-
-dev_dependencies:
-  flutter_test:
     sdk: flutter
 
   dive_core:
@@ -37,5 +36,9 @@ dev_dependencies:
 
   # From flutter.dev: Flutter plugin for playing back video on a Widget surface.
   video_player: '>=0.10.12+3 <2.0.0'
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
 
 flutter:

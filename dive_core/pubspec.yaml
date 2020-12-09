@@ -12,6 +12,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # From: yuli.dev. Simple, fast generation of RFC4122 UUIDs.
+  uuid: ^2.2.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

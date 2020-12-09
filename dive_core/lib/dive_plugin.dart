@@ -1,29 +1,26 @@
 import 'package:flutter/services.dart';
-import 'package:dive_core/dive_device.dart';
 import 'package:dive_core/dive_input_type.dart';
 import 'package:dive_core/dive_input.dart';
 
 class DivePlugin {
   static const String _channelName = 'dive_core.io/plugin';
   static const String _methodGetPlatformVersion = 'getPlatformVersion';
-  static const String _methodGetDevicesDescription = 'getDevicesDescription';
   static const String _methodLoadImage = 'loadImage';
   static const String _methodDisposeTexture = 'disposeTexture';
   static const String _methodInitializeTexture = 'initializeTexture';
-  static const String _methodGetDevices = 'getDevices';
 
   static const String _methodGetInputTypes = 'getInputTypes';
   static const String _methodGetVideoInputs = 'getVideoInputs';
-  static const String _methodCreateSource = 'createSource';
+  static const String _methodCreateMediaSource = 'createMediaSource';
+  static const String _methodCreateVideoSource = 'createVideoSource';
+
+  static const String _methodMediaPlayPause = 'mediaPlayPause';
+  static const String _methodMediaStop = 'mediaStop';
 
   static const MethodChannel _channel = const MethodChannel(_channelName);
 
   static Future<String> platformVersion() async {
     return await _channel.invokeMethod<String>(_methodGetPlatformVersion);
-  }
-
-  static Future<String> devicesDescription() async {
-    return await _channel.invokeMethod(_methodGetDevicesDescription);
   }
 
   static Future<String> loadImage([dynamic arguments]) async {
@@ -35,15 +32,9 @@ class DivePlugin {
         .invokeMethod(_methodDisposeTexture, {"texture_id": textureId});
   }
 
-  static Future<int> initializeTexture({String name, String sourceId}) async {
-    return await _channel.invokeMethod(
-        _methodInitializeTexture, {'name': name, 'source_id': sourceId});
-  }
-
-  static Future<List<DiveDevice>> devices() async {
-    final List<dynamic> devices =
-        await _channel.invokeMethod(_methodGetDevices);
-    return devices.map(DiveDevice.fromJson).toList();
+  static Future<int> initializeTexture({String sourceUUID}) async {
+    return await _channel
+        .invokeMethod(_methodInitializeTexture, {'source_uuid': sourceUUID});
   }
 
   static Future<List<DiveInputType>> inputTypes() async {
@@ -58,12 +49,28 @@ class DivePlugin {
     return devices.map(DiveVideoInput.fromJson).toList();
   }
 
-  static Future<bool> createSource(
-      String deviceName, String deviceUid, bool isTextureSource) async {
-    return await _channel.invokeMethod(_methodCreateSource, {
+  static Future<bool> createMediaSource(
+      String sourceUUID, String localFile) async {
+    return await _channel.invokeMethod(_methodCreateMediaSource,
+        {'source_uuid': sourceUUID, 'local_file': localFile});
+  }
+
+  static Future<bool> createVideoSource(
+      String sourceUUID, String deviceName, String deviceUid) async {
+    return await _channel.invokeMethod(_methodCreateVideoSource, {
+      'source_uuid': sourceUUID,
       'device_name': deviceName,
-      'device_uid': deviceUid,
-      'is_frame_source': isTextureSource
+      'device_uid': deviceUid
     });
+  }
+
+  static Future<bool> mediaPlayPause(String sourceUUID, bool pause) async {
+    return await _channel.invokeMethod(
+        _methodMediaPlayPause, {'source_uuid': sourceUUID, 'pause': pause});
+  }
+
+  static Future<bool> mediaStop(String sourceUUID) async {
+    return await _channel
+        .invokeMethod(_methodMediaStop, {'source_uuid': sourceUUID});
   }
 }

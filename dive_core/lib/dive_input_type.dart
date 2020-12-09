@@ -4,7 +4,10 @@ class DiveInputType {
 
   DiveInputType({this.id, this.name});
 
-  static DiveInputType videoCaptureDevice() =>
+  static DiveInputType get mediaSource =>
+      DiveInputType(id: 'ffmpeg_source', name: 'Media Source');
+
+  static DiveInputType get videoCaptureDevice =>
       DiveInputType(id: 'av_capture_input', name: 'Video Capture Device');
 
   static DiveInputType fromJson(dynamic json) {

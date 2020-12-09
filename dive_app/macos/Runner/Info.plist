@@ -27,14 +27,22 @@
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSCameraUsageDescription</key>
-	<string>testing</string>
+	<string>Used for video recording and streaming.</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
 	<key>NSHumanReadableCopyright</key>
 	<string>$(PRODUCT_COPYRIGHT)</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>testing</string>
+	<string>Used for video recording and streaming.</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>NSDownloadsFolderUsageDescription</key>
+	<string>Used for video recording and streaming.</string>
+	<key>NSDesktopFolderUsageDescription</key>
+	<string>Used for video recording and streaming.</string>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>Used for video recording and streaming.</string>
 </dict>
 </plist>

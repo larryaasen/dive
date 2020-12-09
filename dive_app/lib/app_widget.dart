@@ -10,30 +10,14 @@ class AppWidget extends StatefulWidget {
 }
 
 class _AppWidgetState extends State<AppWidget> {
-  void architecting() {
-    // DiveInputTypes.all().then((inputTypes) {});
-    final inputType =
-        DiveInputType(id: 'av_capture_input', name: 'Video Capture Device');
-    // final videoInputType = DiveInputType.videoCaptureDevice();
-
-    DiveInputs.video().then((videoInputs) {});
-
-    final settings = DiveSettings();
-
-    DiveSource.create(inputType: inputType, name: '', settings: settings)
-        .then((source) {});
-
-    // DiveVideoInput.create(id: "mmhmmCameraDevice", name: "mmhmm Camera")
-    //     .then((DiveVideoInput videoInput) {
-    //   DiveVideoSource.create(videoInput).then((source) {});
-    // });
-  }
-
+  final _mediaSources = List<DiveMediaSource>();
   final _videoSources = List<DiveVideoSource>();
 
   @override
   void initState() {
     super.initState();
+
+    DivePlugin.platformVersion().then((value) => print("$value"));
 
     // Print all input types to the log
     DiveInputTypes.all().then((inputTypes) {
@@ -41,6 +25,16 @@ class _AppWidgetState extends State<AppWidget> {
         print(type);
       });
     });
+
+    // final localFile = '/Users/larry/Downloads/Nicholas-Nationals-Play-Ball.mp4';
+    // DiveMediaSource.create(localFile).then((source) {
+    //   if (source != null) {
+    //     setState(() {
+    //       _mediaSources.add(source);
+    //     });
+    //     source.play();
+    //   }
+    // });
 
     DiveInputs.video().then((videoInputs) {
       videoInputs.forEach((videoInput) {
@@ -56,8 +50,6 @@ class _AppWidgetState extends State<AppWidget> {
 
   @override
   Widget build(BuildContext context) {
-    DivePlugin.platformVersion().then((value) => print("$value"));
-
     Widget content;
     if (_videoSources.length > 1) {
       final box1 = DivePreview(_videoSources[0].controller);

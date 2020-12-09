@@ -2,11 +2,10 @@
 
 @interface TextureSource : NSObject <FlutterTexture>
 
-@property NSString *name;
 @property int64_t textureId;
-@property NSString *source_id;
+@property NSString *sourceUUID;
 
-- (instancetype)initWithName:(NSString *)name registry:(NSObject<FlutterTextureRegistry> *)registry;
+- (instancetype)initWithSourceUUID:(NSString *)sourceUUID registry:(NSObject<FlutterTextureRegistry> *)registry;
 - (void)captureSample:(CVPixelBufferRef) newBuffer;
 
 @end

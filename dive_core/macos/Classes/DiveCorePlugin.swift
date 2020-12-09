@@ -8,13 +8,14 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
     struct Method {
         static let LoadImage = "loadImage"
         static let GetPlatformVersion = "getPlatformVersion"
-        static let GetDevicesDescription = "getDevicesDescription"
         static let DisposeTexture = "disposeTexture"
         static let InitializeTexture = "initializeTexture"
-        static let GetDevices = "getDevices"
         static let GetInputTypes = "getInputTypes"
         static let GetVideoInputs = "getVideoInputs"
-        static let CreateSource = "createSource"
+        static let CreateMediaSource = "createMediaSource"
+        static let CreateVideoSource = "createVideoSource"
+        static let MediaPlayPause = "mediaPlayPause"
+        static let MediaStop = "mediaStop"
     }
     
     static let _channelName = "dive_core.io/plugin"
@@ -41,18 +42,20 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         case Method.LoadImage:
 //            _imageProducer.loadImage()
             result("done")
-        case Method.GetDevicesDescription:
-            result(getDevicesDescription())
-        case Method.GetDevices:
-            result(getDevices())
         case Method.GetPlatformVersion:
             result(getPlatformVersion())
         case Method.GetInputTypes:
             result(getInputTypes())
         case Method.GetVideoInputs:
             result(getVideoInputs())
-        case Method.CreateSource:
-            result(createSource(arguments))
+        case Method.CreateMediaSource:
+            result(createMediaSource(arguments))
+        case Method.CreateVideoSource:
+            result(createVideoSource(arguments))
+        case Method.MediaPlayPause:
+            result(mediaPlayPause(arguments))
+        case Method.MediaStop:
+            result(mediaStop(arguments))
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -70,13 +73,13 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
     }
 
     private func initializeTexture(_ arguments: [String: Any]?) -> Int64 {
-        guard let args = arguments, let name = args["name"] as! String?, let sourceID = args["source_id"] as! String? else {
+        guard let args = arguments, let sourceUUID = args["source_uuid"] as! String? else {
             return 0
         }
-        if let source = TextureSource(name: name, registry: DiveCorePlugin.textureRegistry) {
+        if let source = TextureSource(sourceUUID: sourceUUID, registry: DiveCorePlugin.textureRegistry) {
             if let texturedId = DiveCorePlugin.textureRegistry?.register(source) {
                 source.textureId = texturedId
-                source.source_id = sourceID
+                source.sourceUUID = sourceUUID
                 addFrameCapture(source)
                 return texturedId
             }
@@ -89,24 +92,6 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         return msg
     }
     
-    private func getDevicesDescription() -> String {
-        let devices = captureDevices()
-        return "\(devices)"
-    }
-    
-    private func getDevices() -> [[String: Any]] {
-        let devices = captureDevices()
-        var deviceList = [[String: Any]]()
-        for device in devices {
-            var data = [String: Any]()
-            data["id"] = device.uniqueID
-            data["name"] = device.localizedName
-            data["mediaType"] = mediaTypeName(device.activeFormat.mediaType)
-            deviceList.append(data)
-        }
-        return deviceList
-    }
-
     private func getInputTypes() -> [[String: Any]] {
         return bridge_input_types() as? [[String: Any]] ?? []
     }
@@ -115,32 +100,46 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         return bridge_video_inputs() as? [[String: Any]] ?? []
     }
 
-    private func createSource(_ arguments: [String: Any]?) -> Bool {
+    private func createMediaSource(_ arguments: [String: Any]?) -> Bool {
         guard let args = arguments,
-            let name = args["device_name"] as! String?,
-            let uid = args["device_uid"] as! String?,
-            let isFrameSource = args["is_frame_source"] as! Bool?
+            let source_uuid = args["source_uuid"] as! String?,
+            let localFile = args["local_file"] as! String?
             else {
                 return false
         }
-        let uuid = UUID().uuidString
-        return bridge_create_source(uuid, name, uid, isFrameSource)
-    }
-
-    private func captureDevices() -> [AVCaptureDevice] {
-        let devices = AVCaptureDevice.devices()
-        return devices
-        
-        // if #available(macOS 10.15, *) {
-        //   let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(
-        //   deviceTypes: [ .builtInWideAngleCamera, .externalUnknown ],
-        //   mediaType: .video,
-        //   position: .unspecified
-        //   )
-        //   deviceMsg = "\(deviceDiscoverySession.devices)"
-        // }
+        return bridge_create_media_source(source_uuid, localFile)
     }
     
+    private func createVideoSource(_ arguments: [String: Any]?) -> Bool {
+        guard let args = arguments,
+            let source_uuid = args["source_uuid"] as! String?,
+            let name = args["device_name"] as! String?,
+            let uid = args["device_uid"] as! String?
+            else {
+                return false
+        }
+        return bridge_create_video_source(source_uuid, name, uid)
+    }
+    
+    private func mediaPlayPause(_ arguments: [String: Any]?) -> Bool {
+        guard let args = arguments,
+            let source_uuid = args["source_uuid"] as! String?,
+            let pause = args["pause"] as! Bool?
+            else {
+                return false
+        }
+        return bridge_media_source_play_pause(source_uuid, pause);
+    }
+    
+    private func mediaStop(_ arguments: [String: Any]?) -> Bool {
+        guard let args = arguments,
+            let source_uuid = args["source_uuid"] as! String?
+            else {
+                return false
+        }
+        return bridge_media_source_stop(source_uuid);
+    }
+
     private func mediaTypeName(_ mediaType: AVMediaType) -> String {
         switch mediaType {
         case .audio:

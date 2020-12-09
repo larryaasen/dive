@@ -1,15 +1,9 @@
-#import <AVFoundation/AVFoundation.h>
-
 #include <stdio.h>
+#include <string.h>
 #include <time.h>
-
 #include <functional>
 #include <map>
 #include <memory>
-
-#import <Foundation/Foundation.h>
-#import <AppKit/AppKit.h>
-#import <OpenGL/OpenGL.h>
 
 #include "obslib/obs.h"
 #include "obslib/obs.hpp"
@@ -19,36 +13,6 @@
 
 #include "obs_setup.h"
 #include "TextureSource.h"
-
-static NSMutableArray *_textureSources = [NSMutableArray new];
-
-extern "C" void addFrameCapture(TextureSource *textureSource) {
-    if (textureSource.source_id == NULL || textureSource.source_id.length == 0) {
-        printf("addFrameCapture: missing source_id\n");
-        return;
-    }
-        
-    @synchronized (_textureSources) {
-        for (TextureSource *source in _textureSources) {
-            if ([source.source_id isEqualToString: textureSource.source_id]) {
-                printf("addFrameCapture: duplicate source_id: %s\n", textureSource.source_id.UTF8String);
-                return;
-            }
-        }
-
-        [_textureSources addObject:textureSource];
-        printf("addFrameCapture: added source_id: %s\n", textureSource.source_id.UTF8String);
-    }
-}
-
-extern "C" void removeFrameCapture(TextureSource *textureSource) {
-    @synchronized (_textureSources) {
-        [_textureSources removeObject:textureSource];
-    }
-}
-
-static const int cx = 1280;
-static const int cy = 720;
 
 template<typename T, typename D_T, D_T D>
 struct OBSUniqueHandle : std::unique_ptr<T, std::function<D_T>> {
@@ -70,13 +34,85 @@ using DisplayContext =
 
 #undef DECLARE_DELETER
 
+struct key_cmp_str
+{
+   bool operator()(char const *a, char const *b) const
+   {
+      return std::strcmp(a, b) < 0;
+   }
+};
+
 // obs is not designed for hot reload, so only start it once
 bool obs_started = false;
 
 //DisplayContext display;
 static SceneContext scene1;
 
+// Map of all created sources where the key is a source UUID and the value is a source pointer
+static std::map<const char *, obs_source_t *> uuid_source_list;
+static std::map<obs_source_t *, const char *> source_uuid_list;
+
+// Map of all texture sources where the key is a source UUID and the value is a texture source pointer
+static std::map<const char *, TextureSource *, key_cmp_str> _textureSourceMap;
+// A duplicate map of all texture source that provides Objective-C reference counting
+static NSMutableDictionary *_textureSources = [NSMutableDictionary new];
+
+static bool reset_video();
+static bool reset_audio();
+static bool create_service();
+static void video_callback(void *param, struct video_data *frame);
 static void frame_callback(void *param, obs_source_t *source, struct obs_source_frame *frame);
+
+extern "C" void addFrameCapture(TextureSource *textureSource) {
+    if (textureSource == NULL) {
+        printf("addFrameCapture: missing textureSource\n");
+        return;
+    }
+    
+    if (textureSource.sourceUUID == NULL || textureSource.sourceUUID.length == 0) {
+        printf("addFrameCapture: missing sourceUUID\n");
+        return;
+    }
+
+    const char *uuid_str = textureSource.sourceUUID.UTF8String;
+
+    @synchronized (_textureSources) {
+        TextureSource *source = _textureSources[textureSource.sourceUUID];
+        if (source != NULL) {
+            printf("addFrameCapture: duplicate texture source: %s\n", uuid_str);
+            return;
+        }
+        [_textureSources setObject:textureSource forKey:textureSource.sourceUUID];
+        _textureSourceMap[uuid_str] = textureSource;
+    }
+
+    printf("addFrameCapture: added texture source: %s\n", uuid_str);
+}
+
+extern "C" void removeFrameCapture(TextureSource *textureSource) {
+    if (textureSource == NULL) {
+        printf("removeFrameCapture: missing textureSource\n");
+        return;
+    }
+    
+    if (textureSource.sourceUUID == NULL || textureSource.sourceUUID.length == 0) {
+        printf("removeFrameCapture: missing sourceUUID\n");
+        return;
+    }
+
+    const char *uuid_str = textureSource.sourceUUID.UTF8String;
+
+    @synchronized (_textureSources) {
+        TextureSource *source = _textureSources[textureSource.sourceUUID];
+        if (source == NULL) {
+            printf("removeFrameCapture: unknown texture source: %s\n", uuid_str);
+            return;
+        }
+
+        [_textureSources removeObjectForKey:textureSource.sourceUUID];
+        _textureSourceMap.erase(uuid_str);
+    }
+}
 
 SceneContext _add_scene() {
     const char *scene_name = "scene default";
@@ -93,6 +129,30 @@ SceneContext _add_scene() {
     return scene;
 }
 
+static void save_source(NSString *source_uuid, obs_source_t *source) {
+    const char *_uuid_str = source_uuid.UTF8String;
+    const char *uuid_str = strdup(_uuid_str);
+    uuid_source_list[uuid_str] = source;
+    source_uuid_list[source] = uuid_str;
+}
+
+static void remove_source(const char *uuid_str) {
+    obs_source_t *source = uuid_source_list[uuid_str];
+    free((void *)source_uuid_list[source]);
+    uuid_source_list.erase(uuid_str);
+    source_uuid_list.erase(source);
+}
+
+static void add_video_callback() {
+    struct video_scale_info *conversion = NULL;
+    void *param = NULL;
+    obs_add_raw_video_callback(conversion, video_callback, param);
+}
+
+static void remove_video_callback() {
+    void *param = NULL;
+    obs_remove_raw_video_callback(video_callback, param);
+}
 
 extern "C" bool create_obs(void)
 {
@@ -102,7 +162,23 @@ extern "C" bool create_obs(void)
         printf("Couldn't create OBS\n");
         return false; //throw "Couldn't create OBS";
     }
+    
+    obs_load_all_modules();
+    obs_post_load_modules();
 
+    if (!reset_video()) return false;
+    if (!reset_audio()) return false;
+    scene1 = _add_scene();
+    if (!create_service()) return false;
+//    add_video_callback();
+    
+    return true;
+}
+
+static const int cx = 1280;
+static const int cy = 720;
+
+static bool reset_video() {
     struct obs_video_info ovi;
     ovi.adapter = 0;
     ovi.fps_num = 30000;
@@ -119,7 +195,10 @@ extern "C" bool create_obs(void)
         printf("Couldn't initialize video: %d\n", rv);
         return false; //throw "Couldn't initialize video";
     }
-    
+    return true;
+}
+
+static bool reset_audio() {
     struct obs_audio_info ai;
     ai.samples_per_sec = 48000;
     ai.speakers = SPEAKERS_STEREO;
@@ -127,60 +206,14 @@ extern "C" bool create_obs(void)
         printf("Couldn't initialize audio\n");
         return false;
     }
+    return true;
+}
 
-    obs_load_all_modules();
-    obs_post_load_modules();
-    
-//    bridge_input_types();
-//    print_video_inputs();
-//    return true;
-    
-    scene1 = _add_scene();
-    
-    /*
-    // get list of regular cameras
-    AVCaptureDeviceDiscoverySession *session = [AVCaptureDeviceDiscoverySession
-        discoverySessionWithDeviceTypes:@[AVCaptureDeviceTypeBuiltInWideAngleCamera, AVCaptureDeviceTypeExternalUnknown]
-        mediaType:AVMediaTypeVideo
-        position:AVCaptureDevicePositionUnspecified];
+static void video_callback(void *param, struct video_data *frame) {
+    printf("%s linesize[0] %d\n", __func__, frame->linesize[0]);
+}
 
-    // create json object for each camera
-    for (int zz=0; zz!=session.devices.count; zz++) {
-        AVCaptureDevice *device = session.devices[zz];
-        NSString *s = @"{ ";
-        s = [s stringByAppendingFormat:@"\"id\": %@, ", device.uniqueID];
-        s = [s stringByAppendingFormat:@"\"name\": %@, ", device.localizedName];
-        s = [s stringByAppendingFormat:@"\"facing\": %@ ", device.position == AVCaptureDevicePositionFront ? @"front" : @"back"];
-        s = [s stringByAppendingString:@" }"];
-        printf("camera device: %s\n", s.UTF8String);
-
-        obs_data_t *camerSettings = obs_data_create();
-        obs_data_set_string(camerSettings, "device_name", device.localizedName.UTF8String);
-        obs_data_set_string(camerSettings, "device", device.uniqueID.UTF8String);
-
-        // Load camera
-        SourceContext cameraSource{obs_source_create("av_capture_input", "camera", camerSettings, nullptr)};
-        if (!cameraSource)
-            throw "Couldn't create camera source";
-        obs_source_add_frame_callback(cameraSource, frame_callback, nullptr);
-        obs_scene_add(scene1, cameraSource);
-    }
-     */
-    
-    // Load video file
-    obs_data_t *fileSettings = obs_data_create();
-    obs_data_set_default_bool(fileSettings, "is_local_file", true);
-    obs_data_set_default_bool(fileSettings, "looping", true);
-    obs_data_set_default_bool(fileSettings, "clear_on_media_end", false);
-    obs_data_set_string(fileSettings, "local_file", "/Users/larry/Downloads/Nicholas-Nationals-Play-Ball.mp4");
-
-    SourceContext videoSource{
-        obs_source_create("ffmpeg_source", "video file", fileSettings, nullptr)};
-    if (!videoSource)
-        throw "Couldn't create video source";
-    obs_source_update(videoSource, fileSettings);
-//    obs_scene_add(scene, videoSource);
-
+static bool create_service() {
     obs_data_t *serviceSettings = obs_data_create();
     const char *url = "rtmp://live-iad05.twitch.tv/app/live_276488556_jo79ChcHLboF2N1NniLSL9yEv7ltFt";
     const char *key = "live_276488556_jo79ChcHLboF2N1NniLSL9yEv7ltFt";
@@ -219,20 +252,6 @@ extern "C" bool create_obs(void)
     return true;
 }
 
-// obs_source_frame:
-//    uint8_t *data[MAX_AV_PLANES];
-//    uint32_t linesize[MAX_AV_PLANES];
-//    uint32_t width;
-//    uint32_t height;
-//    uint64_t timestamp;
-//
-//    enum video_format format;
-//    float color_matrix[16];
-//    bool full_range;
-//    float color_range_min[3];
-//    float color_range_max[3];
-//    bool flip;
-
 static void copy_frame_to_source(struct obs_source_frame *frame, TextureSource *textureSource)
 {
     CVPixelBufferRef pxbuffer = NULL;
@@ -257,20 +276,102 @@ static void copy_frame_to_source(struct obs_source_frame *frame, TextureSource *
 
 static void frame_callback(void *param, obs_source_t *source, struct obs_source_frame *frame)
 {
-    obs_data_t *settings = obs_source_get_settings(source);
-    const char *device = obs_data_get_string(settings, "device");
-    const char *device_name = obs_data_get_string(settings, "device_name");
-    printf("frame_callback: %s\n", device_name);
+    const char *uuid_str = source_uuid_list[source];
+    if (uuid_str == NULL) {
+        printf("%s: unknown source %s\n", __func__, uuid_str);
+        return;
+    }
+
+    printf("%s: %s\n", __func__, uuid_str);
 
     @synchronized (_textureSources) {
-        for (TextureSource *textureSource in _textureSources) {
-            if (strcmp(textureSource.source_id.UTF8String, device) == 0 &&
-                strcmp(textureSource.name.UTF8String, device_name) == 0) {
-                copy_frame_to_source(frame, textureSource);
-            }
+        TextureSource *textureSource = _textureSourceMap[uuid_str];
+        if (textureSource != NULL) {
+            copy_frame_to_source(frame, textureSource);
+        } else {
+            printf("frame_callback: no texture source for %s\n", uuid_str);
         }
     }
 }
+
+// TODO: error handling of input paramters, and make this work in the bridge
+
+static bool _create_source(NSString *source_uuid, NSString *source_id, NSString *name, obs_data_t *settings, bool frame_source) {
+    obs_source_t *source = obs_source_create(source_id.UTF8String, name.UTF8String, settings, nullptr);
+    if (!source) {
+        printf("%s: Could not create source\n", __func__);
+        return false;
+    }
+    
+    if (frame_source) {
+        obs_source_add_frame_callback(source, frame_callback, nullptr);
+    }
+
+    save_source(source_uuid, source);
+    obs_scene_add(scene1, source);
+    return true;
+}
+
+#pragma mark - Bridge functions
+
+bool bridge_release_source(NSString *source_uuid) {
+    const char *uuid_str = source_uuid.UTF8String;
+    obs_source_t *source = uuid_source_list[uuid_str];
+    if (!source) {
+        printf("%s: unknown source %s\n", __func__, uuid_str);
+        return false;
+    }
+    obs_source_release(source);
+    remove_source(uuid_str);
+    return true;
+}
+
+bool bridge_create_media_source(NSString *source_uuid, NSString *local_file) {
+    // Load video file
+    obs_data_t *settings = obs_data_create();
+    obs_data_set_default_bool(settings, "is_local_file", true);
+    obs_data_set_default_bool(settings, "looping", true);
+    obs_data_set_default_bool(settings, "clear_on_media_end", false);
+    obs_data_set_string(settings, "local_file", local_file.UTF8String);
+
+    return _create_source(source_uuid, @"ffmpeg_source", @"video file", settings, true);
+}
+
+bool bridge_create_video_source(NSString *source_uuid, NSString *device_name, NSString *device_uid) {
+    obs_data_t *settings = obs_data_create();
+    obs_data_set_string(settings, "device_name", device_name.UTF8String);
+    obs_data_set_string(settings, "device", device_uid.UTF8String);
+    
+    return _create_source(source_uuid, @"av_capture_input", @"camera", settings, true);
+}
+
+#pragma mark - Media Controls
+
+/// Media control: play or pause
+bool bridge_media_source_play_pause(NSString *source_uuid, bool pause) {
+    const char *uuid_str = source_uuid.UTF8String;
+    obs_source_t *source = uuid_source_list[uuid_str];
+    if (!source) {
+        printf("%s: unknown source %s\n", __func__, uuid_str);
+        return false;
+    }
+    obs_source_media_play_pause(source, pause);
+    return true;
+}
+
+/// Media control: play or pause
+bool bridge_media_source_stop(NSString *source_uuid) {
+    const char *uuid_str = source_uuid.UTF8String;
+    obs_source_t *source = uuid_source_list[uuid_str];
+    if (!source) {
+        printf("%s: unknown source %s\n", __func__, uuid_str);
+        return false;
+    }
+    obs_source_media_stop(source);
+    return true;
+}
+
+#pragma mark - Inputs
 
 NSArray *bridge_input_types() {
     const char *type_id;
@@ -304,38 +405,6 @@ NSArray *bridge_input_types() {
 //        printf("input type: %s (%s) (%s)\n", name, unversioned_type_id, deprecated ? "deprectated" : "OK");
     }
     return [list copy];
-}
-
-std::map<const char *, obs_source_t *> source_list;
-
-bool bridge_create_source(NSString *uuid, NSString *device_name, NSString *device_uid, bool frame_source) {
-    obs_data_t *camerSettings = obs_data_create();
-    obs_data_set_string(camerSettings, "device_name", device_name.UTF8String);
-    obs_data_set_string(camerSettings, "device", device_uid.UTF8String);
-
-    // Load camera
-    obs_source_t *source = obs_source_create("av_capture_input", "camera", camerSettings, nullptr);
-    if (!source) {
-        printf("Couldn't create source\n");
-        return false;
-    }
-    
-    if (frame_source) {
-        obs_source_add_frame_callback(source, frame_callback, nullptr);
-    }
-
-    source_list[uuid.UTF8String] = source;
-    obs_scene_add(scene1, source);
-    return true;
-}
-
-bool bridge_release_source(NSString *uuid) {
-    obs_source_t *source = source_list[uuid.UTF8String];
-    if (!source) {
-        return false;
-    }
-    obs_source_release(source);
-    return true;
 }
 
 NSArray *bridge_video_inputs() {

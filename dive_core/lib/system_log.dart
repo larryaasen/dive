@@ -1,3 +1,4 @@
+// TODO: finish SystemLog
 class SystemLog {
   static void message(String message, {String group = ''}) {
     _output(message, group);
