@@ -12,11 +12,11 @@
 
 @implementation TextureSource
 
-- (instancetype)initWithSourceUUID:(NSString *)sourceUUID registry:(NSObject<FlutterTextureRegistry> *)registry {
+- (instancetype)initWithUUID:(NSString *)trackingUUID registry:(NSObject<FlutterTextureRegistry> *)registry {
     self = [super init];
     NSAssert(self, @"super init cannot be nil");
     
-    self.sourceUUID = sourceUUID;
+    self.trackingUUID = trackingUUID;
     self.registry = registry;
     self.textureId = 0;
     return self;
@@ -34,7 +34,7 @@
         pixelBuffer = _latestPixelBuffer;
     }
 
-    printf("copyPixelBuffer %s\n", self.sourceUUID.UTF8String);
+    printf("copyPixelBuffer %s\n", self.trackingUUID.UTF8String);
     return pixelBuffer;
 }
 
@@ -51,7 +51,7 @@
         CFRelease(old);
     }
     [self.registry textureFrameAvailable:self.textureId];
-    printf("captureSample: %s: count=%ld\n", self.sourceUUID.UTF8String, self._sampleCount);
+    printf("captureSample: %s: count=%ld\n", self.trackingUUID.UTF8String, self._sampleCount);
 }
 
 @end

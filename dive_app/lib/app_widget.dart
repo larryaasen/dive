@@ -12,6 +12,7 @@ class AppWidget extends StatefulWidget {
 class _AppWidgetState extends State<AppWidget> {
   final _mediaSources = List<DiveMediaSource>();
   final _videoSources = List<DiveVideoSource>();
+  final _videoMixes = List<DiveVideoMix>();
 
   @override
   void initState() {
@@ -36,14 +37,22 @@ class _AppWidgetState extends State<AppWidget> {
     //   }
     // });
 
+    DiveVideoMix.create().then((mix) {
+      setState(() {
+        _videoMixes.add(mix);
+      });
+    });
+
     DiveInputs.video().then((videoInputs) {
       videoInputs.forEach((videoInput) {
         print(videoInput);
+        // if (videoInput.id == '0x8020000005ac8514') {
         DiveVideoSource.create(videoInput).then((source) {
           setState(() {
             _videoSources.add(source);
           });
         });
+        // }
       });
     });
   }
@@ -51,11 +60,11 @@ class _AppWidgetState extends State<AppWidget> {
   @override
   Widget build(BuildContext context) {
     Widget content;
-    if (_videoSources.length > 1) {
+    if (_videoSources.length > 0) {
       final box1 = DivePreview(_videoSources[0].controller);
-      final box2 = DivePreview(_videoSources[1].controller);
-      final box3 = DivePreview(_videoSources[0].controller);
-      final box4 = DivePreview(_videoSources[1].controller);
+      final box2 = DivePreview(_videoSources[0].controller);
+      final box3 = DivePreview(_videoSources[1].controller);
+      final box4 = DivePreview(_videoMixes[0].controller);
 
       content = Center(
           child: GridView.count(

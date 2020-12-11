@@ -13,6 +13,7 @@ class DivePlugin {
   static const String _methodGetVideoInputs = 'getVideoInputs';
   static const String _methodCreateMediaSource = 'createMediaSource';
   static const String _methodCreateVideoSource = 'createVideoSource';
+  static const String _methodCreateVideoMix = 'createVideoMix';
 
   static const String _methodMediaPlayPause = 'mediaPlayPause';
   static const String _methodMediaStop = 'mediaStop';
@@ -32,9 +33,9 @@ class DivePlugin {
         .invokeMethod(_methodDisposeTexture, {"texture_id": textureId});
   }
 
-  static Future<int> initializeTexture({String sourceUUID}) async {
-    return await _channel
-        .invokeMethod(_methodInitializeTexture, {'source_uuid': sourceUUID});
+  static Future<int> initializeTexture({String trackingUUID}) async {
+    return await _channel.invokeMethod(
+        _methodInitializeTexture, {'tracking_uuid': trackingUUID});
   }
 
   static Future<List<DiveInputType>> inputTypes() async {
@@ -62,6 +63,11 @@ class DivePlugin {
       'device_name': deviceName,
       'device_uid': deviceUid
     });
+  }
+
+  static Future<bool> createVideoMix(String trackingUUID) async {
+    return await _channel
+        .invokeMethod(_methodCreateVideoMix, {'tracking_uuid': trackingUUID});
   }
 
   static Future<bool> mediaPlayPause(String sourceUUID, bool pause) async {

@@ -75,11 +75,12 @@ class PreviewException implements Exception {
 /// Before using a [TextureController] a call to [initialize] must complete.
 ///
 /// To show the texture preview on the screen use a [TexturePreview] widget.
+/// TODO: do we need this ValueNotifier?
 class TextureController extends ValueNotifier<PreviewValue> {
-  final String sourceUUID;
+  final String trackingUUID;
 
   /// Creates a new controller in an uninitialized state.
-  TextureController({this.sourceUUID})
+  TextureController({this.trackingUUID})
       : super(const PreviewValue.uninitialized());
 
   int _textureId;
@@ -100,7 +101,7 @@ class TextureController extends ValueNotifier<PreviewValue> {
   ///
   /// Throws a [PreviewException] if the initialization fails.
   Future<void> initialize() async {
-    ArgumentError.checkNotNull(sourceUUID, 'sourceUUID');
+    ArgumentError.checkNotNull(trackingUUID, 'trackingUUID');
     if (_isDisposed || value.isInitialized) {
       return Future<void>.value();
     }
@@ -108,7 +109,7 @@ class TextureController extends ValueNotifier<PreviewValue> {
       _creatingCompleter = Completer<void>();
 
       final int textureId =
-          await DivePlugin.initializeTexture(sourceUUID: sourceUUID);
+          await DivePlugin.initializeTexture(trackingUUID: trackingUUID);
       _textureId = textureId;
       value = value.copyWith(
         isInitialized: true,

@@ -52,6 +52,8 @@ static SceneContext scene1;
 static std::map<const char *, obs_source_t *> uuid_source_list;
 static std::map<obs_source_t *, const char *> source_uuid_list;
 
+static std::map<unsigned int, const char *> videomix_uuid_list;
+
 // Map of all texture sources where the key is a source UUID and the value is a texture source pointer
 static std::map<const char *, TextureSource *, key_cmp_str> _textureSourceMap;
 // A duplicate map of all texture source that provides Objective-C reference counting
@@ -60,8 +62,8 @@ static NSMutableDictionary *_textureSources = [NSMutableDictionary new];
 static bool reset_video();
 static bool reset_audio();
 static bool create_service();
-static void video_callback(void *param, struct video_data *frame);
-static void frame_callback(void *param, obs_source_t *source, struct obs_source_frame *frame);
+static void videomix_callback(void *param, struct video_data *frame);
+static void source_frame_callback(void *param, obs_source_t *source, struct obs_source_frame *frame);
 
 extern "C" void addFrameCapture(TextureSource *textureSource) {
     if (textureSource == NULL) {
@@ -69,20 +71,20 @@ extern "C" void addFrameCapture(TextureSource *textureSource) {
         return;
     }
     
-    if (textureSource.sourceUUID == NULL || textureSource.sourceUUID.length == 0) {
+    if (textureSource.trackingUUID == NULL || textureSource.trackingUUID.length == 0) {
         printf("addFrameCapture: missing sourceUUID\n");
         return;
     }
 
-    const char *uuid_str = textureSource.sourceUUID.UTF8String;
+    const char *uuid_str = textureSource.trackingUUID.UTF8String;
 
     @synchronized (_textureSources) {
-        TextureSource *source = _textureSources[textureSource.sourceUUID];
+        TextureSource *source = _textureSources[textureSource.trackingUUID];
         if (source != NULL) {
             printf("addFrameCapture: duplicate texture source: %s\n", uuid_str);
             return;
         }
-        [_textureSources setObject:textureSource forKey:textureSource.sourceUUID];
+        [_textureSources setObject:textureSource forKey:textureSource.trackingUUID];
         _textureSourceMap[uuid_str] = textureSource;
     }
 
@@ -95,21 +97,21 @@ extern "C" void removeFrameCapture(TextureSource *textureSource) {
         return;
     }
     
-    if (textureSource.sourceUUID == NULL || textureSource.sourceUUID.length == 0) {
+    if (textureSource.trackingUUID == NULL || textureSource.trackingUUID.length == 0) {
         printf("removeFrameCapture: missing sourceUUID\n");
         return;
     }
 
-    const char *uuid_str = textureSource.sourceUUID.UTF8String;
+    const char *uuid_str = textureSource.trackingUUID.UTF8String;
 
     @synchronized (_textureSources) {
-        TextureSource *source = _textureSources[textureSource.sourceUUID];
+        TextureSource *source = _textureSources[textureSource.trackingUUID];
         if (source == NULL) {
             printf("removeFrameCapture: unknown texture source: %s\n", uuid_str);
             return;
         }
 
-        [_textureSources removeObjectForKey:textureSource.sourceUUID];
+        [_textureSources removeObjectForKey:textureSource.trackingUUID];
         _textureSourceMap.erase(uuid_str);
     }
 }
@@ -138,20 +140,31 @@ static void save_source(NSString *source_uuid, obs_source_t *source) {
 
 static void remove_source(const char *uuid_str) {
     obs_source_t *source = uuid_source_list[uuid_str];
-    free((void *)source_uuid_list[source]);
     uuid_source_list.erase(uuid_str);
     source_uuid_list.erase(source);
+    free((void *)source_uuid_list[source]);
 }
 
-static void add_video_callback() {
+static void add_videomix_callback(NSString *tracking_uuid) {
+    const char *_tracking_uuid_str = tracking_uuid.UTF8String;
+    const char *tracking_uuid_str = strdup(_tracking_uuid_str);
+    
+    unsigned int index = 0;
+    videomix_uuid_list[index] = tracking_uuid_str;
+    
     struct video_scale_info *conversion = NULL;
-    void *param = NULL;
-    obs_add_raw_video_callback(conversion, video_callback, param);
+    void *param = (void *)tracking_uuid_str;
+    obs_add_raw_video_callback(conversion, videomix_callback, param);
 }
 
-static void remove_video_callback() {
-    void *param = NULL;
-    obs_remove_raw_video_callback(video_callback, param);
+static void remove_videomix_callback(NSString *tracking_uuid) {
+    unsigned int index=0;
+    const char *tracking_uuid_str = videomix_uuid_list[index];
+    void *param = (void *)tracking_uuid_str;
+    obs_remove_raw_video_callback(videomix_callback, param);
+
+    videomix_uuid_list.erase(index);
+    free((void *)tracking_uuid_str);
 }
 
 extern "C" bool create_obs(void)
@@ -189,6 +202,7 @@ static bool reset_video() {
     ovi.base_height = cy;
     ovi.output_width = cx;
     ovi.output_height = cy;
+    ovi.colorspace = VIDEO_CS_DEFAULT;
 
     int rv = obs_reset_video(&ovi);
     if (rv != OBS_VIDEO_SUCCESS) {
@@ -207,10 +221,6 @@ static bool reset_audio() {
         return false;
     }
     return true;
-}
-
-static void video_callback(void *param, struct video_data *frame) {
-    printf("%s linesize[0] %d\n", __func__, frame->linesize[0]);
 }
 
 static bool create_service() {
@@ -252,15 +262,15 @@ static bool create_service() {
     return true;
 }
 
-static void copy_frame_to_source(struct obs_source_frame *frame, TextureSource *textureSource)
+static void copy_frame_to_texture(uint32_t width, uint32_t height, OSType pixelFormatType, uint32_t linesize, uint8_t *data, TextureSource *textureSource)
 {
     CVPixelBufferRef pxbuffer = NULL;
     CVReturn status = CVPixelBufferCreateWithBytes(kCFAllocatorDefault,
-                                                   frame->width,
-                                                   frame->height,
-                                                   kCMPixelFormat_422YpCbCr8,
-                                                   frame->data[0],
-                                                   frame->linesize[0],
+                                                   width,
+                                                   height,
+                                                   pixelFormatType,
+                                                   data,
+                                                   linesize,
                                                    NULL,
                                                    NULL,
                                                    NULL,
@@ -274,7 +284,21 @@ static void copy_frame_to_source(struct obs_source_frame *frame, TextureSource *
     CFRelease(pxbuffer);
 }
 
-static void frame_callback(void *param, obs_source_t *source, struct obs_source_frame *frame)
+static void copy_source_frame_to_texture(struct obs_source_frame *frame, TextureSource *textureSource)
+{
+    copy_frame_to_texture(frame->width, frame->height, kCMPixelFormat_422YpCbCr8, frame->linesize[0], frame->data[0], textureSource);
+}
+
+static void copy_videomix_frame_to_texture(struct video_data *frame, TextureSource *textureSource)
+{
+    struct obs_video_info ovi;
+    obs_get_video_info(&ovi);
+
+    // TODO: the frame has the red and blue swapped
+    copy_frame_to_texture(ovi.output_width, ovi.output_height, kCMPixelFormat_32BGRA, frame->linesize[0], frame->data[0], textureSource);
+}
+
+static void source_frame_callback(void *param, obs_source_t *source, struct obs_source_frame *frame)
 {
     const char *uuid_str = source_uuid_list[source];
     if (uuid_str == NULL) {
@@ -287,14 +311,32 @@ static void frame_callback(void *param, obs_source_t *source, struct obs_source_
     @synchronized (_textureSources) {
         TextureSource *textureSource = _textureSourceMap[uuid_str];
         if (textureSource != NULL) {
-            copy_frame_to_source(frame, textureSource);
+            copy_source_frame_to_texture(frame, textureSource);
         } else {
-            printf("frame_callback: no texture source for %s\n", uuid_str);
+            printf("%s: no texture source for %s\n", __func__, uuid_str);
         }
     }
 }
 
+static void videomix_callback(void *param, struct video_data *frame) {
+    printf("%s linesize[0] %d\n", __func__, frame->linesize[0]);
+
+    unsigned int index = 0;
+    const char *uuid_str = videomix_uuid_list[index];
+    @synchronized (_textureSources) {
+        TextureSource *textureSource = _textureSourceMap[uuid_str];
+        if (textureSource != NULL) {
+            copy_videomix_frame_to_texture(frame, textureSource);
+        } else {
+            printf("%s: no texture source for %s\n", __func__, uuid_str);
+        }
+    }
+}
+
+
 // TODO: error handling of input paramters, and make this work in the bridge
+
+static bool first = true;
 
 static bool _create_source(NSString *source_uuid, NSString *source_id, NSString *name, obs_data_t *settings, bool frame_source) {
     obs_source_t *source = obs_source_create(source_id.UTF8String, name.UTF8String, settings, nullptr);
@@ -304,11 +346,32 @@ static bool _create_source(NSString *source_uuid, NSString *source_id, NSString 
     }
     
     if (frame_source) {
-        obs_source_add_frame_callback(source, frame_callback, nullptr);
+        obs_source_add_frame_callback(source, source_frame_callback, nullptr);
     }
 
     save_source(source_uuid, source);
-    obs_scene_add(scene1, source);
+    obs_sceneitem_t *item = obs_scene_add(scene1, source);
+    
+    // TODO: add parameters for bound, position, rotation, scale, etc.
+    if (!first) {
+        vec2 size;
+        vec2_set(&size, 1280/2, 720/2);
+        obs_sceneitem_set_bounds(item, &size);
+        obs_sceneitem_set_bounds_type(item, OBS_BOUNDS_SCALE_INNER);
+    } else {
+        vec2 size;
+        vec2_set(&size, 680, 400);
+        obs_sceneitem_set_bounds(item, &size);
+        obs_sceneitem_set_bounds_type(item, OBS_BOUNDS_SCALE_INNER);
+        
+        vec2 pos;
+        vec2_set(&pos, 600, 320);
+        obs_sceneitem_set_pos(item, &pos);
+    }
+
+    first = false;
+//    obs_sceneitem_set_pos(item, )
+//    obs_sceneitem_set_scale(item, vec2())
     return true;
 }
 
@@ -343,6 +406,16 @@ bool bridge_create_video_source(NSString *source_uuid, NSString *device_name, NS
     obs_data_set_string(settings, "device", device_uid.UTF8String);
     
     return _create_source(source_uuid, @"av_capture_input", @"camera", settings, true);
+}
+
+bool bridge_add_videomix(NSString *tracking_uuid) {
+    add_videomix_callback(tracking_uuid);
+    return true;
+}
+
+bool bridge_remove_videomix(NSString *tracking_uuid) {
+    remove_videomix_callback(tracking_uuid);
+    return true;
 }
 
 #pragma mark - Media Controls

@@ -21,19 +21,54 @@ class DiveInputs {
 // TODO: DiveSettings needs to be implemented
 class DiveSettings {}
 
-class DiveSource {
+/// Use this class as a base class or a mixin
+class DiveController {
+  TextureController _controller;
+  TextureController get controller => _controller;
+
+  /// This must be called right after this class is instantiated and
+  /// before doing anything else.
+  Future<void> setupController(String trackingUUID) async {
+    _controller = TextureController(trackingUUID: trackingUUID);
+    await _controller.initialize();
+    return;
+  }
+
+  /// Release the texture controller.
+  void releaseController() {
+    _controller.dispose();
+  }
+}
+
+class DiveBase {
+  /// A RFC4122 V1 UUID (time-based)
+  final String _trackingUUID;
+
+  /// A RFC4122 V1 UUID (time-based)
+  String get trackingUUID => _trackingUUID;
+
+  DiveBase() : _trackingUUID = _uuid.v1();
+}
+
+class DiveVideoMix extends DiveBase with DiveController {
+  DiveVideoMix();
+
+  static Future<DiveVideoMix> create() async {
+    final video = DiveVideoMix();
+    await video.setupController(video.trackingUUID);
+    if (!await DivePlugin.createVideoMix(video.trackingUUID)) {
+      return null;
+    }
+    return video;
+  }
+}
+
+class DiveSource extends DiveBase {
   final DiveInputType inputType;
   final String name;
   final DiveSettings settings;
 
-  DiveSource({this.inputType, this.name, this.settings})
-      : _sourceUUID = _uuid.v1();
-
-  /// A RFC4122 V1 UUID (time-based)
-  final String _sourceUUID;
-
-  /// A RFC4122 V1 UUID (time-based)
-  String get sourceUUID => _sourceUUID;
+  DiveSource({this.inputType, this.name, this.settings});
 
   // TODO: DiveSource.create() needs to be implemented
   static Future<DiveSource> create(
@@ -41,31 +76,20 @@ class DiveSource {
       null;
 }
 
-class DiveTextureSource extends DiveSource {
+class DiveTextureSource extends DiveSource with DiveController {
   DiveTextureSource({DiveInputType inputType, String name})
       : super(inputType: inputType, name: name);
-
-  TextureController _controller;
-  TextureController get controller => _controller;
-
-  /// This must be called right after this class is instantiated and
-  /// before creating the source.
-  Future<void> setupController() async {
-    _controller = TextureController(sourceUUID: _sourceUUID);
-    await _controller.initialize();
-    return;
-  }
 }
 
-class DiveVideoSource extends DiveTextureSource {
+class DiveVideoSource extends DiveSource with DiveController {
   DiveVideoSource({String name})
       : super(inputType: DiveInputType.videoCaptureDevice, name: name);
 
   static Future<DiveVideoSource> create(DiveVideoInput videoInput) async {
     final source = DiveVideoSource(name: 'my video');
-    await source.setupController();
+    await source.setupController(source.trackingUUID);
     if (!await DivePlugin.createVideoSource(
-        source.sourceUUID, videoInput.name, videoInput.id)) {
+        source.trackingUUID, videoInput.name, videoInput.id)) {
       return null;
     }
     return source;
@@ -78,23 +102,23 @@ class DiveMediaSource extends DiveTextureSource {
 
   static Future<DiveMediaSource> create(String localFile) async {
     final source = DiveMediaSource(name: 'my media');
-    await source.setupController();
-    if (!await DivePlugin.createMediaSource(source.sourceUUID, localFile)) {
+    await source.setupController(source.trackingUUID);
+    if (!await DivePlugin.createMediaSource(source.trackingUUID, localFile)) {
       return null;
     }
     return source;
   }
 
   Future<bool> play() async {
-    return await DivePlugin.mediaPlayPause(sourceUUID, false);
+    return await DivePlugin.mediaPlayPause(trackingUUID, false);
   }
 
   Future<bool> pause() async {
-    return await DivePlugin.mediaPlayPause(sourceUUID, true);
+    return await DivePlugin.mediaPlayPause(trackingUUID, true);
   }
 
   Future<bool> stop() async {
-    return await DivePlugin.mediaStop(sourceUUID);
+    return await DivePlugin.mediaStop(trackingUUID);
   }
 }
 

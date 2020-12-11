@@ -14,6 +14,7 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         static let GetVideoInputs = "getVideoInputs"
         static let CreateMediaSource = "createMediaSource"
         static let CreateVideoSource = "createVideoSource"
+        static let CreateVideoMix = "createVideoMix"
         static let MediaPlayPause = "mediaPlayPause"
         static let MediaStop = "mediaStop"
     }
@@ -52,6 +53,8 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
             result(createMediaSource(arguments))
         case Method.CreateVideoSource:
             result(createVideoSource(arguments))
+        case Method.CreateVideoMix:
+            result(createVideoMix(arguments))
         case Method.MediaPlayPause:
             result(mediaPlayPause(arguments))
         case Method.MediaStop:
@@ -73,13 +76,13 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
     }
 
     private func initializeTexture(_ arguments: [String: Any]?) -> Int64 {
-        guard let args = arguments, let sourceUUID = args["source_uuid"] as! String? else {
+        guard let args = arguments, let trackingUUID = args["tracking_uuid"] as! String? else {
             return 0
         }
-        if let source = TextureSource(sourceUUID: sourceUUID, registry: DiveCorePlugin.textureRegistry) {
+        if let source = TextureSource(uuid: trackingUUID, registry: DiveCorePlugin.textureRegistry) {
             if let texturedId = DiveCorePlugin.textureRegistry?.register(source) {
                 source.textureId = texturedId
-                source.sourceUUID = sourceUUID
+                source.trackingUUID = trackingUUID
                 addFrameCapture(source)
                 return texturedId
             }
@@ -121,6 +124,15 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         return bridge_create_video_source(source_uuid, name, uid)
     }
     
+    private func createVideoMix(_ arguments: [String: Any]?) -> Bool {
+        guard let args = arguments,
+            let tracking_uuid = args["tracking_uuid"] as! String?
+            else {
+                return false
+        }
+        return bridge_add_videomix(tracking_uuid)
+    }
+
     private func mediaPlayPause(_ arguments: [String: Any]?) -> Bool {
         guard let args = arguments,
             let source_uuid = args["source_uuid"] as! String?,

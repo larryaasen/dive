@@ -21,6 +21,8 @@ bool create_obs(void);
 bool bridge_release_source(NSString *source_uuid);
 bool bridge_create_media_source(NSString *sourc_uuid, NSString *local_file);
 bool bridge_create_video_source(NSString *source_uuid, NSString *device_name, NSString *device_uid);
+bool bridge_add_videomix(NSString *tracking_uuid);
+bool bridge_remove_videomix(NSString *tracking_uuid);
 
 #pragma mark - Media Controls
 
