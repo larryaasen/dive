@@ -49,7 +49,7 @@ bool obs_started = false;
 static SceneContext scene1;
 
 // Map of all created sources where the key is a source UUID and the value is a source pointer
-static std::map<const char *, obs_source_t *> uuid_source_list;
+static std::map<const char *, obs_source_t *, key_cmp_str> uuid_source_list;
 static std::map<obs_source_t *, const char *> source_uuid_list;
 
 static std::map<unsigned int, const char *> videomix_uuid_list;
@@ -262,7 +262,17 @@ static bool create_service() {
     return true;
 }
 
-static void copy_frame_to_texture(uint32_t width, uint32_t height, OSType pixelFormatType, uint32_t linesize, uint8_t *data, TextureSource *textureSource)
+static uint8_t *swap_blue_red_colors(uint8_t *data, size_t dataSize) {
+    for (unsigned int zz=0; zz<dataSize; zz+=4) {
+        // swap bytes 0 and 2 out of 0-3
+        uint8_t temp = data[zz];
+        data[zz] = data[zz+2];
+        data[zz+2] = temp;
+    }
+    return data;
+}
+
+static void copy_frame_to_texture(size_t width, size_t height, OSType pixelFormatType, size_t linesize, uint8_t *data, TextureSource *textureSource)
 {
     CVPixelBufferRef pxbuffer = NULL;
     CVReturn status = CVPixelBufferCreateWithBytes(kCFAllocatorDefault,
@@ -284,9 +294,52 @@ static void copy_frame_to_texture(uint32_t width, uint32_t height, OSType pixelF
     CFRelease(pxbuffer);
 }
 
+static void copy_planar_frame_to_texture(size_t width, size_t height, OSType pixelFormatType, uint32_t linesize[], uint8_t *data[], TextureSource *textureSource)
+{
+    CVPixelBufferRef pixelBufferOut = NULL;
+    size_t plane_count = 3;
+    size_t planeWidths[3] = {width, width/2, width/2};
+    size_t planeHeights[3] = {height, height/2, height/2};
+    size_t planeBytesPerRows[3] = {linesize[0], linesize[1], linesize[2]};
+    uint8_t *plane_ptrs[3] = {data[0], data[1], data[2]};
+    size_t contiguous_buf_size =
+        (planeBytesPerRows[0]*planeHeights[0]) +
+        (planeBytesPerRows[1]*planeHeights[1]) +
+        (planeBytesPerRows[2]*planeHeights[2]);
+    
+    CVReturn status = CVPixelBufferCreateWithPlanarBytes(
+                                       kCFAllocatorDefault,
+                                       width,
+                                       height,
+                                       pixelFormatType,
+                                       NULL,
+                                       contiguous_buf_size,
+                                       plane_count,
+                                       (void **)plane_ptrs,
+                                       planeWidths,
+                                       planeHeights,
+                                       planeBytesPerRows,
+                                       NULL,
+                                       NULL,
+                                       NULL,
+                                       &pixelBufferOut);
+
+    if (status != kCVReturnSuccess) {
+        NSLog(@"copy_planar_frame_to_texture: Operation failed");
+        return;
+    }
+    
+    [textureSource captureSample: pixelBufferOut];
+    CFRelease(pixelBufferOut);
+}
+
 static void copy_source_frame_to_texture(struct obs_source_frame *frame, TextureSource *textureSource)
 {
-    copy_frame_to_texture(frame->width, frame->height, kCMPixelFormat_422YpCbCr8, frame->linesize[0], frame->data[0], textureSource);
+    if (frame->format == VIDEO_FORMAT_UYVY) {
+        copy_frame_to_texture(frame->width, frame->height, kCVPixelFormatType_422YpCbCr8, frame->linesize[0], frame->data[0], textureSource);
+    } else if (frame->format == VIDEO_FORMAT_I420) {
+        copy_planar_frame_to_texture(frame->width, frame->height, kCVPixelFormatType_420YpCbCr8PlanarFullRange, frame->linesize, frame->data, textureSource);
+    }
 }
 
 static void copy_videomix_frame_to_texture(struct video_data *frame, TextureSource *textureSource)
@@ -295,7 +348,8 @@ static void copy_videomix_frame_to_texture(struct video_data *frame, TextureSour
     obs_get_video_info(&ovi);
 
     // TODO: the frame has the red and blue swapped
-    copy_frame_to_texture(ovi.output_width, ovi.output_height, kCMPixelFormat_32BGRA, frame->linesize[0], frame->data[0], textureSource);
+    uint8_t *data = swap_blue_red_colors(frame->data[0], frame->linesize[0]*ovi.output_height);
+    copy_frame_to_texture(ovi.output_width, ovi.output_height, kCVPixelFormatType_32BGRA, frame->linesize[0], data, textureSource);
 }
 
 static void source_frame_callback(void *param, obs_source_t *source, struct obs_source_frame *frame)
@@ -306,7 +360,7 @@ static void source_frame_callback(void *param, obs_source_t *source, struct obs_
         return;
     }
 
-    printf("%s: %s\n", __func__, uuid_str);
+//    printf("%s: %s\n", __func__, uuid_str);
 
     @synchronized (_textureSources) {
         TextureSource *textureSource = _textureSourceMap[uuid_str];
@@ -319,7 +373,7 @@ static void source_frame_callback(void *param, obs_source_t *source, struct obs_
 }
 
 static void videomix_callback(void *param, struct video_data *frame) {
-    printf("%s linesize[0] %d\n", __func__, frame->linesize[0]);
+//    printf("%s linesize[0] %d\n", __func__, frame->linesize[0]);
 
     unsigned int index = 0;
     const char *uuid_str = videomix_uuid_list[index];
@@ -333,17 +387,20 @@ static void videomix_callback(void *param, struct video_data *frame) {
     }
 }
 
+// TODO: implement sources: color source, image source.
+
 
 // TODO: error handling of input paramters, and make this work in the bridge
 
-static bool first = true;
+static int _souce_count = 0;
 
-static bool _create_source(NSString *source_uuid, NSString *source_id, NSString *name, obs_data_t *settings, bool frame_source) {
+static obs_source_t *_create_source(NSString *source_uuid, NSString *source_id, NSString *name, obs_data_t *settings, bool frame_source) {
     obs_source_t *source = obs_source_create(source_id.UTF8String, name.UTF8String, settings, nullptr);
     if (!source) {
         printf("%s: Could not create source\n", __func__);
-        return false;
+        return NULL;
     }
+    _souce_count++;
     
     if (frame_source) {
         obs_source_add_frame_callback(source, source_frame_callback, nullptr);
@@ -353,26 +410,38 @@ static bool _create_source(NSString *source_uuid, NSString *source_id, NSString 
     obs_sceneitem_t *item = obs_scene_add(scene1, source);
     
     // TODO: add parameters for bound, position, rotation, scale, etc.
-    if (!first) {
+    if (strcmp(name.UTF8String, "video file") == 0) {
         vec2 size;
-        vec2_set(&size, 1280/2, 720/2);
-        obs_sceneitem_set_bounds(item, &size);
-        obs_sceneitem_set_bounds_type(item, OBS_BOUNDS_SCALE_INNER);
-    } else {
-        vec2 size;
-        vec2_set(&size, 680, 400);
+        vec2_set(&size, 500, 280);
         obs_sceneitem_set_bounds(item, &size);
         obs_sceneitem_set_bounds_type(item, OBS_BOUNDS_SCALE_INNER);
         
         vec2 pos;
-        vec2_set(&pos, 600, 320);
+        vec2_set(&pos, 50, 50);
+        obs_sceneitem_set_pos(item, &pos);
+    } else if (_souce_count == 2) {
+        vec2 size;
+        vec2_set(&size, 1280, 720);
+        obs_sceneitem_set_bounds(item, &size);
+        obs_sceneitem_set_bounds_type(item, OBS_BOUNDS_SCALE_INNER);
+        
+        vec2 pos;
+        vec2_set(&pos, 0, 0);
+        obs_sceneitem_set_pos(item, &pos);
+        
+        obs_sceneitem_set_order_position(item, 0);
+    } else {
+        vec2 size;
+        vec2_set(&size, 500, 280);
+        obs_sceneitem_set_bounds(item, &size);
+        obs_sceneitem_set_bounds_type(item, OBS_BOUNDS_SCALE_INNER);
+        
+        vec2 pos;
+        vec2_set(&pos, 690, 50);
         obs_sceneitem_set_pos(item, &pos);
     }
 
-    first = false;
-//    obs_sceneitem_set_pos(item, )
-//    obs_sceneitem_set_scale(item, vec2())
-    return true;
+    return source;
 }
 
 #pragma mark - Bridge functions
@@ -391,13 +460,26 @@ bool bridge_release_source(NSString *source_uuid) {
 
 bool bridge_create_media_source(NSString *source_uuid, NSString *local_file) {
     // Load video file
-    obs_data_t *settings = obs_data_create();
-    obs_data_set_default_bool(settings, "is_local_file", true);
-    obs_data_set_default_bool(settings, "looping", true);
+    obs_data_t *settings = obs_get_source_defaults("ffmpeg_source");
+    obs_data_set_default_bool(settings, "looping", true);   // TODO: looping not working
     obs_data_set_default_bool(settings, "clear_on_media_end", false);
     obs_data_set_string(settings, "local_file", local_file.UTF8String);
+    
+    // TODO: add this file open check to propvide feedback on failures
+//    FILE *fp = fopen(local_file.UTF8String, "r");
+//    if (fp == NULL) {
+//        int errnum = errno;
+//        fprintf(stderr, "Value of errno: %d\n", errno);
+//        perror("Error printed by perror");
+//        fprintf(stderr, "Error opening file: %s\n", strerror( errnum ));
+//    }
+//    fclose(fp);
 
-    return _create_source(source_uuid, @"ffmpeg_source", @"video file", settings, true);
+    obs_source_t *source = _create_source(source_uuid, @"ffmpeg_source", @"video file", settings, true);
+    if (source != NULL) {
+        obs_source_update(source, settings);
+    }
+    return source != NULL;
 }
 
 bool bridge_create_video_source(NSString *source_uuid, NSString *device_name, NSString *device_uid) {
@@ -405,7 +487,8 @@ bool bridge_create_video_source(NSString *source_uuid, NSString *device_name, NS
     obs_data_set_string(settings, "device_name", device_name.UTF8String);
     obs_data_set_string(settings, "device", device_uid.UTF8String);
     
-    return _create_source(source_uuid, @"av_capture_input", @"camera", settings, true);
+    obs_source_t *source = _create_source(source_uuid, @"av_capture_input", @"camera", settings, true);
+    return source != NULL;
 }
 
 bool bridge_add_videomix(NSString *tracking_uuid) {

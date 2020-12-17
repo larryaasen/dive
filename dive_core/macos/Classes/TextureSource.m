@@ -34,7 +34,7 @@
         pixelBuffer = _latestPixelBuffer;
     }
 
-    printf("copyPixelBuffer %s\n", self.trackingUUID.UTF8String);
+    // printf("copyPixelBuffer %s\n", self.trackingUUID.UTF8String);
     return pixelBuffer;
 }
 
@@ -51,7 +51,7 @@
         CFRelease(old);
     }
     [self.registry textureFrameAvailable:self.textureId];
-    printf("captureSample: %s: count=%ld\n", self.trackingUUID.UTF8String, self._sampleCount);
+    // printf("captureSample: %s: count=%ld\n", self.trackingUUID.UTF8String, self._sampleCount);
 }
 
 @end

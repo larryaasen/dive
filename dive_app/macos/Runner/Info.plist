@@ -5,9 +5,11 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string></string>
+	<string>DiveApp</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
@@ -28,8 +30,12 @@
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Used for video recording and streaming.</string>
-	<key>CFBundleGetInfoString</key>
-	<string></string>
+	<key>NSDesktopFolderUsageDescription</key>
+	<string>Used for video recording and streaming.</string>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>Used for video recording and streaming.</string>
+	<key>NSDownloadsFolderUsageDescription</key>
+	<string>Used for video recording and streaming.</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>$(PRODUCT_COPYRIGHT)</string>
 	<key>NSMainNibFile</key>
@@ -38,11 +44,5 @@
 	<string>Used for video recording and streaming.</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-	<key>NSDownloadsFolderUsageDescription</key>
-	<string>Used for video recording and streaming.</string>
-	<key>NSDesktopFolderUsageDescription</key>
-	<string>Used for video recording and streaming.</string>
-	<key>NSDocumentsFolderUsageDescription</key>
-	<string>Used for video recording and streaming.</string>
 </dict>
 </plist>
