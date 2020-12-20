@@ -10,15 +10,23 @@ class AppWidget extends StatefulWidget {
 }
 
 class _AppWidgetState extends State<AppWidget> {
+  final _imageSources = List<DiveImageSource>();
   final _mediaSources = List<DiveMediaSource>();
   final _videoSources = List<DiveVideoSource>();
   final _videoMixes = List<DiveVideoMix>();
+  DiveScene _currentScene;
 
   @override
   void initState() {
     super.initState();
 
     DivePlugin.platformVersion().then((value) => print("$value"));
+
+    DiveScene.create('Scene 1').then((scene) => setup(scene));
+  }
+
+  void setup(DiveScene scene) {
+    _currentScene = scene;
 
     // Print all input types to the log
     DiveInputTypes.all().then((inputTypes) {
@@ -34,11 +42,20 @@ class _AppWidgetState extends State<AppWidget> {
     });
 
     DiveInputs.video().then((videoInputs) {
+      var xLoc = 50.0;
       videoInputs.forEach((videoInput) {
         print(videoInput);
         DiveVideoSource.create(videoInput).then((source) {
           setState(() {
             _videoSources.add(source);
+          });
+          _currentScene.addSource(source).then((item) {
+            final info = DiveTransformInfo(
+                pos: DiveVec2(xLoc, 50),
+                bounds: DiveVec2(500, 280),
+                boundsType: DiveBoundsType.SCALE_INNER);
+            item.updateTransformInfo(info);
+            xLoc += 680.0;
           });
         });
       });
@@ -50,7 +67,30 @@ class _AppWidgetState extends State<AppWidget> {
         setState(() {
           _mediaSources.add(source);
         });
-        source.play();
+        _currentScene.addSource(source).then((item) {
+          final info = DiveTransformInfo(
+              pos: DiveVec2(50, 330),
+              bounds: DiveVec2(500, 280),
+              boundsType: DiveBoundsType.SCALE_INNER);
+          item.updateTransformInfo(info);
+          source.play();
+        });
+      }
+    });
+
+    final file = '/Users/larry/Downloads/MacBookPro13.jpg';
+    DiveImageSource.create(file).then((source) {
+      if (source != null) {
+        setState(() {
+          _imageSources.add(source);
+        });
+        _currentScene.addSource(source).then((item) {
+          final info = DiveTransformInfo(
+              pos: DiveVec2(730, 330),
+              bounds: DiveVec2(500, 280),
+              boundsType: DiveBoundsType.SCALE_INNER);
+          item.updateTransformInfo(info);
+        });
       }
     });
   }
@@ -65,7 +105,7 @@ class _AppWidgetState extends State<AppWidget> {
     final box3 = DivePreview(
         _videoSources.length > 1 ? _videoSources[1].controller : null);
     final box4 = DivePreview(
-        _videoSources.length > 1 ? _videoSources[1].controller : null);
+        _imageSources.length > 0 ? _imageSources[0].controller : null);
 
     content = GridView.count(
       primary: false,

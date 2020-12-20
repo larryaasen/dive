@@ -8,10 +8,10 @@ class DiveVideoInput extends _DiveInput {
 
   DiveVideoInput({this.name, this.id});
 
-  static DiveVideoInput fromJson(dynamic json) {
+  static DiveVideoInput fromMap(dynamic map) {
     return DiveVideoInput(
-      id: json['id'],
-      name: json['name'],
+      id: map['id'],
+      name: map['name'],
     );
   }
 

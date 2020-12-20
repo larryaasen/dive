@@ -21,19 +21,6 @@ struct OBSUniqueHandle : std::unique_ptr<T, std::function<D_T>> {
     operator T *() { return base::get(); }
 };
 
-#define DECLARE_DELETER(x) decltype(x), x
-
-using SourceContext =
-    OBSUniqueHandle<obs_source, DECLARE_DELETER(obs_source_release)>;
-
-using SceneContext =
-    OBSUniqueHandle<obs_scene, DECLARE_DELETER(obs_scene_release)>;
-
-using DisplayContext =
-    OBSUniqueHandle<obs_display, DECLARE_DELETER(obs_display_destroy)>;
-
-#undef DECLARE_DELETER
-
 struct key_cmp_str
 {
    bool operator()(char const *a, char const *b) const
@@ -45,19 +32,23 @@ struct key_cmp_str
 // obs is not designed for hot reload, so only start it once
 bool obs_started = false;
 
-//DisplayContext display;
-static SceneContext scene1;
+/// Map of all created scenes where the key is a scene UUID and the value is a scene pointer
+static std::map<const char *, obs_scene_t *, key_cmp_str> uuid_scene_list;
+static std::map<obs_scene_t *, const char *> scene_uuid_list;
 
-// Map of all created sources where the key is a source UUID and the value is a source pointer
+/// Map of all created sources where the key is a source UUID and the value is a source pointer
 static std::map<const char *, obs_source_t *, key_cmp_str> uuid_source_list;
 static std::map<obs_source_t *, const char *> source_uuid_list;
 
 static std::map<unsigned int, const char *> videomix_uuid_list;
 
-// Map of all texture sources where the key is a source UUID and the value is a texture source pointer
+/// Map of all texture sources where the key is a source UUID and the value is a texture source pointer
 static std::map<const char *, TextureSource *, key_cmp_str> _textureSourceMap;
-// A duplicate map of all texture source that provides Objective-C reference counting
+/// A duplicate map of all texture source that provides Objective-C reference counting
 static NSMutableDictionary *_textureSources = [NSMutableDictionary new];
+
+/// Tracks the first scene being created, and sets the output source if it is the first
+static bool _isFirstScene = true;
 
 static bool reset_video();
 static bool reset_audio();
@@ -116,19 +107,18 @@ extern "C" void removeFrameCapture(TextureSource *textureSource) {
     }
 }
 
-SceneContext _add_scene() {
-    const char *scene_name = "scene default";
-    SceneContext scene{obs_scene_create(scene_name)};
-    if (!scene) {
-        printf("Couldn't create scene: %s\n", scene_name);
-        return scene;
-    }
-    
-    /* set the scene as the primary draw source and go */
-    uint32_t channel = 0;
-    obs_set_output_source(channel, obs_scene_get_source(scene));
+static void save_scene(NSString *tracking_uuid, obs_scene_t *scene) {
+    const char *_uuid_str = tracking_uuid.UTF8String;
+    const char *uuid_str = strdup(_uuid_str);
+    uuid_scene_list[uuid_str] = scene;
+    scene_uuid_list[scene] = uuid_str;
+}
 
-    return scene;
+static void remove_scene(const char *uuid_str) {
+    obs_scene_t *scene = uuid_scene_list[uuid_str];
+    uuid_scene_list.erase(uuid_str);
+    scene_uuid_list.erase(scene);
+    free((void *)scene_uuid_list[scene]);
 }
 
 static void save_source(NSString *source_uuid, obs_source_t *source) {
@@ -181,9 +171,7 @@ extern "C" bool create_obs(void)
 
     if (!reset_video()) return false;
     if (!reset_audio()) return false;
-    scene1 = _add_scene();
     if (!create_service()) return false;
-//    add_video_callback();
     
     return true;
 }
@@ -338,7 +326,7 @@ static void copy_source_frame_to_texture(struct obs_source_frame *frame, Texture
     if (frame->format == VIDEO_FORMAT_UYVY) {
         copy_frame_to_texture(frame->width, frame->height, kCVPixelFormatType_422YpCbCr8, frame->linesize[0], frame->data[0], textureSource);
     } else if (frame->format == VIDEO_FORMAT_I420) {
-        copy_planar_frame_to_texture(frame->width, frame->height, kCVPixelFormatType_420YpCbCr8PlanarFullRange, frame->linesize, frame->data, textureSource);
+        copy_planar_frame_to_texture(frame->width, frame->height, kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange, frame->linesize, frame->data, textureSource);
     }
 }
 
@@ -347,7 +335,6 @@ static void copy_videomix_frame_to_texture(struct video_data *frame, TextureSour
     struct obs_video_info ovi;
     obs_get_video_info(&ovi);
 
-    // TODO: the frame has the red and blue swapped
     uint8_t *data = swap_blue_red_colors(frame->data[0], frame->linesize[0]*ovi.output_height);
     copy_frame_to_texture(ovi.output_width, ovi.output_height, kCVPixelFormatType_32BGRA, frame->linesize[0], data, textureSource);
 }
@@ -387,7 +374,7 @@ static void videomix_callback(void *param, struct video_data *frame) {
     }
 }
 
-// TODO: implement sources: color source, image source.
+// TODO: implement sources: color source.
 
 
 // TODO: error handling of input paramters, and make this work in the bridge
@@ -407,44 +394,46 @@ static obs_source_t *_create_source(NSString *source_uuid, NSString *source_id, 
     }
 
     save_source(source_uuid, source);
-    obs_sceneitem_t *item = obs_scene_add(scene1, source);
-    
-    // TODO: add parameters for bound, position, rotation, scale, etc.
-    if (strcmp(name.UTF8String, "video file") == 0) {
-        vec2 size;
-        vec2_set(&size, 500, 280);
-        obs_sceneitem_set_bounds(item, &size);
-        obs_sceneitem_set_bounds_type(item, OBS_BOUNDS_SCALE_INNER);
-        
-        vec2 pos;
-        vec2_set(&pos, 50, 50);
-        obs_sceneitem_set_pos(item, &pos);
-    } else if (_souce_count == 2) {
-        vec2 size;
-        vec2_set(&size, 1280, 720);
-        obs_sceneitem_set_bounds(item, &size);
-        obs_sceneitem_set_bounds_type(item, OBS_BOUNDS_SCALE_INNER);
-        
-        vec2 pos;
-        vec2_set(&pos, 0, 0);
-        obs_sceneitem_set_pos(item, &pos);
-        
-        obs_sceneitem_set_order_position(item, 0);
-    } else {
-        vec2 size;
-        vec2_set(&size, 500, 280);
-        obs_sceneitem_set_bounds(item, &size);
-        obs_sceneitem_set_bounds_type(item, OBS_BOUNDS_SCALE_INNER);
-        
-        vec2 pos;
-        vec2_set(&pos, 690, 50);
-        obs_sceneitem_set_pos(item, &pos);
-    }
 
+    //        obs_sceneitem_set_order_position(item, 0);
+
+    
     return source;
 }
 
 #pragma mark - Bridge functions
+
+bool bridge_create_scene(NSString *tracking_uuid, NSString *scene_name) {
+    obs_scene_t *scene = obs_scene_create(scene_name.UTF8String);
+    if (!scene) {
+        printf("Couldn't create scene: %s\n", scene_name.UTF8String);
+        return false;
+    }
+    
+    if (_isFirstScene) {
+        _isFirstScene = false;
+
+        /* set the scene as the primary draw source and go */
+        uint32_t channel = 0;
+        obs_set_output_source(channel, obs_scene_get_source(scene));
+    }
+    
+    save_scene(tracking_uuid, scene);
+
+    return true;
+}
+
+bool bridge_release_scene(NSString *tracking_uuid) {
+    const char *uuid_str = tracking_uuid.UTF8String;
+    obs_scene_t *scene = uuid_scene_list[uuid_str];
+    if (!scene) {
+        printf("%s: unknown scene %s\n", __func__, uuid_str);
+        return false;
+    }
+    obs_scene_release(scene);
+    remove_scene(uuid_str);
+    return true;
+}
 
 bool bridge_release_source(NSString *source_uuid) {
     const char *uuid_str = source_uuid.UTF8String;
@@ -491,6 +480,111 @@ bool bridge_create_video_source(NSString *source_uuid, NSString *device_name, NS
     return source != NULL;
 }
 
+bool bridge_create_image_source(NSString *source_uuid, NSString *file) {
+    obs_data_t *settings = obs_data_create();
+    obs_data_set_string(settings, "file", file.UTF8String);
+    
+    obs_source_t *source = _create_source(source_uuid, @"image_source", @"image", settings, true);
+    return source != NULL;
+}
+
+/// Add an existing source to an existing scene.
+int64_t bridge_add_source(NSString *scene_uuid, NSString *source_uuid) {
+    const char *scene_uuid_str = scene_uuid.UTF8String;
+    obs_scene_t *scene = uuid_scene_list[scene_uuid_str];
+    if (!scene) {
+        printf("%s: unknown scene %s\n", __func__, scene_uuid_str);
+        return 0;
+    }
+
+    const char *source_uuid_str = source_uuid.UTF8String;
+    obs_source_t *source = uuid_source_list[source_uuid_str];
+    if (!source) {
+        printf("%s: unknown source %s\n", __func__, source_uuid_str);
+        return 0;
+    }
+
+    obs_sceneitem_t *item = obs_scene_add(scene, source);
+    int64_t item_id = obs_sceneitem_get_id(item);
+
+    return item_id;
+}
+
+static NSDictionary *_convert_transform_vec2_to_dict(vec2 vec) {
+    NSDictionary *dict = @{
+        @"x": [[NSNumber alloc] initWithFloat:vec.x],
+        @"y": [[NSNumber alloc] initWithFloat:vec.y]
+    };
+
+    return dict;
+}
+
+static NSDictionary *_convert_transform_info_to_dict(obs_transform_info *info) {
+    NSDictionary *infoDict = @{
+        @"pos": _convert_transform_vec2_to_dict(info->pos),
+        @"rot": [[NSNumber alloc] initWithFloat:info->rot],
+        @"scale": _convert_transform_vec2_to_dict(info->scale),
+        @"alignment": [[NSNumber alloc] initWithUnsignedInteger:info->alignment],
+        @"bounds_type": [[NSNumber alloc] initWithUnsignedInteger:info->bounds_type],
+        @"bounds_alignment": [[NSNumber alloc] initWithUnsignedInteger:info->bounds_alignment],
+        @"bounds": _convert_transform_vec2_to_dict(info->bounds)
+    };
+
+    return infoDict;
+}
+
+/// Get the transform info for a scene item.
+NSDictionary *bridge_sceneitem_get_info(NSString *scene_uuid, int64_t item_id) {
+    const char *scene_uuid_str = scene_uuid.UTF8String;
+    obs_scene_t *scene = uuid_scene_list[scene_uuid_str];
+    if (!scene) {
+        printf("%s: unknown scene %s\n", __func__, scene_uuid_str);
+        return NULL;
+    }
+    
+    if (item_id < 1) {
+        printf("%s: unvalid item id %llu\n", __func__, item_id);
+        return NULL;
+    }
+
+    obs_sceneitem_t *item = obs_scene_find_sceneitem_by_id(scene, item_id);
+    obs_transform_info info;
+    obs_sceneitem_get_info(item, &info);
+    return _convert_transform_info_to_dict(&info);
+}
+
+/// Set the transform info for a scene item.
+bool bridge_sceneitem_set_info(NSString *scene_uuid, int64_t item_id, NSDictionary *info) {
+    const char *scene_uuid_str = scene_uuid.UTF8String;
+    obs_scene_t *scene = uuid_scene_list[scene_uuid_str];
+    if (!scene) {
+        printf("%s: unknown scene %s\n", __func__, scene_uuid_str);
+        return NULL;
+    }
+
+    if (item_id < 1) {
+        printf("%s: unvalid item id %llu\n", __func__, item_id);
+        return NULL;
+    }
+
+    obs_transform_info item_info;
+    item_info.pos.x = [info[@"pos"][@"x"] floatValue];
+    item_info.pos.y = [info[@"pos"][@"y"] floatValue];
+    item_info.rot = [info[@"rot"] floatValue];
+    item_info.scale.x = [info[@"scale"][@"x"] floatValue];
+    item_info.scale.y = [info[@"scale"][@"y"] floatValue];
+    item_info.alignment = [info[@"alignment"] unsignedIntValue];
+    item_info.bounds_type = (obs_bounds_type)[info[@"bounds_type"] unsignedIntValue];
+    item_info.bounds_alignment = [info[@"bounds_alignment"] unsignedIntValue];
+    item_info.bounds.x = [info[@"bounds"][@"x"] floatValue];
+    item_info.bounds.y = [info[@"bounds"][@"y"] floatValue];
+    
+    obs_sceneitem_t *item = obs_scene_find_sceneitem_by_id(scene, item_id);
+    obs_sceneitem_set_info(item, &item_info);
+
+    return false;
+}
+
 bool bridge_add_videomix(NSString *tracking_uuid) {
     add_videomix_callback(tracking_uuid);
     return true;
@@ -529,6 +623,8 @@ bool bridge_media_source_stop(NSString *source_uuid) {
 
 #pragma mark - Inputs
 
+/// Get a list of input types.
+/// @return array of dictionaries with keys `id` and `name`.
 NSArray *bridge_input_types() {
     const char *type_id;
     const char *unversioned_type_id;
@@ -563,6 +659,8 @@ NSArray *bridge_input_types() {
     return [list copy];
 }
 
+/// Get a list of video capture inputs from input type `av_capture_input`.
+/// @return array of dictionaries with keys `id` and `name`.
 NSArray *bridge_video_inputs() {
     const char *video_capture_device_type = "av_capture_input";
     NSMutableArray *list = [NSMutableArray new];

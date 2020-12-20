@@ -4,6 +4,9 @@ class DiveInputType {
 
   DiveInputType({this.id, this.name});
 
+  static DiveInputType get imageSource =>
+      DiveInputType(id: 'image_source', name: 'Image Source');
+
   static DiveInputType get mediaSource =>
       DiveInputType(id: 'ffmpeg_source', name: 'Media Source');
 

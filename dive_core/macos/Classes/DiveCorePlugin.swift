@@ -6,17 +6,21 @@ import FlutterMacOS
 
 public class DiveCorePlugin: NSObject, FlutterPlugin {
     struct Method {
-        static let LoadImage = "loadImage"
         static let GetPlatformVersion = "getPlatformVersion"
         static let DisposeTexture = "disposeTexture"
         static let InitializeTexture = "initializeTexture"
         static let GetInputTypes = "getInputTypes"
         static let GetVideoInputs = "getVideoInputs"
+        static let AddSource = "addSource"
+        static let CreateImageSource = "createImageSource"
         static let CreateMediaSource = "createMediaSource"
         static let CreateVideoSource = "createVideoSource"
         static let CreateVideoMix = "createVideoMix"
+        static let CreateScene = "createScene"
         static let MediaPlayPause = "mediaPlayPause"
         static let MediaStop = "mediaStop"
+        static let GetSceneItemInfo = "getSceneItemInfo"
+        static let SetSceneItemInfo = "setSceneItemInfo"
     }
     
     static let _channelName = "dive_core.io/plugin"
@@ -40,25 +44,32 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         switch call.method {
         case Method.InitializeTexture:
             result(initializeTexture(arguments))
-        case Method.LoadImage:
-//            _imageProducer.loadImage()
-            result("done")
         case Method.GetPlatformVersion:
             result(getPlatformVersion())
         case Method.GetInputTypes:
             result(getInputTypes())
         case Method.GetVideoInputs:
             result(getVideoInputs())
+        case Method.AddSource:
+            result(addSource(arguments))
+        case Method.CreateImageSource:
+            result(createImageSource(arguments))
         case Method.CreateMediaSource:
             result(createMediaSource(arguments))
         case Method.CreateVideoSource:
             result(createVideoSource(arguments))
         case Method.CreateVideoMix:
             result(createVideoMix(arguments))
+        case Method.CreateScene:
+            result(createScene(arguments))
         case Method.MediaPlayPause:
             result(mediaPlayPause(arguments))
         case Method.MediaStop:
             result(mediaStop(arguments))
+        case Method.GetSceneItemInfo:
+            result(getSceneItemInfo(arguments))
+        case Method.SetSceneItemInfo:
+            result(setSceneItemInfo(arguments))
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -102,6 +113,26 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
     private func getVideoInputs() -> [[String: Any]] {
         return bridge_video_inputs() as? [[String: Any]] ?? []
     }
+    
+    private func addSource(_ arguments: [String: Any]?) -> Int64 {
+        guard let args = arguments,
+            let scene_uuid = args["scene_uuid"] as! String?,
+            let source_uuid = args["source_uuid"] as! String?
+            else {
+                return 0
+        }
+        return bridge_add_source(scene_uuid, source_uuid);
+    }
+
+    private func createImageSource(_ arguments: [String: Any]?) -> Bool {
+        guard let args = arguments,
+            let source_uuid = args["source_uuid"] as! String?,
+            let localFile = args["file"] as! String?
+            else {
+                return false
+        }
+        return bridge_create_image_source(source_uuid, localFile)
+    }
 
     private func createMediaSource(_ arguments: [String: Any]?) -> Bool {
         guard let args = arguments,
@@ -112,7 +143,7 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         }
         return bridge_create_media_source(source_uuid, localFile)
     }
-    
+
     private func createVideoSource(_ arguments: [String: Any]?) -> Bool {
         guard let args = arguments,
             let source_uuid = args["source_uuid"] as! String?,
@@ -131,6 +162,16 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
                 return false
         }
         return bridge_add_videomix(tracking_uuid)
+    }
+
+    private func createScene(_ arguments: [String: Any]?) -> Bool {
+        guard let args = arguments,
+            let tracking_uuid = args["tracking_uuid"] as! String?,
+            let name = args["name"] as! String?
+            else {
+                return false
+        }
+        return bridge_create_scene(tracking_uuid, name);
     }
 
     private func mediaPlayPause(_ arguments: [String: Any]?) -> Bool {
@@ -152,22 +193,24 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         return bridge_media_source_stop(source_uuid);
     }
 
-    private func mediaTypeName(_ mediaType: AVMediaType) -> String {
-        switch mediaType {
-        case .audio:
-            return "audio"
-        case .video:
-            return "video"
-        default:
-            return "text"
+    private func getSceneItemInfo(_ arguments: [String: Any]?) -> [String: Any] {
+        guard let args = arguments,
+            let scene_uuid = args["scene_uuid"] as! String?,
+            let item_id = args["item_id"] as! Int64?
+            else {
+                return [:]
         }
+        return bridge_sceneitem_get_info(scene_uuid, item_id) as? [String: Any] ?? [:]
+    }
+    
+    private func setSceneItemInfo(_ arguments: [String: Any]?) -> Bool {
+        guard let args = arguments,
+            let scene_uuid = args["scene_uuid"] as! String?,
+            let item_id = args["item_id"] as! Int64?,
+            let info = args["info"] as! [String: Any]?
+            else {
+                return false
+        }
+        return bridge_sceneitem_set_info(scene_uuid, item_id, info)
     }
 }
-
-// public class ImageFrameProducer {
-    
-//     public func loadImage() {
-//         let path = "/Users/larry/Downloads/Nicholas-Nationals-Play-Ball.jpg"
-//         print(path)
-//     }
-// }
