@@ -10,9 +10,8 @@ class DivePlugin {
   static const String _methodDisposeTexture = 'disposeTexture';
   static const String _methodInitializeTexture = 'initializeTexture';
 
-  static const String _methodGetInputTypes = 'getInputTypes';
-  static const String _methodGetVideoInputs = 'getVideoInputs';
   static const String _methodAddSource = 'addSource';
+  static const String _methodCreateSource = 'createSource';
   static const String _methodCreateImageSource = 'createImageSource';
   static const String _methodCreateMediaSource = 'createMediaSource';
   static const String _methodCreateVideoSource = 'createVideoSource';
@@ -21,8 +20,15 @@ class DivePlugin {
   static const String _methodGetSceneItemInfo = 'getSceneItemInfo';
   static const String _methodSetSceneItemInfo = 'setSceneItemInfo';
 
+  static const String _methodStartStopStream = 'startStopStream';
+
   static const String _methodMediaPlayPause = 'mediaPlayPause';
   static const String _methodMediaStop = 'mediaStop';
+
+  static const String _methodGetInputTypes = 'getInputTypes';
+  static const String _methodGetInputsFromType = 'getInputsFromType';
+  static const String _methodGetAudioInputs = 'getAudioInputs';
+  static const String _methodGetVideoInputs = 'getVideoInputs';
 
   static const MethodChannel _channel = const MethodChannel(_channelName);
 
@@ -46,21 +52,19 @@ class DivePlugin {
         _methodInitializeTexture, {'tracking_uuid': trackingUUID});
   }
 
-  static Future<List<DiveInputType>> inputTypes() async {
-    final List<dynamic> devices =
-        await _channel.invokeMethod(_methodGetInputTypes);
-    return devices.map(DiveInputType.fromJson).toList();
-  }
-
-  static Future<List<DiveVideoInput>> videoInputs() async {
-    final List<dynamic> devices =
-        await _channel.invokeMethod(_methodGetVideoInputs);
-    return devices.map(DiveVideoInput.fromMap).toList();
-  }
-
   static Future<int> addSource(String sceneUUID, String sourceUUID) async {
     return await _channel.invokeMethod(
         _methodAddSource, {'scene_uuid': sceneUUID, 'source_uuid': sourceUUID});
+  }
+
+  static Future<bool> createSource(String sourceUUID, String sourceId,
+      String name, bool isFrameSource) async {
+    return await _channel.invokeMethod(_methodCreateSource, {
+      'source_uuid': sourceUUID,
+      'source_id': sourceId,
+      'name': name,
+      'frame_source': isFrameSource
+    });
   }
 
   static Future<bool> createImageSource(String sourceUUID, String file) async {
@@ -93,6 +97,11 @@ class DivePlugin {
         _methodCreateScene, {'tracking_uuid': trackingUUID, 'name': name});
   }
 
+  static Future<bool> startStopStream(bool start) async {
+    return await _channel
+        .invokeMethod(_methodStartStopStream, {'start': start});
+  }
+
   static Future<bool> mediaPlayPause(String sourceUUID, bool pause) async {
     return await _channel.invokeMethod(
         _methodMediaPlayPause, {'source_uuid': sourceUUID, 'pause': pause});
@@ -114,5 +123,29 @@ class DivePlugin {
       String sceneUUID, int itemId, DiveTransformInfo info) async {
     return await _channel.invokeMethod(_methodSetSceneItemInfo,
         {'scene_uuid': sceneUUID, 'item_id': itemId, 'info': info.toMap()});
+  }
+
+  static Future<List<DiveInputType>> inputTypes() async {
+    final List<dynamic> devices =
+        await _channel.invokeMethod(_methodGetInputTypes);
+    return devices.map(DiveInputType.fromJson).toList();
+  }
+
+  static Future<List<DiveInput>> inputsFromType(String typeId) async {
+    final List<dynamic> devices = await _channel
+        .invokeMethod(_methodGetInputsFromType, {'type_id': typeId});
+    return devices.map(DiveInput.fromMap).toList();
+  }
+
+  static Future<List<DiveInput>> audioInputs() async {
+    final List<dynamic> devices =
+        await _channel.invokeMethod(_methodGetAudioInputs);
+    return devices.map(DiveInput.fromMap).toList();
+  }
+
+  static Future<List<DiveInput>> videoInputs() async {
+    final List<dynamic> devices =
+        await _channel.invokeMethod(_methodGetVideoInputs);
+    return devices.map(DiveInput.fromMap).toList();
   }
 }

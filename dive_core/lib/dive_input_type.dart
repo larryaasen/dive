@@ -4,6 +4,9 @@ class DiveInputType {
 
   DiveInputType({this.id, this.name});
 
+  static DiveInputType get audioSource =>
+      DiveInputType(id: 'coreaudio_input_capture', name: 'Audio Source');
+
   static DiveInputType get imageSource =>
       DiveInputType(id: 'image_source', name: 'Image Source');
 

@@ -9,9 +9,8 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         static let GetPlatformVersion = "getPlatformVersion"
         static let DisposeTexture = "disposeTexture"
         static let InitializeTexture = "initializeTexture"
-        static let GetInputTypes = "getInputTypes"
-        static let GetVideoInputs = "getVideoInputs"
         static let AddSource = "addSource"
+        static let CreateSource = "createSource"
         static let CreateImageSource = "createImageSource"
         static let CreateMediaSource = "createMediaSource"
         static let CreateVideoSource = "createVideoSource"
@@ -21,6 +20,13 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         static let MediaStop = "mediaStop"
         static let GetSceneItemInfo = "getSceneItemInfo"
         static let SetSceneItemInfo = "setSceneItemInfo"
+
+        static let StartStopStream = "startStopStream"
+
+        static let GetInputTypes = "getInputTypes"
+        static let GetInputsFromType = "getInputsFromType"
+        static let GetAudioInputs = "getAudioInputs"
+        static let GetVideoInputs = "getVideoInputs"
     }
     
     static let _channelName = "dive_core.io/plugin"
@@ -46,12 +52,10 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
             result(initializeTexture(arguments))
         case Method.GetPlatformVersion:
             result(getPlatformVersion())
-        case Method.GetInputTypes:
-            result(getInputTypes())
-        case Method.GetVideoInputs:
-            result(getVideoInputs())
         case Method.AddSource:
             result(addSource(arguments))
+        case Method.CreateSource:
+            result(createSource(arguments))
         case Method.CreateImageSource:
             result(createImageSource(arguments))
         case Method.CreateMediaSource:
@@ -70,6 +74,16 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
             result(getSceneItemInfo(arguments))
         case Method.SetSceneItemInfo:
             result(setSceneItemInfo(arguments))
+        case Method.StartStopStream:
+            result(startStopStream(arguments))
+        case Method.GetInputTypes:
+            result(getInputTypes())
+        case Method.GetInputsFromType:
+            result(getInputsFromType(arguments))
+        case Method.GetAudioInputs:
+            result(getAudioInputs())
+        case Method.GetVideoInputs:
+            result(getVideoInputs())
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -106,12 +120,16 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         return msg
     }
     
-    private func getInputTypes() -> [[String: Any]] {
-        return bridge_input_types() as? [[String: Any]] ?? []
-    }
-
-    private func getVideoInputs() -> [[String: Any]] {
-        return bridge_video_inputs() as? [[String: Any]] ?? []
+    private func createSource(_ arguments: [String: Any]?) -> Bool {
+        guard let args = arguments,
+            let source_uuid = args["source_uuid"] as! String?,
+            let source_id = args["source_id"] as! String?,
+            let name = args["name"] as! String?,
+            let frame_source = args["frame_source"] as! Bool?
+            else {
+                return false
+        }
+        return bridge_create_source(source_uuid, source_id, name, frame_source)
     }
     
     private func addSource(_ arguments: [String: Any]?) -> Int64 {
@@ -173,6 +191,15 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         }
         return bridge_create_scene(tracking_uuid, name);
     }
+    
+    private func startStopStream(_ arguments: [String: Any]?) -> Bool {
+        guard let args = arguments,
+            let start = args["start"] as! Bool?
+            else {
+                return false
+        }
+        return start ? bridge_stream_output_start() : bridge_stream_output_stop()
+    }
 
     private func mediaPlayPause(_ arguments: [String: Any]?) -> Bool {
         guard let args = arguments,
@@ -212,5 +239,26 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
                 return false
         }
         return bridge_sceneitem_set_info(scene_uuid, item_id, info)
+    }
+    
+    private func getInputTypes() -> [[String: Any]] {
+        return bridge_input_types() as? [[String: Any]] ?? []
+    }
+    
+    private func getInputsFromType(_ arguments: [String: Any]?) -> [[String: Any]] {
+        guard let args = arguments,
+            let type_id = args["type_id"] as! String?
+            else {
+                return []
+        }
+        return bridge_inputs_from_type(type_id) as? [[String: Any]] ?? []
+    }
+
+    private func getAudioInputs() -> [[String: Any]] {
+        return bridge_audio_inputs() as? [[String: Any]] ?? []
+    }
+
+    private func getVideoInputs() -> [[String: Any]] {
+        return bridge_video_inputs() as? [[String: Any]] ?? []
     }
 }

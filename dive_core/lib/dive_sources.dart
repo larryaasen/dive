@@ -18,7 +18,10 @@ class DiveInputTypes {
 }
 
 class DiveInputs {
-  static Future<List<DiveVideoInput>> video() => DivePlugin.videoInputs();
+  static Future<List<DiveInput>> fromType(String typeId) =>
+      DivePlugin.inputsFromType(typeId);
+  static Future<List<DiveInput>> audio() => DivePlugin.audioInputs();
+  static Future<List<DiveInput>> video() => DivePlugin.videoInputs();
 }
 
 // TODO: DiveSettings needs to be implemented
@@ -85,11 +88,29 @@ class DiveTextureSource extends DiveSource with DiveTextureController {
       : super(inputType: inputType, name: name);
 }
 
+class DiveAudioSource extends DiveSource {
+  DiveAudioSource({String name})
+      : super(inputType: DiveInputType.audioSource, name: name);
+
+  static Future<DiveAudioSource> create(String name) async {
+    final source = DiveAudioSource(name: name);
+    if (!await DivePlugin.createSource(
+        // TODO: need to add 'device_id' for audio, such as 'default'
+        source.trackingUUID,
+        source.inputType.id,
+        name,
+        false)) {
+      return null;
+    }
+    return source;
+  }
+}
+
 class DiveVideoSource extends DiveSource with DiveTextureController {
   DiveVideoSource({String name})
       : super(inputType: DiveInputType.videoCaptureDevice, name: name);
 
-  static Future<DiveVideoSource> create(DiveVideoInput videoInput) async {
+  static Future<DiveVideoSource> create(DiveInput videoInput) async {
     final source = DiveVideoSource(name: 'my video');
     await source.setupController(source.trackingUUID);
     if (!await DivePlugin.createVideoSource(
@@ -139,9 +160,6 @@ class DiveMediaSource extends DiveTextureSource {
     return await DivePlugin.mediaStop(trackingUUID);
   }
 }
-
-// TODO: DiveAudioSource needs to be implemented
-class DiveAudioSource extends DiveSource {}
 
 class DiveAlign {
   static const CENTER = 0;
@@ -311,5 +329,28 @@ class DiveScene extends DiveTracking {
         DiveSceneItem(itemId: itemId, source: source, scene: this);
     _sceneItems.add(sceneItem);
     return sceneItem;
+  }
+}
+
+enum DiveOutputStreamingState { stopped, starting, streaming, stopping }
+
+class DiveOutput {
+  DiveOutputStreamingState _streamingState = DiveOutputStreamingState.stopped;
+  DiveOutputStreamingState get streamingState => _streamingState;
+
+  Future<bool> start() async {
+    _streamingState = DiveOutputStreamingState.starting;
+    return DivePlugin.startStopStream(true).then((value) {
+      _streamingState = DiveOutputStreamingState.streaming;
+      return value;
+    });
+  }
+
+  Future<bool> stop() async {
+    _streamingState = DiveOutputStreamingState.stopping;
+    return DivePlugin.startStopStream(false).then((value) {
+      _streamingState = DiveOutputStreamingState.stopped;
+      return value;
+    });
   }
 }

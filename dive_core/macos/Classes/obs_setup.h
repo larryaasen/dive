@@ -10,6 +10,8 @@
 extern "C" {
 #endif
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class TextureSource;
 void addFrameCapture(TextureSource *textureSource);
 void removeFrameCapture(TextureSource *textureSource);
@@ -18,6 +20,7 @@ bool create_obs(void);
 
 #pragma mark - Bridge functions
 
+bool    bridge_create_source(const char *source_uuid, const char *source_id, const char *name, bool frame_source);
 bool    bridge_create_scene(NSString *tracking_uuid, NSString *scene_name);
 bool    bridge_release_scene(NSString *scene_uuid);
 bool    bridge_release_source(NSString *source_uuid);
@@ -31,6 +34,11 @@ bool bridge_sceneitem_set_info(NSString *scene_uuid, int64_t item_id, NSDictiona
 bool    bridge_add_videomix(NSString *tracking_uuid);
 bool    bridge_remove_videomix(NSString *tracking_uuid);
 
+#pragma mark - Stream Controls
+
+bool bridge_stream_output_start();
+bool bridge_stream_output_stop();
+
 #pragma mark - Media Controls
 
 bool bridge_media_source_play_pause(NSString *source_uuid, bool pause);
@@ -39,7 +47,11 @@ bool bridge_media_source_stop(NSString *source_uuid);
 #pragma mark - Inputs
 
 NSArray *bridge_input_types();
+NSArray *bridge_inputs_from_type(const char *input_type_id);
+NSArray *bridge_audio_inputs();
 NSArray *bridge_video_inputs();
+
+NS_ASSUME_NONNULL_END
 
 #ifdef __cplusplus
 }

@@ -6,7 +6,7 @@
 #include <memory>
 
 #include "obslib/obs.h"
-#include "obslib/obs.hpp"
+//#include "obslib/obs.hpp"
 #include "obslib/obs-service.h"
 #include "obslib/obs-output.h"
 #include "obslib/obs-properties.h"
@@ -41,6 +41,8 @@ static std::map<const char *, obs_source_t *, key_cmp_str> uuid_source_list;
 static std::map<obs_source_t *, const char *> source_uuid_list;
 
 static std::map<unsigned int, const char *> videomix_uuid_list;
+
+static obs_output_t *stream_output;
 
 /// Map of all texture sources where the key is a source UUID and the value is a texture source pointer
 static std::map<const char *, TextureSource *, key_cmp_str> _textureSourceMap;
@@ -121,9 +123,8 @@ static void remove_scene(const char *uuid_str) {
     free((void *)scene_uuid_list[scene]);
 }
 
-static void save_source(NSString *source_uuid, obs_source_t *source) {
-    const char *_uuid_str = source_uuid.UTF8String;
-    const char *uuid_str = strdup(_uuid_str);
+static void save_source(const char *source_uuid, obs_source_t *source) {
+    const char *uuid_str = strdup(source_uuid);
     uuid_source_list[uuid_str] = source;
     source_uuid_list[source] = uuid_str;
 }
@@ -219,57 +220,81 @@ static bool create_service() {
     obs_data_set_string(serviceSettings, "key", key);
 
     const char *service_id = "rtmp_common";
-    OBSService service_obj = obs_service_create(
+    obs_service_t *service_obj = obs_service_create(
         service_id, "default_service", serviceSettings, nullptr);
 //    obs_service_release(service_obj);
 
     const char *type = "rtmp_output";
-    OBSOutput streamOutput = obs_output_create(type, "adv_stream", nullptr, nullptr);
-//    obs_output_release(streamOutput);
+    stream_output = obs_output_create(type, "adv_stream", nullptr, nullptr);
+    if (!stream_output) {
+        printf("%s: creation of stream output type '%s' failed\n", __func__, type);
+        return false;
+    }
 
-    OBSEncoder vencoder = obs_video_encoder_create("obs_x264", "test_x264",
+    obs_encoder_t *vencoder = obs_video_encoder_create("obs_x264", "test_x264",
                                nullptr, nullptr);
-    OBSEncoder aencoder = obs_audio_encoder_create("ffmpeg_aac", "test_aac",
+//    obs_encoder_release(vencoder);
+    obs_encoder_t *aencoder = obs_audio_encoder_create("ffmpeg_aac", "test_aac",
                                nullptr, 0, nullptr);
+//    obs_encoder_release(aencoder);
     obs_encoder_set_video(vencoder, obs_get_video());
     obs_encoder_set_audio(aencoder, obs_get_audio());
-    obs_output_set_video_encoder(streamOutput, vencoder);
-    obs_output_set_audio_encoder(streamOutput, aencoder, 0);
+    obs_output_set_video_encoder(stream_output, vencoder);
+    obs_output_set_audio_encoder(stream_output, aencoder, 0);
     
-    obs_output_set_service(streamOutput, service_obj);
+    obs_output_set_service(stream_output, service_obj);
     
     obs_data_t *outputSettings = obs_data_create();
     obs_data_set_string(outputSettings, "bind_ip", "default");
     obs_data_set_bool(outputSettings, "new_socket_loop_enabled", false);
     obs_data_set_bool(outputSettings, "low_latency_mode_enabled", false);
     obs_data_set_bool(outputSettings, "dyn_bitrate", false);
-    obs_output_update(streamOutput, outputSettings);
+    obs_output_update(stream_output, outputSettings);
     
-//    obs_output_start(streamOutput);
+//    if (!obs_output_start(stream_output)) {
+//        printf("%s: output start failed\n", __func__);
+//        return false;
+//    }
 
     return true;
 }
 
 static uint8_t *swap_blue_red_colors(uint8_t *data, size_t dataSize) {
+    uint8_t *newData = (uint8_t *)malloc(dataSize);
+    memcpy(newData, data, dataSize);
+    
     for (unsigned int zz=0; zz<dataSize; zz+=4) {
         // swap bytes 0 and 2 out of 0-3
-        uint8_t temp = data[zz];
-        data[zz] = data[zz+2];
-        data[zz+2] = temp;
+        uint8_t temp = newData[zz];
+        newData[zz] = newData[zz+2];
+        newData[zz+2] = temp;
     }
-    return data;
+    return newData;
 }
 
-static void copy_frame_to_texture(size_t width, size_t height, OSType pixelFormatType, size_t linesize, uint8_t *data, TextureSource *textureSource)
+void BufferReleaseBytesCallback(void *releaseRefCon, const void *baseAddress) {
+    free((void *)baseAddress);
+    return;
+}
+
+
+static void copy_frame_to_texture(size_t width, size_t height, OSType pixelFormatType, size_t linesize, uint8_t *data,
+                                  TextureSource *textureSource, bool shouldSwapRedBlue=false)
 {
     CVPixelBufferRef pxbuffer = NULL;
+    CVPixelBufferReleaseBytesCallback releaseCallback = shouldSwapRedBlue ? BufferReleaseBytesCallback : NULL;
+    
+    if (shouldSwapRedBlue) {
+        data = swap_blue_red_colors(data, linesize*height);
+    }
+
     CVReturn status = CVPixelBufferCreateWithBytes(kCFAllocatorDefault,
                                                    width,
                                                    height,
                                                    pixelFormatType,
                                                    data,
                                                    linesize,
-                                                   NULL,
+                                                   releaseCallback,
                                                    NULL,
                                                    NULL,
                                                    &pxbuffer);
@@ -277,7 +302,7 @@ static void copy_frame_to_texture(size_t width, size_t height, OSType pixelForma
         NSLog(@"copy_frame_to_source: Operation failed");
         return;
     }
-    
+
     [textureSource captureSample: pxbuffer];
     CFRelease(pxbuffer);
 }
@@ -335,8 +360,7 @@ static void copy_videomix_frame_to_texture(struct video_data *frame, TextureSour
     struct obs_video_info ovi;
     obs_get_video_info(&ovi);
 
-    uint8_t *data = swap_blue_red_colors(frame->data[0], frame->linesize[0]*ovi.output_height);
-    copy_frame_to_texture(ovi.output_width, ovi.output_height, kCVPixelFormatType_32BGRA, frame->linesize[0], data, textureSource);
+    copy_frame_to_texture(ovi.output_width, ovi.output_height, kCVPixelFormatType_32BGRA, frame->linesize[0], frame->data[0], textureSource, true);
 }
 
 static void source_frame_callback(void *param, obs_source_t *source, struct obs_source_frame *frame)
@@ -381,8 +405,8 @@ static void videomix_callback(void *param, struct video_data *frame) {
 
 static int _souce_count = 0;
 
-static obs_source_t *_create_source(NSString *source_uuid, NSString *source_id, NSString *name, obs_data_t *settings, bool frame_source) {
-    obs_source_t *source = obs_source_create(source_id.UTF8String, name.UTF8String, settings, nullptr);
+static obs_source_t *_create_source(const char *source_uuid, const char *source_id, const char *name, obs_data_t *settings, bool frame_source) {
+    obs_source_t *source = obs_source_create(source_id, name, settings, nullptr);
     if (!source) {
         printf("%s: Could not create source\n", __func__);
         return NULL;
@@ -396,12 +420,16 @@ static obs_source_t *_create_source(NSString *source_uuid, NSString *source_id, 
     save_source(source_uuid, source);
 
     //        obs_sceneitem_set_order_position(item, 0);
-
     
     return source;
 }
 
 #pragma mark - Bridge functions
+
+bool bridge_create_source(const char *source_uuid, const char *source_id, const char *name, bool frame_source) {
+    obs_data_t *settings = NULL;
+    return _create_source(source_uuid, source_id, name, settings, frame_source);
+}
 
 bool bridge_create_scene(NSString *tracking_uuid, NSString *scene_name) {
     obs_scene_t *scene = obs_scene_create(scene_name.UTF8String);
@@ -450,8 +478,10 @@ bool bridge_release_source(NSString *source_uuid) {
 bool bridge_create_media_source(NSString *source_uuid, NSString *local_file) {
     // Load video file
     obs_data_t *settings = obs_get_source_defaults("ffmpeg_source");
+    obs_data_set_default_bool(settings, "is_local_file", true);
     obs_data_set_default_bool(settings, "looping", true);   // TODO: looping not working
     obs_data_set_default_bool(settings, "clear_on_media_end", false);
+    obs_data_set_default_bool(settings, "close_when_inactive", false);
     obs_data_set_string(settings, "local_file", local_file.UTF8String);
     
     // TODO: add this file open check to propvide feedback on failures
@@ -464,9 +494,10 @@ bool bridge_create_media_source(NSString *source_uuid, NSString *local_file) {
 //    }
 //    fclose(fp);
 
-    obs_source_t *source = _create_source(source_uuid, @"ffmpeg_source", @"video file", settings, true);
+    obs_source_t *source = _create_source(source_uuid.UTF8String, "ffmpeg_source", "video file", settings, true);
     if (source != NULL) {
-        obs_source_update(source, settings);
+//        obs_source_update(source, settings);
+        obs_source_media_play_pause(source, true);
     }
     return source != NULL;
 }
@@ -476,7 +507,7 @@ bool bridge_create_video_source(NSString *source_uuid, NSString *device_name, NS
     obs_data_set_string(settings, "device_name", device_name.UTF8String);
     obs_data_set_string(settings, "device", device_uid.UTF8String);
     
-    obs_source_t *source = _create_source(source_uuid, @"av_capture_input", @"camera", settings, true);
+    obs_source_t *source = _create_source(source_uuid.UTF8String, "av_capture_input", "camera", settings, true);
     return source != NULL;
 }
 
@@ -484,7 +515,7 @@ bool bridge_create_image_source(NSString *source_uuid, NSString *file) {
     obs_data_t *settings = obs_data_create();
     obs_data_set_string(settings, "file", file.UTF8String);
     
-    obs_source_t *source = _create_source(source_uuid, @"image_source", @"image", settings, true);
+    obs_source_t *source = _create_source(source_uuid.UTF8String, "image_source", "image", settings, true);
     return source != NULL;
 }
 
@@ -595,6 +626,23 @@ bool bridge_remove_videomix(NSString *tracking_uuid) {
     return true;
 }
 
+#pragma mark - Stream Controls
+
+/// Start the stream output.
+bool bridge_stream_output_start() {
+    bool rv = obs_output_start(stream_output);
+    if (!rv) {
+        printf("%s: stream not started\n", __func__);
+    }
+    return rv;
+}
+
+/// Stop the stream output.
+bool bridge_stream_output_stop() {
+    obs_output_stop(stream_output);
+    return true;
+}
+
 #pragma mark - Media Controls
 
 /// Media control: play or pause
@@ -659,18 +707,12 @@ NSArray *bridge_input_types() {
     return [list copy];
 }
 
-/// Get a list of video capture inputs from input type `av_capture_input`.
+/// Get a list of inputs from input type.
 /// @return array of dictionaries with keys `id` and `name`.
-NSArray *bridge_video_inputs() {
-    const char *video_capture_device_type = "av_capture_input";
+NSArray *bridge_inputs_from_type(const char *input_type_id) {
     NSMutableArray *list = [NSMutableArray new];
-    
-//    obs_data_t *defaults = obs_get_source_defaults(video_capture_device_type);
-//    if (defaults) {
-//        obs_data_release(defaults);
-//    }
 
-    obs_properties_t *video_props = obs_get_source_properties(video_capture_device_type);
+    obs_properties_t *video_props = obs_get_source_properties(input_type_id);
 
     if (video_props) {
         obs_property_t *property = obs_properties_first(video_props);
@@ -687,7 +729,8 @@ NSArray *bridge_video_inputs() {
 //                        printf("video: %s - %s\n", name, uid);
                         NSDictionary *typeDict = @{
                             @"id": [NSString stringWithUTF8String:uid],
-                            @"name": [NSString stringWithUTF8String:name]
+                            @"name": [NSString stringWithUTF8String:name],
+                            @"type_id": [NSString stringWithUTF8String:input_type_id]
                         };
                         [list addObject:typeDict];
                     }
@@ -699,4 +742,27 @@ NSArray *bridge_video_inputs() {
         obs_properties_destroy(video_props);
     }
     return [list copy];
+}
+
+#ifdef __APPLE__
+#define INPUT_AUDIO_SOURCE "coreaudio_input_capture"
+#define OUTPUT_AUDIO_SOURCE "coreaudio_output_capture"
+#elif _WIN32
+#define INPUT_AUDIO_SOURCE "wasapi_input_capture"
+#define OUTPUT_AUDIO_SOURCE "wasapi_output_capture"
+#else
+#define INPUT_AUDIO_SOURCE "pulse_input_capture"
+#define OUTPUT_AUDIO_SOURCE "pulse_output_capture"
+#endif
+
+/// Get a list of video capture inputs from input type `coreaudio_input_capture`.
+/// @return array of dictionaries with keys `id` and `name`.
+NSArray *bridge_audio_inputs() {
+    return bridge_inputs_from_type(INPUT_AUDIO_SOURCE);
+}
+
+/// Get a list of video capture inputs from input type `av_capture_input`.
+/// @return array of dictionaries with keys `id` and `name`.
+NSArray *bridge_video_inputs() {
+    return bridge_inputs_from_type("av_capture_input");
 }

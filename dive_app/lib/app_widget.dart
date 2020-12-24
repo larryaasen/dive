@@ -10,10 +10,12 @@ class AppWidget extends StatefulWidget {
 }
 
 class _AppWidgetState extends State<AppWidget> {
+  final _audioSources = List<DiveAudioSource>();
   final _imageSources = List<DiveImageSource>();
   final _mediaSources = List<DiveMediaSource>();
   final _videoSources = List<DiveVideoSource>();
   final _videoMixes = List<DiveVideoMix>();
+  final _streamingOutput = DiveOutput();
   DiveScene _currentScene;
 
   @override
@@ -39,6 +41,19 @@ class _AppWidgetState extends State<AppWidget> {
       setState(() {
         _videoMixes.add(mix);
       });
+    });
+
+    DiveInputs.audio().then((audioInputs) {
+      audioInputs.forEach((audioInput) {
+        print(audioInput);
+      });
+    });
+
+    DiveAudioSource.create('my audio').then((source) {
+      setState(() {
+        _audioSources.add(source);
+      });
+      _currentScene.addSource(source).then((item) {});
     });
 
     DiveInputs.video().then((videoInputs) {
@@ -73,13 +88,13 @@ class _AppWidgetState extends State<AppWidget> {
               bounds: DiveVec2(500, 280),
               boundsType: DiveBoundsType.SCALE_INNER);
           item.updateTransformInfo(info);
-          source.play();
+          // source.play();
         });
       }
     });
 
-    final file = '/Users/larry/Downloads/MacBookPro13.jpg';
-    DiveImageSource.create(file).then((source) {
+    final file1 = '/Users/larry/Downloads/MacBookPro13.jpg';
+    DiveImageSource.create(file1).then((source) {
       if (source != null) {
         setState(() {
           _imageSources.add(source);
@@ -93,10 +108,126 @@ class _AppWidgetState extends State<AppWidget> {
         });
       }
     });
+
+    final file2 = '/Users/larry/Downloads/logo_flutter_1080px_clr.png';
+    DiveImageSource.create(file2).then((source) {
+      if (source != null) {
+        setState(() {
+          _imageSources.add(source);
+        });
+        _currentScene.addSource(source).then((item) {
+          final info = DiveTransformInfo(
+              pos: DiveVec2(590, 298),
+              bounds: DiveVec2(100, 124),
+              boundsType: DiveBoundsType.SCALE_INNER);
+          item.updateTransformInfo(info);
+        });
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    return buildMaterial(context);
+  }
+
+  Widget buildMaterial(BuildContext context) {
+    final camerasText = Padding(
+        padding: EdgeInsets.only(left: 10, top: 10, right: 10),
+        child: Text('Cameras',
+            style: TextStyle(color: Colors.grey, fontSize: 24)));
+    final card1 = Padding(
+        padding: EdgeInsets.all(10),
+        child: Card(
+            elevation: 10,
+            child: AspectRatio(
+                aspectRatio: 1280 / 720,
+                child: DivePreview(_videoSources.length > 0
+                    ? _videoSources[0].controller
+                    : null))));
+    final card2 = Padding(
+        padding: EdgeInsets.all(10),
+        child: Card(
+            elevation: 10,
+            child: AspectRatio(
+                aspectRatio: 1280 / 720,
+                child: DivePreview(_videoSources.length > 1
+                    ? _videoSources[1].controller
+                    : null))));
+
+    final sources =
+        Container(color: Colors.white, child: Wrap(spacing: 10, runSpacing: 0,
+            // mainAxisSize: MainAxisSize.max,
+            // mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[camerasText, card1, card2]));
+
+    final videoMix = Padding(
+        padding: EdgeInsets.only(right: 10),
+        child: Card(
+            elevation: 10,
+            child: Container(
+                color: Colors.black,
+                child: AspectRatio(
+                    aspectRatio: 1280 / 720,
+                    child: DivePreview(_videoMixes.length > 0
+                        ? _videoMixes[0].controller
+                        : null)))));
+
+    final mainContent = Row(
+      children: [
+        Expanded(flex: 4, child: sources),
+        Expanded(flex: 6, child: videoMix)
+      ],
+    );
+
+    final mainContainer = Container(
+      decoration: new BoxDecoration(color: Colors.white),
+      child: Align(alignment: Alignment.topCenter, child: mainContent),
+    );
+
+    final content = mainContainer;
+
+    return MaterialApp(
+        title: 'Dive App',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: Scaffold(
+          appBar: AppBar(
+            title: const Text('Dive App'),
+            actions: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.play_circle_fill_outlined),
+                tooltip: 'Play video',
+                onPressed: () {
+                  _mediaSources[0].play().then((value) {});
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.live_tv),
+                tooltip: 'Start streaming',
+                onPressed: () {
+                  if (_streamingOutput.streamingState ==
+                      DiveOutputStreamingState.streaming) {
+                    _streamingOutput.stop().then((value) {
+                      setState(() {});
+                    });
+                  } else {
+                    _streamingOutput.start().then((value) {
+                      setState(() {});
+                    });
+                  }
+                },
+              ),
+            ],
+          ),
+          body: content,
+        ));
+  }
+
+  Widget buildStudio(BuildContext context) {
     Widget content;
     final box1 = DivePreview(
         _videoSources.length > 0 ? _videoSources[0].controller : null);
@@ -147,13 +278,12 @@ class _AppWidgetState extends State<AppWidget> {
     content = mainContainer;
 
     return MaterialApp(
-      title: 'Dive App',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: content,
-    );
+        title: 'Dive App',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: content);
   }
 }
