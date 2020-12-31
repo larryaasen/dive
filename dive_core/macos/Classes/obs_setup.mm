@@ -478,10 +478,10 @@ bool bridge_release_source(NSString *source_uuid) {
 bool bridge_create_media_source(NSString *source_uuid, NSString *local_file) {
     // Load video file
     obs_data_t *settings = obs_get_source_defaults("ffmpeg_source");
-    obs_data_set_default_bool(settings, "is_local_file", true);
-    obs_data_set_default_bool(settings, "looping", true);   // TODO: looping not working
-    obs_data_set_default_bool(settings, "clear_on_media_end", false);
-    obs_data_set_default_bool(settings, "close_when_inactive", false);
+    obs_data_set_bool(settings, "is_local_file", true);
+    obs_data_set_bool(settings, "looping", false);
+    obs_data_set_bool(settings, "clear_on_media_end", true);
+    obs_data_set_bool(settings, "close_when_inactive", true);
     obs_data_set_string(settings, "local_file", local_file.UTF8String);
     
     // TODO: add this file open check to propvide feedback on failures
@@ -495,10 +495,6 @@ bool bridge_create_media_source(NSString *source_uuid, NSString *local_file) {
 //    fclose(fp);
 
     obs_source_t *source = _create_source(source_uuid.UTF8String, "ffmpeg_source", "video file", settings, true);
-    if (source != NULL) {
-//        obs_source_update(source, settings);
-        obs_source_media_play_pause(source, true);
-    }
     return source != NULL;
 }
 
@@ -643,6 +639,19 @@ bool bridge_stream_output_stop() {
     return true;
 }
 
+/// Get the output state: 1 (active), 2 (paused), or 3 (reconnecting)
+int bridge_output_get_state() {
+    bool active = obs_output_active(stream_output);
+    bool paused = obs_output_paused(stream_output);
+    bool reconnecting = obs_output_reconnecting(stream_output);
+    int state = 0;
+    if (active) state = 1;
+    else if (paused) state = 2;
+    else if (reconnecting) state = 3;
+
+    return state;
+}
+
 #pragma mark - Media Controls
 
 /// Media control: play or pause
@@ -653,11 +662,19 @@ bool bridge_media_source_play_pause(NSString *source_uuid, bool pause) {
         printf("%s: unknown source %s\n", __func__, uuid_str);
         return false;
     }
+    
+    obs_media_state state = obs_source_media_get_state(source);
+    printf("%s: media state b4 %d\n", __func__, state);
+
     obs_source_media_play_pause(source, pause);
+
+    state = obs_source_media_get_state(source);
+    printf("%s: media state af %d\n", __func__, state);
+
     return true;
 }
 
-/// Media control: play or pause
+/// Media control: stop
 bool bridge_media_source_stop(NSString *source_uuid) {
     const char *uuid_str = source_uuid.UTF8String;
     obs_source_t *source = uuid_source_list[uuid_str];
@@ -667,6 +684,20 @@ bool bridge_media_source_stop(NSString *source_uuid) {
     }
     obs_source_media_stop(source);
     return true;
+}
+
+/// Media control: get state
+int bridge_media_source_get_state(NSString *source_uuid) {
+    const char *uuid_str = source_uuid.UTF8String;
+    obs_source_t *source = uuid_source_list[uuid_str];
+    if (!source) {
+        printf("%s: unknown source %s\n", __func__, uuid_str);
+        return false;
+    }
+
+    obs_media_state state = obs_source_media_get_state(source);
+    printf("%s: media state af %d\n", __func__, state);
+    return state;
 }
 
 #pragma mark - Inputs

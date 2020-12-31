@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dive_core/dive_core.dart';
 import 'package:dive_core/dive_input_type.dart';
 import 'package:dive_core/dive_input.dart';
 import 'package:dive_core/dive_plugin.dart';
@@ -132,32 +133,6 @@ class DiveImageSource extends DiveTextureSource {
       return null;
     }
     return source;
-  }
-}
-
-class DiveMediaSource extends DiveTextureSource {
-  DiveMediaSource({String name})
-      : super(inputType: DiveInputType.mediaSource, name: name);
-
-  static Future<DiveMediaSource> create(String localFile) async {
-    final source = DiveMediaSource(name: 'my media');
-    await source.setupController(source.trackingUUID);
-    if (!await DivePlugin.createMediaSource(source.trackingUUID, localFile)) {
-      return null;
-    }
-    return source;
-  }
-
-  Future<bool> play() async {
-    return await DivePlugin.mediaPlayPause(trackingUUID, false);
-  }
-
-  Future<bool> pause() async {
-    return await DivePlugin.mediaPlayPause(trackingUUID, true);
-  }
-
-  Future<bool> stop() async {
-    return await DivePlugin.mediaStop(trackingUUID);
   }
 }
 
@@ -332,25 +307,10 @@ class DiveScene extends DiveTracking {
   }
 }
 
-enum DiveOutputStreamingState { stopped, starting, streaming, stopping }
+// class DiveStateNotifier<T> extends StateNotifier<T> {
+//   DiveStateNotifier(T initialState) : super(initialState);
 
-class DiveOutput {
-  DiveOutputStreamingState _streamingState = DiveOutputStreamingState.stopped;
-  DiveOutputStreamingState get streamingState => _streamingState;
-
-  Future<bool> start() async {
-    _streamingState = DiveOutputStreamingState.starting;
-    return DivePlugin.startStopStream(true).then((value) {
-      _streamingState = DiveOutputStreamingState.streaming;
-      return value;
-    });
-  }
-
-  Future<bool> stop() async {
-    _streamingState = DiveOutputStreamingState.stopping;
-    return DivePlugin.startStopStream(false).then((value) {
-      _streamingState = DiveOutputStreamingState.stopped;
-      return value;
-    });
-  }
-}
+//   void change(T newState) {
+//     state = newState;
+//   }
+// }

@@ -2,7 +2,16 @@ library dive_ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/all.dart';
 import 'package:dive_core/dive_core.dart';
+
+class DiveUI {
+  static void setup(BuildContext context) {
+    // DiveCore and DiveUI must use the same [ProviderContainer], so it needs
+    // to be passed to DiveCore at the start.
+    DiveCore.providerContainer = ProviderScope.containerOf(context);
+  }
+}
 
 /// A widget showing a preview of a video/image frame using a [Texture] widget.
 class DivePreview extends StatelessWidget {
@@ -19,5 +28,70 @@ class DivePreview extends StatelessWidget {
         : Container(color: Colors.blue);
 
     return texture;
+  }
+}
+
+class DiveMediaPlayButton extends ConsumerWidget {
+  const DiveMediaPlayButton({Key key, @required DiveMediaSource mediaSource})
+      : mediaSource = mediaSource,
+        super(key: key);
+
+  final DiveMediaSource mediaSource;
+
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
+    if (mediaSource == null) {
+      return Container();
+    }
+    final state = watch(mediaSource.stateProvider.state);
+
+    return IconButton(
+      icon: Icon(state == DiveMediaState.PLAYING
+          ? Icons.pause_circle_filled_outlined
+          : Icons.play_circle_fill_outlined),
+      tooltip: state == DiveMediaState.PLAYING ? 'Pause video' : 'Play video',
+      onPressed: () {
+        final stateNotifier = context.read(mediaSource.stateProvider);
+        final currentState = stateNotifier.mediaState;
+        currentState == DiveMediaState.PLAYING
+            ? mediaSource.pause()
+            : mediaSource.play();
+      },
+    );
+  }
+}
+
+class DiveStreamPlayButton extends ConsumerWidget {
+  const DiveStreamPlayButton({
+    Key key,
+    @required DiveOutput streamingOutput,
+  })  : streamingOutput = streamingOutput,
+        super(key: key);
+
+  final DiveOutput streamingOutput;
+
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
+    if (streamingOutput == null) {
+      return Container();
+    }
+
+    final state = watch(streamingOutput.stateProvider.state);
+
+    return IconButton(
+      icon: state == DiveOutputStreamingState.active
+          ? const Icon(Icons.connected_tv)
+          : const Icon(Icons.live_tv),
+      tooltip: state == DiveOutputStreamingState.active
+          ? 'Stop streaming'
+          : 'Start streaming',
+      onPressed: () {
+        if (state == DiveOutputStreamingState.active) {
+          streamingOutput.stop().then((value) {});
+        } else {
+          streamingOutput.start().then((value) {});
+        }
+      },
+    );
   }
 }

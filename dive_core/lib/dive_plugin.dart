@@ -21,9 +21,11 @@ class DivePlugin {
   static const String _methodSetSceneItemInfo = 'setSceneItemInfo';
 
   static const String _methodStartStopStream = 'startStopStream';
+  static const String _methodOutputGetState = 'outputGetState';
 
   static const String _methodMediaPlayPause = 'mediaPlayPause';
   static const String _methodMediaStop = 'mediaStop';
+  static const String _methodMediaGetState = 'mediaGetState';
 
   static const String _methodGetInputTypes = 'getInputTypes';
   static const String _methodGetInputsFromType = 'getInputsFromType';
@@ -102,6 +104,10 @@ class DivePlugin {
         .invokeMethod(_methodStartStopStream, {'start': start});
   }
 
+  static Future<int> outputGetState() async {
+    return await _channel.invokeMethod(_methodOutputGetState);
+  }
+
   static Future<bool> mediaPlayPause(String sourceUUID, bool pause) async {
     return await _channel.invokeMethod(
         _methodMediaPlayPause, {'source_uuid': sourceUUID, 'pause': pause});
@@ -110,6 +116,11 @@ class DivePlugin {
   static Future<bool> mediaStop(String sourceUUID) async {
     return await _channel
         .invokeMethod(_methodMediaStop, {'source_uuid': sourceUUID});
+  }
+
+  static Future<int> mediaGetState(String sourceUUID) async {
+    return await _channel
+        .invokeMethod(_methodMediaGetState, {'source_uuid': sourceUUID});
   }
 
   static Future<DiveTransformInfo> getSceneItemInfo(

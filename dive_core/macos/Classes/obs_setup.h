@@ -38,11 +38,14 @@ bool    bridge_remove_videomix(NSString *tracking_uuid);
 
 bool bridge_stream_output_start();
 bool bridge_stream_output_stop();
+int bridge_output_get_state();
 
 #pragma mark - Media Controls
 
 bool bridge_media_source_play_pause(NSString *source_uuid, bool pause);
 bool bridge_media_source_stop(NSString *source_uuid);
+int bridge_media_source_get_state(NSString *source_uuid);
+
 
 #pragma mark - Inputs
 

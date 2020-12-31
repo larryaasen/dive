@@ -17,14 +17,29 @@ class _AppWidgetState extends State<AppWidget> {
   final _videoMixes = List<DiveVideoMix>();
   final _streamingOutput = DiveOutput();
   DiveScene _currentScene;
+  bool _initialized = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (!_initialized) {
+      _initialized = true;
+
+      // DiveCore and DiveApp must use the same [BuildContext], so it needs
+      // to be passed to DiveCore at the start. The method [DiveUI.setup] must
+      // be called after [_AppWidgetState.initState] completes.
+      DiveUI.setup(this.context);
+
+      DivePlugin.platformVersion().then((value) => print("$value"));
+
+      DiveScene.create('Scene 1').then((scene) => setup(scene));
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-
-    DivePlugin.platformVersion().then((value) => print("$value"));
-
-    DiveScene.create('Scene 1').then((scene) => setup(scene));
   }
 
   void setup(DiveScene scene) {
@@ -56,25 +71,25 @@ class _AppWidgetState extends State<AppWidget> {
       _currentScene.addSource(source).then((item) {});
     });
 
-    DiveInputs.video().then((videoInputs) {
-      var xLoc = 50.0;
-      videoInputs.forEach((videoInput) {
-        print(videoInput);
-        DiveVideoSource.create(videoInput).then((source) {
-          setState(() {
-            _videoSources.add(source);
-          });
-          _currentScene.addSource(source).then((item) {
-            final info = DiveTransformInfo(
-                pos: DiveVec2(xLoc, 50),
-                bounds: DiveVec2(500, 280),
-                boundsType: DiveBoundsType.SCALE_INNER);
-            item.updateTransformInfo(info);
-            xLoc += 680.0;
-          });
-        });
-      });
-    });
+    // DiveInputs.video().then((videoInputs) {
+    //   var xLoc = 50.0;
+    //   videoInputs.forEach((videoInput) {
+    //     print(videoInput);
+    //     DiveVideoSource.create(videoInput).then((source) {
+    //       setState(() {
+    //         _videoSources.add(source);
+    //       });
+    //       _currentScene.addSource(source).then((item) {
+    //         final info = DiveTransformInfo(
+    //             pos: DiveVec2(xLoc, 50),
+    //             bounds: DiveVec2(500, 280),
+    //             boundsType: DiveBoundsType.SCALE_INNER);
+    //         item.updateTransformInfo(info);
+    //         xLoc += 680.0;
+    //       });
+    //     });
+    //   });
+    // });
 
     final localFile = '/Users/larry/Downloads/Nicholas-Nationals-Play-Ball.mp4';
     DiveMediaSource.create(localFile).then((source) {
@@ -88,7 +103,6 @@ class _AppWidgetState extends State<AppWidget> {
               bounds: DiveVec2(500, 280),
               boundsType: DiveBoundsType.SCALE_INNER);
           item.updateTransformInfo(info);
-          // source.play();
         });
       }
     });
@@ -198,29 +212,10 @@ class _AppWidgetState extends State<AppWidget> {
           appBar: AppBar(
             title: const Text('Dive App'),
             actions: <Widget>[
-              IconButton(
-                icon: const Icon(Icons.play_circle_fill_outlined),
-                tooltip: 'Play video',
-                onPressed: () {
-                  _mediaSources[0].play().then((value) {});
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.live_tv),
-                tooltip: 'Start streaming',
-                onPressed: () {
-                  if (_streamingOutput.streamingState ==
-                      DiveOutputStreamingState.streaming) {
-                    _streamingOutput.stop().then((value) {
-                      setState(() {});
-                    });
-                  } else {
-                    _streamingOutput.start().then((value) {
-                      setState(() {});
-                    });
-                  }
-                },
-              ),
+              DiveMediaPlayButton(
+                  mediaSource:
+                      _mediaSources.length == 0 ? null : _mediaSources[0]),
+              DiveStreamPlayButton(streamingOutput: _streamingOutput),
             ],
           ),
           body: content,

@@ -18,10 +18,12 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         static let CreateScene = "createScene"
         static let MediaPlayPause = "mediaPlayPause"
         static let MediaStop = "mediaStop"
+        static let MediaGetState = "mediaGetState"
         static let GetSceneItemInfo = "getSceneItemInfo"
         static let SetSceneItemInfo = "setSceneItemInfo"
 
         static let StartStopStream = "startStopStream"
+        static let OutputGetState = "outputGetState"
 
         static let GetInputTypes = "getInputTypes"
         static let GetInputsFromType = "getInputsFromType"
@@ -70,12 +72,16 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
             result(mediaPlayPause(arguments))
         case Method.MediaStop:
             result(mediaStop(arguments))
+        case Method.MediaGetState:
+            result(mediaGetState(arguments))
         case Method.GetSceneItemInfo:
             result(getSceneItemInfo(arguments))
         case Method.SetSceneItemInfo:
             result(setSceneItemInfo(arguments))
         case Method.StartStopStream:
             result(startStopStream(arguments))
+        case Method.OutputGetState:
+            result(outputGetState())
         case Method.GetInputTypes:
             result(getInputTypes())
         case Method.GetInputsFromType:
@@ -201,6 +207,10 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         return start ? bridge_stream_output_start() : bridge_stream_output_stop()
     }
 
+    private func outputGetState() -> Int {
+        return Int(bridge_output_get_state());
+    }
+
     private func mediaPlayPause(_ arguments: [String: Any]?) -> Bool {
         guard let args = arguments,
             let source_uuid = args["source_uuid"] as! String?,
@@ -218,6 +228,15 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
                 return false
         }
         return bridge_media_source_stop(source_uuid);
+    }
+
+    private func mediaGetState(_ arguments: [String: Any]?) -> Int {
+        guard let args = arguments,
+            let source_uuid = args["source_uuid"] as! String?
+            else {
+                return 0
+        }
+        return Int(bridge_media_source_get_state(source_uuid));
     }
 
     private func getSceneItemInfo(_ arguments: [String: Any]?) -> [String: Any] {

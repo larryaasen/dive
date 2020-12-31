@@ -18,15 +18,13 @@ dependencies:
   dive_ui:
     path: ../dive_ui
 
-    # From fluttetcommunity.dev: Simplify Dart Equality Comparisons
+  # From fluttetcommunity.dev: Simplify Dart Equality Comparisons
   equatable: ^1.2.5
 
-  ### Packages
   flutter_bloc: ^6.0.5
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.0
+  # From darky12s@gmail.com: a state-manangement library
+  flutter_riverpod: ^0.12.1
 
 dev_dependencies:
   flutter_test:
