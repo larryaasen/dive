@@ -212,7 +212,7 @@ class _AppWidgetState extends State<AppWidget> {
           appBar: AppBar(
             title: const Text('Dive App'),
             actions: <Widget>[
-              DiveMediaPlayButton(
+              DiveMediaButtonBar(
                   mediaSource:
                       _mediaSources.length == 0 ? null : _mediaSources[0]),
               DiveStreamPlayButton(streamingOutput: _streamingOutput),

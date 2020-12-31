@@ -6,6 +6,7 @@ export 'dive_input_type.dart';
 export 'dive_input.dart';
 export 'dive_media_source.dart';
 export 'dive_sources.dart';
+export 'dive_output.dart';
 export 'texture_controller.dart';
 
 /// A callback used by providers to create the value exposed.

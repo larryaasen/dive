@@ -61,6 +61,56 @@ class DiveMediaPlayButton extends ConsumerWidget {
   }
 }
 
+class DiveMediaStopButton extends ConsumerWidget {
+  const DiveMediaStopButton({Key key, @required DiveMediaSource mediaSource})
+      : mediaSource = mediaSource,
+        super(key: key);
+
+  final DiveMediaSource mediaSource;
+
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
+    if (mediaSource == null) {
+      return Container();
+    }
+    final state = watch(mediaSource.stateProvider.state);
+
+    return IconButton(
+      icon: Icon(Icons.stop_circle_outlined),
+      tooltip: 'Stop video',
+      onPressed:
+          state != DiveMediaState.PLAYING ? null : () => mediaSource.stop(),
+    );
+  }
+}
+
+class DiveMediaButtonBar extends ConsumerWidget {
+  const DiveMediaButtonBar({Key key, @required DiveMediaSource mediaSource})
+      : mediaSource = mediaSource,
+        super(key: key);
+
+  final DiveMediaSource mediaSource;
+
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
+    if (mediaSource == null) {
+      return Container();
+    }
+
+    // final state = watch(mediaSource.stateProvider.state);
+
+    final row = Row(
+      children: [
+        DiveMediaPlayButton(mediaSource: mediaSource),
+        DiveMediaStopButton(
+          mediaSource: mediaSource,
+        )
+      ],
+    );
+    return row;
+  }
+}
+
 class DiveStreamPlayButton extends ConsumerWidget {
   const DiveStreamPlayButton({
     Key key,

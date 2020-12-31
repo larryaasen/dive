@@ -480,8 +480,9 @@ bool bridge_create_media_source(NSString *source_uuid, NSString *local_file) {
     obs_data_t *settings = obs_get_source_defaults("ffmpeg_source");
     obs_data_set_bool(settings, "is_local_file", true);
     obs_data_set_bool(settings, "looping", false);
-    obs_data_set_bool(settings, "clear_on_media_end", true);
+    obs_data_set_bool(settings, "clear_on_media_end", false);
     obs_data_set_bool(settings, "close_when_inactive", true);
+    obs_data_set_bool(settings, "restart_on_activate", false);
     obs_data_set_string(settings, "local_file", local_file.UTF8String);
     
     // TODO: add this file open check to propvide feedback on failures
@@ -672,6 +673,10 @@ bool bridge_media_source_play_pause(NSString *source_uuid, bool pause) {
     printf("%s: media state af %d\n", __func__, state);
 
     return true;
+}
+
+bool bridge_media_source_restart(NSString *source_uuid) {
+    obs_source_media_restart
 }
 
 /// Media control: stop
