@@ -21,7 +21,7 @@ dependencies:
   # From fluttetcommunity.dev: Simplify Dart Equality Comparisons
   equatable: ^1.2.5
 
-  flutter_bloc: ^6.0.5
+  # flutter_bloc: ^6.0.5
 
   # From darky12s@gmail.com: a state-manangement library
   flutter_riverpod: ^0.12.1

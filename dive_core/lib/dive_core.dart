@@ -2,11 +2,14 @@ library dive_core;
 
 import 'package:riverpod/riverpod.dart';
 
+export 'dive_format.dart';
 export 'dive_input_type.dart';
 export 'dive_input.dart';
 export 'dive_media_source.dart';
-export 'dive_sources.dart';
 export 'dive_output.dart';
+export 'dive_plugin.dart';
+export 'dive_sources.dart';
+export 'dive_system_log.dart';
 export 'texture_controller.dart';
 
 /// A callback used by providers to create the value exposed.

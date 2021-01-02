@@ -24,6 +24,7 @@ class DivePlugin {
   static const String _methodOutputGetState = 'outputGetState';
 
   static const String _methodMediaPlayPause = 'mediaPlayPause';
+  static const String _methodMediaRestart = 'mediaRestart';
   static const String _methodMediaStop = 'mediaStop';
   static const String _methodMediaGetState = 'mediaGetState';
 
@@ -80,6 +81,7 @@ class DivePlugin {
         {'source_uuid': sourceUUID, 'local_file': localFile});
   }
 
+  // TODO: creating a video source breaks the Flutter connection to the device.
   static Future<bool> createVideoSource(
       String sourceUUID, String deviceName, String deviceUid) async {
     return await _channel.invokeMethod(_methodCreateVideoSource, {
@@ -113,9 +115,29 @@ class DivePlugin {
         _methodMediaPlayPause, {'source_uuid': sourceUUID, 'pause': pause});
   }
 
+  static Future<bool> mediaRestart(String sourceUUID) async {
+    return await _channel
+        .invokeMethod(_methodMediaRestart, {'source_uuid': sourceUUID});
+  }
+
   static Future<bool> mediaStop(String sourceUUID) async {
     return await _channel
         .invokeMethod(_methodMediaStop, {'source_uuid': sourceUUID});
+  }
+
+  static Future<int> mediaGetDuration(String sourceUUID) async {
+    return await _channel
+        .invokeMethod('mediaGetDuration', {'source_uuid': sourceUUID});
+  }
+
+  static Future<int> mediaGetTime(String sourceUUID) async {
+    return await _channel
+        .invokeMethod('mediaGetTime', {'source_uuid': sourceUUID});
+  }
+
+  static Future<bool> mediaSetTime(String sourceUUID, int ms) async {
+    return await _channel
+        .invokeMethod('mediaSetTime', {'source_uuid': sourceUUID, 'ms': ms});
   }
 
   static Future<int> mediaGetState(String sourceUUID) async {

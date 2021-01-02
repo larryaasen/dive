@@ -16,9 +16,15 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         static let CreateVideoSource = "createVideoSource"
         static let CreateVideoMix = "createVideoMix"
         static let CreateScene = "createScene"
+
         static let MediaPlayPause = "mediaPlayPause"
+        static let MediaRestart = "mediaRestart"
         static let MediaStop = "mediaStop"
+        static let MediaGetDuration = "mediaGetDuration"
+        static let MediaGetTime = "mediaGetTime"
+        static let MediaSetTime = "mediaSetTime"        
         static let MediaGetState = "mediaGetState"
+
         static let GetSceneItemInfo = "getSceneItemInfo"
         static let SetSceneItemInfo = "setSceneItemInfo"
 
@@ -68,12 +74,22 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
             result(createVideoMix(arguments))
         case Method.CreateScene:
             result(createScene(arguments))
+
         case Method.MediaPlayPause:
             result(mediaPlayPause(arguments))
+        case Method.MediaRestart:
+            result(mediaRestart(arguments))
         case Method.MediaStop:
             result(mediaStop(arguments))
+        case Method.MediaGetDuration:
+            result(mediaGetDuration(arguments))
+        case Method.MediaGetTime:
+            result(mediaGetTime(arguments))
+        case Method.MediaSetTime:
+            result(mediaSetTime(arguments))
         case Method.MediaGetState:
             result(mediaGetState(arguments))
+
         case Method.GetSceneItemInfo:
             result(getSceneItemInfo(arguments))
         case Method.SetSceneItemInfo:
@@ -221,6 +237,15 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         return bridge_media_source_play_pause(source_uuid, pause);
     }
     
+    private func mediaRestart(_ arguments: [String: Any]?) -> Bool {
+        guard let args = arguments,
+            let source_uuid = args["source_uuid"] as! String?
+            else {
+                return false
+        }
+        return bridge_media_source_restart(source_uuid);
+    }
+
     private func mediaStop(_ arguments: [String: Any]?) -> Bool {
         guard let args = arguments,
             let source_uuid = args["source_uuid"] as! String?
@@ -228,6 +253,34 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
                 return false
         }
         return bridge_media_source_stop(source_uuid);
+    }
+    
+    private func mediaGetDuration(_ arguments: [String: Any]?) -> Int64 {
+        guard let args = arguments,
+            let source_uuid = args["source_uuid"] as! String?
+            else {
+                return 0
+        }
+        return bridge_media_source_get_duration(source_uuid);
+    }
+    
+    private func mediaGetTime(_ arguments: [String: Any]?) -> Int64 {
+        guard let args = arguments,
+            let source_uuid = args["source_uuid"] as! String?
+            else {
+                return 0
+        }
+        return bridge_media_source_get_time(source_uuid);
+    }
+    
+    private func mediaSetTime(_ arguments: [String: Any]?) -> Bool {
+        guard let args = arguments,
+            let source_uuid = args["source_uuid"] as! String?,
+            let ms = args["ms"] as! Int64?
+            else {
+                return false
+        }
+        return bridge_media_source_set_time(source_uuid, ms);
     }
 
     private func mediaGetState(_ arguments: [String: Any]?) -> Int {

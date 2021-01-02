@@ -43,28 +43,75 @@ class DiveMediaPlayButton extends ConsumerWidget {
     if (mediaSource == null) {
       return Container();
     }
-    final state = watch(mediaSource.stateProvider.state);
+
+    final stateModel = watch(mediaSource.stateProvider.state);
 
     return IconButton(
-      icon: Icon(state == DiveMediaState.PLAYING
+      icon: Icon(stateModel.mediaState == DiveMediaState.PLAYING
           ? Icons.pause_circle_filled_outlined
           : Icons.play_circle_fill_outlined),
-      tooltip: state == DiveMediaState.PLAYING ? 'Pause video' : 'Play video',
+      tooltip: stateModel.mediaState == DiveMediaState.PLAYING
+          ? 'Pause video'
+          : 'Play video',
       onPressed: () {
-        final stateNotifier = context.read(mediaSource.stateProvider);
-        final currentState = stateNotifier.mediaState;
-        currentState == DiveMediaState.PLAYING
-            ? mediaSource.pause()
-            : mediaSource.play();
+        // TODO: sometimes onPressed is not called
+        print("onPressed: clicked");
+        mediaSource.getState().then((newStateModel) async {
+          print("onPressed: state $newStateModel");
+          switch (newStateModel.mediaState) {
+            case DiveMediaState.STOPPED:
+            case DiveMediaState.ENDED:
+              await mediaSource.restart().then((value) {
+                print("restart completed");
+              });
+              break;
+            case DiveMediaState.PLAYING:
+              mediaSource.pause().then((value) {
+                print("pause completed");
+              });
+              break;
+            case DiveMediaState.PAUSED:
+              mediaSource.play().then((value) {
+                print("play completed");
+              });
+              break;
+            default:
+              break;
+          }
+        });
       },
     );
   }
 }
 
-class DiveMediaStopButton extends ConsumerWidget {
-  const DiveMediaStopButton({Key key, @required DiveMediaSource mediaSource})
-      : mediaSource = mediaSource,
-        super(key: key);
+class DiveMediaStopButton extends StatelessWidget {
+  const DiveMediaStopButton({Key key, @required this.mediaSource})
+      : super(key: key);
+
+  final DiveMediaSource mediaSource;
+
+  @override
+  Widget build(BuildContext context) {
+    if (mediaSource == null) {
+      return Container();
+    }
+
+    return IconButton(
+      icon: Icon(Icons.stop_circle_outlined),
+      tooltip: 'Stop video',
+      onPressed: () async {
+        print("onPressed: clicked");
+        await mediaSource.stop().then((value) {
+          print("stop completed");
+        });
+      },
+    );
+  }
+}
+
+class DiveMediaDuration extends ConsumerWidget {
+  const DiveMediaDuration({Key key, @required this.mediaSource})
+      : super(key: key);
 
   final DiveMediaSource mediaSource;
 
@@ -73,14 +120,14 @@ class DiveMediaStopButton extends ConsumerWidget {
     if (mediaSource == null) {
       return Container();
     }
-    final state = watch(mediaSource.stateProvider.state);
 
-    return IconButton(
-      icon: Icon(Icons.stop_circle_outlined),
-      tooltip: 'Stop video',
-      onPressed:
-          state != DiveMediaState.PLAYING ? null : () => mediaSource.stop(),
-    );
+    final stateModel = watch(mediaSource.stateProvider.state);
+    final cur = DiveFormat.formatDuration(
+        Duration(milliseconds: stateModel.currentTime));
+    final dur =
+        DiveFormat.formatDuration(Duration(milliseconds: stateModel.duration));
+    final msg = "$cur / $dur";
+    return Text(msg);
   }
 }
 
@@ -101,10 +148,9 @@ class DiveMediaButtonBar extends ConsumerWidget {
 
     final row = Row(
       children: [
+        DiveMediaDuration(mediaSource: mediaSource),
         DiveMediaPlayButton(mediaSource: mediaSource),
-        DiveMediaStopButton(
-          mediaSource: mediaSource,
-        )
+        DiveMediaStopButton(mediaSource: mediaSource),
       ],
     );
     return row;
@@ -137,9 +183,9 @@ class DiveStreamPlayButton extends ConsumerWidget {
           : 'Start streaming',
       onPressed: () {
         if (state == DiveOutputStreamingState.active) {
-          streamingOutput.stop().then((value) {});
+          streamingOutput.stop();
         } else {
-          streamingOutput.start().then((value) {});
+          streamingOutput.start();
         }
       },
     );

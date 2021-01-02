@@ -279,7 +279,7 @@ class DiveSceneItem {
 class DiveScene extends DiveTracking {
   static const MAX_CHANNELS = 64;
 
-  final _sceneItems = List<DiveSceneItem>();
+  final List<DiveSceneItem> _sceneItems = [];
 
   static Future<DiveScene> create(String name) async {
     if (_sceneCount > 0) {

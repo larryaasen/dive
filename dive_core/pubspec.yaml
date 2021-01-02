@@ -12,11 +12,11 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # From Dart Team: provides internationalization and localization facilities, including message translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
+  intl: ^0.16.1
+
   # From darky12s@gmail.com: a state-manangement library
   riverpod: ^0.12.1
-
-  # # From dash-overflow.net: reimplements ValueNotifier outside of Flutter
-  # state_notifier: ^0.6.0
 
   # From: yuli.dev. Simple, fast generation of RFC4122 UUIDs
   uuid: ^2.2.2

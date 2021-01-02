@@ -43,9 +43,12 @@ int bridge_output_get_state();
 #pragma mark - Media Controls
 
 bool bridge_media_source_play_pause(NSString *source_uuid, bool pause);
+bool bridge_media_source_restart(NSString *source_uuid);
 bool bridge_media_source_stop(NSString *source_uuid);
+int64_t bridge_media_source_get_duration(NSString *source_uuid);
+int64_t bridge_media_source_get_time(NSString *source_uuid);
+bool bridge_media_source_set_time(NSString *source_uuid, int64_t ms);
 int bridge_media_source_get_state(NSString *source_uuid);
-
 
 #pragma mark - Inputs
 

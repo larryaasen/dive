@@ -10,14 +10,15 @@ class AppWidget extends StatefulWidget {
 }
 
 class _AppWidgetState extends State<AppWidget> {
-  final _audioSources = List<DiveAudioSource>();
-  final _imageSources = List<DiveImageSource>();
-  final _mediaSources = List<DiveMediaSource>();
-  final _videoSources = List<DiveVideoSource>();
-  final _videoMixes = List<DiveVideoMix>();
+  final List<DiveAudioSource> _audioSources = [];
+  final List<DiveImageSource> _imageSources = [];
+  final List<DiveMediaSource> _mediaSources = [];
+  final List<DiveVideoSource> _videoSources = [];
+  final List<DiveVideoMix> _videoMixes = [];
   final _streamingOutput = DiveOutput();
   DiveScene _currentScene;
   bool _initialized = false;
+  bool _enableCameras = false;
 
   @override
   void didChangeDependencies() {
@@ -71,25 +72,27 @@ class _AppWidgetState extends State<AppWidget> {
       _currentScene.addSource(source).then((item) {});
     });
 
-    // DiveInputs.video().then((videoInputs) {
-    //   var xLoc = 50.0;
-    //   videoInputs.forEach((videoInput) {
-    //     print(videoInput);
-    //     DiveVideoSource.create(videoInput).then((source) {
-    //       setState(() {
-    //         _videoSources.add(source);
-    //       });
-    //       _currentScene.addSource(source).then((item) {
-    //         final info = DiveTransformInfo(
-    //             pos: DiveVec2(xLoc, 50),
-    //             bounds: DiveVec2(500, 280),
-    //             boundsType: DiveBoundsType.SCALE_INNER);
-    //         item.updateTransformInfo(info);
-    //         xLoc += 680.0;
-    //       });
-    //     });
-    //   });
-    // });
+    if (_enableCameras) {
+      DiveInputs.video().then((videoInputs) {
+        var xLoc = 50.0;
+        videoInputs.forEach((videoInput) {
+          print(videoInput);
+          DiveVideoSource.create(videoInput).then((source) {
+            setState(() {
+              _videoSources.add(source);
+            });
+            _currentScene.addSource(source).then((item) {
+              final info = DiveTransformInfo(
+                  pos: DiveVec2(xLoc, 50),
+                  bounds: DiveVec2(500, 280),
+                  boundsType: DiveBoundsType.SCALE_INNER);
+              item.updateTransformInfo(info);
+              xLoc += 680.0;
+            });
+          });
+        });
+      });
+    }
 
     final localFile = '/Users/larry/Downloads/Nicholas-Nationals-Play-Ball.mp4';
     DiveMediaSource.create(localFile).then((source) {

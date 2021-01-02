@@ -499,6 +499,7 @@ bool bridge_create_media_source(NSString *source_uuid, NSString *local_file) {
     return source != NULL;
 }
 
+// TODO: creating a video source breaks the Flutter connection to the device.
 bool bridge_create_video_source(NSString *source_uuid, NSString *device_name, NSString *device_uid) {
     obs_data_t *settings = obs_data_create();
     obs_data_set_string(settings, "device_name", device_name.UTF8String);
@@ -663,20 +664,20 @@ bool bridge_media_source_play_pause(NSString *source_uuid, bool pause) {
         printf("%s: unknown source %s\n", __func__, uuid_str);
         return false;
     }
-    
-    obs_media_state state = obs_source_media_get_state(source);
-    printf("%s: media state b4 %d\n", __func__, state);
 
     obs_source_media_play_pause(source, pause);
-
-    state = obs_source_media_get_state(source);
-    printf("%s: media state af %d\n", __func__, state);
-
     return true;
 }
 
 bool bridge_media_source_restart(NSString *source_uuid) {
-    obs_source_media_restart
+    const char *uuid_str = source_uuid.UTF8String;
+    obs_source_t *source = uuid_source_list[uuid_str];
+    if (!source) {
+        printf("%s: unknown source %s\n", __func__, uuid_str);
+        return false;
+    }
+    obs_source_media_restart(source);
+    return true;
 }
 
 /// Media control: stop
@@ -691,6 +692,45 @@ bool bridge_media_source_stop(NSString *source_uuid) {
     return true;
 }
 
+/// Media control: get time
+int64_t bridge_media_source_get_duration(NSString *source_uuid) {
+    const char *uuid_str = source_uuid.UTF8String;
+    obs_source_t *source = uuid_source_list[uuid_str];
+    if (!source) {
+        printf("%s: unknown source %s\n", __func__, uuid_str);
+        return 0;
+    }
+
+    return obs_source_media_get_duration(source);
+}
+
+/// Media control: get time
+int64_t bridge_media_source_get_time(NSString *source_uuid) {
+    const char *uuid_str = source_uuid.UTF8String;
+    obs_source_t *source = uuid_source_list[uuid_str];
+    if (!source) {
+        printf("%s: unknown source %s\n", __func__, uuid_str);
+        return 0;
+    }
+
+    return obs_source_media_get_time(source);
+}
+
+/// Media control: set time
+bool bridge_media_source_set_time(NSString *source_uuid, int64_t ms) {
+    const char *uuid_str = source_uuid.UTF8String;
+    obs_source_t *source = uuid_source_list[uuid_str];
+    if (!source) {
+        printf("%s: unknown source %s\n", __func__, uuid_str);
+        return false;
+    }
+
+    obs_source_media_set_time(source, ms);
+    return true;
+}
+
+// TODO: implement signals from media source: obs_source_get_signal_handler
+
 /// Media control: get state
 int bridge_media_source_get_state(NSString *source_uuid) {
     const char *uuid_str = source_uuid.UTF8String;
@@ -701,7 +741,6 @@ int bridge_media_source_get_state(NSString *source_uuid) {
     }
 
     obs_media_state state = obs_source_media_get_state(source);
-    printf("%s: media state af %d\n", __func__, state);
     return state;
 }
 
