@@ -64,6 +64,13 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  dive_obslib:
+    dependency: transitive
+    description:
+      path: "../dive_obslib"
+      relative: true
+    source: path
+    version: "0.0.1"
   fake_async:
     dependency: transitive
     description:

@@ -4,7 +4,7 @@ import FlutterMacOS
 
 // let _imageProducer = ImageFrameProducer()
 
-public class DiveCorePlugin: NSObject, FlutterPlugin {
+public class DiveObsLibPlugin: NSObject, FlutterPlugin {
     struct Method {
         static let GetPlatformVersion = "getPlatformVersion"
         static let DisposeTexture = "disposeTexture"
@@ -37,23 +37,23 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         static let GetVideoInputs = "getVideoInputs"
     }
     
-    static let _channelName = "dive_core.io/plugin"
+    static let _channelName = "dive_obslib.io/plugin"
     static var textureRegistry: FlutterTextureRegistry?
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         textureRegistry = registrar.textures
         
         let channel = FlutterMethodChannel(name: _channelName, binaryMessenger: registrar.messenger)
-        let instance = DiveCorePlugin()
+        let instance = DiveObsLibPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
         
         create_obs()
 
-        print("DiveCorePlugin registered.")
+        print("DiveObsLibPlugin registered.")
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        print("DiveCorePlugin.handle method: \(call.method)")
+        print("DiveObsLibPlugin.handle method: \(call.method)")
         let arguments = call.arguments != nil ? call.arguments as? [String: Any] : nil
         switch call.method {
         case Method.InitializeTexture:
@@ -115,7 +115,7 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         var rv = false
         if let args = arguments {
             if let texturedId = args["textureId"] as! Int64? {
-                DiveCorePlugin.textureRegistry?.unregisterTexture(texturedId)
+                DiveObsLibPlugin.textureRegistry?.unregisterTexture(texturedId)
                 rv = true
             }
         }
@@ -126,8 +126,8 @@ public class DiveCorePlugin: NSObject, FlutterPlugin {
         guard let args = arguments, let trackingUUID = args["tracking_uuid"] as! String? else {
             return 0
         }
-        if let source = TextureSource(uuid: trackingUUID, registry: DiveCorePlugin.textureRegistry) {
-            if let texturedId = DiveCorePlugin.textureRegistry?.register(source) {
+        if let source = TextureSource(uuid: trackingUUID, registry: DiveObsLibPlugin.textureRegistry) {
+            if let texturedId = DiveObsLibPlugin.textureRegistry?.register(source) {
                 source.textureId = texturedId
                 source.trackingUUID = trackingUUID
                 addFrameCapture(source)

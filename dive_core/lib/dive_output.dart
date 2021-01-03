@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:dive_core/dive_core.dart';
-import 'package:dive_core/dive_plugin.dart';
+import 'package:dive_obslib/dive_obslib.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:state_notifier/state_notifier.dart';
 

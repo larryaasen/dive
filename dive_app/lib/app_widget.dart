@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:dive_core/dive_core.dart';
-import 'package:dive_core/dive_plugin.dart';
 import 'package:dive_ui/dive_ui.dart';
 // import 'package:dive_app/home_widget.dart';
 
@@ -18,7 +17,7 @@ class _AppWidgetState extends State<AppWidget> {
   final _streamingOutput = DiveOutput();
   DiveScene _currentScene;
   bool _initialized = false;
-  bool _enableCameras = false;
+  bool _enableCameras = true;
 
   @override
   void didChangeDependencies() {
@@ -31,8 +30,6 @@ class _AppWidgetState extends State<AppWidget> {
       // to be passed to DiveCore at the start. The method [DiveUI.setup] must
       // be called after [_AppWidgetState.initState] completes.
       DiveUI.setup(this.context);
-
-      DivePlugin.platformVersion().then((value) => print("$value"));
 
       DiveScene.create('Scene 1').then((scene) => setup(scene));
     }

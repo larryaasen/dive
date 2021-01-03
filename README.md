@@ -11,19 +11,24 @@ DiveUI - a Flutter plugin package that provides Widgets for Flutter apps using D
 
 DiveApp - a Flutter app for video recording and streaming.
 
-## DiveCore
+## DiveObslib
 
-The DiveCore package is a Flutter plugin that provides low level services for
-video playback, camera devices, live streaming, and audio. This package
+The DiveObslib package is a Flutter plugin that provides low level access
+to obslib. This package 
 contains platform-specific implementations with native extensions for Android,
 iOS, and macOS.
 
-DiveCore is powered by obslib, a CocoaPods library built from the core of OBS Studio.
+DiveObslib is powered by obslib, a CocoaPods library built from the core of OBS Studio.
 It utilizes all of the underlying features of OBS Studio excluding the UI code.
 It includes inputs, sources, outputs, encoders, services, and more.
 
-DiveCore contains the DiveCorePlugin and the dive_core CocoaPods library. The
-dive_core pod has a dependency on the obslib CocoaPods library.
+DiveObslib contains the DiveObsLibPlugin and the dive_obslib CocoaPods library. The
+dive_obslib pod has a dependency on the obslib CocoaPods library.
+
+## DiveCore
+
+The DiveCore package is a Flutter plugin that provides basic services for
+video playback, camera devices, live streaming, and audio.
 
 ## DiveUI
 

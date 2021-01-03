@@ -1,4 +1,4 @@
-# dive_core
+# dive_obslib
 
 ## Building the obslib Framework
 

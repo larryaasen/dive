@@ -1,26 +1,12 @@
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:dive_core/dive_plugin.dart';
 import 'package:dive_core/dive_format.dart';
 
 void main() {
-  const MethodChannel channel = MethodChannel('dive_core');
-
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  setUp(() {
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      return '42';
-    });
-  });
+  setUp(() {});
 
-  tearDown(() {
-    channel.setMockMethodCallHandler(null);
-  });
-
-  test('getPlatformVersion', () async {
-    expect(await DivePlugin.platformVersion(), '42');
-  });
+  tearDown(() {});
 
   test('formatDuration', () {
     final fmt = DiveFormat.formatDuration;

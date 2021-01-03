@@ -5,10 +5,10 @@
 import FlutterMacOS
 import Foundation
 
-import dive_core
+import dive_obslib
 import path_provider_macos
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
-  DiveCorePlugin.register(with: registry.registrar(forPlugin: "DiveCorePlugin"))
+  DiveObsLibPlugin.register(with: registry.registrar(forPlugin: "DiveObsLibPlugin"))
   PathProviderPlugin.register(with: registry.registrar(forPlugin: "PathProviderPlugin"))
 }

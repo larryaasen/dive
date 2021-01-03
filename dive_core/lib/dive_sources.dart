@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dive_core/dive_core.dart';
 import 'package:dive_core/dive_input_type.dart';
 import 'package:dive_core/dive_input.dart';
+import 'package:dive_obslib/dive_obslib.dart';
 import 'package:dive_core/dive_plugin.dart';
 import 'package:dive_core/texture_controller.dart';
 import 'package:uuid/uuid.dart';
@@ -15,14 +16,14 @@ int _sceneCount = 0;
 
 class DiveInputTypes {
   DiveInputTypes();
-  static Future<List<DiveInputType>> all() => DivePlugin.inputTypes();
+  static Future<List<DiveInputType>> all() => DivePluginExt.inputTypes();
 }
 
 class DiveInputs {
   static Future<List<DiveInput>> fromType(String typeId) =>
-      DivePlugin.inputsFromType(typeId);
-  static Future<List<DiveInput>> audio() => DivePlugin.audioInputs();
-  static Future<List<DiveInput>> video() => DivePlugin.videoInputs();
+      DivePluginExt.inputsFromType(typeId);
+  static Future<List<DiveInput>> audio() => DivePluginExt.audioInputs();
+  static Future<List<DiveInput>> video() => DivePluginExt.videoInputs();
 }
 
 // TODO: DiveSettings needs to be implemented
@@ -265,13 +266,13 @@ class DiveSceneItem {
   Future<void> updateTransformInfo(DiveTransformInfo info) async {
     // get transform info
     final currentInfo =
-        await DivePlugin.getSceneItemInfo(scene.trackingUUID, itemId);
+        await DivePluginExt.getSceneItemInfo(scene.trackingUUID, itemId);
 
     // update info with changes
     final newInfo = currentInfo.copyFrom(info);
 
     // set transform info
-    return await DivePlugin.setSceneItemInfo(
+    return await DivePluginExt.setSceneItemInfo(
         scene.trackingUUID, itemId, newInfo);
   }
 }
