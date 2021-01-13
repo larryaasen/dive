@@ -17,6 +17,7 @@ void addFrameCapture(TextureSource *textureSource);
 void removeFrameCapture(TextureSource *textureSource);
 
 bool create_obs(void);
+bool load_obs(void);
 
 #pragma mark - Bridge functions
 

@@ -39,6 +39,8 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
     
     static let _channelName = "dive_obslib.io/plugin"
     static var textureRegistry: FlutterTextureRegistry?
+    static let obsFFI = true;
+    static let obsPlugin = !obsFFI;
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         textureRegistry = registrar.textures
@@ -46,66 +48,76 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
         let channel = FlutterMethodChannel(name: _channelName, binaryMessenger: registrar.messenger)
         let instance = DiveObsLibPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
-        
-        create_obs()
-
         print("DiveObsLibPlugin registered.")
+        
+        // This function must be called on the main thread because of some 
+        // functions used by OBS that need to be called on the main thread.
+        // The other functions can be called on FFI worker threads.
+        let rv = create_obs()
+
+        // This is old code use for the plugin technique.
+       if obsPlugin && rv {
+           load_obs()
+       }
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         print("DiveObsLibPlugin.handle method: \(call.method)")
         let arguments = call.arguments != nil ? call.arguments as? [String: Any] : nil
+        
+        let ffi = DiveObsLibPlugin.obsFFI
+
         switch call.method {
         case Method.InitializeTexture:
             result(initializeTexture(arguments))
         case Method.GetPlatformVersion:
             result(getPlatformVersion())
         case Method.AddSource:
-            result(addSource(arguments))
+            ffi ? nil : result(addSource(arguments))
         case Method.CreateSource:
-            result(createSource(arguments))
+            ffi ? nil : result(createSource(arguments))
         case Method.CreateImageSource:
-            result(createImageSource(arguments))
+            ffi ? nil : result(createImageSource(arguments))
         case Method.CreateMediaSource:
-            result(createMediaSource(arguments))
+            ffi ? nil : result(createMediaSource(arguments))
         case Method.CreateVideoSource:
-            result(createVideoSource(arguments))
+            ffi ? nil : result(createVideoSource(arguments))
         case Method.CreateVideoMix:
-            result(createVideoMix(arguments))
+            ffi ? nil : result(createVideoMix(arguments))
         case Method.CreateScene:
-            result(createScene(arguments))
+            ffi ? nil : result(createScene(arguments))
 
         case Method.MediaPlayPause:
-            result(mediaPlayPause(arguments))
+            ffi ? nil : result(mediaPlayPause(arguments))
         case Method.MediaRestart:
-            result(mediaRestart(arguments))
+            ffi ? nil : result(mediaRestart(arguments))
         case Method.MediaStop:
-            result(mediaStop(arguments))
+            ffi ? nil : result(mediaStop(arguments))
         case Method.MediaGetDuration:
-            result(mediaGetDuration(arguments))
+            ffi ? nil : result(mediaGetDuration(arguments))
         case Method.MediaGetTime:
-            result(mediaGetTime(arguments))
+            ffi ? nil : result(mediaGetTime(arguments))
         case Method.MediaSetTime:
-            result(mediaSetTime(arguments))
+            ffi ? nil : result(mediaSetTime(arguments))
         case Method.MediaGetState:
-            result(mediaGetState(arguments))
+            ffi ? nil : result(mediaGetState(arguments))
 
         case Method.GetSceneItemInfo:
-            result(getSceneItemInfo(arguments))
+            ffi ? nil : result(getSceneItemInfo(arguments))
         case Method.SetSceneItemInfo:
-            result(setSceneItemInfo(arguments))
+            ffi ? nil : result(setSceneItemInfo(arguments))
         case Method.StartStopStream:
-            result(startStopStream(arguments))
+            ffi ? nil : result(startStopStream(arguments))
         case Method.OutputGetState:
-            result(outputGetState())
+            ffi ? nil : result(outputGetState())
         case Method.GetInputTypes:
-            result(getInputTypes())
+            ffi ? nil : result(getInputTypes())
         case Method.GetInputsFromType:
-            result(getInputsFromType(arguments))
+            ffi ? nil : result(getInputsFromType(arguments))
         case Method.GetAudioInputs:
-            result(getAudioInputs())
+            ffi ? nil : result(getAudioInputs())
         case Method.GetVideoInputs:
-            result(getVideoInputs())
+            ffi ? nil : result(getVideoInputs())
         default:
             result(FlutterMethodNotImplemented)
         }

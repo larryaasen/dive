@@ -2,6 +2,10 @@ library dive_core;
 
 import 'package:riverpod/riverpod.dart';
 
+import 'package:dive_obslib/dive_ffi.dart';
+import 'package:dive_obslib/dive_ffi_load.dart';
+import 'package:ffi/ffi.dart';
+
 export 'dive_format.dart';
 export 'dive_input_type.dart';
 export 'dive_input.dart';
@@ -37,6 +41,35 @@ class DiveCore {
     return DiveCore.providerContainer != null
         ? DiveCore.providerContainer.read(provider)
         : null;
+  }
+
+  DiveObslibFFI _lib;
+
+  int startFFI() {
+    _lib = DiveObslibFFILoad.loadLib();
+
+    return _startObs();
+  }
+
+  int _startObs() {
+    try {
+      // final locale = 'en'.toInt8();
+      // final rv = _lib.obs_startup(locale, _lib.nullptr, _lib.nullptr);
+      // free(locale);
+      int rv = 1;
+
+      if (rv == 1) {
+        _lib.obs_load_all_modules();
+        _lib.obs_post_load_modules();
+      } else {
+        print("_startObs: the call to obs_startup failed.");
+      }
+
+      return rv;
+    } catch (e) {
+      print("_startObs: exception: $e");
+    }
+    return 0;
   }
 }
 

@@ -157,6 +157,18 @@ static void remove_videomix_callback(NSString *tracking_uuid) {
     free((void *)tracking_uuid_str);
 }
 
+bool load_obs(void)
+{
+    obs_load_all_modules();
+    obs_post_load_modules();
+
+    if (!reset_video()) return false;
+    if (!reset_audio()) return false;
+    if (!create_service()) return false;
+    
+    return true;
+}
+
 extern "C" bool create_obs(void)
 {
     if (obs_started) return true;
@@ -165,13 +177,6 @@ extern "C" bool create_obs(void)
         printf("Couldn't create OBS\n");
         return false; //throw "Couldn't create OBS";
     }
-    
-    obs_load_all_modules();
-    obs_post_load_modules();
-
-    if (!reset_video()) return false;
-    if (!reset_audio()) return false;
-    if (!create_service()) return false;
     
     return true;
 }

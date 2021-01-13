@@ -17,11 +17,13 @@ class _AppWidgetState extends State<AppWidget> {
   final _streamingOutput = DiveOutput();
   DiveScene _currentScene;
   bool _initialized = false;
-  bool _enableCameras = true;
+  bool _enableCameras = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
+    DiveCore().startFFI();
 
     if (!_initialized) {
       _initialized = true;
@@ -29,9 +31,10 @@ class _AppWidgetState extends State<AppWidget> {
       // DiveCore and DiveApp must use the same [BuildContext], so it needs
       // to be passed to DiveCore at the start. The method [DiveUI.setup] must
       // be called after [_AppWidgetState.initState] completes.
-      DiveUI.setup(this.context);
 
-      DiveScene.create('Scene 1').then((scene) => setup(scene));
+      // DiveUI.setup(this.context);
+
+      // DiveScene.create('Scene 1').then((scene) => setup(scene));
     }
   }
 
