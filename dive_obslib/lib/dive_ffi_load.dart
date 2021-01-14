@@ -1,6 +1,6 @@
 import 'dart:ffi' as ffi;
 import 'dart:io';
-import 'package:dive_obslib/dive_ffi.dart';
+import 'package:dive_obslib/dive_obs_ffi.dart';
 import 'package:ffi/ffi.dart';
 
 extension StringExtensions on String {

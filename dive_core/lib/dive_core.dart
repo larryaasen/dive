@@ -2,7 +2,7 @@ library dive_core;
 
 import 'package:riverpod/riverpod.dart';
 
-import 'package:dive_obslib/dive_ffi.dart';
+import 'package:dive_obslib/dive_obs_ffi.dart';
 import 'package:dive_obslib/dive_ffi_load.dart';
 import 'package:ffi/ffi.dart';
 
@@ -61,6 +61,11 @@ class DiveCore {
       if (rv == 1) {
         _lib.obs_load_all_modules();
         _lib.obs_post_load_modules();
+        // next: ???
+        if (!reset_video()) return 0;
+        // if (!reset_audio()) return false;
+        // if (!create_service()) return false;
+
       } else {
         print("_startObs: the call to obs_startup failed.");
       }
@@ -69,8 +74,32 @@ class DiveCore {
     } catch (e) {
       print("_startObs: exception: $e");
     }
-    return 0;
+    return 1;
   }
+
+  static const int cx = 1280;
+static const int cy = 720;
+
+bool _reset_video() {
+    obs_video_info ovi;
+    ovi.adapter = 0;
+    ovi.fps_num = 30000;
+    ovi.fps_den = 1001;
+    ovi.graphics_module = "libobs-opengl"; //DL_OPENGL
+    ovi.output_format = video_format.VIDEO_FORMAT_RGBA;
+    ovi.base_width = cx;
+    ovi.base_height = cy;
+    ovi.output_width = cx;
+    ovi.output_height = cy;
+    ovi.colorspace = video_colorspace.VIDEO_CS_DEFAULT;
+
+    int rv = obs_reset_video(&ovi);
+    if (rv != OBS_VIDEO_SUCCESS) {
+        printf("Couldn't initialize video: %d\n", rv);
+        return false; //throw "Couldn't initialize video";
+    }
+    return true;
+}
 }
 
 class ProviderContainerException implements Exception {

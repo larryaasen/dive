@@ -7907,36 +7907,6 @@ class encoder_packet extends ffi.Struct {
   ffi.Pointer<obs_encoder> encoder;
 }
 
-const int LIBOBS_API_MAJOR_VER = 26;
-
-const int LIBOBS_API_MINOR_VER = 0;
-
-const int LIBOBS_API_PATCH_VER = 2;
-
-const int LIBOBS_API_VER = 436207618;
-
-const String OBS_VERSION = 'unknown';
-
-const String OBS_DATA_PATH = '../../data';
-
-const String OBS_INSTALL_PREFIX = '';
-
-const String OBS_PLUGIN_DESTINATION = 'obs-plugins';
-
-const String OBS_RELATIVE_PREFIX = '../../';
-
-const int OBS_RELEASE_CANDIDATE_MAJOR = 0;
-
-const int OBS_RELEASE_CANDIDATE_MINOR = 0;
-
-const int OBS_RELEASE_CANDIDATE_PATCH = 0;
-
-const int OBS_RELEASE_CANDIDATE_VER = 0;
-
-const int OBS_RELEASE_CANDIDATE = 0;
-
-const String OBS_INSTALL_DATA_PATH = '../../data';
-
 const int OBS_SOURCE_FLAG_UNUSED_1 = 1;
 
 const int OBS_SOURCE_FLAG_FORCE_MONO = 2;
