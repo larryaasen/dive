@@ -1,5 +1,6 @@
 library dive_core;
 
+import 'dart:ffi' as ffi;
 import 'package:riverpod/riverpod.dart';
 
 import 'package:dive_obslib/dive_obs_ffi.dart';
@@ -61,10 +62,9 @@ class DiveCore {
       if (rv == 1) {
         _lib.obs_load_all_modules();
         _lib.obs_post_load_modules();
-        // next: ???
-        if (!reset_video()) return 0;
-        // if (!reset_audio()) return false;
-        // if (!create_service()) return false;
+        if (!_resetVideo()) return 0;
+        if (!_resetAudio()) return 0;
+        // if (!create_service()) return 0;
 
       } else {
         print("_startObs: the call to obs_startup failed.");
@@ -78,28 +78,40 @@ class DiveCore {
   }
 
   static const int cx = 1280;
-static const int cy = 720;
+  static const int cy = 720;
 
-bool _reset_video() {
-    obs_video_info ovi;
-    ovi.adapter = 0;
-    ovi.fps_num = 30000;
-    ovi.fps_den = 1001;
-    ovi.graphics_module = "libobs-opengl"; //DL_OPENGL
-    ovi.output_format = video_format.VIDEO_FORMAT_RGBA;
-    ovi.base_width = cx;
-    ovi.base_height = cy;
-    ovi.output_width = cx;
-    ovi.output_height = cy;
-    ovi.colorspace = video_colorspace.VIDEO_CS_DEFAULT;
+  bool _resetVideo() {
+    final ovi = allocate<obs_video_info>().ref
+      ..adapter = 0
+      ..fps_num = 30000
+      ..fps_den = 1001
+      ..graphics_module = 'libobs-opengl'.toInt8() //DL_OPENGL
+      ..output_format = video_format.VIDEO_FORMAT_RGBA
+      ..base_width = cx
+      ..base_height = cy
+      ..output_width = cx
+      ..output_height = cy
+      ..colorspace = video_colorspace.VIDEO_CS_DEFAULT;
 
-    int rv = obs_reset_video(&ovi);
+    int rv = _lib.obs_reset_video(ovi.addressOf);
     if (rv != OBS_VIDEO_SUCCESS) {
-        printf("Couldn't initialize video: %d\n", rv);
-        return false; //throw "Couldn't initialize video";
+      print("Couldn't initialize video: $rv");
+      return false; //throw "Couldn't initialize video";
     }
     return true;
-}
+  }
+
+  bool _resetAudio() {
+    final ai = allocate<obs_audio_info>().ref
+      ..samples_per_sec = 48000
+      ..speakers = speaker_layout.SPEAKERS_STEREO;
+    int rv = _lib.obs_reset_audio(ai.addressOf);
+    if (rv == 0) {
+      print("Couldn't initialize audio: $rv");
+      return false;
+    }
+    return true;
+  }
 }
 
 class ProviderContainerException implements Exception {
