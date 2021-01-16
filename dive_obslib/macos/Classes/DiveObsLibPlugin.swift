@@ -39,7 +39,11 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
     
     static let _channelName = "dive_obslib.io/plugin"
     static var textureRegistry: FlutterTextureRegistry?
+    
+    /// Use Dart FFI with OBS Lib
     static let obsFFI = true;
+    
+    /// Use Flutter plugin with OBS Lib
     static let obsPlugin = !obsFFI;
     
     public static func register(with registrar: FlutterPluginRegistrar) {

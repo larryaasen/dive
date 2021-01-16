@@ -7,6 +7,10 @@ extension StringExtensions on String {
   ffi.Pointer<ffi.Int8> toInt8() {
     return Utf8.toUtf8(this).cast<ffi.Int8>();
   }
+
+  static String fromInt8(ffi.Pointer<ffi.Int8> pointer) {
+    return pointer.address == 0 ? null : Utf8.fromUtf8(pointer.cast<Utf8>());
+  }
 }
 
 extension PointerExtensions<T extends ffi.NativeType> on ffi.Pointer<T> {

@@ -796,7 +796,6 @@ NSArray *bridge_inputs_from_type(const char *input_type_id) {
     if (video_props) {
         obs_property_t *property = obs_properties_first(video_props);
         while (property != nullptr) {
-//            const char *name = obs_property_name(property);
             obs_property_type type = obs_property_get_type(property);
             if (type == OBS_PROPERTY_LIST) {
                 size_t count = obs_property_list_item_count(property);
@@ -805,7 +804,6 @@ NSArray *bridge_inputs_from_type(const char *input_type_id) {
                     const char *name = obs_property_list_item_name(property, index);
                     const char *uid = obs_property_list_item_string(property, index);
                     if (!disabled && name != NULL && uid != NULL && strlen(name) > 0 && strlen(uid) > 0) {
-//                        printf("video: %s - %s\n", name, uid);
                         NSDictionary *typeDict = @{
                             @"id": [NSString stringWithUTF8String:uid],
                             @"name": [NSString stringWithUTF8String:name],
@@ -817,7 +815,6 @@ NSArray *bridge_inputs_from_type(const char *input_type_id) {
             }
             obs_property_next(&property);
         }
-//        obs_property_t *inputs = obs_properties_get(video_props, "device_id");
         obs_properties_destroy(video_props);
     }
     return [list copy];

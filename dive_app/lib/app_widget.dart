@@ -9,6 +9,7 @@ class AppWidget extends StatefulWidget {
 }
 
 class _AppWidgetState extends State<AppWidget> {
+  DiveCore _diveCore;
   final List<DiveAudioSource> _audioSources = [];
   final List<DiveImageSource> _imageSources = [];
   final List<DiveMediaSource> _mediaSources = [];
@@ -17,13 +18,14 @@ class _AppWidgetState extends State<AppWidget> {
   final _streamingOutput = DiveOutput();
   DiveScene _currentScene;
   bool _initialized = false;
-  bool _enableCameras = false;
+  bool _enableCameras = true;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    DiveCore().startFFI();
+    _diveCore = DiveCore();
+    _diveCore.setupOBS();
 
     if (!_initialized) {
       _initialized = true;
@@ -31,10 +33,9 @@ class _AppWidgetState extends State<AppWidget> {
       // DiveCore and DiveApp must use the same [BuildContext], so it needs
       // to be passed to DiveCore at the start. The method [DiveUI.setup] must
       // be called after [_AppWidgetState.initState] completes.
+      DiveUI.setup(this.context);
 
-      // DiveUI.setup(this.context);
-
-      // DiveScene.create('Scene 1').then((scene) => setup(scene));
+      DiveScene.create('Scene 1').then((scene) => setup(scene));
     }
   }
 
@@ -46,31 +47,31 @@ class _AppWidgetState extends State<AppWidget> {
   void setup(DiveScene scene) {
     _currentScene = scene;
 
-    // Print all input types to the log
-    DiveInputTypes.all().then((inputTypes) {
-      inputTypes.forEach((type) {
-        print(type);
-      });
-    });
+    // // Print all input types to the log
+    // DiveInputTypes.all().then((inputTypes) {
+    //   inputTypes.forEach((type) {
+    //     print(type);
+    //   });
+    // });
 
-    DiveVideoMix.create().then((mix) {
-      setState(() {
-        _videoMixes.add(mix);
-      });
-    });
+    // DiveVideoMix.create().then((mix) {
+    //   setState(() {
+    //     _videoMixes.add(mix);
+    //   });
+    // });
 
-    DiveInputs.audio().then((audioInputs) {
-      audioInputs.forEach((audioInput) {
-        print(audioInput);
-      });
-    });
+    // DiveInputs.audio().then((audioInputs) {
+    //   audioInputs.forEach((audioInput) {
+    //     print(audioInput);
+    //   });
+    // });
 
-    DiveAudioSource.create('my audio').then((source) {
-      setState(() {
-        _audioSources.add(source);
-      });
-      _currentScene.addSource(source).then((item) {});
-    });
+    // DiveAudioSource.create('my audio').then((source) {
+    //   setState(() {
+    //     _audioSources.add(source);
+    //   });
+    //   _currentScene.addSource(source).then((item) {});
+    // });
 
     if (_enableCameras) {
       DiveInputs.video().then((videoInputs) {

@@ -23,7 +23,10 @@ class DiveInputs {
   static Future<List<DiveInput>> fromType(String typeId) =>
       DivePluginExt.inputsFromType(typeId);
   static Future<List<DiveInput>> audio() => DivePluginExt.audioInputs();
-  static Future<List<DiveInput>> video() => DivePluginExt.videoInputs();
+  static Future<List<DiveInput>> video() async => DiveCore.bridge
+      .videoInputs()
+      .map(DiveInput.fromMap)
+      .toList(); // DivePluginExt.videoInputs();
 }
 
 // TODO: DiveSettings needs to be implemented
@@ -281,6 +284,7 @@ class DiveScene extends DiveTracking {
   static const MAX_CHANNELS = 64;
 
   final List<DiveSceneItem> _sceneItems = [];
+  DiveBridgePointer bridgePointer;
 
   static Future<DiveScene> create(String name) async {
     if (_sceneCount > 0) {
@@ -289,9 +293,12 @@ class DiveScene extends DiveTracking {
     _sceneCount++;
 
     final scene = DiveScene();
-    if (!await DivePlugin.createScene(scene.trackingUUID, name)) {
-      return null;
-    }
+    scene.bridgePointer = DiveCore.bridge.createScene(scene.trackingUUID, name);
+
+    // if (!await DivePlugin.createScene(scene.trackingUUID, name)) {
+    //   return null;
+    // }
+
     return scene;
   }
 
