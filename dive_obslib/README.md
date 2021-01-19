@@ -70,6 +70,10 @@ Reasons not to use dart:ffi to wrap obslib:
 * Difficult to use which will slow down development.
 * Cannot step through the obslib code, which can be done via bridge wrapper.
 * Would FFI callbacks work?
+* C structs inside C structs are not supported.
+* When C code calls a callback from another thread (not the main Dart thread),
+it is not supported: 
+https://github.com/dart-lang/sdk/issues/40529#issuecomment-584530622
 * Some unknowns - What parts of obslib would not work via FFI?
 * FFI still seems too new to invest in it right now.
 

@@ -407,15 +407,12 @@ static void videomix_callback(void *param, struct video_data *frame) {
 
 // TODO: error handling of input paramters, and make this work in the bridge
 
-static int _souce_count = 0;
-
 static obs_source_t *_create_source(const char *source_uuid, const char *source_id, const char *name, obs_data_t *settings, bool frame_source) {
     obs_source_t *source = obs_source_create(source_id, name, settings, nullptr);
     if (!source) {
         printf("%s: Could not create source\n", __func__);
         return NULL;
     }
-    _souce_count++;
     
     if (frame_source) {
         obs_source_add_frame_callback(source, source_frame_callback, nullptr);
@@ -423,12 +420,17 @@ static obs_source_t *_create_source(const char *source_uuid, const char *source_
 
     save_source(source_uuid, source);
 
-    //        obs_sceneitem_set_order_position(item, 0);
-    
     return source;
 }
 
 #pragma mark - Bridge functions
+
+bool bridge_source_add_frame_callback(const char *source_uuid, int64_t source_ptr) {
+    obs_source_t *source = (obs_source_t *)source_ptr;
+    obs_source_add_frame_callback(source, source_frame_callback, nullptr);
+    save_source(source_uuid, source);
+    return true;
+}
 
 bool bridge_create_source(const char *source_uuid, const char *source_id, const char *name, bool frame_source) {
     obs_data_t *settings = NULL;

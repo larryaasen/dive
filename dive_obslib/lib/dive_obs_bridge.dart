@@ -45,10 +45,6 @@ class DiveObsBridge {
     _lib = DiveObslibFFILoad.loadLib();
   }
 
-  // final locale = 'en'.toInt8();
-  // final rv = _lib.obs_startup(locale, _lib.nullptr, _lib.nullptr);
-  // free(locale);
-
   static const int cx = 1280;
   static const int cy = 720;
 
@@ -87,9 +83,8 @@ class DiveObsBridge {
 
   /// Create a new OBS scene.
   DiveBridgePointer createScene(String trackingUuid, String sceneName) {
-    final name = sceneName.toInt8();
-    final scene = _lib.obs_scene_create(name);
-    free(name);
+    final scene = _lib.obs_scene_create(sceneName.int8());
+    StringExtensions.freeInt8s();
     if (scene == null) {
       print("Couldn't create scene: $sceneName");
       return null;
@@ -117,9 +112,7 @@ class DiveObsBridge {
   List<Map<String, String>> inputsFromType(String inputTypeId) {
     final List<Map<String, String>> list = [];
 
-    final typeId = inputTypeId.toInt8();
-    final videoProps = _lib.obs_get_source_properties(typeId);
-    free(typeId);
+    final videoProps = _lib.obs_get_source_properties(inputTypeId.int8());
 
     if (videoProps != null) {
       ffi.Pointer<ffi.Pointer<obs_property>> propertyOut = allocate();
@@ -153,6 +146,101 @@ class DiveObsBridge {
       }
       _lib.obs_properties_destroy(videoProps);
     }
+    StringExtensions.freeInt8s();
+
     return list;
   }
+
+  DiveBridgePointer createVideoSource(
+      String sourceUuid, String deviceName, String deviceUid) {
+    final settings = _lib.obs_data_create();
+    _lib.obs_data_set_string(settings, "device_name".int8(), deviceName.int8());
+    _lib.obs_data_set_string(settings, "device".int8(), deviceUid.int8());
+    StringExtensions.freeInt8s();
+
+    // TODO: creating a video source breaks the Flutter connection to the device.
+    final source =
+        createSource(sourceUuid, "av_capture_input", "camera", settings, true);
+
+    return source;
+  }
+
+  // static const except = -1;
+
+  /// If you see this message: The method 'FfiTrampoline' was called on null
+  /// make sure to use nullptr instead of null.
+  /// https://github.com/dart-lang/sdk/issues/39804#
+
+  DiveBridgePointer createSource(String sourceUuid, String sourceId,
+      String name, ffi.Pointer<obs_data> settings, bool frameSource) {
+    final source = _lib.obs_source_create(
+        sourceId.int8(), name.int8(), settings, ffi.nullptr);
+    StringExtensions.freeInt8s();
+    if (source.address == 0) {
+      print("Could not create source");
+      return null;
+    }
+
+    return DiveBridgePointer(sourceUuid, source);
+  }
+
+  /// Add an existing source to an existing scene, and return
+  int addSource(DiveBridgePointer scene, DiveBridgePointer source) {
+    final item = _lib.obs_scene_add(scene.pointer, source.pointer);
+    int item_id = _lib.obs_sceneitem_get_id(item);
+
+    return item_id;
+  }
+
+  /// Get the transform info for a scene item.
+  Map sceneitemGetInfo(DiveBridgePointer scene, int itemId) {
+    if (itemId < 1) {
+      print("invalid item id $itemId");
+      return null;
+    }
+
+    // final item = _lib.obs_scene_find_sceneitem_by_id(scene.pointer, itemId);
+    // obs_transform_info info;
+    // _lib.obs_sceneitem_get_info(item, info);
+    // TODO: finish this
+    return null; // _convert_transform_info_to_dict(info);
+  }
+
+  Map _convert_transform_vec2_to_dict(vec2 vec) {
+    return {"x": vec.x, "y": vec.y};
+  }
+
+  // Map _convert_transform_info_to_dict(obs_transform_info info) {
+  //   return {
+  //         "pos": _convert_transform_vec2_to_dict(info.pos),
+  //         "rot": info.rot,
+  //         "scale": _convert_transform_vec2_to_dict(info.scale),
+  //         "alignment": info->alignment,
+  //         "bounds_type": bounds_type,
+  //         "bounds_alignment": info->bounds_alignment,
+  //         "bounds": _convert_transform_vec2_to_dict(info.bounds)
+  //     };
+  // }
+
+}
+
+void sourceFrameCallback(ffi.Pointer<ffi.Void> param,
+    ffi.Pointer<obs_source> source, ffi.Pointer<obs_source_frame> frame) {
+  print("sourceFrameCallback called");
+  // TODO: finish this
+
+  // const char *uuid_str = source_uuid_list[source];
+  // if (uuid_str == NULL) {
+  //     printf("%s: unknown source %s\n", __func__, uuid_str);
+  //     return;
+  // }
+
+  // @synchronized (_textureSources) {
+  //     TextureSource *textureSource = _textureSourceMap[uuid_str];
+  //     if (textureSource != NULL) {
+  //         copy_source_frame_to_texture(frame, textureSource);
+  //     } else {
+  //         printf("%s: no texture source for %s\n", __func__, uuid_str);
+  //     }
+  // }
 }

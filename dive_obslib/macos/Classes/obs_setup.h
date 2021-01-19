@@ -21,6 +21,7 @@ bool load_obs(void);
 
 #pragma mark - Bridge functions
 
+bool    bridge_source_add_frame_callback(const char *source_uuid, int64_t source_ptr);
 bool    bridge_create_source(const char *source_uuid, const char *source_id, const char *name, bool frame_source);
 bool    bridge_create_scene(NSString *tracking_uuid, NSString *scene_name);
 bool    bridge_release_scene(NSString *scene_uuid);

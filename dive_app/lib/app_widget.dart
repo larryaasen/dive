@@ -95,53 +95,53 @@ class _AppWidgetState extends State<AppWidget> {
       });
     }
 
-    final localFile = '/Users/larry/Downloads/Nicholas-Nationals-Play-Ball.mp4';
-    DiveMediaSource.create(localFile).then((source) {
-      if (source != null) {
-        setState(() {
-          _mediaSources.add(source);
-        });
-        _currentScene.addSource(source).then((item) {
-          final info = DiveTransformInfo(
-              pos: DiveVec2(50, 330),
-              bounds: DiveVec2(500, 280),
-              boundsType: DiveBoundsType.SCALE_INNER);
-          item.updateTransformInfo(info);
-        });
-      }
-    });
+    // final localFile = '/Users/larry/Downloads/Nicholas-Nationals-Play-Ball.mp4';
+    // DiveMediaSource.create(localFile).then((source) {
+    //   if (source != null) {
+    //     setState(() {
+    //       _mediaSources.add(source);
+    //     });
+    //     _currentScene.addSource(source).then((item) {
+    //       final info = DiveTransformInfo(
+    //           pos: DiveVec2(50, 330),
+    //           bounds: DiveVec2(500, 280),
+    //           boundsType: DiveBoundsType.SCALE_INNER);
+    //       item.updateTransformInfo(info);
+    //     });
+    //   }
+    // });
 
-    final file1 = '/Users/larry/Downloads/MacBookPro13.jpg';
-    DiveImageSource.create(file1).then((source) {
-      if (source != null) {
-        setState(() {
-          _imageSources.add(source);
-        });
-        _currentScene.addSource(source).then((item) {
-          final info = DiveTransformInfo(
-              pos: DiveVec2(730, 330),
-              bounds: DiveVec2(500, 280),
-              boundsType: DiveBoundsType.SCALE_INNER);
-          item.updateTransformInfo(info);
-        });
-      }
-    });
+    // final file1 = '/Users/larry/Downloads/MacBookPro13.jpg';
+    // DiveImageSource.create(file1).then((source) {
+    //   if (source != null) {
+    //     setState(() {
+    //       _imageSources.add(source);
+    //     });
+    //     _currentScene.addSource(source).then((item) {
+    //       final info = DiveTransformInfo(
+    //           pos: DiveVec2(730, 330),
+    //           bounds: DiveVec2(500, 280),
+    //           boundsType: DiveBoundsType.SCALE_INNER);
+    //       item.updateTransformInfo(info);
+    //     });
+    //   }
+    // });
 
-    final file2 = '/Users/larry/Downloads/logo_flutter_1080px_clr.png';
-    DiveImageSource.create(file2).then((source) {
-      if (source != null) {
-        setState(() {
-          _imageSources.add(source);
-        });
-        _currentScene.addSource(source).then((item) {
-          final info = DiveTransformInfo(
-              pos: DiveVec2(590, 298),
-              bounds: DiveVec2(100, 124),
-              boundsType: DiveBoundsType.SCALE_INNER);
-          item.updateTransformInfo(info);
-        });
-      }
-    });
+    // final file2 = '/Users/larry/Downloads/logo_flutter_1080px_clr.png';
+    // DiveImageSource.create(file2).then((source) {
+    //   if (source != null) {
+    //     setState(() {
+    //       _imageSources.add(source);
+    //     });
+    //     _currentScene.addSource(source).then((item) {
+    //       final info = DiveTransformInfo(
+    //           pos: DiveVec2(590, 298),
+    //           bounds: DiveVec2(100, 124),
+    //           boundsType: DiveBoundsType.SCALE_INNER);
+    //       item.updateTransformInfo(info);
+    //     });
+    //   }
+    // });
   }
 
   @override

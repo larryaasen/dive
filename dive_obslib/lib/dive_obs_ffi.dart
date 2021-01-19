@@ -16640,7 +16640,13 @@ class profiler_name_store extends ffi.Struct {}
 
 class text_lookup extends ffi.Struct {}
 
-class vec2 extends ffi.Struct {}
+class vec2 extends ffi.Struct {
+  @ffi.Double()
+  double x;
+
+  @ffi.Double()
+  double y;
+}
 
 class vec3 extends ffi.Struct {}
 
@@ -17499,7 +17505,9 @@ abstract class obs_bounds_type {
   static const int OBS_BOUNDS_MAX_ONLY = 6;
 }
 
-class obs_transform_info extends ffi.Struct {}
+class obs_transform_info extends ffi.Struct {
+  // TODO: bug in ffigen: https://github.com/dart-lang/ffigen/pull/126
+}
 
 /// Video initialization structure
 class obs_video_info extends ffi.Struct {

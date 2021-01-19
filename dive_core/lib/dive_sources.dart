@@ -27,6 +27,7 @@ class DiveInputs {
       .videoInputs()
       .map(DiveInput.fromMap)
       .toList(); // DivePluginExt.videoInputs();
+
 }
 
 // TODO: DiveSettings needs to be implemented
@@ -79,6 +80,7 @@ class DiveSource extends DiveTracking {
   final DiveInputType inputType;
   final String name;
   final DiveSettings settings;
+  DiveBridgePointer bridgePointer;
 
   DiveSource({this.inputType, this.name, this.settings});
 
@@ -118,10 +120,14 @@ class DiveVideoSource extends DiveSource with DiveTextureController {
   static Future<DiveVideoSource> create(DiveInput videoInput) async {
     final source = DiveVideoSource(name: 'my video');
     await source.setupController(source.trackingUUID);
-    if (!await DivePlugin.createVideoSource(
-        source.trackingUUID, videoInput.name, videoInput.id)) {
-      return null;
-    }
+    source.bridgePointer = DiveCore.bridge
+        .createVideoSource(source.trackingUUID, videoInput.name, videoInput.id);
+    DivePlugin.addSourceFrameCallback(
+        source.trackingUUID, source.bridgePointer.address);
+    // if (!await DivePlugin.createVideoSource(
+    //     source.trackingUUID, videoInput.name, videoInput.id)) {
+    //   return null;
+    // }
     return source;
   }
 }
@@ -304,7 +310,8 @@ class DiveScene extends DiveTracking {
 
   Future<DiveSceneItem> addSource(DiveSource source) async {
     final itemId =
-        await DivePlugin.addSource(trackingUUID, source.trackingUUID);
+        DiveCore.bridge.addSource(bridgePointer, source.bridgePointer);
+    // await DivePlugin.addSource(trackingUUID, source.trackingUUID);
     if (itemId == 0) {
       return null;
     }

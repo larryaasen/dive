@@ -9,6 +9,8 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
         static let GetPlatformVersion = "getPlatformVersion"
         static let DisposeTexture = "disposeTexture"
         static let InitializeTexture = "initializeTexture"
+        static let AddSourceFrameCallback = "addSourceFrameCallback"
+
         static let AddSource = "addSource"
         static let CreateSource = "createSource"
         static let CreateImageSource = "createImageSource"
@@ -76,6 +78,9 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
             result(initializeTexture(arguments))
         case Method.GetPlatformVersion:
             result(getPlatformVersion())
+        case Method.AddSourceFrameCallback:
+            result(addSourceFrameCallback(arguments))
+
         case Method.AddSource:
             ffi ? nil : result(addSource(arguments))
         case Method.CreateSource:
@@ -156,6 +161,25 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
     private func getPlatformVersion() -> String {
         let msg = "macOS " + ProcessInfo.processInfo.operatingSystemVersionString
         return msg
+    }
+
+    private func addSourceFrameCallback(_ arguments: [String: Any]?) -> Bool {
+        guard let args = arguments,
+            let source_uuid = args["source_uuid"] as! String?,
+            let source_ptr = args["source_ptr"] as! Int64?
+            else {
+                return false
+        }
+        
+        return bridge_source_add_frame_callback(source_uuid, source_ptr)
+    }
+
+    func bridge<T : AnyObject>(_ obj : T) -> UnsafeRawPointer {
+        return UnsafeRawPointer(Unmanaged.passUnretained(obj).toOpaque())
+    }
+
+    func bridge<T : AnyObject>(ptr : UnsafeRawPointer) -> T {
+        return Unmanaged<T>.fromOpaque(ptr).takeUnretainedValue()
     }
     
     private func createSource(_ arguments: [String: Any]?) -> Bool {

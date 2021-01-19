@@ -7,6 +7,8 @@ class DivePlugin {
   static const String _methodDisposeTexture = 'disposeTexture';
   static const String _methodInitializeTexture = 'initializeTexture';
 
+  static const String _methodAddSourceFrameCallback = 'addSourceFrameCallback';
+
   static const String _methodAddSource = 'addSource';
   static const String _methodCreateSource = 'createSource';
   static const String _methodCreateImageSource = 'createImageSource';
@@ -48,6 +50,12 @@ class DivePlugin {
   static Future<int> initializeTexture({String trackingUUID}) async {
     return await _channel.invokeMethod(
         _methodInitializeTexture, {'tracking_uuid': trackingUUID});
+  }
+
+  static Future<bool> addSourceFrameCallback(
+      String sourceUUID, dynamic sourcePtr) async {
+    return await _channel.invokeMethod(_methodAddSourceFrameCallback,
+        {'source_uuid': sourceUUID, 'source_ptr': sourcePtr});
   }
 
   static Future<int> addSource(String sceneUUID, String sourceUUID) async {

@@ -11,4 +11,6 @@ class DiveBridgePointer {
   void releasePointer() {
     free(pointer as ffi.Pointer<ffi.Int8>);
   }
+
+  int get address => (pointer as ffi.Pointer).address;
 }
