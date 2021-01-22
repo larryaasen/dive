@@ -18,7 +18,7 @@ class _AppWidgetState extends State<AppWidget> {
   final _streamingOutput = DiveOutput();
   DiveScene _currentScene;
   bool _initialized = false;
-  bool _enableCameras = true;
+  bool _enableCameras = false;
 
   @override
   void didChangeDependencies() {
@@ -47,31 +47,31 @@ class _AppWidgetState extends State<AppWidget> {
   void setup(DiveScene scene) {
     _currentScene = scene;
 
-    // // Print all input types to the log
-    // DiveInputTypes.all().then((inputTypes) {
-    //   inputTypes.forEach((type) {
-    //     print(type);
-    //   });
-    // });
+    // Print all input types to the log
+    DiveInputTypes.all().then((inputTypes) {
+      inputTypes.forEach((type) {
+        print(type);
+      });
+    });
 
-    // DiveVideoMix.create().then((mix) {
-    //   setState(() {
-    //     _videoMixes.add(mix);
-    //   });
-    // });
+    DiveVideoMix.create().then((mix) {
+      setState(() {
+        _videoMixes.add(mix);
+      });
+    });
 
-    // DiveInputs.audio().then((audioInputs) {
-    //   audioInputs.forEach((audioInput) {
-    //     print(audioInput);
-    //   });
-    // });
+    DiveInputs.audio().then((audioInputs) {
+      audioInputs.forEach((audioInput) {
+        print(audioInput);
+      });
+    });
 
-    // DiveAudioSource.create('my audio').then((source) {
-    //   setState(() {
-    //     _audioSources.add(source);
-    //   });
-    //   _currentScene.addSource(source).then((item) {});
-    // });
+    DiveAudioSource.create('my audio').then((source) {
+      setState(() {
+        _audioSources.add(source);
+      });
+      _currentScene.addSource(source).then((item) {});
+    });
 
     if (_enableCameras) {
       DiveInputs.video().then((videoInputs) {
@@ -95,53 +95,53 @@ class _AppWidgetState extends State<AppWidget> {
       });
     }
 
-    // final localFile = '/Users/larry/Downloads/Nicholas-Nationals-Play-Ball.mp4';
-    // DiveMediaSource.create(localFile).then((source) {
-    //   if (source != null) {
-    //     setState(() {
-    //       _mediaSources.add(source);
-    //     });
-    //     _currentScene.addSource(source).then((item) {
-    //       final info = DiveTransformInfo(
-    //           pos: DiveVec2(50, 330),
-    //           bounds: DiveVec2(500, 280),
-    //           boundsType: DiveBoundsType.SCALE_INNER);
-    //       item.updateTransformInfo(info);
-    //     });
-    //   }
-    // });
+    final localFile = '/Users/larry/Downloads/Nicholas-Nationals-Play-Ball.mp4';
+    DiveMediaSource.create(localFile).then((source) {
+      if (source != null) {
+        setState(() {
+          _mediaSources.add(source);
+        });
+        _currentScene.addSource(source).then((item) {
+          // final info = DiveTransformInfo(
+          //     pos: DiveVec2(50, 330),
+          //     bounds: DiveVec2(500, 280),
+          //     boundsType: DiveBoundsType.SCALE_INNER);
+          // item.updateTransformInfo(info);
+        });
+      }
+    });
 
-    // final file1 = '/Users/larry/Downloads/MacBookPro13.jpg';
-    // DiveImageSource.create(file1).then((source) {
-    //   if (source != null) {
-    //     setState(() {
-    //       _imageSources.add(source);
-    //     });
-    //     _currentScene.addSource(source).then((item) {
-    //       final info = DiveTransformInfo(
-    //           pos: DiveVec2(730, 330),
-    //           bounds: DiveVec2(500, 280),
-    //           boundsType: DiveBoundsType.SCALE_INNER);
-    //       item.updateTransformInfo(info);
-    //     });
-    //   }
-    // });
+    final file1 = '/Users/larry/Downloads/MacBookPro13.jpg';
+    DiveImageSource.create(file1).then((source) {
+      if (source != null) {
+        setState(() {
+          _imageSources.add(source);
+        });
+        _currentScene.addSource(source).then((item) {
+          // final info = DiveTransformInfo(
+          //     pos: DiveVec2(730, 330),
+          //     bounds: DiveVec2(500, 280),
+          //     boundsType: DiveBoundsType.SCALE_INNER);
+          // item.updateTransformInfo(info);
+        });
+      }
+    });
 
-    // final file2 = '/Users/larry/Downloads/logo_flutter_1080px_clr.png';
-    // DiveImageSource.create(file2).then((source) {
-    //   if (source != null) {
-    //     setState(() {
-    //       _imageSources.add(source);
-    //     });
-    //     _currentScene.addSource(source).then((item) {
-    //       final info = DiveTransformInfo(
-    //           pos: DiveVec2(590, 298),
-    //           bounds: DiveVec2(100, 124),
-    //           boundsType: DiveBoundsType.SCALE_INNER);
-    //       item.updateTransformInfo(info);
-    //     });
-    //   }
-    // });
+    final file2 = '/Users/larry/Downloads/logo_flutter_1080px_clr.png';
+    DiveImageSource.create(file2).then((source) {
+      if (source != null) {
+        setState(() {
+          _imageSources.add(source);
+        });
+        _currentScene.addSource(source).then((item) {
+          // final info = DiveTransformInfo(
+          //     pos: DiveVec2(590, 298),
+          //     bounds: DiveVec2(100, 124),
+          //     boundsType: DiveBoundsType.SCALE_INNER);
+          // item.updateTransformInfo(info);
+        });
+      }
+    });
   }
 
   @override

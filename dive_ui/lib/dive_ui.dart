@@ -6,9 +6,9 @@ import 'package:flutter_riverpod/all.dart';
 import 'package:dive_core/dive_core.dart';
 
 class DiveUI {
+  /// DiveCore and DiveUI must use the same [ProviderContainer], so it needs
+  /// to be passed to DiveCore at the start.
   static void setup(BuildContext context) {
-    // DiveCore and DiveUI must use the same [ProviderContainer], so it needs
-    // to be passed to DiveCore at the start.
     DiveCore.providerContainer = ProviderScope.containerOf(context);
   }
 }

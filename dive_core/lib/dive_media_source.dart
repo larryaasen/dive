@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:dive_core/dive_core.dart';
-import 'package:dive_obslib/dive_obslib.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:state_notifier/state_notifier.dart';
 
@@ -65,11 +64,13 @@ class DiveMediaSource extends DiveTextureSource {
   static Future<DiveMediaSource> create(String localFile) async {
     final source = DiveMediaSource(name: 'my media');
     await source.setupController(source.trackingUUID);
-    if (!await DivePlugin.createMediaSource(source.trackingUUID, localFile)) {
-      return null;
-    }
+    source.bridgePointer =
+        DiveCore.bridge.createMediaSource(source.trackingUUID, localFile);
+    // if (!await DivePlugin.createMediaSource(source.trackingUUID, localFile)) {
+    //   return null;
+    // }
     await source.syncState();
-    return source;
+    return source.bridgePointer == null ? null : source;
   }
 
   /// Remove this media source.
@@ -107,57 +108,80 @@ class DiveMediaSource extends DiveTextureSource {
   }
 
   /// Get the media source state for this media source.
-  Future<DiveMediaSourceState> getState() {
-    return DivePlugin.mediaGetState(trackingUUID).then((mediaState) =>
-        DivePlugin.mediaGetDuration(trackingUUID).then((duration) =>
-            DivePlugin.mediaGetTime(trackingUUID).then((ms) =>
-                DiveMediaSourceState(
-                    currentTime: ms,
-                    duration: duration,
-                    mediaState: DiveMediaState.values[mediaState]))));
+  Future<DiveMediaSourceState> getState() async {
+    final mediaState = DiveCore.bridge.mediaSourceGetState(bridgePointer);
+    final duration = DiveCore.bridge.mediaSourceGetDuration(bridgePointer);
+    final ms = DiveCore.bridge.mediaSourceGetTime(bridgePointer);
+    return DiveMediaSourceState(
+        currentTime: ms,
+        duration: duration,
+        mediaState: DiveMediaState.values[mediaState]);
+    // return DivePlugin.mediaGetState(trackingUUID).then((mediaState) =>
+    //     DivePlugin.mediaGetDuration(trackingUUID).then((duration) =>
+    //         DivePlugin.mediaGetTime(trackingUUID).then((ms) =>
+    //             DiveMediaSourceState(
+    //                 currentTime: ms,
+    //                 duration: duration,
+    //                 mediaState: DiveMediaState.values[mediaState]))));
   }
 
   Future<bool> play() async {
-    final rv = await DivePlugin.mediaPlayPause(trackingUUID, false);
-    if (rv) {
-      await syncState();
-    }
-    return rv;
+    DiveCore.bridge.mediaSourcePlayPause(bridgePointer, false);
+    await syncState();
+    return true;
+    // final rv = await DivePlugin.mediaPlayPause(trackingUUID, false);
+    // if (rv) {
+    //   await syncState();
+    // }
+    // return rv;
   }
 
   Future<bool> pause() async {
-    final rv = await DivePlugin.mediaPlayPause(trackingUUID, true);
-    if (rv) {
-      await syncState();
-    }
-    return rv;
+    DiveCore.bridge.mediaSourcePlayPause(bridgePointer, true);
+    await syncState();
+    return true;
+    // final rv = await DivePlugin.mediaPlayPause(trackingUUID, true);
+    // if (rv) {
+    //   await syncState();
+    // }
+    // return rv;
   }
 
   Future<bool> restart() async {
-    final rv = await DivePlugin.mediaRestart(trackingUUID);
-    if (rv) {
-      await syncState();
-    }
-    return rv;
+    DiveCore.bridge.mediaSourceRestart(bridgePointer);
+    await syncState();
+    return true;
+    // final rv = await DivePlugin.mediaRestart(trackingUUID);
+    // if (rv) {
+    //   await syncState();
+    // }
+    // return rv;
   }
 
   Future<bool> stop() async {
-    final rv = await DivePlugin.mediaStop(trackingUUID);
-    if (rv) {
-      await syncState();
-    }
-    return rv;
+    DiveCore.bridge.mediaSourceStop(bridgePointer);
+    await syncState();
+    return true;
+    // final rv = await DivePlugin.mediaStop(trackingUUID);
+    // if (rv) {
+    //   await syncState();
+    // }
+    // return rv;
   }
 
-  Future<int> getDuration() {
-    return DivePlugin.mediaGetDuration(trackingUUID);
+  Future<int> getDuration() async {
+    return DiveCore.bridge.mediaSourceGetDuration(bridgePointer);
+    // return DivePlugin.mediaGetDuration(trackingUUID);
   }
 
-  Future<int> getTime() {
-    return DivePlugin.mediaGetTime(trackingUUID);
+  Future<int> getTime() async {
+    return DiveCore.bridge.mediaSourceGetTime(bridgePointer);
+    // return DivePlugin.mediaGetTime(trackingUUID);
   }
 
-  Future<bool> setTime(int ms) {
-    return DivePlugin.mediaSetTime(trackingUUID, ms);
+  Future<bool> setTime(int ms) async {
+    DiveCore.bridge.mediaSourceSetTime(bridgePointer, ms);
+    return true;
+    // return DivePlugin.mediaSetTime(trackingUUID, ms);
   }
 }

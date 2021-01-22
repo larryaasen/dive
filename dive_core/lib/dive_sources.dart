@@ -16,18 +16,20 @@ int _sceneCount = 0;
 
 class DiveInputTypes {
   DiveInputTypes();
-  static Future<List<DiveInputType>> all() => DivePluginExt.inputTypes();
+  static Future<List<DiveInputType>> all() async =>
+      DiveCore.bridge.inputTypes().map(DiveInputType.fromJson).toList();
+  // DivePluginExt.inputTypes();
 }
 
 class DiveInputs {
   static Future<List<DiveInput>> fromType(String typeId) =>
       DivePluginExt.inputsFromType(typeId);
-  static Future<List<DiveInput>> audio() => DivePluginExt.audioInputs();
-  static Future<List<DiveInput>> video() async => DiveCore.bridge
-      .videoInputs()
-      .map(DiveInput.fromMap)
-      .toList(); // DivePluginExt.videoInputs();
-
+  static Future<List<DiveInput>> audio() async =>
+      DiveCore.bridge.audioInputs().map(DiveInput.fromMap).toList();
+  // DivePluginExt.audioInputs();
+  static Future<List<DiveInput>> video() async =>
+      DiveCore.bridge.videoInputs().map(DiveInput.fromMap).toList();
+  // DivePluginExt.videoInputs();
 }
 
 // TODO: DiveSettings needs to be implemented
@@ -101,15 +103,21 @@ class DiveAudioSource extends DiveSource {
 
   static Future<DiveAudioSource> create(String name) async {
     final source = DiveAudioSource(name: name);
-    if (!await DivePlugin.createSource(
-        // TODO: need to add 'device_id' for audio, such as 'default'
-        source.trackingUUID,
-        source.inputType.id,
-        name,
-        false)) {
-      return null;
-    }
-    return source;
+    source.bridgePointer = DiveCore.bridge.createSource(
+      // TODO: need to add 'device_id' for audio, such as 'default'
+      source.trackingUUID,
+      source.inputType.id,
+      name,
+    );
+    // if (!await DivePlugin.createSource(
+    //     // TODO: need to add 'device_id' for audio, such as 'default'
+    //     source.trackingUUID,
+    //     source.inputType.id,
+    //     name,
+    //     false)) {
+    //   return null;
+    // }
+    return source.bridgePointer == null ? null : source;
   }
 }
 
@@ -128,7 +136,7 @@ class DiveVideoSource extends DiveSource with DiveTextureController {
     //     source.trackingUUID, videoInput.name, videoInput.id)) {
     //   return null;
     // }
-    return source;
+    return source.bridgePointer == null ? null : source;
   }
 }
 
@@ -139,10 +147,12 @@ class DiveImageSource extends DiveTextureSource {
   static Future<DiveImageSource> create(String file) async {
     final source = DiveImageSource(name: 'my image');
     await source.setupController(source.trackingUUID);
-    if (!await DivePlugin.createImageSource(source.trackingUUID, file)) {
-      return null;
-    }
-    return source;
+    source.bridgePointer =
+        DiveCore.bridge.createImageSource(source.trackingUUID, file);
+    // if (!await DivePlugin.createImageSource(source.trackingUUID, file)) {
+    //   return null;
+    // }
+    return source.bridgePointer == null ? null : source;
   }
 }
 

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:dive_core/dive_core.dart';
-import 'package:dive_obslib/dive_obslib.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:state_notifier/state_notifier.dart';
 
@@ -50,23 +49,30 @@ class DiveOutput {
 
   /// Sync the media state from the media source to the state provider.
   Future<void> _syncState() async {
-    final state = await DivePlugin.outputGetState();
-    DiveCore.notifierFor(stateProvider)
-        .updateOutputState(DiveOutputStreamingState.values[state]);
-    return;
+    DiveCore.notifierFor(stateProvider).updateOutputState(
+        DiveOutputStreamingState.values[DiveCore.bridge.outputGetState()]);
+    // final state = await DivePlugin.outputGetState();
+    // DiveCore.notifierFor(stateProvider)
+    //     .updateOutputState(DiveOutputStreamingState.values[state]);
   }
 
   Future<bool> start() async {
-    return DivePlugin.startStopStream(true).then((value) {
-      syncState(repeating: true);
-      return value;
-    });
+    final rv = DiveCore.bridge.streamOutputStart();
+    syncState(repeating: true);
+    return rv;
+    // return DivePlugin.startStopStream(true).then((value) {
+    //   syncState(repeating: true);
+    //   return value;
+    // });
   }
 
   Future<bool> stop() async {
-    return DivePlugin.startStopStream(false).then((value) {
-      syncState(repeating: true);
-      return value;
-    });
+    DiveCore.bridge.streamOutputStop();
+    syncState(repeating: true);
+    return true;
+    // return DivePlugin.startStopStream(false).then((value) {
+    //   syncState(repeating: true);
+    //   return value;
+    // });
   }
 }

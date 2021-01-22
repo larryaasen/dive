@@ -9270,6 +9270,1367 @@ class DiveObslibFFI {
 
   _dart_obs_proprety_text_type _obs_proprety_text_type;
 
+  void obs_register_source_s(
+    ffi.Pointer<obs_source_info> info,
+    int size,
+  ) {
+    _obs_register_source_s ??= _dylib.lookupFunction<_c_obs_register_source_s,
+        _dart_obs_register_source_s>('obs_register_source_s');
+    return _obs_register_source_s(
+      info,
+      size,
+    );
+  }
+
+  _dart_obs_register_source_s _obs_register_source_s;
+
+  void obs_register_encoder_s(
+    ffi.Pointer<obs_encoder_info> info,
+    int size,
+  ) {
+    _obs_register_encoder_s ??= _dylib.lookupFunction<_c_obs_register_encoder_s,
+        _dart_obs_register_encoder_s>('obs_register_encoder_s');
+    return _obs_register_encoder_s(
+      info,
+      size,
+    );
+  }
+
+  _dart_obs_register_encoder_s _obs_register_encoder_s;
+
+  void obs_register_output_s(
+    ffi.Pointer<obs_output_info> info,
+    int size,
+  ) {
+    _obs_register_output_s ??= _dylib.lookupFunction<_c_obs_register_output_s,
+        _dart_obs_register_output_s>('obs_register_output_s');
+    return _obs_register_output_s(
+      info,
+      size,
+    );
+  }
+
+  _dart_obs_register_output_s _obs_register_output_s;
+
+  void obs_register_service_s(
+    ffi.Pointer<obs_service_info> info,
+    int size,
+  ) {
+    _obs_register_service_s ??= _dylib.lookupFunction<_c_obs_register_service_s,
+        _dart_obs_register_service_s>('obs_register_service_s');
+    return _obs_register_service_s(
+      info,
+      size,
+    );
+  }
+
+  _dart_obs_register_service_s _obs_register_service_s;
+
+  /// @brief Create a fader
+  /// @param type the type of the fader
+  /// @return pointer to the fader object
+  ///
+  /// A fader object is used to map input values from a gui element to dB and
+  /// subsequently multiplier values used by libobs to mix audio.
+  /// The current "position" of the fader is internally stored as dB value.
+  ffi.Pointer<obs_fader> obs_fader_create(
+    int type,
+  ) {
+    _obs_fader_create ??=
+        _dylib.lookupFunction<_c_obs_fader_create, _dart_obs_fader_create>(
+            'obs_fader_create');
+    return _obs_fader_create(
+      type,
+    );
+  }
+
+  _dart_obs_fader_create _obs_fader_create;
+
+  /// @brief Destroy a fader
+  /// @param fader pointer to the fader object
+  ///
+  /// Destroy the fader and free all related data
+  void obs_fader_destroy(
+    ffi.Pointer<obs_fader> fader,
+  ) {
+    _obs_fader_destroy ??=
+        _dylib.lookupFunction<_c_obs_fader_destroy, _dart_obs_fader_destroy>(
+            'obs_fader_destroy');
+    return _obs_fader_destroy(
+      fader,
+    );
+  }
+
+  _dart_obs_fader_destroy _obs_fader_destroy;
+
+  /// @brief Set the fader dB value
+  /// @param fader pointer to the fader object
+  /// @param db new dB value
+  /// @return true if value was set without clamping
+  int obs_fader_set_db(
+    ffi.Pointer<obs_fader> fader,
+    double db,
+  ) {
+    _obs_fader_set_db ??=
+        _dylib.lookupFunction<_c_obs_fader_set_db, _dart_obs_fader_set_db>(
+            'obs_fader_set_db');
+    return _obs_fader_set_db(
+      fader,
+      db,
+    );
+  }
+
+  _dart_obs_fader_set_db _obs_fader_set_db;
+
+  /// @brief Get the current fader dB value
+  /// @param fader pointer to the fader object
+  /// @return current fader dB value
+  double obs_fader_get_db(
+    ffi.Pointer<obs_fader> fader,
+  ) {
+    _obs_fader_get_db ??=
+        _dylib.lookupFunction<_c_obs_fader_get_db, _dart_obs_fader_get_db>(
+            'obs_fader_get_db');
+    return _obs_fader_get_db(
+      fader,
+    );
+  }
+
+  _dart_obs_fader_get_db _obs_fader_get_db;
+
+  /// @brief Set the fader value from deflection
+  /// @param fader pointer to the fader object
+  /// @param def new deflection
+  /// @return true if value was set without clamping
+  ///
+  /// This sets the new fader value from the supplied deflection, in case the
+  /// resulting value was clamped due to limits this function will return false.
+  /// The deflection is typically in the range [0.0, 1.0] but may be higher in
+  /// order to provide some amplification. In order for this to work the high dB
+  /// limit has to be set.
+  int obs_fader_set_deflection(
+    ffi.Pointer<obs_fader> fader,
+    double def,
+  ) {
+    _obs_fader_set_deflection ??= _dylib.lookupFunction<
+        _c_obs_fader_set_deflection,
+        _dart_obs_fader_set_deflection>('obs_fader_set_deflection');
+    return _obs_fader_set_deflection(
+      fader,
+      def,
+    );
+  }
+
+  _dart_obs_fader_set_deflection _obs_fader_set_deflection;
+
+  /// @brief Get the current fader deflection
+  /// @param fader pointer to the fader object
+  /// @return current fader deflection
+  double obs_fader_get_deflection(
+    ffi.Pointer<obs_fader> fader,
+  ) {
+    _obs_fader_get_deflection ??= _dylib.lookupFunction<
+        _c_obs_fader_get_deflection,
+        _dart_obs_fader_get_deflection>('obs_fader_get_deflection');
+    return _obs_fader_get_deflection(
+      fader,
+    );
+  }
+
+  _dart_obs_fader_get_deflection _obs_fader_get_deflection;
+
+  /// @brief Set the fader value from multiplier
+  /// @param fader pointer to the fader object
+  /// @return true if the value was set without clamping
+  int obs_fader_set_mul(
+    ffi.Pointer<obs_fader> fader,
+    double mul,
+  ) {
+    _obs_fader_set_mul ??=
+        _dylib.lookupFunction<_c_obs_fader_set_mul, _dart_obs_fader_set_mul>(
+            'obs_fader_set_mul');
+    return _obs_fader_set_mul(
+      fader,
+      mul,
+    );
+  }
+
+  _dart_obs_fader_set_mul _obs_fader_set_mul;
+
+  /// @brief Get the current fader multiplier value
+  /// @param fader pointer to the fader object
+  /// @return current fader multiplier
+  double obs_fader_get_mul(
+    ffi.Pointer<obs_fader> fader,
+  ) {
+    _obs_fader_get_mul ??=
+        _dylib.lookupFunction<_c_obs_fader_get_mul, _dart_obs_fader_get_mul>(
+            'obs_fader_get_mul');
+    return _obs_fader_get_mul(
+      fader,
+    );
+  }
+
+  _dart_obs_fader_get_mul _obs_fader_get_mul;
+
+  /// @brief Attach the fader to a source
+  /// @param fader pointer to the fader object
+  /// @param source pointer to the source object
+  /// @return true on success
+  ///
+  /// When the fader is attached to a source it will automatically sync it's state
+  /// to the volume of the source.
+  int obs_fader_attach_source(
+    ffi.Pointer<obs_fader> fader,
+    ffi.Pointer<obs_source> source,
+  ) {
+    _obs_fader_attach_source ??= _dylib.lookupFunction<
+        _c_obs_fader_attach_source,
+        _dart_obs_fader_attach_source>('obs_fader_attach_source');
+    return _obs_fader_attach_source(
+      fader,
+      source,
+    );
+  }
+
+  _dart_obs_fader_attach_source _obs_fader_attach_source;
+
+  /// @brief Detach the fader from the currently attached source
+  /// @param fader pointer to the fader object
+  void obs_fader_detach_source(
+    ffi.Pointer<obs_fader> fader,
+  ) {
+    _obs_fader_detach_source ??= _dylib.lookupFunction<
+        _c_obs_fader_detach_source,
+        _dart_obs_fader_detach_source>('obs_fader_detach_source');
+    return _obs_fader_detach_source(
+      fader,
+    );
+  }
+
+  _dart_obs_fader_detach_source _obs_fader_detach_source;
+
+  void obs_fader_add_callback(
+    ffi.Pointer<obs_fader> fader,
+    ffi.Pointer<ffi.NativeFunction<obs_fader_changed_t>> callback,
+    ffi.Pointer<ffi.Void> param,
+  ) {
+    _obs_fader_add_callback ??= _dylib.lookupFunction<_c_obs_fader_add_callback,
+        _dart_obs_fader_add_callback>('obs_fader_add_callback');
+    return _obs_fader_add_callback(
+      fader,
+      callback,
+      param,
+    );
+  }
+
+  _dart_obs_fader_add_callback _obs_fader_add_callback;
+
+  void obs_fader_remove_callback(
+    ffi.Pointer<obs_fader> fader,
+    ffi.Pointer<ffi.NativeFunction<obs_fader_changed_t>> callback,
+    ffi.Pointer<ffi.Void> param,
+  ) {
+    _obs_fader_remove_callback ??= _dylib.lookupFunction<
+        _c_obs_fader_remove_callback,
+        _dart_obs_fader_remove_callback>('obs_fader_remove_callback');
+    return _obs_fader_remove_callback(
+      fader,
+      callback,
+      param,
+    );
+  }
+
+  _dart_obs_fader_remove_callback _obs_fader_remove_callback;
+
+  /// @brief Create a volume meter
+  /// @param type the mapping type to use for the volume meter
+  /// @return pointer to the volume meter object
+  ///
+  /// A volume meter object is used to prepare the sound levels reported by audio
+  /// sources for display in a GUI.
+  /// It will automatically take source volume into account and map the levels
+  /// to a range [0.0f, 1.0f].
+  ffi.Pointer<obs_volmeter> obs_volmeter_create(
+    int type,
+  ) {
+    _obs_volmeter_create ??= _dylib.lookupFunction<_c_obs_volmeter_create,
+        _dart_obs_volmeter_create>('obs_volmeter_create');
+    return _obs_volmeter_create(
+      type,
+    );
+  }
+
+  _dart_obs_volmeter_create _obs_volmeter_create;
+
+  /// @brief Destroy a volume meter
+  /// @param volmeter pointer to the volmeter object
+  ///
+  /// Destroy the volume meter and free all related data
+  void obs_volmeter_destroy(
+    ffi.Pointer<obs_volmeter> volmeter,
+  ) {
+    _obs_volmeter_destroy ??= _dylib.lookupFunction<_c_obs_volmeter_destroy,
+        _dart_obs_volmeter_destroy>('obs_volmeter_destroy');
+    return _obs_volmeter_destroy(
+      volmeter,
+    );
+  }
+
+  _dart_obs_volmeter_destroy _obs_volmeter_destroy;
+
+  /// @brief Attach the volume meter to a source
+  /// @param volmeter pointer to the volume meter object
+  /// @param source pointer to the source object
+  /// @return true on success
+  ///
+  /// When the volume meter is attached to a source it will start to listen to
+  /// volume updates on the source and after preparing the data emit its own
+  /// signal.
+  int obs_volmeter_attach_source(
+    ffi.Pointer<obs_volmeter> volmeter,
+    ffi.Pointer<obs_source> source,
+  ) {
+    _obs_volmeter_attach_source ??= _dylib.lookupFunction<
+        _c_obs_volmeter_attach_source,
+        _dart_obs_volmeter_attach_source>('obs_volmeter_attach_source');
+    return _obs_volmeter_attach_source(
+      volmeter,
+      source,
+    );
+  }
+
+  _dart_obs_volmeter_attach_source _obs_volmeter_attach_source;
+
+  /// @brief Detach the volume meter from the currently attached source
+  /// @param volmeter pointer to the volume meter object
+  void obs_volmeter_detach_source(
+    ffi.Pointer<obs_volmeter> volmeter,
+  ) {
+    _obs_volmeter_detach_source ??= _dylib.lookupFunction<
+        _c_obs_volmeter_detach_source,
+        _dart_obs_volmeter_detach_source>('obs_volmeter_detach_source');
+    return _obs_volmeter_detach_source(
+      volmeter,
+    );
+  }
+
+  _dart_obs_volmeter_detach_source _obs_volmeter_detach_source;
+
+  /// @brief Set the peak meter type for the volume meter
+  /// @param volmeter pointer to the volume meter object
+  /// @param peak_meter_type set if true-peak needs to be measured.
+  void obs_volmeter_set_peak_meter_type(
+    ffi.Pointer<obs_volmeter> volmeter,
+    int peak_meter_type,
+  ) {
+    _obs_volmeter_set_peak_meter_type ??= _dylib.lookupFunction<
+            _c_obs_volmeter_set_peak_meter_type,
+            _dart_obs_volmeter_set_peak_meter_type>(
+        'obs_volmeter_set_peak_meter_type');
+    return _obs_volmeter_set_peak_meter_type(
+      volmeter,
+      peak_meter_type,
+    );
+  }
+
+  _dart_obs_volmeter_set_peak_meter_type _obs_volmeter_set_peak_meter_type;
+
+  /// @brief Set the update interval for the volume meter
+  /// @param volmeter pointer to the volume meter object
+  /// @param ms update interval in ms
+  ///
+  /// This sets the update interval in milliseconds that should be processed before
+  /// the resulting values are emitted by the levels_updated signal. The resulting
+  /// number of audio samples is rounded to an integer.
+  ///
+  /// Please note that due to way obs does receive audio data from the sources
+  /// this is no hard guarantee for the timing of the signal itself. When the
+  /// volume meter receives a chunk of data that is multiple the size of the sample
+  /// interval, all data will be sampled and the values updated accordingly, but
+  /// only the signal for the last segment is actually emitted.
+  /// On the other hand data might be received in a way that will cause the signal
+  /// to be emitted in shorter intervals than specified here under some
+  /// circumstances.
+  void obs_volmeter_set_update_interval(
+    ffi.Pointer<obs_volmeter> volmeter,
+    int ms,
+  ) {
+    _obs_volmeter_set_update_interval ??= _dylib.lookupFunction<
+            _c_obs_volmeter_set_update_interval,
+            _dart_obs_volmeter_set_update_interval>(
+        'obs_volmeter_set_update_interval');
+    return _obs_volmeter_set_update_interval(
+      volmeter,
+      ms,
+    );
+  }
+
+  _dart_obs_volmeter_set_update_interval _obs_volmeter_set_update_interval;
+
+  /// @brief Get the update interval currently used for the volume meter
+  /// @param volmeter pointer to the volume meter object
+  /// @return update interval in ms
+  int obs_volmeter_get_update_interval(
+    ffi.Pointer<obs_volmeter> volmeter,
+  ) {
+    _obs_volmeter_get_update_interval ??= _dylib.lookupFunction<
+            _c_obs_volmeter_get_update_interval,
+            _dart_obs_volmeter_get_update_interval>(
+        'obs_volmeter_get_update_interval');
+    return _obs_volmeter_get_update_interval(
+      volmeter,
+    );
+  }
+
+  _dart_obs_volmeter_get_update_interval _obs_volmeter_get_update_interval;
+
+  /// @brief Get the number of channels which are configured for this source.
+  /// @param volmeter pointer to the volume meter object
+  int obs_volmeter_get_nr_channels(
+    ffi.Pointer<obs_volmeter> volmeter,
+  ) {
+    _obs_volmeter_get_nr_channels ??= _dylib.lookupFunction<
+        _c_obs_volmeter_get_nr_channels,
+        _dart_obs_volmeter_get_nr_channels>('obs_volmeter_get_nr_channels');
+    return _obs_volmeter_get_nr_channels(
+      volmeter,
+    );
+  }
+
+  _dart_obs_volmeter_get_nr_channels _obs_volmeter_get_nr_channels;
+
+  void obs_volmeter_add_callback(
+    ffi.Pointer<obs_volmeter> volmeter,
+    ffi.Pointer<ffi.NativeFunction<obs_volmeter_updated_t>> callback,
+    ffi.Pointer<ffi.Void> param,
+  ) {
+    _obs_volmeter_add_callback ??= _dylib.lookupFunction<
+        _c_obs_volmeter_add_callback,
+        _dart_obs_volmeter_add_callback>('obs_volmeter_add_callback');
+    return _obs_volmeter_add_callback(
+      volmeter,
+      callback,
+      param,
+    );
+  }
+
+  _dart_obs_volmeter_add_callback _obs_volmeter_add_callback;
+
+  void obs_volmeter_remove_callback(
+    ffi.Pointer<obs_volmeter> volmeter,
+    ffi.Pointer<ffi.NativeFunction<obs_volmeter_updated_t>> callback,
+    ffi.Pointer<ffi.Void> param,
+  ) {
+    _obs_volmeter_remove_callback ??= _dylib.lookupFunction<
+        _c_obs_volmeter_remove_callback,
+        _dart_obs_volmeter_remove_callback>('obs_volmeter_remove_callback');
+    return _obs_volmeter_remove_callback(
+      volmeter,
+      callback,
+      param,
+    );
+  }
+
+  _dart_obs_volmeter_remove_callback _obs_volmeter_remove_callback;
+
+  double obs_mul_to_db(
+    double mul,
+  ) {
+    _obs_mul_to_db ??= _dylib
+        .lookupFunction<_c_obs_mul_to_db, _dart_obs_mul_to_db>('obs_mul_to_db');
+    return _obs_mul_to_db(
+      mul,
+    );
+  }
+
+  _dart_obs_mul_to_db _obs_mul_to_db;
+
+  double obs_db_to_mul(
+    double db,
+  ) {
+    _obs_db_to_mul ??= _dylib
+        .lookupFunction<_c_obs_db_to_mul, _dart_obs_db_to_mul>('obs_db_to_mul');
+    return _obs_db_to_mul(
+      db,
+    );
+  }
+
+  _dart_obs_db_to_mul _obs_db_to_mul;
+
+  int obs_hotkey_get_id(
+    ffi.Pointer<obs_hotkey> key,
+  ) {
+    _obs_hotkey_get_id ??=
+        _dylib.lookupFunction<_c_obs_hotkey_get_id, _dart_obs_hotkey_get_id>(
+            'obs_hotkey_get_id');
+    return _obs_hotkey_get_id(
+      key,
+    );
+  }
+
+  _dart_obs_hotkey_get_id _obs_hotkey_get_id;
+
+  ffi.Pointer<ffi.Int8> obs_hotkey_get_name(
+    ffi.Pointer<obs_hotkey> key,
+  ) {
+    _obs_hotkey_get_name ??= _dylib.lookupFunction<_c_obs_hotkey_get_name,
+        _dart_obs_hotkey_get_name>('obs_hotkey_get_name');
+    return _obs_hotkey_get_name(
+      key,
+    );
+  }
+
+  _dart_obs_hotkey_get_name _obs_hotkey_get_name;
+
+  ffi.Pointer<ffi.Int8> obs_hotkey_get_description(
+    ffi.Pointer<obs_hotkey> key,
+  ) {
+    _obs_hotkey_get_description ??= _dylib.lookupFunction<
+        _c_obs_hotkey_get_description,
+        _dart_obs_hotkey_get_description>('obs_hotkey_get_description');
+    return _obs_hotkey_get_description(
+      key,
+    );
+  }
+
+  _dart_obs_hotkey_get_description _obs_hotkey_get_description;
+
+  int obs_hotkey_get_registerer_type(
+    ffi.Pointer<obs_hotkey> key,
+  ) {
+    _obs_hotkey_get_registerer_type ??= _dylib.lookupFunction<
+        _c_obs_hotkey_get_registerer_type,
+        _dart_obs_hotkey_get_registerer_type>('obs_hotkey_get_registerer_type');
+    return _obs_hotkey_get_registerer_type(
+      key,
+    );
+  }
+
+  _dart_obs_hotkey_get_registerer_type _obs_hotkey_get_registerer_type;
+
+  ffi.Pointer<ffi.Void> obs_hotkey_get_registerer(
+    ffi.Pointer<obs_hotkey> key,
+  ) {
+    _obs_hotkey_get_registerer ??= _dylib.lookupFunction<
+        _c_obs_hotkey_get_registerer,
+        _dart_obs_hotkey_get_registerer>('obs_hotkey_get_registerer');
+    return _obs_hotkey_get_registerer(
+      key,
+    );
+  }
+
+  _dart_obs_hotkey_get_registerer _obs_hotkey_get_registerer;
+
+  int obs_hotkey_get_pair_partner_id(
+    ffi.Pointer<obs_hotkey> key,
+  ) {
+    _obs_hotkey_get_pair_partner_id ??= _dylib.lookupFunction<
+        _c_obs_hotkey_get_pair_partner_id,
+        _dart_obs_hotkey_get_pair_partner_id>('obs_hotkey_get_pair_partner_id');
+    return _obs_hotkey_get_pair_partner_id(
+      key,
+    );
+  }
+
+  _dart_obs_hotkey_get_pair_partner_id _obs_hotkey_get_pair_partner_id;
+
+  int obs_hotkey_binding_get_hotkey_id(
+    ffi.Pointer<obs_hotkey_binding> binding,
+  ) {
+    _obs_hotkey_binding_get_hotkey_id ??= _dylib.lookupFunction<
+            _c_obs_hotkey_binding_get_hotkey_id,
+            _dart_obs_hotkey_binding_get_hotkey_id>(
+        'obs_hotkey_binding_get_hotkey_id');
+    return _obs_hotkey_binding_get_hotkey_id(
+      binding,
+    );
+  }
+
+  _dart_obs_hotkey_binding_get_hotkey_id _obs_hotkey_binding_get_hotkey_id;
+
+  ffi.Pointer<obs_hotkey> obs_hotkey_binding_get_hotkey(
+    ffi.Pointer<obs_hotkey_binding> binding,
+  ) {
+    _obs_hotkey_binding_get_hotkey ??= _dylib.lookupFunction<
+        _c_obs_hotkey_binding_get_hotkey,
+        _dart_obs_hotkey_binding_get_hotkey>('obs_hotkey_binding_get_hotkey');
+    return _obs_hotkey_binding_get_hotkey(
+      binding,
+    );
+  }
+
+  _dart_obs_hotkey_binding_get_hotkey _obs_hotkey_binding_get_hotkey;
+
+  void obs_hotkey_set_name(
+    int id,
+    ffi.Pointer<ffi.Int8> name,
+  ) {
+    _obs_hotkey_set_name ??= _dylib.lookupFunction<_c_obs_hotkey_set_name,
+        _dart_obs_hotkey_set_name>('obs_hotkey_set_name');
+    return _obs_hotkey_set_name(
+      id,
+      name,
+    );
+  }
+
+  _dart_obs_hotkey_set_name _obs_hotkey_set_name;
+
+  void obs_hotkey_set_description(
+    int id,
+    ffi.Pointer<ffi.Int8> desc,
+  ) {
+    _obs_hotkey_set_description ??= _dylib.lookupFunction<
+        _c_obs_hotkey_set_description,
+        _dart_obs_hotkey_set_description>('obs_hotkey_set_description');
+    return _obs_hotkey_set_description(
+      id,
+      desc,
+    );
+  }
+
+  _dart_obs_hotkey_set_description _obs_hotkey_set_description;
+
+  void obs_hotkey_pair_set_names(
+    int id,
+    ffi.Pointer<ffi.Int8> name0,
+    ffi.Pointer<ffi.Int8> name1,
+  ) {
+    _obs_hotkey_pair_set_names ??= _dylib.lookupFunction<
+        _c_obs_hotkey_pair_set_names,
+        _dart_obs_hotkey_pair_set_names>('obs_hotkey_pair_set_names');
+    return _obs_hotkey_pair_set_names(
+      id,
+      name0,
+      name1,
+    );
+  }
+
+  _dart_obs_hotkey_pair_set_names _obs_hotkey_pair_set_names;
+
+  void obs_hotkey_pair_set_descriptions(
+    int id,
+    ffi.Pointer<ffi.Int8> desc0,
+    ffi.Pointer<ffi.Int8> desc1,
+  ) {
+    _obs_hotkey_pair_set_descriptions ??= _dylib.lookupFunction<
+            _c_obs_hotkey_pair_set_descriptions,
+            _dart_obs_hotkey_pair_set_descriptions>(
+        'obs_hotkey_pair_set_descriptions');
+    return _obs_hotkey_pair_set_descriptions(
+      id,
+      desc0,
+      desc1,
+    );
+  }
+
+  _dart_obs_hotkey_pair_set_descriptions _obs_hotkey_pair_set_descriptions;
+
+  void obs_hotkeys_set_translations_s(
+    ffi.Pointer<obs_hotkeys_translations> translations,
+    int size,
+  ) {
+    _obs_hotkeys_set_translations_s ??= _dylib.lookupFunction<
+        _c_obs_hotkeys_set_translations_s,
+        _dart_obs_hotkeys_set_translations_s>('obs_hotkeys_set_translations_s');
+    return _obs_hotkeys_set_translations_s(
+      translations,
+      size,
+    );
+  }
+
+  _dart_obs_hotkeys_set_translations_s _obs_hotkeys_set_translations_s;
+
+  void obs_hotkeys_set_audio_hotkeys_translations(
+    ffi.Pointer<ffi.Int8> mute,
+    ffi.Pointer<ffi.Int8> unmute,
+    ffi.Pointer<ffi.Int8> push_to_mute,
+    ffi.Pointer<ffi.Int8> push_to_talk,
+  ) {
+    _obs_hotkeys_set_audio_hotkeys_translations ??= _dylib.lookupFunction<
+            _c_obs_hotkeys_set_audio_hotkeys_translations,
+            _dart_obs_hotkeys_set_audio_hotkeys_translations>(
+        'obs_hotkeys_set_audio_hotkeys_translations');
+    return _obs_hotkeys_set_audio_hotkeys_translations(
+      mute,
+      unmute,
+      push_to_mute,
+      push_to_talk,
+    );
+  }
+
+  _dart_obs_hotkeys_set_audio_hotkeys_translations
+      _obs_hotkeys_set_audio_hotkeys_translations;
+
+  void obs_hotkeys_set_sceneitem_hotkeys_translations(
+    ffi.Pointer<ffi.Int8> show_1,
+    ffi.Pointer<ffi.Int8> hide_1,
+  ) {
+    _obs_hotkeys_set_sceneitem_hotkeys_translations ??= _dylib.lookupFunction<
+            _c_obs_hotkeys_set_sceneitem_hotkeys_translations,
+            _dart_obs_hotkeys_set_sceneitem_hotkeys_translations>(
+        'obs_hotkeys_set_sceneitem_hotkeys_translations');
+    return _obs_hotkeys_set_sceneitem_hotkeys_translations(
+      show_1,
+      hide_1,
+    );
+  }
+
+  _dart_obs_hotkeys_set_sceneitem_hotkeys_translations
+      _obs_hotkeys_set_sceneitem_hotkeys_translations;
+
+  int obs_hotkey_register_frontend(
+    ffi.Pointer<ffi.Int8> name,
+    ffi.Pointer<ffi.Int8> description,
+    ffi.Pointer<ffi.NativeFunction<obs_hotkey_func>> func,
+    ffi.Pointer<ffi.Void> data,
+  ) {
+    _obs_hotkey_register_frontend ??= _dylib.lookupFunction<
+        _c_obs_hotkey_register_frontend,
+        _dart_obs_hotkey_register_frontend>('obs_hotkey_register_frontend');
+    return _obs_hotkey_register_frontend(
+      name,
+      description,
+      func,
+      data,
+    );
+  }
+
+  _dart_obs_hotkey_register_frontend _obs_hotkey_register_frontend;
+
+  int obs_hotkey_register_encoder(
+    ffi.Pointer<obs_encoder> encoder,
+    ffi.Pointer<ffi.Int8> name,
+    ffi.Pointer<ffi.Int8> description,
+    ffi.Pointer<ffi.NativeFunction<obs_hotkey_func>> func,
+    ffi.Pointer<ffi.Void> data,
+  ) {
+    _obs_hotkey_register_encoder ??= _dylib.lookupFunction<
+        _c_obs_hotkey_register_encoder,
+        _dart_obs_hotkey_register_encoder>('obs_hotkey_register_encoder');
+    return _obs_hotkey_register_encoder(
+      encoder,
+      name,
+      description,
+      func,
+      data,
+    );
+  }
+
+  _dart_obs_hotkey_register_encoder _obs_hotkey_register_encoder;
+
+  int obs_hotkey_register_output(
+    ffi.Pointer<obs_output> output,
+    ffi.Pointer<ffi.Int8> name,
+    ffi.Pointer<ffi.Int8> description,
+    ffi.Pointer<ffi.NativeFunction<obs_hotkey_func>> func,
+    ffi.Pointer<ffi.Void> data,
+  ) {
+    _obs_hotkey_register_output ??= _dylib.lookupFunction<
+        _c_obs_hotkey_register_output,
+        _dart_obs_hotkey_register_output>('obs_hotkey_register_output');
+    return _obs_hotkey_register_output(
+      output,
+      name,
+      description,
+      func,
+      data,
+    );
+  }
+
+  _dart_obs_hotkey_register_output _obs_hotkey_register_output;
+
+  int obs_hotkey_register_service(
+    ffi.Pointer<obs_service> service,
+    ffi.Pointer<ffi.Int8> name,
+    ffi.Pointer<ffi.Int8> description,
+    ffi.Pointer<ffi.NativeFunction<obs_hotkey_func>> func,
+    ffi.Pointer<ffi.Void> data,
+  ) {
+    _obs_hotkey_register_service ??= _dylib.lookupFunction<
+        _c_obs_hotkey_register_service,
+        _dart_obs_hotkey_register_service>('obs_hotkey_register_service');
+    return _obs_hotkey_register_service(
+      service,
+      name,
+      description,
+      func,
+      data,
+    );
+  }
+
+  _dart_obs_hotkey_register_service _obs_hotkey_register_service;
+
+  int obs_hotkey_register_source(
+    ffi.Pointer<obs_source> source,
+    ffi.Pointer<ffi.Int8> name,
+    ffi.Pointer<ffi.Int8> description,
+    ffi.Pointer<ffi.NativeFunction<obs_hotkey_func>> func,
+    ffi.Pointer<ffi.Void> data,
+  ) {
+    _obs_hotkey_register_source ??= _dylib.lookupFunction<
+        _c_obs_hotkey_register_source,
+        _dart_obs_hotkey_register_source>('obs_hotkey_register_source');
+    return _obs_hotkey_register_source(
+      source,
+      name,
+      description,
+      func,
+      data,
+    );
+  }
+
+  _dart_obs_hotkey_register_source _obs_hotkey_register_source;
+
+  int obs_hotkey_pair_register_frontend(
+    ffi.Pointer<ffi.Int8> name0,
+    ffi.Pointer<ffi.Int8> description0,
+    ffi.Pointer<ffi.Int8> name1,
+    ffi.Pointer<ffi.Int8> description1,
+    ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func0,
+    ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func1,
+    ffi.Pointer<ffi.Void> data0,
+    ffi.Pointer<ffi.Void> data1,
+  ) {
+    _obs_hotkey_pair_register_frontend ??= _dylib.lookupFunction<
+            _c_obs_hotkey_pair_register_frontend,
+            _dart_obs_hotkey_pair_register_frontend>(
+        'obs_hotkey_pair_register_frontend');
+    return _obs_hotkey_pair_register_frontend(
+      name0,
+      description0,
+      name1,
+      description1,
+      func0,
+      func1,
+      data0,
+      data1,
+    );
+  }
+
+  _dart_obs_hotkey_pair_register_frontend _obs_hotkey_pair_register_frontend;
+
+  int obs_hotkey_pair_register_encoder(
+    ffi.Pointer<obs_encoder> encoder,
+    ffi.Pointer<ffi.Int8> name0,
+    ffi.Pointer<ffi.Int8> description0,
+    ffi.Pointer<ffi.Int8> name1,
+    ffi.Pointer<ffi.Int8> description1,
+    ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func0,
+    ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func1,
+    ffi.Pointer<ffi.Void> data0,
+    ffi.Pointer<ffi.Void> data1,
+  ) {
+    _obs_hotkey_pair_register_encoder ??= _dylib.lookupFunction<
+            _c_obs_hotkey_pair_register_encoder,
+            _dart_obs_hotkey_pair_register_encoder>(
+        'obs_hotkey_pair_register_encoder');
+    return _obs_hotkey_pair_register_encoder(
+      encoder,
+      name0,
+      description0,
+      name1,
+      description1,
+      func0,
+      func1,
+      data0,
+      data1,
+    );
+  }
+
+  _dart_obs_hotkey_pair_register_encoder _obs_hotkey_pair_register_encoder;
+
+  int obs_hotkey_pair_register_output(
+    ffi.Pointer<obs_output> output,
+    ffi.Pointer<ffi.Int8> name0,
+    ffi.Pointer<ffi.Int8> description0,
+    ffi.Pointer<ffi.Int8> name1,
+    ffi.Pointer<ffi.Int8> description1,
+    ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func0,
+    ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func1,
+    ffi.Pointer<ffi.Void> data0,
+    ffi.Pointer<ffi.Void> data1,
+  ) {
+    _obs_hotkey_pair_register_output ??= _dylib.lookupFunction<
+            _c_obs_hotkey_pair_register_output,
+            _dart_obs_hotkey_pair_register_output>(
+        'obs_hotkey_pair_register_output');
+    return _obs_hotkey_pair_register_output(
+      output,
+      name0,
+      description0,
+      name1,
+      description1,
+      func0,
+      func1,
+      data0,
+      data1,
+    );
+  }
+
+  _dart_obs_hotkey_pair_register_output _obs_hotkey_pair_register_output;
+
+  int obs_hotkey_pair_register_service(
+    ffi.Pointer<obs_service> service,
+    ffi.Pointer<ffi.Int8> name0,
+    ffi.Pointer<ffi.Int8> description0,
+    ffi.Pointer<ffi.Int8> name1,
+    ffi.Pointer<ffi.Int8> description1,
+    ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func0,
+    ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func1,
+    ffi.Pointer<ffi.Void> data0,
+    ffi.Pointer<ffi.Void> data1,
+  ) {
+    _obs_hotkey_pair_register_service ??= _dylib.lookupFunction<
+            _c_obs_hotkey_pair_register_service,
+            _dart_obs_hotkey_pair_register_service>(
+        'obs_hotkey_pair_register_service');
+    return _obs_hotkey_pair_register_service(
+      service,
+      name0,
+      description0,
+      name1,
+      description1,
+      func0,
+      func1,
+      data0,
+      data1,
+    );
+  }
+
+  _dart_obs_hotkey_pair_register_service _obs_hotkey_pair_register_service;
+
+  int obs_hotkey_pair_register_source(
+    ffi.Pointer<obs_source> source,
+    ffi.Pointer<ffi.Int8> name0,
+    ffi.Pointer<ffi.Int8> description0,
+    ffi.Pointer<ffi.Int8> name1,
+    ffi.Pointer<ffi.Int8> description1,
+    ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func0,
+    ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func1,
+    ffi.Pointer<ffi.Void> data0,
+    ffi.Pointer<ffi.Void> data1,
+  ) {
+    _obs_hotkey_pair_register_source ??= _dylib.lookupFunction<
+            _c_obs_hotkey_pair_register_source,
+            _dart_obs_hotkey_pair_register_source>(
+        'obs_hotkey_pair_register_source');
+    return _obs_hotkey_pair_register_source(
+      source,
+      name0,
+      description0,
+      name1,
+      description1,
+      func0,
+      func1,
+      data0,
+      data1,
+    );
+  }
+
+  _dart_obs_hotkey_pair_register_source _obs_hotkey_pair_register_source;
+
+  void obs_hotkey_unregister(
+    int id,
+  ) {
+    _obs_hotkey_unregister ??= _dylib.lookupFunction<_c_obs_hotkey_unregister,
+        _dart_obs_hotkey_unregister>('obs_hotkey_unregister');
+    return _obs_hotkey_unregister(
+      id,
+    );
+  }
+
+  _dart_obs_hotkey_unregister _obs_hotkey_unregister;
+
+  void obs_hotkey_pair_unregister(
+    int id,
+  ) {
+    _obs_hotkey_pair_unregister ??= _dylib.lookupFunction<
+        _c_obs_hotkey_pair_unregister,
+        _dart_obs_hotkey_pair_unregister>('obs_hotkey_pair_unregister');
+    return _obs_hotkey_pair_unregister(
+      id,
+    );
+  }
+
+  _dart_obs_hotkey_pair_unregister _obs_hotkey_pair_unregister;
+
+  void obs_hotkey_load_bindings(
+    int id,
+    ffi.Pointer<obs_key_combination> combinations,
+    int num,
+  ) {
+    _obs_hotkey_load_bindings ??= _dylib.lookupFunction<
+        _c_obs_hotkey_load_bindings,
+        _dart_obs_hotkey_load_bindings>('obs_hotkey_load_bindings');
+    return _obs_hotkey_load_bindings(
+      id,
+      combinations,
+      num,
+    );
+  }
+
+  _dart_obs_hotkey_load_bindings _obs_hotkey_load_bindings;
+
+  void obs_hotkey_load(
+    int id,
+    ffi.Pointer<obs_data_array> data,
+  ) {
+    _obs_hotkey_load ??=
+        _dylib.lookupFunction<_c_obs_hotkey_load, _dart_obs_hotkey_load>(
+            'obs_hotkey_load');
+    return _obs_hotkey_load(
+      id,
+      data,
+    );
+  }
+
+  _dart_obs_hotkey_load _obs_hotkey_load;
+
+  void obs_hotkeys_load_encoder(
+    ffi.Pointer<obs_encoder> encoder,
+    ffi.Pointer<obs_data> hotkeys,
+  ) {
+    _obs_hotkeys_load_encoder ??= _dylib.lookupFunction<
+        _c_obs_hotkeys_load_encoder,
+        _dart_obs_hotkeys_load_encoder>('obs_hotkeys_load_encoder');
+    return _obs_hotkeys_load_encoder(
+      encoder,
+      hotkeys,
+    );
+  }
+
+  _dart_obs_hotkeys_load_encoder _obs_hotkeys_load_encoder;
+
+  void obs_hotkeys_load_output(
+    ffi.Pointer<obs_output> output,
+    ffi.Pointer<obs_data> hotkeys,
+  ) {
+    _obs_hotkeys_load_output ??= _dylib.lookupFunction<
+        _c_obs_hotkeys_load_output,
+        _dart_obs_hotkeys_load_output>('obs_hotkeys_load_output');
+    return _obs_hotkeys_load_output(
+      output,
+      hotkeys,
+    );
+  }
+
+  _dart_obs_hotkeys_load_output _obs_hotkeys_load_output;
+
+  void obs_hotkeys_load_service(
+    ffi.Pointer<obs_service> service,
+    ffi.Pointer<obs_data> hotkeys,
+  ) {
+    _obs_hotkeys_load_service ??= _dylib.lookupFunction<
+        _c_obs_hotkeys_load_service,
+        _dart_obs_hotkeys_load_service>('obs_hotkeys_load_service');
+    return _obs_hotkeys_load_service(
+      service,
+      hotkeys,
+    );
+  }
+
+  _dart_obs_hotkeys_load_service _obs_hotkeys_load_service;
+
+  void obs_hotkeys_load_source(
+    ffi.Pointer<obs_source> source,
+    ffi.Pointer<obs_data> hotkeys,
+  ) {
+    _obs_hotkeys_load_source ??= _dylib.lookupFunction<
+        _c_obs_hotkeys_load_source,
+        _dart_obs_hotkeys_load_source>('obs_hotkeys_load_source');
+    return _obs_hotkeys_load_source(
+      source,
+      hotkeys,
+    );
+  }
+
+  _dart_obs_hotkeys_load_source _obs_hotkeys_load_source;
+
+  void obs_hotkey_pair_load(
+    int id,
+    ffi.Pointer<obs_data_array> data0,
+    ffi.Pointer<obs_data_array> data1,
+  ) {
+    _obs_hotkey_pair_load ??= _dylib.lookupFunction<_c_obs_hotkey_pair_load,
+        _dart_obs_hotkey_pair_load>('obs_hotkey_pair_load');
+    return _obs_hotkey_pair_load(
+      id,
+      data0,
+      data1,
+    );
+  }
+
+  _dart_obs_hotkey_pair_load _obs_hotkey_pair_load;
+
+  ffi.Pointer<obs_data_array> obs_hotkey_save(
+    int id,
+  ) {
+    _obs_hotkey_save ??=
+        _dylib.lookupFunction<_c_obs_hotkey_save, _dart_obs_hotkey_save>(
+            'obs_hotkey_save');
+    return _obs_hotkey_save(
+      id,
+    );
+  }
+
+  _dart_obs_hotkey_save _obs_hotkey_save;
+
+  void obs_hotkey_pair_save(
+    int id,
+    ffi.Pointer<ffi.Pointer<obs_data_array>> p_data0,
+    ffi.Pointer<ffi.Pointer<obs_data_array>> p_data1,
+  ) {
+    _obs_hotkey_pair_save ??= _dylib.lookupFunction<_c_obs_hotkey_pair_save,
+        _dart_obs_hotkey_pair_save>('obs_hotkey_pair_save');
+    return _obs_hotkey_pair_save(
+      id,
+      p_data0,
+      p_data1,
+    );
+  }
+
+  _dart_obs_hotkey_pair_save _obs_hotkey_pair_save;
+
+  ffi.Pointer<obs_data> obs_hotkeys_save_encoder(
+    ffi.Pointer<obs_encoder> encoder,
+  ) {
+    _obs_hotkeys_save_encoder ??= _dylib.lookupFunction<
+        _c_obs_hotkeys_save_encoder,
+        _dart_obs_hotkeys_save_encoder>('obs_hotkeys_save_encoder');
+    return _obs_hotkeys_save_encoder(
+      encoder,
+    );
+  }
+
+  _dart_obs_hotkeys_save_encoder _obs_hotkeys_save_encoder;
+
+  ffi.Pointer<obs_data> obs_hotkeys_save_output(
+    ffi.Pointer<obs_output> output,
+  ) {
+    _obs_hotkeys_save_output ??= _dylib.lookupFunction<
+        _c_obs_hotkeys_save_output,
+        _dart_obs_hotkeys_save_output>('obs_hotkeys_save_output');
+    return _obs_hotkeys_save_output(
+      output,
+    );
+  }
+
+  _dart_obs_hotkeys_save_output _obs_hotkeys_save_output;
+
+  ffi.Pointer<obs_data> obs_hotkeys_save_service(
+    ffi.Pointer<obs_service> service,
+  ) {
+    _obs_hotkeys_save_service ??= _dylib.lookupFunction<
+        _c_obs_hotkeys_save_service,
+        _dart_obs_hotkeys_save_service>('obs_hotkeys_save_service');
+    return _obs_hotkeys_save_service(
+      service,
+    );
+  }
+
+  _dart_obs_hotkeys_save_service _obs_hotkeys_save_service;
+
+  ffi.Pointer<obs_data> obs_hotkeys_save_source(
+    ffi.Pointer<obs_source> source,
+  ) {
+    _obs_hotkeys_save_source ??= _dylib.lookupFunction<
+        _c_obs_hotkeys_save_source,
+        _dart_obs_hotkeys_save_source>('obs_hotkeys_save_source');
+    return _obs_hotkeys_save_source(
+      source,
+    );
+  }
+
+  _dart_obs_hotkeys_save_source _obs_hotkeys_save_source;
+
+  void obs_enum_hotkeys(
+    ffi.Pointer<ffi.NativeFunction<obs_hotkey_enum_func>> func,
+    ffi.Pointer<ffi.Void> data,
+  ) {
+    _obs_enum_hotkeys ??=
+        _dylib.lookupFunction<_c_obs_enum_hotkeys, _dart_obs_enum_hotkeys>(
+            'obs_enum_hotkeys');
+    return _obs_enum_hotkeys(
+      func,
+      data,
+    );
+  }
+
+  _dart_obs_enum_hotkeys _obs_enum_hotkeys;
+
+  void obs_enum_hotkey_bindings(
+    ffi.Pointer<ffi.NativeFunction<obs_hotkey_binding_enum_func>> func,
+    ffi.Pointer<ffi.Void> data,
+  ) {
+    _obs_enum_hotkey_bindings ??= _dylib.lookupFunction<
+        _c_obs_enum_hotkey_bindings,
+        _dart_obs_enum_hotkey_bindings>('obs_enum_hotkey_bindings');
+    return _obs_enum_hotkey_bindings(
+      func,
+      data,
+    );
+  }
+
+  _dart_obs_enum_hotkey_bindings _obs_enum_hotkey_bindings;
+
+  void obs_hotkey_enable_background_press(
+    int enable,
+  ) {
+    _obs_hotkey_enable_background_press ??= _dylib.lookupFunction<
+            _c_obs_hotkey_enable_background_press,
+            _dart_obs_hotkey_enable_background_press>(
+        'obs_hotkey_enable_background_press');
+    return _obs_hotkey_enable_background_press(
+      enable,
+    );
+  }
+
+  _dart_obs_hotkey_enable_background_press _obs_hotkey_enable_background_press;
+
+  void obs_hotkey_enable_strict_modifiers(
+    int enable,
+  ) {
+    _obs_hotkey_enable_strict_modifiers ??= _dylib.lookupFunction<
+            _c_obs_hotkey_enable_strict_modifiers,
+            _dart_obs_hotkey_enable_strict_modifiers>(
+        'obs_hotkey_enable_strict_modifiers');
+    return _obs_hotkey_enable_strict_modifiers(
+      enable,
+    );
+  }
+
+  _dart_obs_hotkey_enable_strict_modifiers _obs_hotkey_enable_strict_modifiers;
+
+  void obs_hotkey_set_callback_routing_func(
+    ffi.Pointer<ffi.NativeFunction<obs_hotkey_callback_router_func>> func,
+    ffi.Pointer<ffi.Void> data,
+  ) {
+    _obs_hotkey_set_callback_routing_func ??= _dylib.lookupFunction<
+            _c_obs_hotkey_set_callback_routing_func,
+            _dart_obs_hotkey_set_callback_routing_func>(
+        'obs_hotkey_set_callback_routing_func');
+    return _obs_hotkey_set_callback_routing_func(
+      func,
+      data,
+    );
+  }
+
+  _dart_obs_hotkey_set_callback_routing_func
+      _obs_hotkey_set_callback_routing_func;
+
+  void obs_hotkey_trigger_routed_callback(
+    int id,
+    int pressed,
+  ) {
+    _obs_hotkey_trigger_routed_callback ??= _dylib.lookupFunction<
+            _c_obs_hotkey_trigger_routed_callback,
+            _dart_obs_hotkey_trigger_routed_callback>(
+        'obs_hotkey_trigger_routed_callback');
+    return _obs_hotkey_trigger_routed_callback(
+      id,
+      pressed,
+    );
+  }
+
+  _dart_obs_hotkey_trigger_routed_callback _obs_hotkey_trigger_routed_callback;
+
+  void obs_hotkey_enable_callback_rerouting(
+    int enable,
+  ) {
+    _obs_hotkey_enable_callback_rerouting ??= _dylib.lookupFunction<
+            _c_obs_hotkey_enable_callback_rerouting,
+            _dart_obs_hotkey_enable_callback_rerouting>(
+        'obs_hotkey_enable_callback_rerouting');
+    return _obs_hotkey_enable_callback_rerouting(
+      enable,
+    );
+  }
+
+  _dart_obs_hotkey_enable_callback_rerouting
+      _obs_hotkey_enable_callback_rerouting;
+
+  void obs_hotkey_update_atomic(
+    ffi.Pointer<ffi.NativeFunction<obs_hotkey_atomic_update_func>> func,
+    ffi.Pointer<ffi.Void> data,
+  ) {
+    _obs_hotkey_update_atomic ??= _dylib.lookupFunction<
+        _c_obs_hotkey_update_atomic,
+        _dart_obs_hotkey_update_atomic>('obs_hotkey_update_atomic');
+    return _obs_hotkey_update_atomic(
+      func,
+      data,
+    );
+  }
+
+  _dart_obs_hotkey_update_atomic _obs_hotkey_update_atomic;
+
+  void obs_key_to_str(
+    int key,
+    ffi.Pointer<dstr> str,
+  ) {
+    _obs_key_to_str ??=
+        _dylib.lookupFunction<_c_obs_key_to_str, _dart_obs_key_to_str>(
+            'obs_key_to_str');
+    return _obs_key_to_str(
+      key,
+      str,
+    );
+  }
+
+  _dart_obs_key_to_str _obs_key_to_str;
+
+  int obs_key_from_virtual_key(
+    int code,
+  ) {
+    _obs_key_from_virtual_key ??= _dylib.lookupFunction<
+        _c_obs_key_from_virtual_key,
+        _dart_obs_key_from_virtual_key>('obs_key_from_virtual_key');
+    return _obs_key_from_virtual_key(
+      code,
+    );
+  }
+
+  _dart_obs_key_from_virtual_key _obs_key_from_virtual_key;
+
+  int obs_key_to_virtual_key(
+    int key,
+  ) {
+    _obs_key_to_virtual_key ??= _dylib.lookupFunction<_c_obs_key_to_virtual_key,
+        _dart_obs_key_to_virtual_key>('obs_key_to_virtual_key');
+    return _obs_key_to_virtual_key(
+      key,
+    );
+  }
+
+  _dart_obs_key_to_virtual_key _obs_key_to_virtual_key;
+
+  ffi.Pointer<ffi.Int8> obs_key_to_name(
+    int key,
+  ) {
+    _obs_key_to_name ??=
+        _dylib.lookupFunction<_c_obs_key_to_name, _dart_obs_key_to_name>(
+            'obs_key_to_name');
+    return _obs_key_to_name(
+      key,
+    );
+  }
+
+  _dart_obs_key_to_name _obs_key_to_name;
+
+  int obs_key_from_name(
+    ffi.Pointer<ffi.Int8> name,
+  ) {
+    _obs_key_from_name ??=
+        _dylib.lookupFunction<_c_obs_key_from_name, _dart_obs_key_from_name>(
+            'obs_key_from_name');
+    return _obs_key_from_name(
+      name,
+    );
+  }
+
+  _dart_obs_key_from_name _obs_key_from_name;
+
   /// Find a core libobs data file
   /// @param path name of the base file
   /// @return A string containing the full path to the file.
@@ -10065,7 +11426,7 @@ class DiveObslibFFI {
   /// Use obs_source_get_ref or obs_source_get_weak_source if you want to retain
   /// a reference after obs_enum_sources finishes
   void obs_enum_sources(
-    ffi.Pointer<ffi.NativeFunction<_typedefC_15>> enum_proc,
+    ffi.Pointer<ffi.NativeFunction<_typedefC_108>> enum_proc,
     ffi.Pointer<ffi.Void> param,
   ) {
     _obs_enum_sources ??=
@@ -10081,7 +11442,7 @@ class DiveObslibFFI {
 
   /// Enumerates scenes
   void obs_enum_scenes(
-    ffi.Pointer<ffi.NativeFunction<_typedefC_16>> enum_proc,
+    ffi.Pointer<ffi.NativeFunction<_typedefC_109>> enum_proc,
     ffi.Pointer<ffi.Void> param,
   ) {
     _obs_enum_scenes ??=
@@ -10097,7 +11458,7 @@ class DiveObslibFFI {
 
   /// Enumerates outputs
   void obs_enum_outputs(
-    ffi.Pointer<ffi.NativeFunction<_typedefC_17>> enum_proc,
+    ffi.Pointer<ffi.NativeFunction<_typedefC_110>> enum_proc,
     ffi.Pointer<ffi.Void> param,
   ) {
     _obs_enum_outputs ??=
@@ -10113,7 +11474,7 @@ class DiveObslibFFI {
 
   /// Enumerates encoders
   void obs_enum_encoders(
-    ffi.Pointer<ffi.NativeFunction<_typedefC_18>> enum_proc,
+    ffi.Pointer<ffi.NativeFunction<_typedefC_111>> enum_proc,
     ffi.Pointer<ffi.Void> param,
   ) {
     _obs_enum_encoders ??=
@@ -10129,7 +11490,7 @@ class DiveObslibFFI {
 
   /// Enumerates encoders
   void obs_enum_services(
-    ffi.Pointer<ffi.NativeFunction<_typedefC_19>> enum_proc,
+    ffi.Pointer<ffi.NativeFunction<_typedefC_112>> enum_proc,
     ffi.Pointer<ffi.Void> param,
   ) {
     _obs_enum_services ??=
@@ -10503,7 +11864,7 @@ class DiveObslibFFI {
   _dart_obs_get_audio_monitoring_device _obs_get_audio_monitoring_device;
 
   void obs_add_tick_callback(
-    ffi.Pointer<ffi.NativeFunction<_typedefC_20>> tick,
+    ffi.Pointer<ffi.NativeFunction<_typedefC_113>> tick,
     ffi.Pointer<ffi.Void> param,
   ) {
     _obs_add_tick_callback ??= _dylib.lookupFunction<_c_obs_add_tick_callback,
@@ -10517,7 +11878,7 @@ class DiveObslibFFI {
   _dart_obs_add_tick_callback _obs_add_tick_callback;
 
   void obs_remove_tick_callback(
-    ffi.Pointer<ffi.NativeFunction<_typedefC_21>> tick,
+    ffi.Pointer<ffi.NativeFunction<_typedefC_114>> tick,
     ffi.Pointer<ffi.Void> param,
   ) {
     _obs_remove_tick_callback ??= _dylib.lookupFunction<
@@ -10532,7 +11893,7 @@ class DiveObslibFFI {
   _dart_obs_remove_tick_callback _obs_remove_tick_callback;
 
   void obs_add_main_render_callback(
-    ffi.Pointer<ffi.NativeFunction<_typedefC_22>> draw,
+    ffi.Pointer<ffi.NativeFunction<_typedefC_115>> draw,
     ffi.Pointer<ffi.Void> param,
   ) {
     _obs_add_main_render_callback ??= _dylib.lookupFunction<
@@ -10547,7 +11908,7 @@ class DiveObslibFFI {
   _dart_obs_add_main_render_callback _obs_add_main_render_callback;
 
   void obs_remove_main_render_callback(
-    ffi.Pointer<ffi.NativeFunction<_typedefC_23>> draw,
+    ffi.Pointer<ffi.NativeFunction<_typedefC_116>> draw,
     ffi.Pointer<ffi.Void> param,
   ) {
     _obs_remove_main_render_callback ??= _dylib.lookupFunction<
@@ -10564,7 +11925,7 @@ class DiveObslibFFI {
 
   void obs_add_raw_video_callback(
     ffi.Pointer<video_scale_info> conversion,
-    ffi.Pointer<ffi.NativeFunction<_typedefC_24>> callback,
+    ffi.Pointer<ffi.NativeFunction<_typedefC_117>> callback,
     ffi.Pointer<ffi.Void> param,
   ) {
     _obs_add_raw_video_callback ??= _dylib.lookupFunction<
@@ -10580,7 +11941,7 @@ class DiveObslibFFI {
   _dart_obs_add_raw_video_callback _obs_add_raw_video_callback;
 
   void obs_remove_raw_video_callback(
-    ffi.Pointer<ffi.NativeFunction<_typedefC_25>> callback,
+    ffi.Pointer<ffi.NativeFunction<_typedefC_118>> callback,
     ffi.Pointer<ffi.Void> param,
   ) {
     _obs_remove_raw_video_callback ??= _dylib.lookupFunction<
@@ -10850,7 +12211,7 @@ class DiveObslibFFI {
   /// @param  param    The user data to be associated with this draw callback.
   void obs_display_add_draw_callback(
     ffi.Pointer<obs_display> display,
-    ffi.Pointer<ffi.NativeFunction<_typedefC_26>> draw,
+    ffi.Pointer<ffi.NativeFunction<_typedefC_119>> draw,
     ffi.Pointer<ffi.Void> param,
   ) {
     _obs_display_add_draw_callback ??= _dylib.lookupFunction<
@@ -10868,7 +12229,7 @@ class DiveObslibFFI {
   /// Removes a draw callback for this display context
   void obs_display_remove_draw_callback(
     ffi.Pointer<obs_display> display,
-    ffi.Pointer<ffi.NativeFunction<_typedefC_27>> draw,
+    ffi.Pointer<ffi.NativeFunction<_typedefC_120>> draw,
     ffi.Pointer<ffi.Void> param,
   ) {
     _obs_display_remove_draw_callback ??= _dylib.lookupFunction<
@@ -13498,7 +14859,7 @@ class DiveObslibFFI {
   /// Enumerates sources within a scene
   void obs_scene_enum_items(
     ffi.Pointer<obs_scene> scene,
-    ffi.Pointer<ffi.NativeFunction<_typedefC_28>> callback,
+    ffi.Pointer<ffi.NativeFunction<_typedefC_121>> callback,
     ffi.Pointer<ffi.Void> param,
   ) {
     _obs_scene_enum_items ??= _dylib.lookupFunction<_c_obs_scene_enum_items,
@@ -14364,7 +15725,7 @@ class DiveObslibFFI {
 
   void obs_sceneitem_group_enum_items(
     ffi.Pointer<obs_scene_item> group,
-    ffi.Pointer<ffi.NativeFunction<_typedefC_29>> callback,
+    ffi.Pointer<ffi.NativeFunction<_typedefC_122>> callback,
     ffi.Pointer<ffi.Void> param,
   ) {
     _obs_sceneitem_group_enum_items ??= _dylib.lookupFunction<
@@ -16574,7 +17935,7 @@ class DiveObslibFFI {
   /// @param  param    The user data to be associated with this frame callback.
   void obs_source_add_frame_callback(
     ffi.Pointer<obs_source> source,
-    ffi.Pointer<ffi.NativeFunction<_typedefC_30>> frame,
+    ffi.Pointer<ffi.NativeFunction<_typedefC_123>> frame,
     ffi.Pointer<ffi.Void> param,
   ) {
     _obs_source_add_frame_callback ??= _dylib.lookupFunction<
@@ -16592,7 +17953,7 @@ class DiveObslibFFI {
   /// Removes a frame callback for this source
   void obs_source_remove_frame_callback(
     ffi.Pointer<obs_source> source,
-    ffi.Pointer<ffi.NativeFunction<_typedefC_31>> frame,
+    ffi.Pointer<ffi.NativeFunction<_typedefC_124>> frame,
     ffi.Pointer<ffi.Void> param,
   ) {
     _obs_source_remove_frame_callback ??= _dylib.lookupFunction<
@@ -17453,6 +18814,1423 @@ class obs_weak_encoder extends ffi.Struct {}
 
 class obs_weak_service extends ffi.Struct {}
 
+abstract class obs_source_type {
+  static const int OBS_SOURCE_TYPE_INPUT = 0;
+  static const int OBS_SOURCE_TYPE_FILTER = 1;
+  static const int OBS_SOURCE_TYPE_TRANSITION = 2;
+  static const int OBS_SOURCE_TYPE_SCENE = 3;
+}
+
+abstract class obs_balance_type {
+  static const int OBS_BALANCE_TYPE_SINE_LAW = 0;
+  static const int OBS_BALANCE_TYPE_SQUARE_LAW = 1;
+  static const int OBS_BALANCE_TYPE_LINEAR = 2;
+}
+
+abstract class obs_icon_type {
+  static const int OBS_ICON_TYPE_UNKNOWN = 0;
+  static const int OBS_ICON_TYPE_IMAGE = 1;
+  static const int OBS_ICON_TYPE_COLOR = 2;
+  static const int OBS_ICON_TYPE_SLIDESHOW = 3;
+  static const int OBS_ICON_TYPE_AUDIO_INPUT = 4;
+  static const int OBS_ICON_TYPE_AUDIO_OUTPUT = 5;
+  static const int OBS_ICON_TYPE_DESKTOP_CAPTURE = 6;
+  static const int OBS_ICON_TYPE_WINDOW_CAPTURE = 7;
+  static const int OBS_ICON_TYPE_GAME_CAPTURE = 8;
+  static const int OBS_ICON_TYPE_CAMERA = 9;
+  static const int OBS_ICON_TYPE_TEXT = 10;
+  static const int OBS_ICON_TYPE_MEDIA = 11;
+  static const int OBS_ICON_TYPE_BROWSER = 12;
+  static const int OBS_ICON_TYPE_CUSTOM = 13;
+}
+
+abstract class obs_media_state {
+  static const int OBS_MEDIA_STATE_NONE = 0;
+  static const int OBS_MEDIA_STATE_PLAYING = 1;
+  static const int OBS_MEDIA_STATE_OPENING = 2;
+  static const int OBS_MEDIA_STATE_BUFFERING = 3;
+  static const int OBS_MEDIA_STATE_PAUSED = 4;
+  static const int OBS_MEDIA_STATE_STOPPED = 5;
+  static const int OBS_MEDIA_STATE_ENDED = 6;
+  static const int OBS_MEDIA_STATE_ERROR = 7;
+}
+
+class obs_source_audio_mix extends ffi.Struct {}
+
+/// Source asynchronous video output structure.  Used with
+/// obs_source_output_video to output asynchronous video.  Video is buffered as
+/// necessary to play according to timestamps.  When used with audio output,
+/// audio is synced to video as it is played.
+///
+/// If a YUV format is specified, it will be automatically upsampled and
+/// converted to RGB via shader on the graphics processor.
+///
+/// NOTE: Non-YUV formats will always be treated as full range with this
+/// structure!  Use obs_source_frame2 along with obs_source_output_video2
+/// instead if partial range support is desired for non-YUV video formats.
+class obs_source_frame extends ffi.Struct {}
+
+/// Sent to source filters via the filter_audio callback to allow filtering of
+/// audio data
+class obs_audio_data extends ffi.Struct {}
+
+/// Source definition structure
+class obs_source_info extends ffi.Struct {
+  /// Unique string identifier for the source
+  ffi.Pointer<ffi.Int8> id;
+
+  /// Type of source.
+  ///
+  /// OBS_SOURCE_TYPE_INPUT for input sources,
+  /// OBS_SOURCE_TYPE_FILTER for filter sources, and
+  /// OBS_SOURCE_TYPE_TRANSITION for transition sources.
+  @ffi.Int32()
+  int type;
+
+  /// Source output flags
+  @ffi.Uint32()
+  int output_flags;
+
+  /// Get the translated name of the source type
+  ///
+  /// @param  type_data  The type_data variable of this structure
+  /// @return               The translated name of the source type
+  ffi.Pointer<ffi.NativeFunction<_typedefC_15>> get_name;
+
+  /// Creates the source data for the source
+  ///
+  /// @param  settings  Settings to initialize the source with
+  /// @param  source    Source that this data is associated with
+  /// @return           The data associated with this source
+  ffi.Pointer<ffi.NativeFunction<_typedefC_16>> create;
+
+  /// Destroys the private data for the source
+  ///
+  /// Async sources must not call obs_source_output_video after returning
+  /// from destroy
+  ffi.Pointer<ffi.NativeFunction<_typedefC_17>> destroy;
+
+  /// Returns the width of the source.  Required if this is an input
+  /// source and has non-async video
+  ffi.Pointer<ffi.NativeFunction<_typedefC_18>> get_width;
+
+  /// Returns the height of the source.  Required if this is an input
+  /// source and has non-async video
+  ffi.Pointer<ffi.NativeFunction<_typedefC_19>> get_height;
+
+  /// Gets the default settings for this source
+  ///
+  /// @param[out]  settings  Data to assign default settings to
+  /// @deprecated            Use get_defaults2 if type_data is needed
+  ffi.Pointer<ffi.NativeFunction<_typedefC_20>> get_defaults;
+
+  /// Gets the property information of this source
+  ///
+  /// @return         The properties data
+  /// @deprecated     Use get_properties2 if type_data is needed
+  ffi.Pointer<ffi.NativeFunction<_typedefC_21>> get_properties;
+
+  /// Updates the settings for this source
+  ///
+  /// @param data      Source data
+  /// @param settings  New settings for this source
+  ffi.Pointer<ffi.NativeFunction<_typedefC_22>> update;
+
+  /// Called when the source has been activated in the main view
+  ffi.Pointer<ffi.NativeFunction<_typedefC_23>> activate;
+
+  /// Called when the source has been deactivated from the main view
+  /// (no longer being played/displayed)
+  ffi.Pointer<ffi.NativeFunction<_typedefC_24>> deactivate;
+
+  /// Called when the source is visible
+  ffi.Pointer<ffi.NativeFunction<_typedefC_25>> show_1;
+
+  /// Called when the source is no longer visible
+  ffi.Pointer<ffi.NativeFunction<_typedefC_26>> hide_1;
+
+  /// Called each video frame with the time elapsed
+  ///
+  /// @param  data     Source data
+  /// @param  seconds  Seconds elapsed since the last frame
+  ffi.Pointer<ffi.NativeFunction<_typedefC_27>> video_tick;
+
+  /// Called when rendering the source with the graphics subsystem.
+  ///
+  /// If this is an input/transition source, this is called to draw the
+  /// source texture with the graphics subsystem using the specified
+  /// effect.
+  ///
+  /// If this is a filter source, it wraps source draw calls (for
+  /// example applying a custom effect with custom parameters to a
+  /// source).  In this case, it's highly recommended to use the
+  /// obs_source_process_filter function to automatically handle
+  /// effect-based filter processing.  However, you can implement custom
+  /// draw handling as desired as well.
+  ///
+  /// If the source output flags do not include SOURCE_CUSTOM_DRAW, all
+  /// a source needs to do is set the "image" parameter of the effect to
+  /// the desired texture, and then draw.  If the output flags include
+  /// SOURCE_COLOR_MATRIX, you may optionally set the "color_matrix"
+  /// parameter of the effect to a custom 4x4 conversion matrix (by
+  /// default it will be set to an YUV->RGB conversion matrix)
+  ///
+  /// @param data    Source data
+  /// @param effect  Effect to be used with this source.  If the source
+  /// output flags include SOURCE_CUSTOM_DRAW, this will
+  /// be NULL, and the source is expected to process with
+  /// an effect manually.
+  ffi.Pointer<ffi.NativeFunction<_typedefC_28>> video_render;
+
+  /// Called to filter raw async video data.
+  ///
+  /// @note          This function is only used with filter sources.
+  ///
+  /// @param  data   Filter data
+  /// @param  frame  Video frame to filter
+  /// @return        New video frame data.  This can defer video data to
+  /// be drawn later if time is needed for processing
+  ffi.Pointer<ffi.NativeFunction<_typedefC_29>> filter_video;
+
+  /// Called to filter raw audio data.
+  ///
+  /// @note          This function is only used with filter sources.
+  ///
+  /// @param  data   Filter data
+  /// @param  audio  Audio data to filter.
+  /// @return        Modified or new audio data.  You can directly modify
+  /// the data passed and return it, or you can defer audio
+  /// data for later if time is needed for processing.  If
+  /// you are returning new data, that data must exist
+  /// until the next call to the filter_audio callback or
+  /// until the filter is removed/destroyed.
+  ffi.Pointer<ffi.NativeFunction<_typedefC_30>> filter_audio;
+
+  /// Called to enumerate all active sources being used within this
+  /// source.  If the source has children that render audio/video it must
+  /// implement this callback.
+  ///
+  /// @param  data           Filter data
+  /// @param  enum_callback  Enumeration callback
+  /// @param  param          User data to pass to callback
+  ffi.Pointer<ffi.NativeFunction<_typedefC_31>> enum_active_sources;
+
+  /// Called when saving a source.  This is a separate function because
+  /// sometimes a source needs to know when it is being saved so it
+  /// doesn't always have to update the current settings until a certain
+  /// point.
+  ///
+  /// @param  data      Source data
+  /// @param  settings  Settings
+  ffi.Pointer<ffi.NativeFunction<_typedefC_32>> save;
+
+  /// Called when loading a source from saved data.  This should be called
+  /// after all the loading sources have actually been created because
+  /// sometimes there are sources that depend on each other.
+  ///
+  /// @param  data      Source data
+  /// @param  settings  Settings
+  ffi.Pointer<ffi.NativeFunction<_typedefC_33>> load;
+
+  /// Called when interacting with a source and a mouse-down or mouse-up
+  /// occurs.
+  ///
+  /// @param data         Source data
+  /// @param event        Mouse event properties
+  /// @param type         Mouse button pushed
+  /// @param mouse_up     Mouse event type (true if mouse-up)
+  /// @param click_count  Mouse click count (1 for single click, etc.)
+  ffi.Pointer<ffi.NativeFunction<_typedefC_34>> mouse_click;
+
+  /// Called when interacting with a source and a mouse-move occurs.
+  ///
+  /// @param data         Source data
+  /// @param event        Mouse event properties
+  /// @param mouse_leave  Mouse leave state (true if mouse left source)
+  ffi.Pointer<ffi.NativeFunction<_typedefC_35>> mouse_move;
+
+  /// Called when interacting with a source and a mouse-wheel occurs.
+  ///
+  /// @param data         Source data
+  /// @param event        Mouse event properties
+  /// @param x_delta      Movement delta in the horizontal direction
+  /// @param y_delta      Movement delta in the vertical direction
+  ffi.Pointer<ffi.NativeFunction<_typedefC_36>> mouse_wheel;
+
+  /// Called when interacting with a source and gain focus/lost focus event
+  /// occurs.
+  ///
+  /// @param data         Source data
+  /// @param focus        Focus state (true if focus gained)
+  ffi.Pointer<ffi.NativeFunction<_typedefC_37>> focus;
+
+  /// Called when interacting with a source and a key-up or key-down
+  /// occurs.
+  ///
+  /// @param data         Source data
+  /// @param event        Key event properties
+  /// @param focus        Key event type (true if mouse-up)
+  ffi.Pointer<ffi.NativeFunction<_typedefC_38>> key_click;
+
+  /// Called when the filter is removed from a source
+  ///
+  /// @param  data    Filter data
+  /// @param  source  Source that the filter being removed from
+  ffi.Pointer<ffi.NativeFunction<_typedefC_39>> filter_remove;
+
+  /// Private data associated with this entry
+  ffi.Pointer<ffi.Void> type_data;
+
+  /// If defined, called to free private data on shutdown
+  ffi.Pointer<ffi.NativeFunction<_typedefC_40>> free_type_data;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_41>> audio_render;
+
+  /// Called to enumerate all active and inactive sources being used
+  /// within this source.  If this callback isn't implemented,
+  /// enum_active_sources will be called instead.
+  ///
+  /// This is typically used if a source can have inactive child sources.
+  ///
+  /// @param  data           Filter data
+  /// @param  enum_callback  Enumeration callback
+  /// @param  param          User data to pass to callback
+  ffi.Pointer<ffi.NativeFunction<_typedefC_42>> enum_all_sources;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_43>> transition_start;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_44>> transition_stop;
+
+  /// Gets the default settings for this source
+  ///
+  /// If get_defaults is also defined both will be called, and the first
+  /// call will be to get_defaults, then to get_defaults2.
+  ///
+  /// @param       type_data The type_data variable of this structure
+  /// @param[out]  settings  Data to assign default settings to
+  ffi.Pointer<ffi.NativeFunction<_typedefC_45>> get_defaults2;
+
+  /// Gets the property information of this source
+  ///
+  /// @param data      Source data
+  /// @param type_data The type_data variable of this structure
+  /// @return          The properties data
+  ffi.Pointer<ffi.NativeFunction<_typedefC_46>> get_properties2;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_47>> audio_mix;
+
+  /// Icon type for the source
+  @ffi.Int32()
+  int icon_type;
+
+  /// Media controls
+  ffi.Pointer<ffi.NativeFunction<_typedefC_48>> media_play_pause;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_49>> media_restart;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_50>> media_stop;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_51>> media_next;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_52>> media_previous;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_53>> media_get_duration;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_54>> media_get_time;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_55>> media_set_time;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_56>> media_get_state;
+
+  @ffi.Uint32()
+  int version;
+
+  ffi.Pointer<ffi.Int8> unversioned_id;
+}
+
+/// Specifies the encoder type
+abstract class obs_encoder_type {
+  /// < The encoder provides an audio codec
+  static const int OBS_ENCODER_AUDIO = 0;
+
+  /// < The encoder provides a video codec
+  static const int OBS_ENCODER_VIDEO = 1;
+}
+
+/// Encoder output packet
+class encoder_packet extends ffi.Struct {
+  /// < Packet data
+  ffi.Pointer<ffi.Uint8> data;
+
+  /// < Packet size
+  @ffi.Uint64()
+  int size;
+
+  /// < Presentation timestamp
+  @ffi.Int64()
+  int pts;
+
+  /// < Decode timestamp
+  @ffi.Int64()
+  int dts;
+
+  /// < Timebase numerator
+  @ffi.Int32()
+  int timebase_num;
+
+  /// < Timebase denominator
+  @ffi.Int32()
+  int timebase_den;
+
+  /// < Encoder type
+  @ffi.Int32()
+  int type;
+
+  /// < Is a keyframe
+  @ffi.Uint8()
+  int keyframe;
+
+  @ffi.Int64()
+  int dts_usec;
+
+  @ffi.Int64()
+  int sys_dts_usec;
+
+  /// Packet priority
+  ///
+  /// This is generally use by video encoders to specify the priority
+  /// of the packet.
+  @ffi.Int32()
+  int priority;
+
+  /// Dropped packet priority
+  ///
+  /// If this packet needs to be dropped, the next packet must be of this
+  /// priority or higher to continue transmission.
+  @ffi.Int32()
+  int drop_priority;
+
+  /// Audio track index (used with outputs)
+  @ffi.Uint64()
+  int track_idx;
+
+  /// Encoder from which the track originated from
+  ffi.Pointer<obs_encoder> encoder;
+}
+
+/// Encoder input frame
+class encoder_frame extends ffi.Struct {}
+
+/// Encoder interface
+///
+/// Encoders have a limited usage with OBS.  You are not generally supposed to
+/// implement every encoder out there.  Generally, these are limited or specific
+/// encoders for h264/aac for streaming and recording.  It doesn't have to be
+/// *just* h264 or aac of course, but generally those are the expected encoders.
+///
+/// That being said, other encoders will be kept in mind for future use.
+class obs_encoder_info extends ffi.Struct {
+  /// Specifies the named identifier of this encoder
+  ffi.Pointer<ffi.Int8> id;
+
+  /// Specifies the encoder type (video or audio)
+  @ffi.Int32()
+  int type;
+
+  /// Specifies the codec
+  ffi.Pointer<ffi.Int8> codec;
+
+  /// Gets the full translated name of this encoder
+  ///
+  /// @param  type_data  The type_data variable of this structure
+  /// @return            Translated name of the encoder
+  ffi.Pointer<ffi.NativeFunction<_typedefC_57>> get_name;
+
+  /// Creates the encoder with the specified settings
+  ///
+  /// @param  settings  Settings for the encoder
+  /// @param  encoder   OBS encoder context
+  /// @return           Data associated with this encoder context, or
+  /// NULL if initialization failed.
+  ffi.Pointer<ffi.NativeFunction<_typedefC_58>> create;
+
+  /// Destroys the encoder data
+  ///
+  /// @param  data  Data associated with this encoder context
+  ffi.Pointer<ffi.NativeFunction<_typedefC_59>> destroy;
+
+  /// Encodes frame(s), and outputs encoded packets as they become
+  /// available.
+  ///
+  /// @param       data             Data associated with this encoder
+  /// context
+  /// @param[in]   frame            Raw audio/video data to encode
+  /// @param[out]  packet           Encoder packet output, if any
+  /// @param[out]  received_packet  Set to true if a packet was received,
+  /// false otherwise
+  /// @return                       true if successful, false otherwise.
+  ffi.Pointer<ffi.NativeFunction<_typedefC_60>> encode;
+
+  /// Audio encoder only:  Returns the frame size for this encoder
+  ffi.Pointer<ffi.NativeFunction<_typedefC_61>> get_frame_size;
+
+  /// Gets the default settings for this encoder
+  ///
+  /// @param[out]  settings  Data to assign default settings to
+  ffi.Pointer<ffi.NativeFunction<_typedefC_62>> get_defaults;
+
+  /// Gets the property information of this encoder
+  ///
+  /// @return         The properties data
+  ffi.Pointer<ffi.NativeFunction<_typedefC_63>> get_properties;
+
+  /// Updates the settings for this encoder (usually used for things like
+  /// changing bitrate while active)
+  ///
+  /// @param  data      Data associated with this encoder context
+  /// @param  settings  New settings for this encoder
+  /// @return           true if successful, false otherwise
+  ffi.Pointer<ffi.NativeFunction<_typedefC_64>> update;
+
+  /// Returns extra data associated with this encoder (usually header)
+  ///
+  /// @param  data             Data associated with this encoder context
+  /// @param[out]  extra_data  Pointer to receive the extra data
+  /// @param[out]  size        Pointer to receive the size of the extra
+  /// data
+  /// @return                  true if extra data available, false
+  /// otherwise
+  ffi.Pointer<ffi.NativeFunction<_typedefC_65>> get_extra_data;
+
+  /// Gets the SEI data, if any
+  ///
+  /// @param       data      Data associated with this encoder context
+  /// @param[out]  sei_data  Pointer to receive the SEI data
+  /// @param[out]  size      Pointer to receive the SEI data size
+  /// @return                true if SEI data available, false otherwise
+  ffi.Pointer<ffi.NativeFunction<_typedefC_66>> get_sei_data;
+
+  /// Returns desired audio format and sample information
+  ///
+  /// @param          data  Data associated with this encoder context
+  /// @param[in/out]  info  Audio format information
+  ffi.Pointer<ffi.NativeFunction<_typedefC_67>> get_audio_info;
+
+  /// Returns desired video format information
+  ///
+  /// @param          data  Data associated with this encoder context
+  /// @param[in/out]  info  Video format information
+  ffi.Pointer<ffi.NativeFunction<_typedefC_68>> get_video_info;
+
+  ffi.Pointer<ffi.Void> type_data;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_69>> free_type_data;
+
+  @ffi.Uint32()
+  int caps;
+
+  /// Gets the default settings for this encoder
+  ///
+  /// If get_defaults is also defined both will be called, and the first
+  /// call will be to get_defaults, then to get_defaults2.
+  ///
+  /// @param[out]  settings  Data to assign default settings to
+  /// @param[in]   typedata  Type Data
+  ffi.Pointer<ffi.NativeFunction<_typedefC_70>> get_defaults2;
+
+  /// Gets the property information of this encoder
+  ///
+  /// @param[in]   data      Pointer from create (or null)
+  /// @param[in]   typedata  Type Data
+  /// @return                The properties data
+  ffi.Pointer<ffi.NativeFunction<_typedefC_71>> get_properties2;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_72>> encode_texture;
+}
+
+class obs_output_info extends ffi.Struct {
+  ffi.Pointer<ffi.Int8> id;
+
+  @ffi.Uint32()
+  int flags;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_73>> get_name;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_74>> create;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_75>> destroy;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_76>> start;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_77>> stop;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_78>> raw_video;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_79>> raw_audio;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_80>> encoded_packet;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_81>> update;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_82>> get_defaults;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_83>> get_properties;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_84>> unused1;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_85>> get_total_bytes;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_86>> get_dropped_frames;
+
+  ffi.Pointer<ffi.Void> type_data;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_87>> free_type_data;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_88>> get_congestion;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_89>> get_connect_time_ms;
+
+  ffi.Pointer<ffi.Int8> encoded_video_codecs;
+
+  ffi.Pointer<ffi.Int8> encoded_audio_codecs;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_90>> raw_audio2;
+}
+
+class obs_service_info extends ffi.Struct {
+  ffi.Pointer<ffi.Int8> id;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_91>> get_name;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_92>> create;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_93>> destroy;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_94>> activate;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_95>> deactivate;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_96>> update;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_97>> get_defaults;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_98>> get_properties;
+
+  /// Called when getting ready to start up an output, before the encoders
+  /// and output are initialized
+  ///
+  /// @param  data    Internal service data
+  /// @param  output  Output context
+  /// @return         true to allow the output to start up,
+  /// false to prevent output from starting up
+  ffi.Pointer<ffi.NativeFunction<_typedefC_99>> initialize;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_100>> get_url;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_101>> get_key;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_102>> get_username;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_103>> get_password;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_104>> deprecated_1;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_105>> apply_encoder_settings;
+
+  ffi.Pointer<ffi.Void> type_data;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_106>> free_type_data;
+
+  ffi.Pointer<ffi.NativeFunction<_typedefC_107>> get_output_type;
+}
+
+/// @brief Fader types
+abstract class obs_fader_type {
+  /// @brief A simple cubic fader for controlling audio levels
+  ///
+  /// This is a very common type of software fader since it yields good
+  /// results while being quite performant.
+  /// The input value is mapped to mul values with the simple formula x^3.
+  static const int OBS_FADER_CUBIC = 0;
+
+  /// @brief A fader compliant to IEC 60-268-18
+  ///
+  /// This type of fader has several segments with different slopes that
+  /// map deflection linearly to dB values. The segments are defined as
+  /// in the following table:
+  ///
+  /// @code
+  /// Deflection           | Volume
+  /// ------------------------------------------
+  /// [ 100   %, 75   % ]  | [   0 dB,   -9 dB ]
+  /// [  75   %, 50   % ]  | [  -9 dB,  -20 dB ]
+  /// [  50   %, 30   % ]  | [ -20 dB,  -30 dB ]
+  /// [  30   %, 15   % ]  | [ -30 dB,  -40 dB ]
+  /// [  15   %,  7.5 % ]  | [ -40 dB,  -50 dB ]
+  /// [   7.5 %,  2.5 % ]  | [ -50 dB,  -60 dB ]
+  /// [   2.5 %,  0   % ]  | [ -60 dB, -inf dB ]
+  /// @endcode
+  static const int OBS_FADER_IEC = 1;
+
+  /// @brief Logarithmic fader
+  static const int OBS_FADER_LOG = 2;
+}
+
+/// @brief Peak meter types
+abstract class obs_peak_meter_type {
+  /// @brief A simple peak meter measuring the maximum of all samples.
+  ///
+  /// This was a very common type of peak meter used for audio, but
+  /// is not very accurate with regards to further audio processing.
+  static const int SAMPLE_PEAK_METER = 0;
+
+  /// @brief An accurate peak meter measure the maximum of inter-samples.
+  ///
+  /// This meter is more computational intensive due to 4x oversampling
+  /// to determine the true peak to an accuracy of +/- 0.5 dB.
+  static const int TRUE_PEAK_METER = 1;
+}
+
+abstract class obs_key {
+  static const int OBS_KEY_NONE = 0;
+  static const int OBS_KEY_RETURN = 1;
+  static const int OBS_KEY_ENTER = 2;
+  static const int OBS_KEY_ESCAPE = 3;
+  static const int OBS_KEY_TAB = 4;
+  static const int OBS_KEY_BACKTAB = 5;
+  static const int OBS_KEY_BACKSPACE = 6;
+  static const int OBS_KEY_INSERT = 7;
+  static const int OBS_KEY_DELETE = 8;
+  static const int OBS_KEY_PAUSE = 9;
+  static const int OBS_KEY_PRINT = 10;
+  static const int OBS_KEY_SYSREQ = 11;
+  static const int OBS_KEY_CLEAR = 12;
+  static const int OBS_KEY_HOME = 13;
+  static const int OBS_KEY_END = 14;
+  static const int OBS_KEY_LEFT = 15;
+  static const int OBS_KEY_UP = 16;
+  static const int OBS_KEY_RIGHT = 17;
+  static const int OBS_KEY_DOWN = 18;
+  static const int OBS_KEY_PAGEUP = 19;
+  static const int OBS_KEY_PAGEDOWN = 20;
+  static const int OBS_KEY_SHIFT = 21;
+  static const int OBS_KEY_CONTROL = 22;
+  static const int OBS_KEY_META = 23;
+  static const int OBS_KEY_ALT = 24;
+  static const int OBS_KEY_ALTGR = 25;
+  static const int OBS_KEY_CAPSLOCK = 26;
+  static const int OBS_KEY_NUMLOCK = 27;
+  static const int OBS_KEY_SCROLLLOCK = 28;
+  static const int OBS_KEY_F1 = 29;
+  static const int OBS_KEY_F2 = 30;
+  static const int OBS_KEY_F3 = 31;
+  static const int OBS_KEY_F4 = 32;
+  static const int OBS_KEY_F5 = 33;
+  static const int OBS_KEY_F6 = 34;
+  static const int OBS_KEY_F7 = 35;
+  static const int OBS_KEY_F8 = 36;
+  static const int OBS_KEY_F9 = 37;
+  static const int OBS_KEY_F10 = 38;
+  static const int OBS_KEY_F11 = 39;
+  static const int OBS_KEY_F12 = 40;
+  static const int OBS_KEY_F13 = 41;
+  static const int OBS_KEY_F14 = 42;
+  static const int OBS_KEY_F15 = 43;
+  static const int OBS_KEY_F16 = 44;
+  static const int OBS_KEY_F17 = 45;
+  static const int OBS_KEY_F18 = 46;
+  static const int OBS_KEY_F19 = 47;
+  static const int OBS_KEY_F20 = 48;
+  static const int OBS_KEY_F21 = 49;
+  static const int OBS_KEY_F22 = 50;
+  static const int OBS_KEY_F23 = 51;
+  static const int OBS_KEY_F24 = 52;
+  static const int OBS_KEY_F25 = 53;
+  static const int OBS_KEY_F26 = 54;
+  static const int OBS_KEY_F27 = 55;
+  static const int OBS_KEY_F28 = 56;
+  static const int OBS_KEY_F29 = 57;
+  static const int OBS_KEY_F30 = 58;
+  static const int OBS_KEY_F31 = 59;
+  static const int OBS_KEY_F32 = 60;
+  static const int OBS_KEY_F33 = 61;
+  static const int OBS_KEY_F34 = 62;
+  static const int OBS_KEY_F35 = 63;
+  static const int OBS_KEY_MENU = 64;
+  static const int OBS_KEY_HYPER_L = 65;
+  static const int OBS_KEY_HYPER_R = 66;
+  static const int OBS_KEY_HELP = 67;
+  static const int OBS_KEY_DIRECTION_L = 68;
+  static const int OBS_KEY_DIRECTION_R = 69;
+  static const int OBS_KEY_SPACE = 70;
+  static const int OBS_KEY_EXCLAM = 71;
+  static const int OBS_KEY_QUOTEDBL = 72;
+  static const int OBS_KEY_NUMBERSIGN = 73;
+  static const int OBS_KEY_DOLLAR = 74;
+  static const int OBS_KEY_PERCENT = 75;
+  static const int OBS_KEY_AMPERSAND = 76;
+  static const int OBS_KEY_APOSTROPHE = 77;
+  static const int OBS_KEY_PARENLEFT = 78;
+  static const int OBS_KEY_PARENRIGHT = 79;
+  static const int OBS_KEY_ASTERISK = 80;
+  static const int OBS_KEY_PLUS = 81;
+  static const int OBS_KEY_COMMA = 82;
+  static const int OBS_KEY_MINUS = 83;
+  static const int OBS_KEY_PERIOD = 84;
+  static const int OBS_KEY_SLASH = 85;
+  static const int OBS_KEY_0 = 86;
+  static const int OBS_KEY_1 = 87;
+  static const int OBS_KEY_2 = 88;
+  static const int OBS_KEY_3 = 89;
+  static const int OBS_KEY_4 = 90;
+  static const int OBS_KEY_5 = 91;
+  static const int OBS_KEY_6 = 92;
+  static const int OBS_KEY_7 = 93;
+  static const int OBS_KEY_8 = 94;
+  static const int OBS_KEY_9 = 95;
+  static const int OBS_KEY_NUMEQUAL = 96;
+  static const int OBS_KEY_NUMASTERISK = 97;
+  static const int OBS_KEY_NUMPLUS = 98;
+  static const int OBS_KEY_NUMCOMMA = 99;
+  static const int OBS_KEY_NUMMINUS = 100;
+  static const int OBS_KEY_NUMPERIOD = 101;
+  static const int OBS_KEY_NUMSLASH = 102;
+  static const int OBS_KEY_NUM0 = 103;
+  static const int OBS_KEY_NUM1 = 104;
+  static const int OBS_KEY_NUM2 = 105;
+  static const int OBS_KEY_NUM3 = 106;
+  static const int OBS_KEY_NUM4 = 107;
+  static const int OBS_KEY_NUM5 = 108;
+  static const int OBS_KEY_NUM6 = 109;
+  static const int OBS_KEY_NUM7 = 110;
+  static const int OBS_KEY_NUM8 = 111;
+  static const int OBS_KEY_NUM9 = 112;
+  static const int OBS_KEY_COLON = 113;
+  static const int OBS_KEY_SEMICOLON = 114;
+  static const int OBS_KEY_QUOTE = 115;
+  static const int OBS_KEY_LESS = 116;
+  static const int OBS_KEY_EQUAL = 117;
+  static const int OBS_KEY_GREATER = 118;
+  static const int OBS_KEY_QUESTION = 119;
+  static const int OBS_KEY_AT = 120;
+  static const int OBS_KEY_A = 121;
+  static const int OBS_KEY_B = 122;
+  static const int OBS_KEY_C = 123;
+  static const int OBS_KEY_D = 124;
+  static const int OBS_KEY_E = 125;
+  static const int OBS_KEY_F = 126;
+  static const int OBS_KEY_G = 127;
+  static const int OBS_KEY_H = 128;
+  static const int OBS_KEY_I = 129;
+  static const int OBS_KEY_J = 130;
+  static const int OBS_KEY_K = 131;
+  static const int OBS_KEY_L = 132;
+  static const int OBS_KEY_M = 133;
+  static const int OBS_KEY_N = 134;
+  static const int OBS_KEY_O = 135;
+  static const int OBS_KEY_P = 136;
+  static const int OBS_KEY_Q = 137;
+  static const int OBS_KEY_R = 138;
+  static const int OBS_KEY_S = 139;
+  static const int OBS_KEY_T = 140;
+  static const int OBS_KEY_U = 141;
+  static const int OBS_KEY_V = 142;
+  static const int OBS_KEY_W = 143;
+  static const int OBS_KEY_X = 144;
+  static const int OBS_KEY_Y = 145;
+  static const int OBS_KEY_Z = 146;
+  static const int OBS_KEY_BRACKETLEFT = 147;
+  static const int OBS_KEY_BACKSLASH = 148;
+  static const int OBS_KEY_BRACKETRIGHT = 149;
+  static const int OBS_KEY_ASCIICIRCUM = 150;
+  static const int OBS_KEY_UNDERSCORE = 151;
+  static const int OBS_KEY_QUOTELEFT = 152;
+  static const int OBS_KEY_BRACELEFT = 153;
+  static const int OBS_KEY_BAR = 154;
+  static const int OBS_KEY_BRACERIGHT = 155;
+  static const int OBS_KEY_ASCIITILDE = 156;
+  static const int OBS_KEY_NOBREAKSPACE = 157;
+  static const int OBS_KEY_EXCLAMDOWN = 158;
+  static const int OBS_KEY_CENT = 159;
+  static const int OBS_KEY_STERLING = 160;
+  static const int OBS_KEY_CURRENCY = 161;
+  static const int OBS_KEY_YEN = 162;
+  static const int OBS_KEY_BROKENBAR = 163;
+  static const int OBS_KEY_SECTION = 164;
+  static const int OBS_KEY_DIAERESIS = 165;
+  static const int OBS_KEY_COPYRIGHT = 166;
+  static const int OBS_KEY_ORDFEMININE = 167;
+  static const int OBS_KEY_GUILLEMOTLEFT = 168;
+  static const int OBS_KEY_NOTSIGN = 169;
+  static const int OBS_KEY_HYPHEN = 170;
+  static const int OBS_KEY_REGISTERED = 171;
+  static const int OBS_KEY_MACRON = 172;
+  static const int OBS_KEY_DEGREE = 173;
+  static const int OBS_KEY_PLUSMINUS = 174;
+  static const int OBS_KEY_TWOSUPERIOR = 175;
+  static const int OBS_KEY_THREESUPERIOR = 176;
+  static const int OBS_KEY_ACUTE = 177;
+  static const int OBS_KEY_MU = 178;
+  static const int OBS_KEY_PARAGRAPH = 179;
+  static const int OBS_KEY_PERIODCENTERED = 180;
+  static const int OBS_KEY_CEDILLA = 181;
+  static const int OBS_KEY_ONESUPERIOR = 182;
+  static const int OBS_KEY_MASCULINE = 183;
+  static const int OBS_KEY_GUILLEMOTRIGHT = 184;
+  static const int OBS_KEY_ONEQUARTER = 185;
+  static const int OBS_KEY_ONEHALF = 186;
+  static const int OBS_KEY_THREEQUARTERS = 187;
+  static const int OBS_KEY_QUESTIONDOWN = 188;
+  static const int OBS_KEY_AGRAVE = 189;
+  static const int OBS_KEY_AACUTE = 190;
+  static const int OBS_KEY_ACIRCUMFLEX = 191;
+  static const int OBS_KEY_ATILDE = 192;
+  static const int OBS_KEY_ADIAERESIS = 193;
+  static const int OBS_KEY_ARING = 194;
+  static const int OBS_KEY_AE = 195;
+  static const int OBS_KEY_CCEDILLA = 196;
+  static const int OBS_KEY_EGRAVE = 197;
+  static const int OBS_KEY_EACUTE = 198;
+  static const int OBS_KEY_ECIRCUMFLEX = 199;
+  static const int OBS_KEY_EDIAERESIS = 200;
+  static const int OBS_KEY_IGRAVE = 201;
+  static const int OBS_KEY_IACUTE = 202;
+  static const int OBS_KEY_ICIRCUMFLEX = 203;
+  static const int OBS_KEY_IDIAERESIS = 204;
+  static const int OBS_KEY_ETH = 205;
+  static const int OBS_KEY_NTILDE = 206;
+  static const int OBS_KEY_OGRAVE = 207;
+  static const int OBS_KEY_OACUTE = 208;
+  static const int OBS_KEY_OCIRCUMFLEX = 209;
+  static const int OBS_KEY_OTILDE = 210;
+  static const int OBS_KEY_ODIAERESIS = 211;
+  static const int OBS_KEY_MULTIPLY = 212;
+  static const int OBS_KEY_OOBLIQUE = 213;
+  static const int OBS_KEY_UGRAVE = 214;
+  static const int OBS_KEY_UACUTE = 215;
+  static const int OBS_KEY_UCIRCUMFLEX = 216;
+  static const int OBS_KEY_UDIAERESIS = 217;
+  static const int OBS_KEY_YACUTE = 218;
+  static const int OBS_KEY_THORN = 219;
+  static const int OBS_KEY_SSHARP = 220;
+  static const int OBS_KEY_DIVISION = 221;
+  static const int OBS_KEY_YDIAERESIS = 222;
+  static const int OBS_KEY_MULTI_KEY = 223;
+  static const int OBS_KEY_CODEINPUT = 224;
+  static const int OBS_KEY_SINGLECANDIDATE = 225;
+  static const int OBS_KEY_MULTIPLECANDIDATE = 226;
+  static const int OBS_KEY_PREVIOUSCANDIDATE = 227;
+  static const int OBS_KEY_MODE_SWITCH = 228;
+  static const int OBS_KEY_KANJI = 229;
+  static const int OBS_KEY_MUHENKAN = 230;
+  static const int OBS_KEY_HENKAN = 231;
+  static const int OBS_KEY_ROMAJI = 232;
+  static const int OBS_KEY_HIRAGANA = 233;
+  static const int OBS_KEY_KATAKANA = 234;
+  static const int OBS_KEY_HIRAGANA_KATAKANA = 235;
+  static const int OBS_KEY_ZENKAKU = 236;
+  static const int OBS_KEY_HANKAKU = 237;
+  static const int OBS_KEY_ZENKAKU_HANKAKU = 238;
+  static const int OBS_KEY_TOUROKU = 239;
+  static const int OBS_KEY_MASSYO = 240;
+  static const int OBS_KEY_KANA_LOCK = 241;
+  static const int OBS_KEY_KANA_SHIFT = 242;
+  static const int OBS_KEY_EISU_SHIFT = 243;
+  static const int OBS_KEY_EISU_TOGGLE = 244;
+  static const int OBS_KEY_HANGUL = 245;
+  static const int OBS_KEY_HANGUL_START = 246;
+  static const int OBS_KEY_HANGUL_END = 247;
+  static const int OBS_KEY_HANGUL_HANJA = 248;
+  static const int OBS_KEY_HANGUL_JAMO = 249;
+  static const int OBS_KEY_HANGUL_ROMAJA = 250;
+  static const int OBS_KEY_HANGUL_JEONJA = 251;
+  static const int OBS_KEY_HANGUL_BANJA = 252;
+  static const int OBS_KEY_HANGUL_PREHANJA = 253;
+  static const int OBS_KEY_HANGUL_POSTHANJA = 254;
+  static const int OBS_KEY_HANGUL_SPECIAL = 255;
+  static const int OBS_KEY_DEAD_GRAVE = 256;
+  static const int OBS_KEY_DEAD_ACUTE = 257;
+  static const int OBS_KEY_DEAD_CIRCUMFLEX = 258;
+  static const int OBS_KEY_DEAD_TILDE = 259;
+  static const int OBS_KEY_DEAD_MACRON = 260;
+  static const int OBS_KEY_DEAD_BREVE = 261;
+  static const int OBS_KEY_DEAD_ABOVEDOT = 262;
+  static const int OBS_KEY_DEAD_DIAERESIS = 263;
+  static const int OBS_KEY_DEAD_ABOVERING = 264;
+  static const int OBS_KEY_DEAD_DOUBLEACUTE = 265;
+  static const int OBS_KEY_DEAD_CARON = 266;
+  static const int OBS_KEY_DEAD_CEDILLA = 267;
+  static const int OBS_KEY_DEAD_OGONEK = 268;
+  static const int OBS_KEY_DEAD_IOTA = 269;
+  static const int OBS_KEY_DEAD_VOICED_SOUND = 270;
+  static const int OBS_KEY_DEAD_SEMIVOICED_SOUND = 271;
+  static const int OBS_KEY_DEAD_BELOWDOT = 272;
+  static const int OBS_KEY_DEAD_HOOK = 273;
+  static const int OBS_KEY_DEAD_HORN = 274;
+  static const int OBS_KEY_BACK = 275;
+  static const int OBS_KEY_FORWARD = 276;
+  static const int OBS_KEY_STOP = 277;
+  static const int OBS_KEY_REFRESH = 278;
+  static const int OBS_KEY_VOLUMEDOWN = 279;
+  static const int OBS_KEY_VOLUMEMUTE = 280;
+  static const int OBS_KEY_VOLUMEUP = 281;
+  static const int OBS_KEY_BASSBOOST = 282;
+  static const int OBS_KEY_BASSUP = 283;
+  static const int OBS_KEY_BASSDOWN = 284;
+  static const int OBS_KEY_TREBLEUP = 285;
+  static const int OBS_KEY_TREBLEDOWN = 286;
+  static const int OBS_KEY_MEDIAPLAY = 287;
+  static const int OBS_KEY_MEDIASTOP = 288;
+  static const int OBS_KEY_MEDIAPREVIOUS = 289;
+  static const int OBS_KEY_MEDIANEXT = 290;
+  static const int OBS_KEY_MEDIARECORD = 291;
+  static const int OBS_KEY_MEDIAPAUSE = 292;
+  static const int OBS_KEY_MEDIATOGGLEPLAYPAUSE = 293;
+  static const int OBS_KEY_HOMEPAGE = 294;
+  static const int OBS_KEY_FAVORITES = 295;
+  static const int OBS_KEY_SEARCH = 296;
+  static const int OBS_KEY_STANDBY = 297;
+  static const int OBS_KEY_OPENURL = 298;
+  static const int OBS_KEY_LAUNCHMAIL = 299;
+  static const int OBS_KEY_LAUNCHMEDIA = 300;
+  static const int OBS_KEY_LAUNCH0 = 301;
+  static const int OBS_KEY_LAUNCH1 = 302;
+  static const int OBS_KEY_LAUNCH2 = 303;
+  static const int OBS_KEY_LAUNCH3 = 304;
+  static const int OBS_KEY_LAUNCH4 = 305;
+  static const int OBS_KEY_LAUNCH5 = 306;
+  static const int OBS_KEY_LAUNCH6 = 307;
+  static const int OBS_KEY_LAUNCH7 = 308;
+  static const int OBS_KEY_LAUNCH8 = 309;
+  static const int OBS_KEY_LAUNCH9 = 310;
+  static const int OBS_KEY_LAUNCHA = 311;
+  static const int OBS_KEY_LAUNCHB = 312;
+  static const int OBS_KEY_LAUNCHC = 313;
+  static const int OBS_KEY_LAUNCHD = 314;
+  static const int OBS_KEY_LAUNCHE = 315;
+  static const int OBS_KEY_LAUNCHF = 316;
+  static const int OBS_KEY_LAUNCHG = 317;
+  static const int OBS_KEY_LAUNCHH = 318;
+  static const int OBS_KEY_MONBRIGHTNESSUP = 319;
+  static const int OBS_KEY_MONBRIGHTNESSDOWN = 320;
+  static const int OBS_KEY_KEYBOARDLIGHTONOFF = 321;
+  static const int OBS_KEY_KEYBOARDBRIGHTNESSUP = 322;
+  static const int OBS_KEY_KEYBOARDBRIGHTNESSDOWN = 323;
+  static const int OBS_KEY_POWEROFF = 324;
+  static const int OBS_KEY_WAKEUP = 325;
+  static const int OBS_KEY_EJECT = 326;
+  static const int OBS_KEY_SCREENSAVER = 327;
+  static const int OBS_KEY_WWW = 328;
+  static const int OBS_KEY_MEMO = 329;
+  static const int OBS_KEY_LIGHTBULB = 330;
+  static const int OBS_KEY_SHOP = 331;
+  static const int OBS_KEY_HISTORY = 332;
+  static const int OBS_KEY_ADDFAVORITE = 333;
+  static const int OBS_KEY_HOTLINKS = 334;
+  static const int OBS_KEY_BRIGHTNESSADJUST = 335;
+  static const int OBS_KEY_FINANCE = 336;
+  static const int OBS_KEY_COMMUNITY = 337;
+  static const int OBS_KEY_AUDIOREWIND = 338;
+  static const int OBS_KEY_BACKFORWARD = 339;
+  static const int OBS_KEY_APPLICATIONLEFT = 340;
+  static const int OBS_KEY_APPLICATIONRIGHT = 341;
+  static const int OBS_KEY_BOOK = 342;
+  static const int OBS_KEY_CD = 343;
+  static const int OBS_KEY_CALCULATOR = 344;
+  static const int OBS_KEY_TODOLIST = 345;
+  static const int OBS_KEY_CLEARGRAB = 346;
+  static const int OBS_KEY_CLOSE = 347;
+  static const int OBS_KEY_COPY = 348;
+  static const int OBS_KEY_CUT = 349;
+  static const int OBS_KEY_DISPLAY = 350;
+  static const int OBS_KEY_DOS = 351;
+  static const int OBS_KEY_DOCUMENTS = 352;
+  static const int OBS_KEY_EXCEL = 353;
+  static const int OBS_KEY_EXPLORER = 354;
+  static const int OBS_KEY_GAME = 355;
+  static const int OBS_KEY_GO = 356;
+  static const int OBS_KEY_ITOUCH = 357;
+  static const int OBS_KEY_LOGOFF = 358;
+  static const int OBS_KEY_MARKET = 359;
+  static const int OBS_KEY_MEETING = 360;
+  static const int OBS_KEY_MENUKB = 361;
+  static const int OBS_KEY_MENUPB = 362;
+  static const int OBS_KEY_MYSITES = 363;
+  static const int OBS_KEY_NEWS = 364;
+  static const int OBS_KEY_OFFICEHOME = 365;
+  static const int OBS_KEY_OPTION = 366;
+  static const int OBS_KEY_PASTE = 367;
+  static const int OBS_KEY_PHONE = 368;
+  static const int OBS_KEY_CALENDAR = 369;
+  static const int OBS_KEY_REPLY = 370;
+  static const int OBS_KEY_RELOAD = 371;
+  static const int OBS_KEY_ROTATEWINDOWS = 372;
+  static const int OBS_KEY_ROTATIONPB = 373;
+  static const int OBS_KEY_ROTATIONKB = 374;
+  static const int OBS_KEY_SAVE = 375;
+  static const int OBS_KEY_SEND = 376;
+  static const int OBS_KEY_SPELL = 377;
+  static const int OBS_KEY_SPLITSCREEN = 378;
+  static const int OBS_KEY_SUPPORT = 379;
+  static const int OBS_KEY_TASKPANE = 380;
+  static const int OBS_KEY_TERMINAL = 381;
+  static const int OBS_KEY_TOOLS = 382;
+  static const int OBS_KEY_TRAVEL = 383;
+  static const int OBS_KEY_VIDEO = 384;
+  static const int OBS_KEY_WORD = 385;
+  static const int OBS_KEY_XFER = 386;
+  static const int OBS_KEY_ZOOMIN = 387;
+  static const int OBS_KEY_ZOOMOUT = 388;
+  static const int OBS_KEY_AWAY = 389;
+  static const int OBS_KEY_MESSENGER = 390;
+  static const int OBS_KEY_WEBCAM = 391;
+  static const int OBS_KEY_MAILFORWARD = 392;
+  static const int OBS_KEY_PICTURES = 393;
+  static const int OBS_KEY_MUSIC = 394;
+  static const int OBS_KEY_BATTERY = 395;
+  static const int OBS_KEY_BLUETOOTH = 396;
+  static const int OBS_KEY_WLAN = 397;
+  static const int OBS_KEY_UWB = 398;
+  static const int OBS_KEY_AUDIOFORWARD = 399;
+  static const int OBS_KEY_AUDIOREPEAT = 400;
+  static const int OBS_KEY_AUDIORANDOMPLAY = 401;
+  static const int OBS_KEY_SUBTITLE = 402;
+  static const int OBS_KEY_AUDIOCYCLETRACK = 403;
+  static const int OBS_KEY_TIME = 404;
+  static const int OBS_KEY_HIBERNATE = 405;
+  static const int OBS_KEY_VIEW = 406;
+  static const int OBS_KEY_TOPMENU = 407;
+  static const int OBS_KEY_POWERDOWN = 408;
+  static const int OBS_KEY_SUSPEND = 409;
+  static const int OBS_KEY_CONTRASTADJUST = 410;
+  static const int OBS_KEY_MEDIALAST = 411;
+  static const int OBS_KEY_CALL = 412;
+  static const int OBS_KEY_CAMERA = 413;
+  static const int OBS_KEY_CAMERAFOCUS = 414;
+  static const int OBS_KEY_CONTEXT1 = 415;
+  static const int OBS_KEY_CONTEXT2 = 416;
+  static const int OBS_KEY_CONTEXT3 = 417;
+  static const int OBS_KEY_CONTEXT4 = 418;
+  static const int OBS_KEY_FLIP = 419;
+  static const int OBS_KEY_HANGUP = 420;
+  static const int OBS_KEY_NO = 421;
+  static const int OBS_KEY_SELECT = 422;
+  static const int OBS_KEY_YES = 423;
+  static const int OBS_KEY_TOGGLECALLHANGUP = 424;
+  static const int OBS_KEY_VOICEDIAL = 425;
+  static const int OBS_KEY_LASTNUMBERREDIAL = 426;
+  static const int OBS_KEY_EXECUTE = 427;
+  static const int OBS_KEY_PRINTER = 428;
+  static const int OBS_KEY_PLAY = 429;
+  static const int OBS_KEY_SLEEP = 430;
+  static const int OBS_KEY_ZOOM = 431;
+  static const int OBS_KEY_CANCEL = 432;
+  static const int OBS_KEY_MOUSE1 = 433;
+  static const int OBS_KEY_MOUSE2 = 434;
+  static const int OBS_KEY_MOUSE3 = 435;
+  static const int OBS_KEY_MOUSE4 = 436;
+  static const int OBS_KEY_MOUSE5 = 437;
+  static const int OBS_KEY_MOUSE6 = 438;
+  static const int OBS_KEY_MOUSE7 = 439;
+  static const int OBS_KEY_MOUSE8 = 440;
+  static const int OBS_KEY_MOUSE9 = 441;
+  static const int OBS_KEY_MOUSE10 = 442;
+  static const int OBS_KEY_MOUSE11 = 443;
+  static const int OBS_KEY_MOUSE12 = 444;
+  static const int OBS_KEY_MOUSE13 = 445;
+  static const int OBS_KEY_MOUSE14 = 446;
+  static const int OBS_KEY_MOUSE15 = 447;
+  static const int OBS_KEY_MOUSE16 = 448;
+  static const int OBS_KEY_MOUSE17 = 449;
+  static const int OBS_KEY_MOUSE18 = 450;
+  static const int OBS_KEY_MOUSE19 = 451;
+  static const int OBS_KEY_MOUSE20 = 452;
+  static const int OBS_KEY_MOUSE21 = 453;
+  static const int OBS_KEY_MOUSE22 = 454;
+  static const int OBS_KEY_MOUSE23 = 455;
+  static const int OBS_KEY_MOUSE24 = 456;
+  static const int OBS_KEY_MOUSE25 = 457;
+  static const int OBS_KEY_MOUSE26 = 458;
+  static const int OBS_KEY_MOUSE27 = 459;
+  static const int OBS_KEY_MOUSE28 = 460;
+  static const int OBS_KEY_MOUSE29 = 461;
+  static const int OBS_KEY_BACKSLASH_RT102 = 462;
+  static const int OBS_KEY_OPEN = 463;
+  static const int OBS_KEY_FIND = 464;
+  static const int OBS_KEY_REDO = 465;
+  static const int OBS_KEY_UNDO = 466;
+  static const int OBS_KEY_FRONT = 467;
+  static const int OBS_KEY_PROPS = 468;
+  static const int OBS_KEY_VK_CANCEL = 469;
+  static const int OBS_KEY_0x07 = 470;
+  static const int OBS_KEY_0x0A = 471;
+  static const int OBS_KEY_0x0B = 472;
+  static const int OBS_KEY_0x0E = 473;
+  static const int OBS_KEY_0x0F = 474;
+  static const int OBS_KEY_0x16 = 475;
+  static const int OBS_KEY_VK_JUNJA = 476;
+  static const int OBS_KEY_VK_FINAL = 477;
+  static const int OBS_KEY_0x1A = 478;
+  static const int OBS_KEY_VK_ACCEPT = 479;
+  static const int OBS_KEY_VK_MODECHANGE = 480;
+  static const int OBS_KEY_VK_SELECT = 481;
+  static const int OBS_KEY_VK_PRINT = 482;
+  static const int OBS_KEY_VK_EXECUTE = 483;
+  static const int OBS_KEY_VK_HELP = 484;
+  static const int OBS_KEY_0x30 = 485;
+  static const int OBS_KEY_0x31 = 486;
+  static const int OBS_KEY_0x32 = 487;
+  static const int OBS_KEY_0x33 = 488;
+  static const int OBS_KEY_0x34 = 489;
+  static const int OBS_KEY_0x35 = 490;
+  static const int OBS_KEY_0x36 = 491;
+  static const int OBS_KEY_0x37 = 492;
+  static const int OBS_KEY_0x38 = 493;
+  static const int OBS_KEY_0x39 = 494;
+  static const int OBS_KEY_0x3A = 495;
+  static const int OBS_KEY_0x3B = 496;
+  static const int OBS_KEY_0x3C = 497;
+  static const int OBS_KEY_0x3D = 498;
+  static const int OBS_KEY_0x3E = 499;
+  static const int OBS_KEY_0x3F = 500;
+  static const int OBS_KEY_0x40 = 501;
+  static const int OBS_KEY_0x41 = 502;
+  static const int OBS_KEY_0x42 = 503;
+  static const int OBS_KEY_0x43 = 504;
+  static const int OBS_KEY_0x44 = 505;
+  static const int OBS_KEY_0x45 = 506;
+  static const int OBS_KEY_0x46 = 507;
+  static const int OBS_KEY_0x47 = 508;
+  static const int OBS_KEY_0x48 = 509;
+  static const int OBS_KEY_0x49 = 510;
+  static const int OBS_KEY_0x4A = 511;
+  static const int OBS_KEY_0x4B = 512;
+  static const int OBS_KEY_0x4C = 513;
+  static const int OBS_KEY_0x4D = 514;
+  static const int OBS_KEY_0x4E = 515;
+  static const int OBS_KEY_0x4F = 516;
+  static const int OBS_KEY_0x50 = 517;
+  static const int OBS_KEY_0x51 = 518;
+  static const int OBS_KEY_0x52 = 519;
+  static const int OBS_KEY_0x53 = 520;
+  static const int OBS_KEY_0x54 = 521;
+  static const int OBS_KEY_0x55 = 522;
+  static const int OBS_KEY_0x56 = 523;
+  static const int OBS_KEY_0x57 = 524;
+  static const int OBS_KEY_0x58 = 525;
+  static const int OBS_KEY_0x59 = 526;
+  static const int OBS_KEY_0x5A = 527;
+  static const int OBS_KEY_VK_LWIN = 528;
+  static const int OBS_KEY_VK_RWIN = 529;
+  static const int OBS_KEY_VK_APPS = 530;
+  static const int OBS_KEY_0x5E = 531;
+  static const int OBS_KEY_VK_SLEEP = 532;
+  static const int OBS_KEY_VK_SEPARATOR = 533;
+  static const int OBS_KEY_0x88 = 534;
+  static const int OBS_KEY_0x89 = 535;
+  static const int OBS_KEY_0x8A = 536;
+  static const int OBS_KEY_0x8B = 537;
+  static const int OBS_KEY_0x8C = 538;
+  static const int OBS_KEY_0x8D = 539;
+  static const int OBS_KEY_0x8E = 540;
+  static const int OBS_KEY_0x8F = 541;
+  static const int OBS_KEY_VK_OEM_FJ_JISHO = 542;
+  static const int OBS_KEY_VK_OEM_FJ_LOYA = 543;
+  static const int OBS_KEY_VK_OEM_FJ_ROYA = 544;
+  static const int OBS_KEY_0x97 = 545;
+  static const int OBS_KEY_0x98 = 546;
+  static const int OBS_KEY_0x99 = 547;
+  static const int OBS_KEY_0x9A = 548;
+  static const int OBS_KEY_0x9B = 549;
+  static const int OBS_KEY_0x9C = 550;
+  static const int OBS_KEY_0x9D = 551;
+  static const int OBS_KEY_0x9E = 552;
+  static const int OBS_KEY_0x9F = 553;
+  static const int OBS_KEY_VK_LSHIFT = 554;
+  static const int OBS_KEY_VK_RSHIFT = 555;
+  static const int OBS_KEY_VK_LCONTROL = 556;
+  static const int OBS_KEY_VK_RCONTROL = 557;
+  static const int OBS_KEY_VK_LMENU = 558;
+  static const int OBS_KEY_VK_RMENU = 559;
+  static const int OBS_KEY_VK_BROWSER_BACK = 560;
+  static const int OBS_KEY_VK_BROWSER_FORWARD = 561;
+  static const int OBS_KEY_VK_BROWSER_REFRESH = 562;
+  static const int OBS_KEY_VK_BROWSER_STOP = 563;
+  static const int OBS_KEY_VK_BROWSER_SEARCH = 564;
+  static const int OBS_KEY_VK_BROWSER_FAVORITES = 565;
+  static const int OBS_KEY_VK_BROWSER_HOME = 566;
+  static const int OBS_KEY_VK_VOLUME_MUTE = 567;
+  static const int OBS_KEY_VK_VOLUME_DOWN = 568;
+  static const int OBS_KEY_VK_VOLUME_UP = 569;
+  static const int OBS_KEY_VK_MEDIA_NEXT_TRACK = 570;
+  static const int OBS_KEY_VK_MEDIA_PREV_TRACK = 571;
+  static const int OBS_KEY_VK_MEDIA_STOP = 572;
+  static const int OBS_KEY_VK_MEDIA_PLAY_PAUSE = 573;
+  static const int OBS_KEY_VK_LAUNCH_MAIL = 574;
+  static const int OBS_KEY_VK_LAUNCH_MEDIA_SELECT = 575;
+  static const int OBS_KEY_VK_LAUNCH_APP1 = 576;
+  static const int OBS_KEY_VK_LAUNCH_APP2 = 577;
+  static const int OBS_KEY_0xB8 = 578;
+  static const int OBS_KEY_0xB9 = 579;
+  static const int OBS_KEY_0xC1 = 580;
+  static const int OBS_KEY_0xC2 = 581;
+  static const int OBS_KEY_0xC3 = 582;
+  static const int OBS_KEY_0xC4 = 583;
+  static const int OBS_KEY_0xC5 = 584;
+  static const int OBS_KEY_0xC6 = 585;
+  static const int OBS_KEY_0xC7 = 586;
+  static const int OBS_KEY_0xC8 = 587;
+  static const int OBS_KEY_0xC9 = 588;
+  static const int OBS_KEY_0xCA = 589;
+  static const int OBS_KEY_0xCB = 590;
+  static const int OBS_KEY_0xCC = 591;
+  static const int OBS_KEY_0xCD = 592;
+  static const int OBS_KEY_0xCE = 593;
+  static const int OBS_KEY_0xCF = 594;
+  static const int OBS_KEY_0xD0 = 595;
+  static const int OBS_KEY_0xD1 = 596;
+  static const int OBS_KEY_0xD2 = 597;
+  static const int OBS_KEY_0xD3 = 598;
+  static const int OBS_KEY_0xD4 = 599;
+  static const int OBS_KEY_0xD5 = 600;
+  static const int OBS_KEY_0xD6 = 601;
+  static const int OBS_KEY_0xD7 = 602;
+  static const int OBS_KEY_0xD8 = 603;
+  static const int OBS_KEY_0xD9 = 604;
+  static const int OBS_KEY_0xDA = 605;
+  static const int OBS_KEY_VK_OEM_8 = 606;
+  static const int OBS_KEY_0xE0 = 607;
+  static const int OBS_KEY_VK_OEM_AX = 608;
+  static const int OBS_KEY_VK_ICO_HELP = 609;
+  static const int OBS_KEY_VK_ICO_00 = 610;
+  static const int OBS_KEY_VK_PROCESSKEY = 611;
+  static const int OBS_KEY_VK_ICO_CLEAR = 612;
+  static const int OBS_KEY_VK_PACKET = 613;
+  static const int OBS_KEY_0xE8 = 614;
+  static const int OBS_KEY_VK_OEM_RESET = 615;
+  static const int OBS_KEY_VK_OEM_JUMP = 616;
+  static const int OBS_KEY_VK_OEM_PA1 = 617;
+  static const int OBS_KEY_VK_OEM_PA2 = 618;
+  static const int OBS_KEY_VK_OEM_PA3 = 619;
+  static const int OBS_KEY_VK_OEM_WSCTRL = 620;
+  static const int OBS_KEY_VK_OEM_CUSEL = 621;
+  static const int OBS_KEY_VK_OEM_ATTN = 622;
+  static const int OBS_KEY_VK_OEM_FINISH = 623;
+  static const int OBS_KEY_VK_OEM_COPY = 624;
+  static const int OBS_KEY_VK_OEM_AUTO = 625;
+  static const int OBS_KEY_VK_OEM_ENLW = 626;
+  static const int OBS_KEY_VK_ATTN = 627;
+  static const int OBS_KEY_VK_CRSEL = 628;
+  static const int OBS_KEY_VK_EXSEL = 629;
+  static const int OBS_KEY_VK_EREOF = 630;
+  static const int OBS_KEY_VK_PLAY = 631;
+  static const int OBS_KEY_VK_ZOOM = 632;
+  static const int OBS_KEY_VK_NONAME = 633;
+  static const int OBS_KEY_VK_PA1 = 634;
+  static const int OBS_KEY_VK_OEM_CLEAR = 635;
+  static const int OBS_KEY_LAST_VALUE = 636;
+}
+
+class obs_key_combination extends ffi.Struct {
+  @ffi.Uint32()
+  int modifiers;
+
+  @ffi.Int32()
+  int key;
+}
+
+class obs_hotkey extends ffi.Struct {}
+
+class obs_hotkey_binding extends ffi.Struct {}
+
+abstract class obs_hotkey_registerer_type {
+  static const int OBS_HOTKEY_REGISTERER_FRONTEND = 0;
+  static const int OBS_HOTKEY_REGISTERER_SOURCE = 1;
+  static const int OBS_HOTKEY_REGISTERER_OUTPUT = 2;
+  static const int OBS_HOTKEY_REGISTERER_ENCODER = 3;
+  static const int OBS_HOTKEY_REGISTERER_SERVICE = 4;
+}
+
+class obs_hotkeys_translations extends ffi.Struct {
+  ffi.Pointer<ffi.Int8> insert;
+
+  ffi.Pointer<ffi.Int8> del;
+
+  ffi.Pointer<ffi.Int8> home;
+
+  ffi.Pointer<ffi.Int8> end;
+
+  ffi.Pointer<ffi.Int8> page_up;
+
+  ffi.Pointer<ffi.Int8> page_down;
+
+  ffi.Pointer<ffi.Int8> num_lock;
+
+  ffi.Pointer<ffi.Int8> scroll_lock;
+
+  ffi.Pointer<ffi.Int8> caps_lock;
+
+  ffi.Pointer<ffi.Int8> backspace;
+
+  ffi.Pointer<ffi.Int8> tab;
+
+  ffi.Pointer<ffi.Int8> print;
+
+  ffi.Pointer<ffi.Int8> pause;
+
+  ffi.Pointer<ffi.Int8> left;
+
+  ffi.Pointer<ffi.Int8> right;
+
+  ffi.Pointer<ffi.Int8> up;
+
+  ffi.Pointer<ffi.Int8> down;
+
+  ffi.Pointer<ffi.Int8> shift;
+
+  ffi.Pointer<ffi.Int8> alt;
+
+  ffi.Pointer<ffi.Int8> control;
+
+  ffi.Pointer<ffi.Int8> meta;
+
+  ffi.Pointer<ffi.Int8> menu;
+
+  ffi.Pointer<ffi.Int8> space;
+
+  ffi.Pointer<ffi.Int8> numpad_num;
+
+  ffi.Pointer<ffi.Int8> numpad_divide;
+
+  ffi.Pointer<ffi.Int8> numpad_multiply;
+
+  ffi.Pointer<ffi.Int8> numpad_minus;
+
+  ffi.Pointer<ffi.Int8> numpad_plus;
+
+  ffi.Pointer<ffi.Int8> numpad_decimal;
+
+  ffi.Pointer<ffi.Int8> apple_keypad_num;
+
+  ffi.Pointer<ffi.Int8> apple_keypad_divide;
+
+  ffi.Pointer<ffi.Int8> apple_keypad_multiply;
+
+  ffi.Pointer<ffi.Int8> apple_keypad_minus;
+
+  ffi.Pointer<ffi.Int8> apple_keypad_plus;
+
+  ffi.Pointer<ffi.Int8> apple_keypad_decimal;
+
+  ffi.Pointer<ffi.Int8> apple_keypad_equal;
+
+  ffi.Pointer<ffi.Int8> mouse_num;
+
+  ffi.Pointer<ffi.Int8> escape;
+}
+
+class dstr extends ffi.Struct {}
+
 /// Used for changing the order of items (for example, filters in a source,
 /// or items in a scene)
 abstract class obs_order_movement {
@@ -17505,9 +20283,7 @@ abstract class obs_bounds_type {
   static const int OBS_BOUNDS_MAX_ONLY = 6;
 }
 
-class obs_transform_info extends ffi.Struct {
-  // TODO: bug in ffigen: https://github.com/dart-lang/ffigen/pull/126
-}
+class obs_transform_info extends ffi.Struct {}
 
 /// Video initialization structure
 class obs_video_info extends ffi.Struct {
@@ -17572,26 +20348,9 @@ class obs_audio_info extends ffi.Struct {
   int speakers;
 }
 
-/// Sent to source filters via the filter_audio callback to allow filtering of
-/// audio data
-class obs_audio_data extends ffi.Struct {}
-
 /// Source audio output structure.  Used with obs_source_output_audio to output
 /// source audio.  Audio is automatically resampled and remixed as necessary.
 class obs_source_audio extends ffi.Struct {}
-
-/// Source asynchronous video output structure.  Used with
-/// obs_source_output_video to output asynchronous video.  Video is buffered as
-/// necessary to play according to timestamps.  When used with audio output,
-/// audio is synced to video as it is played.
-///
-/// If a YUV format is specified, it will be automatically upsampled and
-/// converted to RGB via shader on the graphics processor.
-///
-/// NOTE: Non-YUV formats will always be treated as full range with this
-/// structure!  Use obs_source_frame2 along with obs_source_output_video2
-/// instead if partial range support is desired for non-YUV video formats.
-class obs_source_frame extends ffi.Struct {}
 
 class obs_source_frame2 extends ffi.Struct {}
 
@@ -17677,8 +20436,6 @@ abstract class obs_monitoring_type {
   static const int OBS_MONITORING_TYPE_MONITOR_AND_OUTPUT = 2;
 }
 
-class obs_source_audio_mix extends ffi.Struct {}
-
 abstract class obs_transition_target {
   static const int OBS_TRANSITION_SOURCE_A = 0;
   static const int OBS_TRANSITION_SOURCE_B = 1;
@@ -17727,67 +20484,6 @@ class obs_sceneitem_crop extends ffi.Struct {
 
   @ffi.Int32()
   int bottom;
-}
-
-/// Encoder output packet
-class encoder_packet extends ffi.Struct {
-  /// < Packet data
-  ffi.Pointer<ffi.Uint8> data;
-
-  /// < Packet size
-  @ffi.Uint64()
-  int size;
-
-  /// < Presentation timestamp
-  @ffi.Int64()
-  int pts;
-
-  /// < Decode timestamp
-  @ffi.Int64()
-  int dts;
-
-  /// < Timebase numerator
-  @ffi.Int32()
-  int timebase_num;
-
-  /// < Timebase denominator
-  @ffi.Int32()
-  int timebase_den;
-
-  /// < Encoder type
-  @ffi.Int32()
-  int type;
-
-  /// < Is a keyframe
-  @ffi.Uint8()
-  int keyframe;
-
-  @ffi.Int64()
-  int dts_usec;
-
-  @ffi.Int64()
-  int sys_dts_usec;
-
-  /// Packet priority
-  ///
-  /// This is generally use by video encoders to specify the priority
-  /// of the packet.
-  @ffi.Int32()
-  int priority;
-
-  /// Dropped packet priority
-  ///
-  /// If this packet needs to be dropped, the next packet must be of this
-  /// priority or higher to continue transmission.
-  @ffi.Int32()
-  int drop_priority;
-
-  /// Audio track index (used with outputs)
-  @ffi.Uint64()
-  int track_idx;
-
-  /// Encoder from which the track originated from
-  ffi.Pointer<obs_encoder> encoder;
 }
 
 const int GS_MAX_TEXTURES = 8;
@@ -17947,6 +20643,64 @@ const int OBS_FONT_ITALIC = 2;
 const int OBS_FONT_UNDERLINE = 4;
 
 const int OBS_FONT_STRIKEOUT = 8;
+
+const int OBS_SOURCE_VIDEO = 1;
+
+const int OBS_SOURCE_AUDIO = 2;
+
+const int OBS_SOURCE_ASYNC = 4;
+
+const int OBS_SOURCE_ASYNC_VIDEO = 5;
+
+const int OBS_SOURCE_CUSTOM_DRAW = 8;
+
+const int OBS_SOURCE_INTERACTION = 32;
+
+const int OBS_SOURCE_COMPOSITE = 64;
+
+const int OBS_SOURCE_DO_NOT_DUPLICATE = 128;
+
+const int OBS_SOURCE_DEPRECATED = 256;
+
+const int OBS_SOURCE_DO_NOT_SELF_MONITOR = 512;
+
+const int OBS_SOURCE_CAP_DISABLED = 1024;
+
+const int OBS_SOURCE_CAP_OBSOLETE = 1024;
+
+const int OBS_SOURCE_MONITOR_BY_DEFAULT = 2048;
+
+const int OBS_SOURCE_SUBMIX = 4096;
+
+const int OBS_SOURCE_CONTROLLABLE_MEDIA = 8192;
+
+const int OBS_ENCODER_CAP_DEPRECATED = 1;
+
+const int OBS_ENCODER_CAP_PASS_TEXTURE = 2;
+
+const int OBS_ENCODER_CAP_DYN_BITRATE = 4;
+
+const int OBS_ENCODER_CAP_INTERNAL = 8;
+
+const int OBS_OUTPUT_VIDEO = 1;
+
+const int OBS_OUTPUT_AUDIO = 2;
+
+const int OBS_OUTPUT_AV = 3;
+
+const int OBS_OUTPUT_ENCODED = 4;
+
+const int OBS_OUTPUT_SERVICE = 8;
+
+const int OBS_OUTPUT_MULTI_TRACK = 16;
+
+const int OBS_OUTPUT_CAN_PAUSE = 32;
+
+const int OBS_INVALID_HOTKEY_ID = -1;
+
+const int OBS_INVALID_HOTKEY_PAIR_ID = -1;
+
+const int XINPUT_MOUSE_LEN = 33;
 
 const int OBS_SOURCE_FLAG_UNUSED_1 = 1;
 
@@ -24176,6 +26930,912 @@ typedef _dart_obs_proprety_text_type = int Function(
   ffi.Pointer<obs_property> p,
 );
 
+typedef _c_obs_register_source_s = ffi.Void Function(
+  ffi.Pointer<obs_source_info> info,
+  ffi.Uint64 size,
+);
+
+typedef _dart_obs_register_source_s = void Function(
+  ffi.Pointer<obs_source_info> info,
+  int size,
+);
+
+typedef _c_obs_register_encoder_s = ffi.Void Function(
+  ffi.Pointer<obs_encoder_info> info,
+  ffi.Uint64 size,
+);
+
+typedef _dart_obs_register_encoder_s = void Function(
+  ffi.Pointer<obs_encoder_info> info,
+  int size,
+);
+
+typedef _c_obs_register_output_s = ffi.Void Function(
+  ffi.Pointer<obs_output_info> info,
+  ffi.Uint64 size,
+);
+
+typedef _dart_obs_register_output_s = void Function(
+  ffi.Pointer<obs_output_info> info,
+  int size,
+);
+
+typedef _c_obs_register_service_s = ffi.Void Function(
+  ffi.Pointer<obs_service_info> info,
+  ffi.Uint64 size,
+);
+
+typedef _dart_obs_register_service_s = void Function(
+  ffi.Pointer<obs_service_info> info,
+  int size,
+);
+
+typedef _c_obs_fader_create = ffi.Pointer<obs_fader> Function(
+  ffi.Int32 type,
+);
+
+typedef _dart_obs_fader_create = ffi.Pointer<obs_fader> Function(
+  int type,
+);
+
+typedef _c_obs_fader_destroy = ffi.Void Function(
+  ffi.Pointer<obs_fader> fader,
+);
+
+typedef _dart_obs_fader_destroy = void Function(
+  ffi.Pointer<obs_fader> fader,
+);
+
+typedef _c_obs_fader_set_db = ffi.Uint8 Function(
+  ffi.Pointer<obs_fader> fader,
+  ffi.Float db,
+);
+
+typedef _dart_obs_fader_set_db = int Function(
+  ffi.Pointer<obs_fader> fader,
+  double db,
+);
+
+typedef _c_obs_fader_get_db = ffi.Float Function(
+  ffi.Pointer<obs_fader> fader,
+);
+
+typedef _dart_obs_fader_get_db = double Function(
+  ffi.Pointer<obs_fader> fader,
+);
+
+typedef _c_obs_fader_set_deflection = ffi.Uint8 Function(
+  ffi.Pointer<obs_fader> fader,
+  ffi.Float def,
+);
+
+typedef _dart_obs_fader_set_deflection = int Function(
+  ffi.Pointer<obs_fader> fader,
+  double def,
+);
+
+typedef _c_obs_fader_get_deflection = ffi.Float Function(
+  ffi.Pointer<obs_fader> fader,
+);
+
+typedef _dart_obs_fader_get_deflection = double Function(
+  ffi.Pointer<obs_fader> fader,
+);
+
+typedef _c_obs_fader_set_mul = ffi.Uint8 Function(
+  ffi.Pointer<obs_fader> fader,
+  ffi.Float mul,
+);
+
+typedef _dart_obs_fader_set_mul = int Function(
+  ffi.Pointer<obs_fader> fader,
+  double mul,
+);
+
+typedef _c_obs_fader_get_mul = ffi.Float Function(
+  ffi.Pointer<obs_fader> fader,
+);
+
+typedef _dart_obs_fader_get_mul = double Function(
+  ffi.Pointer<obs_fader> fader,
+);
+
+typedef _c_obs_fader_attach_source = ffi.Uint8 Function(
+  ffi.Pointer<obs_fader> fader,
+  ffi.Pointer<obs_source> source,
+);
+
+typedef _dart_obs_fader_attach_source = int Function(
+  ffi.Pointer<obs_fader> fader,
+  ffi.Pointer<obs_source> source,
+);
+
+typedef _c_obs_fader_detach_source = ffi.Void Function(
+  ffi.Pointer<obs_fader> fader,
+);
+
+typedef _dart_obs_fader_detach_source = void Function(
+  ffi.Pointer<obs_fader> fader,
+);
+
+typedef obs_fader_changed_t = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Float,
+);
+
+typedef _c_obs_fader_add_callback = ffi.Void Function(
+  ffi.Pointer<obs_fader> fader,
+  ffi.Pointer<ffi.NativeFunction<obs_fader_changed_t>> callback,
+  ffi.Pointer<ffi.Void> param,
+);
+
+typedef _dart_obs_fader_add_callback = void Function(
+  ffi.Pointer<obs_fader> fader,
+  ffi.Pointer<ffi.NativeFunction<obs_fader_changed_t>> callback,
+  ffi.Pointer<ffi.Void> param,
+);
+
+typedef _c_obs_fader_remove_callback = ffi.Void Function(
+  ffi.Pointer<obs_fader> fader,
+  ffi.Pointer<ffi.NativeFunction<obs_fader_changed_t>> callback,
+  ffi.Pointer<ffi.Void> param,
+);
+
+typedef _dart_obs_fader_remove_callback = void Function(
+  ffi.Pointer<obs_fader> fader,
+  ffi.Pointer<ffi.NativeFunction<obs_fader_changed_t>> callback,
+  ffi.Pointer<ffi.Void> param,
+);
+
+typedef _c_obs_volmeter_create = ffi.Pointer<obs_volmeter> Function(
+  ffi.Int32 type,
+);
+
+typedef _dart_obs_volmeter_create = ffi.Pointer<obs_volmeter> Function(
+  int type,
+);
+
+typedef _c_obs_volmeter_destroy = ffi.Void Function(
+  ffi.Pointer<obs_volmeter> volmeter,
+);
+
+typedef _dart_obs_volmeter_destroy = void Function(
+  ffi.Pointer<obs_volmeter> volmeter,
+);
+
+typedef _c_obs_volmeter_attach_source = ffi.Uint8 Function(
+  ffi.Pointer<obs_volmeter> volmeter,
+  ffi.Pointer<obs_source> source,
+);
+
+typedef _dart_obs_volmeter_attach_source = int Function(
+  ffi.Pointer<obs_volmeter> volmeter,
+  ffi.Pointer<obs_source> source,
+);
+
+typedef _c_obs_volmeter_detach_source = ffi.Void Function(
+  ffi.Pointer<obs_volmeter> volmeter,
+);
+
+typedef _dart_obs_volmeter_detach_source = void Function(
+  ffi.Pointer<obs_volmeter> volmeter,
+);
+
+typedef _c_obs_volmeter_set_peak_meter_type = ffi.Void Function(
+  ffi.Pointer<obs_volmeter> volmeter,
+  ffi.Int32 peak_meter_type,
+);
+
+typedef _dart_obs_volmeter_set_peak_meter_type = void Function(
+  ffi.Pointer<obs_volmeter> volmeter,
+  int peak_meter_type,
+);
+
+typedef _c_obs_volmeter_set_update_interval = ffi.Void Function(
+  ffi.Pointer<obs_volmeter> volmeter,
+  ffi.Uint32 ms,
+);
+
+typedef _dart_obs_volmeter_set_update_interval = void Function(
+  ffi.Pointer<obs_volmeter> volmeter,
+  int ms,
+);
+
+typedef _c_obs_volmeter_get_update_interval = ffi.Uint32 Function(
+  ffi.Pointer<obs_volmeter> volmeter,
+);
+
+typedef _dart_obs_volmeter_get_update_interval = int Function(
+  ffi.Pointer<obs_volmeter> volmeter,
+);
+
+typedef _c_obs_volmeter_get_nr_channels = ffi.Int32 Function(
+  ffi.Pointer<obs_volmeter> volmeter,
+);
+
+typedef _dart_obs_volmeter_get_nr_channels = int Function(
+  ffi.Pointer<obs_volmeter> volmeter,
+);
+
+typedef obs_volmeter_updated_t = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<ffi.Float>,
+  ffi.Pointer<ffi.Float>,
+  ffi.Pointer<ffi.Float>,
+);
+
+typedef _c_obs_volmeter_add_callback = ffi.Void Function(
+  ffi.Pointer<obs_volmeter> volmeter,
+  ffi.Pointer<ffi.NativeFunction<obs_volmeter_updated_t>> callback,
+  ffi.Pointer<ffi.Void> param,
+);
+
+typedef _dart_obs_volmeter_add_callback = void Function(
+  ffi.Pointer<obs_volmeter> volmeter,
+  ffi.Pointer<ffi.NativeFunction<obs_volmeter_updated_t>> callback,
+  ffi.Pointer<ffi.Void> param,
+);
+
+typedef _c_obs_volmeter_remove_callback = ffi.Void Function(
+  ffi.Pointer<obs_volmeter> volmeter,
+  ffi.Pointer<ffi.NativeFunction<obs_volmeter_updated_t>> callback,
+  ffi.Pointer<ffi.Void> param,
+);
+
+typedef _dart_obs_volmeter_remove_callback = void Function(
+  ffi.Pointer<obs_volmeter> volmeter,
+  ffi.Pointer<ffi.NativeFunction<obs_volmeter_updated_t>> callback,
+  ffi.Pointer<ffi.Void> param,
+);
+
+typedef _c_obs_mul_to_db = ffi.Float Function(
+  ffi.Float mul,
+);
+
+typedef _dart_obs_mul_to_db = double Function(
+  double mul,
+);
+
+typedef _c_obs_db_to_mul = ffi.Float Function(
+  ffi.Float db,
+);
+
+typedef _dart_obs_db_to_mul = double Function(
+  double db,
+);
+
+typedef _c_obs_hotkey_get_id = ffi.Uint64 Function(
+  ffi.Pointer<obs_hotkey> key,
+);
+
+typedef _dart_obs_hotkey_get_id = int Function(
+  ffi.Pointer<obs_hotkey> key,
+);
+
+typedef _c_obs_hotkey_get_name = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<obs_hotkey> key,
+);
+
+typedef _dart_obs_hotkey_get_name = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<obs_hotkey> key,
+);
+
+typedef _c_obs_hotkey_get_description = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<obs_hotkey> key,
+);
+
+typedef _dart_obs_hotkey_get_description = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<obs_hotkey> key,
+);
+
+typedef _c_obs_hotkey_get_registerer_type = ffi.Int32 Function(
+  ffi.Pointer<obs_hotkey> key,
+);
+
+typedef _dart_obs_hotkey_get_registerer_type = int Function(
+  ffi.Pointer<obs_hotkey> key,
+);
+
+typedef _c_obs_hotkey_get_registerer = ffi.Pointer<ffi.Void> Function(
+  ffi.Pointer<obs_hotkey> key,
+);
+
+typedef _dart_obs_hotkey_get_registerer = ffi.Pointer<ffi.Void> Function(
+  ffi.Pointer<obs_hotkey> key,
+);
+
+typedef _c_obs_hotkey_get_pair_partner_id = ffi.Uint64 Function(
+  ffi.Pointer<obs_hotkey> key,
+);
+
+typedef _dart_obs_hotkey_get_pair_partner_id = int Function(
+  ffi.Pointer<obs_hotkey> key,
+);
+
+typedef _c_obs_hotkey_binding_get_hotkey_id = ffi.Uint64 Function(
+  ffi.Pointer<obs_hotkey_binding> binding,
+);
+
+typedef _dart_obs_hotkey_binding_get_hotkey_id = int Function(
+  ffi.Pointer<obs_hotkey_binding> binding,
+);
+
+typedef _c_obs_hotkey_binding_get_hotkey = ffi.Pointer<obs_hotkey> Function(
+  ffi.Pointer<obs_hotkey_binding> binding,
+);
+
+typedef _dart_obs_hotkey_binding_get_hotkey = ffi.Pointer<obs_hotkey> Function(
+  ffi.Pointer<obs_hotkey_binding> binding,
+);
+
+typedef _c_obs_hotkey_set_name = ffi.Void Function(
+  ffi.Uint64 id,
+  ffi.Pointer<ffi.Int8> name,
+);
+
+typedef _dart_obs_hotkey_set_name = void Function(
+  int id,
+  ffi.Pointer<ffi.Int8> name,
+);
+
+typedef _c_obs_hotkey_set_description = ffi.Void Function(
+  ffi.Uint64 id,
+  ffi.Pointer<ffi.Int8> desc,
+);
+
+typedef _dart_obs_hotkey_set_description = void Function(
+  int id,
+  ffi.Pointer<ffi.Int8> desc,
+);
+
+typedef _c_obs_hotkey_pair_set_names = ffi.Void Function(
+  ffi.Uint64 id,
+  ffi.Pointer<ffi.Int8> name0,
+  ffi.Pointer<ffi.Int8> name1,
+);
+
+typedef _dart_obs_hotkey_pair_set_names = void Function(
+  int id,
+  ffi.Pointer<ffi.Int8> name0,
+  ffi.Pointer<ffi.Int8> name1,
+);
+
+typedef _c_obs_hotkey_pair_set_descriptions = ffi.Void Function(
+  ffi.Uint64 id,
+  ffi.Pointer<ffi.Int8> desc0,
+  ffi.Pointer<ffi.Int8> desc1,
+);
+
+typedef _dart_obs_hotkey_pair_set_descriptions = void Function(
+  int id,
+  ffi.Pointer<ffi.Int8> desc0,
+  ffi.Pointer<ffi.Int8> desc1,
+);
+
+typedef _c_obs_hotkeys_set_translations_s = ffi.Void Function(
+  ffi.Pointer<obs_hotkeys_translations> translations,
+  ffi.Uint64 size,
+);
+
+typedef _dart_obs_hotkeys_set_translations_s = void Function(
+  ffi.Pointer<obs_hotkeys_translations> translations,
+  int size,
+);
+
+typedef _c_obs_hotkeys_set_audio_hotkeys_translations = ffi.Void Function(
+  ffi.Pointer<ffi.Int8> mute,
+  ffi.Pointer<ffi.Int8> unmute,
+  ffi.Pointer<ffi.Int8> push_to_mute,
+  ffi.Pointer<ffi.Int8> push_to_talk,
+);
+
+typedef _dart_obs_hotkeys_set_audio_hotkeys_translations = void Function(
+  ffi.Pointer<ffi.Int8> mute,
+  ffi.Pointer<ffi.Int8> unmute,
+  ffi.Pointer<ffi.Int8> push_to_mute,
+  ffi.Pointer<ffi.Int8> push_to_talk,
+);
+
+typedef _c_obs_hotkeys_set_sceneitem_hotkeys_translations = ffi.Void Function(
+  ffi.Pointer<ffi.Int8> show_1,
+  ffi.Pointer<ffi.Int8> hide_1,
+);
+
+typedef _dart_obs_hotkeys_set_sceneitem_hotkeys_translations = void Function(
+  ffi.Pointer<ffi.Int8> show_1,
+  ffi.Pointer<ffi.Int8> hide_1,
+);
+
+typedef obs_hotkey_func = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Uint64,
+  ffi.Pointer<obs_hotkey>,
+  ffi.Uint8,
+);
+
+typedef _c_obs_hotkey_register_frontend = ffi.Uint64 Function(
+  ffi.Pointer<ffi.Int8> name,
+  ffi.Pointer<ffi.Int8> description,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_func>> func,
+  ffi.Pointer<ffi.Void> data,
+);
+
+typedef _dart_obs_hotkey_register_frontend = int Function(
+  ffi.Pointer<ffi.Int8> name,
+  ffi.Pointer<ffi.Int8> description,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_func>> func,
+  ffi.Pointer<ffi.Void> data,
+);
+
+typedef _c_obs_hotkey_register_encoder = ffi.Uint64 Function(
+  ffi.Pointer<obs_encoder> encoder,
+  ffi.Pointer<ffi.Int8> name,
+  ffi.Pointer<ffi.Int8> description,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_func>> func,
+  ffi.Pointer<ffi.Void> data,
+);
+
+typedef _dart_obs_hotkey_register_encoder = int Function(
+  ffi.Pointer<obs_encoder> encoder,
+  ffi.Pointer<ffi.Int8> name,
+  ffi.Pointer<ffi.Int8> description,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_func>> func,
+  ffi.Pointer<ffi.Void> data,
+);
+
+typedef _c_obs_hotkey_register_output = ffi.Uint64 Function(
+  ffi.Pointer<obs_output> output,
+  ffi.Pointer<ffi.Int8> name,
+  ffi.Pointer<ffi.Int8> description,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_func>> func,
+  ffi.Pointer<ffi.Void> data,
+);
+
+typedef _dart_obs_hotkey_register_output = int Function(
+  ffi.Pointer<obs_output> output,
+  ffi.Pointer<ffi.Int8> name,
+  ffi.Pointer<ffi.Int8> description,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_func>> func,
+  ffi.Pointer<ffi.Void> data,
+);
+
+typedef _c_obs_hotkey_register_service = ffi.Uint64 Function(
+  ffi.Pointer<obs_service> service,
+  ffi.Pointer<ffi.Int8> name,
+  ffi.Pointer<ffi.Int8> description,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_func>> func,
+  ffi.Pointer<ffi.Void> data,
+);
+
+typedef _dart_obs_hotkey_register_service = int Function(
+  ffi.Pointer<obs_service> service,
+  ffi.Pointer<ffi.Int8> name,
+  ffi.Pointer<ffi.Int8> description,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_func>> func,
+  ffi.Pointer<ffi.Void> data,
+);
+
+typedef _c_obs_hotkey_register_source = ffi.Uint64 Function(
+  ffi.Pointer<obs_source> source,
+  ffi.Pointer<ffi.Int8> name,
+  ffi.Pointer<ffi.Int8> description,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_func>> func,
+  ffi.Pointer<ffi.Void> data,
+);
+
+typedef _dart_obs_hotkey_register_source = int Function(
+  ffi.Pointer<obs_source> source,
+  ffi.Pointer<ffi.Int8> name,
+  ffi.Pointer<ffi.Int8> description,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_func>> func,
+  ffi.Pointer<ffi.Void> data,
+);
+
+typedef obs_hotkey_active_func = ffi.Uint8 Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Uint64,
+  ffi.Pointer<obs_hotkey>,
+  ffi.Uint8,
+);
+
+typedef _c_obs_hotkey_pair_register_frontend = ffi.Uint64 Function(
+  ffi.Pointer<ffi.Int8> name0,
+  ffi.Pointer<ffi.Int8> description0,
+  ffi.Pointer<ffi.Int8> name1,
+  ffi.Pointer<ffi.Int8> description1,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func0,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func1,
+  ffi.Pointer<ffi.Void> data0,
+  ffi.Pointer<ffi.Void> data1,
+);
+
+typedef _dart_obs_hotkey_pair_register_frontend = int Function(
+  ffi.Pointer<ffi.Int8> name0,
+  ffi.Pointer<ffi.Int8> description0,
+  ffi.Pointer<ffi.Int8> name1,
+  ffi.Pointer<ffi.Int8> description1,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func0,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func1,
+  ffi.Pointer<ffi.Void> data0,
+  ffi.Pointer<ffi.Void> data1,
+);
+
+typedef _c_obs_hotkey_pair_register_encoder = ffi.Uint64 Function(
+  ffi.Pointer<obs_encoder> encoder,
+  ffi.Pointer<ffi.Int8> name0,
+  ffi.Pointer<ffi.Int8> description0,
+  ffi.Pointer<ffi.Int8> name1,
+  ffi.Pointer<ffi.Int8> description1,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func0,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func1,
+  ffi.Pointer<ffi.Void> data0,
+  ffi.Pointer<ffi.Void> data1,
+);
+
+typedef _dart_obs_hotkey_pair_register_encoder = int Function(
+  ffi.Pointer<obs_encoder> encoder,
+  ffi.Pointer<ffi.Int8> name0,
+  ffi.Pointer<ffi.Int8> description0,
+  ffi.Pointer<ffi.Int8> name1,
+  ffi.Pointer<ffi.Int8> description1,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func0,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func1,
+  ffi.Pointer<ffi.Void> data0,
+  ffi.Pointer<ffi.Void> data1,
+);
+
+typedef _c_obs_hotkey_pair_register_output = ffi.Uint64 Function(
+  ffi.Pointer<obs_output> output,
+  ffi.Pointer<ffi.Int8> name0,
+  ffi.Pointer<ffi.Int8> description0,
+  ffi.Pointer<ffi.Int8> name1,
+  ffi.Pointer<ffi.Int8> description1,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func0,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func1,
+  ffi.Pointer<ffi.Void> data0,
+  ffi.Pointer<ffi.Void> data1,
+);
+
+typedef _dart_obs_hotkey_pair_register_output = int Function(
+  ffi.Pointer<obs_output> output,
+  ffi.Pointer<ffi.Int8> name0,
+  ffi.Pointer<ffi.Int8> description0,
+  ffi.Pointer<ffi.Int8> name1,
+  ffi.Pointer<ffi.Int8> description1,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func0,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func1,
+  ffi.Pointer<ffi.Void> data0,
+  ffi.Pointer<ffi.Void> data1,
+);
+
+typedef _c_obs_hotkey_pair_register_service = ffi.Uint64 Function(
+  ffi.Pointer<obs_service> service,
+  ffi.Pointer<ffi.Int8> name0,
+  ffi.Pointer<ffi.Int8> description0,
+  ffi.Pointer<ffi.Int8> name1,
+  ffi.Pointer<ffi.Int8> description1,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func0,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func1,
+  ffi.Pointer<ffi.Void> data0,
+  ffi.Pointer<ffi.Void> data1,
+);
+
+typedef _dart_obs_hotkey_pair_register_service = int Function(
+  ffi.Pointer<obs_service> service,
+  ffi.Pointer<ffi.Int8> name0,
+  ffi.Pointer<ffi.Int8> description0,
+  ffi.Pointer<ffi.Int8> name1,
+  ffi.Pointer<ffi.Int8> description1,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func0,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func1,
+  ffi.Pointer<ffi.Void> data0,
+  ffi.Pointer<ffi.Void> data1,
+);
+
+typedef _c_obs_hotkey_pair_register_source = ffi.Uint64 Function(
+  ffi.Pointer<obs_source> source,
+  ffi.Pointer<ffi.Int8> name0,
+  ffi.Pointer<ffi.Int8> description0,
+  ffi.Pointer<ffi.Int8> name1,
+  ffi.Pointer<ffi.Int8> description1,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func0,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func1,
+  ffi.Pointer<ffi.Void> data0,
+  ffi.Pointer<ffi.Void> data1,
+);
+
+typedef _dart_obs_hotkey_pair_register_source = int Function(
+  ffi.Pointer<obs_source> source,
+  ffi.Pointer<ffi.Int8> name0,
+  ffi.Pointer<ffi.Int8> description0,
+  ffi.Pointer<ffi.Int8> name1,
+  ffi.Pointer<ffi.Int8> description1,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func0,
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_active_func>> func1,
+  ffi.Pointer<ffi.Void> data0,
+  ffi.Pointer<ffi.Void> data1,
+);
+
+typedef _c_obs_hotkey_unregister = ffi.Void Function(
+  ffi.Uint64 id,
+);
+
+typedef _dart_obs_hotkey_unregister = void Function(
+  int id,
+);
+
+typedef _c_obs_hotkey_pair_unregister = ffi.Void Function(
+  ffi.Uint64 id,
+);
+
+typedef _dart_obs_hotkey_pair_unregister = void Function(
+  int id,
+);
+
+typedef _c_obs_hotkey_load_bindings = ffi.Void Function(
+  ffi.Uint64 id,
+  ffi.Pointer<obs_key_combination> combinations,
+  ffi.Uint64 num,
+);
+
+typedef _dart_obs_hotkey_load_bindings = void Function(
+  int id,
+  ffi.Pointer<obs_key_combination> combinations,
+  int num,
+);
+
+typedef _c_obs_hotkey_load = ffi.Void Function(
+  ffi.Uint64 id,
+  ffi.Pointer<obs_data_array> data,
+);
+
+typedef _dart_obs_hotkey_load = void Function(
+  int id,
+  ffi.Pointer<obs_data_array> data,
+);
+
+typedef _c_obs_hotkeys_load_encoder = ffi.Void Function(
+  ffi.Pointer<obs_encoder> encoder,
+  ffi.Pointer<obs_data> hotkeys,
+);
+
+typedef _dart_obs_hotkeys_load_encoder = void Function(
+  ffi.Pointer<obs_encoder> encoder,
+  ffi.Pointer<obs_data> hotkeys,
+);
+
+typedef _c_obs_hotkeys_load_output = ffi.Void Function(
+  ffi.Pointer<obs_output> output,
+  ffi.Pointer<obs_data> hotkeys,
+);
+
+typedef _dart_obs_hotkeys_load_output = void Function(
+  ffi.Pointer<obs_output> output,
+  ffi.Pointer<obs_data> hotkeys,
+);
+
+typedef _c_obs_hotkeys_load_service = ffi.Void Function(
+  ffi.Pointer<obs_service> service,
+  ffi.Pointer<obs_data> hotkeys,
+);
+
+typedef _dart_obs_hotkeys_load_service = void Function(
+  ffi.Pointer<obs_service> service,
+  ffi.Pointer<obs_data> hotkeys,
+);
+
+typedef _c_obs_hotkeys_load_source = ffi.Void Function(
+  ffi.Pointer<obs_source> source,
+  ffi.Pointer<obs_data> hotkeys,
+);
+
+typedef _dart_obs_hotkeys_load_source = void Function(
+  ffi.Pointer<obs_source> source,
+  ffi.Pointer<obs_data> hotkeys,
+);
+
+typedef _c_obs_hotkey_pair_load = ffi.Void Function(
+  ffi.Uint64 id,
+  ffi.Pointer<obs_data_array> data0,
+  ffi.Pointer<obs_data_array> data1,
+);
+
+typedef _dart_obs_hotkey_pair_load = void Function(
+  int id,
+  ffi.Pointer<obs_data_array> data0,
+  ffi.Pointer<obs_data_array> data1,
+);
+
+typedef _c_obs_hotkey_save = ffi.Pointer<obs_data_array> Function(
+  ffi.Uint64 id,
+);
+
+typedef _dart_obs_hotkey_save = ffi.Pointer<obs_data_array> Function(
+  int id,
+);
+
+typedef _c_obs_hotkey_pair_save = ffi.Void Function(
+  ffi.Uint64 id,
+  ffi.Pointer<ffi.Pointer<obs_data_array>> p_data0,
+  ffi.Pointer<ffi.Pointer<obs_data_array>> p_data1,
+);
+
+typedef _dart_obs_hotkey_pair_save = void Function(
+  int id,
+  ffi.Pointer<ffi.Pointer<obs_data_array>> p_data0,
+  ffi.Pointer<ffi.Pointer<obs_data_array>> p_data1,
+);
+
+typedef _c_obs_hotkeys_save_encoder = ffi.Pointer<obs_data> Function(
+  ffi.Pointer<obs_encoder> encoder,
+);
+
+typedef _dart_obs_hotkeys_save_encoder = ffi.Pointer<obs_data> Function(
+  ffi.Pointer<obs_encoder> encoder,
+);
+
+typedef _c_obs_hotkeys_save_output = ffi.Pointer<obs_data> Function(
+  ffi.Pointer<obs_output> output,
+);
+
+typedef _dart_obs_hotkeys_save_output = ffi.Pointer<obs_data> Function(
+  ffi.Pointer<obs_output> output,
+);
+
+typedef _c_obs_hotkeys_save_service = ffi.Pointer<obs_data> Function(
+  ffi.Pointer<obs_service> service,
+);
+
+typedef _dart_obs_hotkeys_save_service = ffi.Pointer<obs_data> Function(
+  ffi.Pointer<obs_service> service,
+);
+
+typedef _c_obs_hotkeys_save_source = ffi.Pointer<obs_data> Function(
+  ffi.Pointer<obs_source> source,
+);
+
+typedef _dart_obs_hotkeys_save_source = ffi.Pointer<obs_data> Function(
+  ffi.Pointer<obs_source> source,
+);
+
+typedef obs_hotkey_enum_func = ffi.Uint8 Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Uint64,
+  ffi.Pointer<obs_hotkey>,
+);
+
+typedef _c_obs_enum_hotkeys = ffi.Void Function(
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_enum_func>> func,
+  ffi.Pointer<ffi.Void> data,
+);
+
+typedef _dart_obs_enum_hotkeys = void Function(
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_enum_func>> func,
+  ffi.Pointer<ffi.Void> data,
+);
+
+typedef obs_hotkey_binding_enum_func = ffi.Uint8 Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Uint64,
+  ffi.Pointer<obs_hotkey_binding>,
+);
+
+typedef _c_obs_enum_hotkey_bindings = ffi.Void Function(
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_binding_enum_func>> func,
+  ffi.Pointer<ffi.Void> data,
+);
+
+typedef _dart_obs_enum_hotkey_bindings = void Function(
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_binding_enum_func>> func,
+  ffi.Pointer<ffi.Void> data,
+);
+
+typedef _c_obs_hotkey_enable_background_press = ffi.Void Function(
+  ffi.Uint8 enable,
+);
+
+typedef _dart_obs_hotkey_enable_background_press = void Function(
+  int enable,
+);
+
+typedef _c_obs_hotkey_enable_strict_modifiers = ffi.Void Function(
+  ffi.Uint8 enable,
+);
+
+typedef _dart_obs_hotkey_enable_strict_modifiers = void Function(
+  int enable,
+);
+
+typedef obs_hotkey_callback_router_func = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Uint64,
+  ffi.Uint8,
+);
+
+typedef _c_obs_hotkey_set_callback_routing_func = ffi.Void Function(
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_callback_router_func>> func,
+  ffi.Pointer<ffi.Void> data,
+);
+
+typedef _dart_obs_hotkey_set_callback_routing_func = void Function(
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_callback_router_func>> func,
+  ffi.Pointer<ffi.Void> data,
+);
+
+typedef _c_obs_hotkey_trigger_routed_callback = ffi.Void Function(
+  ffi.Uint64 id,
+  ffi.Uint8 pressed,
+);
+
+typedef _dart_obs_hotkey_trigger_routed_callback = void Function(
+  int id,
+  int pressed,
+);
+
+typedef _c_obs_hotkey_enable_callback_rerouting = ffi.Void Function(
+  ffi.Uint8 enable,
+);
+
+typedef _dart_obs_hotkey_enable_callback_rerouting = void Function(
+  int enable,
+);
+
+typedef obs_hotkey_atomic_update_func = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _c_obs_hotkey_update_atomic = ffi.Void Function(
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_atomic_update_func>> func,
+  ffi.Pointer<ffi.Void> data,
+);
+
+typedef _dart_obs_hotkey_update_atomic = void Function(
+  ffi.Pointer<ffi.NativeFunction<obs_hotkey_atomic_update_func>> func,
+  ffi.Pointer<ffi.Void> data,
+);
+
+typedef _c_obs_key_to_str = ffi.Void Function(
+  ffi.Int32 key,
+  ffi.Pointer<dstr> str,
+);
+
+typedef _dart_obs_key_to_str = void Function(
+  int key,
+  ffi.Pointer<dstr> str,
+);
+
+typedef _c_obs_key_from_virtual_key = ffi.Int32 Function(
+  ffi.Int32 code,
+);
+
+typedef _dart_obs_key_from_virtual_key = int Function(
+  int code,
+);
+
+typedef _c_obs_key_to_virtual_key = ffi.Int32 Function(
+  ffi.Int32 key,
+);
+
+typedef _dart_obs_key_to_virtual_key = int Function(
+  int key,
+);
+
+typedef _c_obs_key_to_name = ffi.Pointer<ffi.Int8> Function(
+  ffi.Int32 key,
+);
+
+typedef _dart_obs_key_to_name = ffi.Pointer<ffi.Int8> Function(
+  int key,
+);
+
+typedef _c_obs_key_from_name = ffi.Int32 Function(
+  ffi.Pointer<ffi.Int8> name,
+);
+
+typedef _dart_obs_key_from_name = int Function(
+  ffi.Pointer<ffi.Int8> name,
+);
+
 typedef _c_obs_find_data_file = ffi.Pointer<ffi.Int8> Function(
   ffi.Pointer<ffi.Int8> file,
 );
@@ -24598,78 +28258,78 @@ typedef _dart_obs_get_output_source = ffi.Pointer<obs_source> Function(
   int channel,
 );
 
-typedef _typedefC_15 = ffi.Uint8 Function(
+typedef _typedefC_108 = ffi.Uint8 Function(
   ffi.Pointer<ffi.Void>,
   ffi.Pointer<obs_source>,
 );
 
 typedef _c_obs_enum_sources = ffi.Void Function(
-  ffi.Pointer<ffi.NativeFunction<_typedefC_15>> enum_proc,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_108>> enum_proc,
   ffi.Pointer<ffi.Void> param,
 );
 
 typedef _dart_obs_enum_sources = void Function(
-  ffi.Pointer<ffi.NativeFunction<_typedefC_15>> enum_proc,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_108>> enum_proc,
   ffi.Pointer<ffi.Void> param,
 );
 
-typedef _typedefC_16 = ffi.Uint8 Function(
+typedef _typedefC_109 = ffi.Uint8 Function(
   ffi.Pointer<ffi.Void>,
   ffi.Pointer<obs_source>,
 );
 
 typedef _c_obs_enum_scenes = ffi.Void Function(
-  ffi.Pointer<ffi.NativeFunction<_typedefC_16>> enum_proc,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_109>> enum_proc,
   ffi.Pointer<ffi.Void> param,
 );
 
 typedef _dart_obs_enum_scenes = void Function(
-  ffi.Pointer<ffi.NativeFunction<_typedefC_16>> enum_proc,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_109>> enum_proc,
   ffi.Pointer<ffi.Void> param,
 );
 
-typedef _typedefC_17 = ffi.Uint8 Function(
+typedef _typedefC_110 = ffi.Uint8 Function(
   ffi.Pointer<ffi.Void>,
   ffi.Pointer<obs_output>,
 );
 
 typedef _c_obs_enum_outputs = ffi.Void Function(
-  ffi.Pointer<ffi.NativeFunction<_typedefC_17>> enum_proc,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_110>> enum_proc,
   ffi.Pointer<ffi.Void> param,
 );
 
 typedef _dart_obs_enum_outputs = void Function(
-  ffi.Pointer<ffi.NativeFunction<_typedefC_17>> enum_proc,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_110>> enum_proc,
   ffi.Pointer<ffi.Void> param,
 );
 
-typedef _typedefC_18 = ffi.Uint8 Function(
+typedef _typedefC_111 = ffi.Uint8 Function(
   ffi.Pointer<ffi.Void>,
   ffi.Pointer<obs_encoder>,
 );
 
 typedef _c_obs_enum_encoders = ffi.Void Function(
-  ffi.Pointer<ffi.NativeFunction<_typedefC_18>> enum_proc,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_111>> enum_proc,
   ffi.Pointer<ffi.Void> param,
 );
 
 typedef _dart_obs_enum_encoders = void Function(
-  ffi.Pointer<ffi.NativeFunction<_typedefC_18>> enum_proc,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_111>> enum_proc,
   ffi.Pointer<ffi.Void> param,
 );
 
-typedef _typedefC_19 = ffi.Uint8 Function(
+typedef _typedefC_112 = ffi.Uint8 Function(
   ffi.Pointer<ffi.Void>,
   ffi.Pointer<obs_service>,
 );
 
 typedef _c_obs_enum_services = ffi.Void Function(
-  ffi.Pointer<ffi.NativeFunction<_typedefC_19>> enum_proc,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_112>> enum_proc,
   ffi.Pointer<ffi.Void> param,
 );
 
 typedef _dart_obs_enum_services = void Function(
-  ffi.Pointer<ffi.NativeFunction<_typedefC_19>> enum_proc,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_112>> enum_proc,
   ffi.Pointer<ffi.Void> param,
 );
 
@@ -24889,97 +28549,97 @@ typedef _dart_obs_get_audio_monitoring_device = void Function(
   ffi.Pointer<ffi.Pointer<ffi.Int8>> id,
 );
 
-typedef _typedefC_20 = ffi.Void Function(
+typedef _typedefC_113 = ffi.Void Function(
   ffi.Pointer<ffi.Void>,
   ffi.Float,
 );
 
 typedef _c_obs_add_tick_callback = ffi.Void Function(
-  ffi.Pointer<ffi.NativeFunction<_typedefC_20>> tick,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_113>> tick,
   ffi.Pointer<ffi.Void> param,
 );
 
 typedef _dart_obs_add_tick_callback = void Function(
-  ffi.Pointer<ffi.NativeFunction<_typedefC_20>> tick,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_113>> tick,
   ffi.Pointer<ffi.Void> param,
 );
 
-typedef _typedefC_21 = ffi.Void Function(
+typedef _typedefC_114 = ffi.Void Function(
   ffi.Pointer<ffi.Void>,
   ffi.Float,
 );
 
 typedef _c_obs_remove_tick_callback = ffi.Void Function(
-  ffi.Pointer<ffi.NativeFunction<_typedefC_21>> tick,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_114>> tick,
   ffi.Pointer<ffi.Void> param,
 );
 
 typedef _dart_obs_remove_tick_callback = void Function(
-  ffi.Pointer<ffi.NativeFunction<_typedefC_21>> tick,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_114>> tick,
   ffi.Pointer<ffi.Void> param,
 );
 
-typedef _typedefC_22 = ffi.Void Function(
+typedef _typedefC_115 = ffi.Void Function(
   ffi.Pointer<ffi.Void>,
   ffi.Uint32,
   ffi.Uint32,
 );
 
 typedef _c_obs_add_main_render_callback = ffi.Void Function(
-  ffi.Pointer<ffi.NativeFunction<_typedefC_22>> draw,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_115>> draw,
   ffi.Pointer<ffi.Void> param,
 );
 
 typedef _dart_obs_add_main_render_callback = void Function(
-  ffi.Pointer<ffi.NativeFunction<_typedefC_22>> draw,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_115>> draw,
   ffi.Pointer<ffi.Void> param,
 );
 
-typedef _typedefC_23 = ffi.Void Function(
+typedef _typedefC_116 = ffi.Void Function(
   ffi.Pointer<ffi.Void>,
   ffi.Uint32,
   ffi.Uint32,
 );
 
 typedef _c_obs_remove_main_render_callback = ffi.Void Function(
-  ffi.Pointer<ffi.NativeFunction<_typedefC_23>> draw,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_116>> draw,
   ffi.Pointer<ffi.Void> param,
 );
 
 typedef _dart_obs_remove_main_render_callback = void Function(
-  ffi.Pointer<ffi.NativeFunction<_typedefC_23>> draw,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_116>> draw,
   ffi.Pointer<ffi.Void> param,
 );
 
-typedef _typedefC_24 = ffi.Void Function(
+typedef _typedefC_117 = ffi.Void Function(
   ffi.Pointer<ffi.Void>,
   ffi.Pointer<video_data>,
 );
 
 typedef _c_obs_add_raw_video_callback = ffi.Void Function(
   ffi.Pointer<video_scale_info> conversion,
-  ffi.Pointer<ffi.NativeFunction<_typedefC_24>> callback,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_117>> callback,
   ffi.Pointer<ffi.Void> param,
 );
 
 typedef _dart_obs_add_raw_video_callback = void Function(
   ffi.Pointer<video_scale_info> conversion,
-  ffi.Pointer<ffi.NativeFunction<_typedefC_24>> callback,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_117>> callback,
   ffi.Pointer<ffi.Void> param,
 );
 
-typedef _typedefC_25 = ffi.Void Function(
+typedef _typedefC_118 = ffi.Void Function(
   ffi.Pointer<ffi.Void>,
   ffi.Pointer<video_data>,
 );
 
 typedef _c_obs_remove_raw_video_callback = ffi.Void Function(
-  ffi.Pointer<ffi.NativeFunction<_typedefC_25>> callback,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_118>> callback,
   ffi.Pointer<ffi.Void> param,
 );
 
 typedef _dart_obs_remove_raw_video_callback = void Function(
-  ffi.Pointer<ffi.NativeFunction<_typedefC_25>> callback,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_118>> callback,
   ffi.Pointer<ffi.Void> param,
 );
 
@@ -25135,7 +28795,7 @@ typedef _dart_obs_display_resize = void Function(
   int cy,
 );
 
-typedef _typedefC_26 = ffi.Void Function(
+typedef _typedefC_119 = ffi.Void Function(
   ffi.Pointer<ffi.Void>,
   ffi.Uint32,
   ffi.Uint32,
@@ -25143,17 +28803,17 @@ typedef _typedefC_26 = ffi.Void Function(
 
 typedef _c_obs_display_add_draw_callback = ffi.Void Function(
   ffi.Pointer<obs_display> display,
-  ffi.Pointer<ffi.NativeFunction<_typedefC_26>> draw,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_119>> draw,
   ffi.Pointer<ffi.Void> param,
 );
 
 typedef _dart_obs_display_add_draw_callback = void Function(
   ffi.Pointer<obs_display> display,
-  ffi.Pointer<ffi.NativeFunction<_typedefC_26>> draw,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_119>> draw,
   ffi.Pointer<ffi.Void> param,
 );
 
-typedef _typedefC_27 = ffi.Void Function(
+typedef _typedefC_120 = ffi.Void Function(
   ffi.Pointer<ffi.Void>,
   ffi.Uint32,
   ffi.Uint32,
@@ -25161,13 +28821,13 @@ typedef _typedefC_27 = ffi.Void Function(
 
 typedef _c_obs_display_remove_draw_callback = ffi.Void Function(
   ffi.Pointer<obs_display> display,
-  ffi.Pointer<ffi.NativeFunction<_typedefC_27>> draw,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_120>> draw,
   ffi.Pointer<ffi.Void> param,
 );
 
 typedef _dart_obs_display_remove_draw_callback = void Function(
   ffi.Pointer<obs_display> display,
-  ffi.Pointer<ffi.NativeFunction<_typedefC_27>> draw,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_120>> draw,
   ffi.Pointer<ffi.Void> param,
 );
 
@@ -26809,7 +30469,7 @@ typedef _dart_obs_scene_find_sceneitem_by_id = ffi.Pointer<obs_scene_item>
   int id,
 );
 
-typedef _typedefC_28 = ffi.Uint8 Function(
+typedef _typedefC_121 = ffi.Uint8 Function(
   ffi.Pointer<obs_scene>,
   ffi.Pointer<obs_scene_item>,
   ffi.Pointer<ffi.Void>,
@@ -26817,13 +30477,13 @@ typedef _typedefC_28 = ffi.Uint8 Function(
 
 typedef _c_obs_scene_enum_items = ffi.Void Function(
   ffi.Pointer<obs_scene> scene,
-  ffi.Pointer<ffi.NativeFunction<_typedefC_28>> callback,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_121>> callback,
   ffi.Pointer<ffi.Void> param,
 );
 
 typedef _dart_obs_scene_enum_items = void Function(
   ffi.Pointer<obs_scene> scene,
-  ffi.Pointer<ffi.NativeFunction<_typedefC_28>> callback,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_121>> callback,
   ffi.Pointer<ffi.Void> param,
 );
 
@@ -27395,7 +31055,7 @@ typedef _dart_obs_scene_is_group = int Function(
   ffi.Pointer<obs_scene> scene,
 );
 
-typedef _typedefC_29 = ffi.Uint8 Function(
+typedef _typedefC_122 = ffi.Uint8 Function(
   ffi.Pointer<obs_scene>,
   ffi.Pointer<obs_scene_item>,
   ffi.Pointer<ffi.Void>,
@@ -27403,13 +31063,13 @@ typedef _typedefC_29 = ffi.Uint8 Function(
 
 typedef _c_obs_sceneitem_group_enum_items = ffi.Void Function(
   ffi.Pointer<obs_scene_item> group,
-  ffi.Pointer<ffi.NativeFunction<_typedefC_29>> callback,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_122>> callback,
   ffi.Pointer<ffi.Void> param,
 );
 
 typedef _dart_obs_sceneitem_group_enum_items = void Function(
   ffi.Pointer<obs_scene_item> group,
-  ffi.Pointer<ffi.NativeFunction<_typedefC_29>> callback,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_122>> callback,
   ffi.Pointer<ffi.Void> param,
 );
 
@@ -28743,7 +32403,7 @@ typedef _dart_obs_source_frame_copy = void Function(
   ffi.Pointer<obs_source_frame> src,
 );
 
-typedef _typedefC_30 = ffi.Void Function(
+typedef _typedefC_123 = ffi.Void Function(
   ffi.Pointer<ffi.Void>,
   ffi.Pointer<obs_source>,
   ffi.Pointer<obs_source_frame>,
@@ -28751,17 +32411,17 @@ typedef _typedefC_30 = ffi.Void Function(
 
 typedef _c_obs_source_add_frame_callback = ffi.Void Function(
   ffi.Pointer<obs_source> source,
-  ffi.Pointer<ffi.NativeFunction<_typedefC_30>> frame,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_123>> frame,
   ffi.Pointer<ffi.Void> param,
 );
 
 typedef _dart_obs_source_add_frame_callback = void Function(
   ffi.Pointer<obs_source> source,
-  ffi.Pointer<ffi.NativeFunction<_typedefC_30>> frame,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_123>> frame,
   ffi.Pointer<ffi.Void> param,
 );
 
-typedef _typedefC_31 = ffi.Void Function(
+typedef _typedefC_124 = ffi.Void Function(
   ffi.Pointer<ffi.Void>,
   ffi.Pointer<obs_source>,
   ffi.Pointer<obs_source_frame>,
@@ -28769,13 +32429,13 @@ typedef _typedefC_31 = ffi.Void Function(
 
 typedef _c_obs_source_remove_frame_callback = ffi.Void Function(
   ffi.Pointer<obs_source> source,
-  ffi.Pointer<ffi.NativeFunction<_typedefC_31>> frame,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_124>> frame,
   ffi.Pointer<ffi.Void> param,
 );
 
 typedef _dart_obs_source_remove_frame_callback = void Function(
   ffi.Pointer<obs_source> source,
-  ffi.Pointer<ffi.NativeFunction<_typedefC_31>> frame,
+  ffi.Pointer<ffi.NativeFunction<_typedefC_124>> frame,
   ffi.Pointer<ffi.Void> param,
 );
 
@@ -28835,5 +32495,446 @@ typedef _typedefC_11 = ffi.Pointer<ffi.Void> Function(
 );
 
 typedef _typedefC_12 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_15 = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_16 = ffi.Pointer<ffi.Void> Function(
+  ffi.Pointer<obs_data>,
+  ffi.Pointer<obs_source>,
+);
+
+typedef _typedefC_17 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_18 = ffi.Uint32 Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_19 = ffi.Uint32 Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_20 = ffi.Void Function(
+  ffi.Pointer<obs_data>,
+);
+
+typedef _typedefC_21 = ffi.Pointer<obs_properties> Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_22 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<obs_data>,
+);
+
+typedef _typedefC_23 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_24 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_25 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_26 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_27 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Float,
+);
+
+typedef _typedefC_28 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<gs_effect>,
+);
+
+typedef _typedefC_29 = ffi.Pointer<obs_source_frame> Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<obs_source_frame>,
+);
+
+typedef _typedefC_30 = ffi.Pointer<obs_audio_data> Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<obs_audio_data>,
+);
+
+typedef _typedefC_31 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<ffi.NativeFunction<obs_source_enum_proc_t>>,
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_32 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<obs_data>,
+);
+
+typedef _typedefC_33 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<obs_data>,
+);
+
+typedef _typedefC_34 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<obs_mouse_event>,
+  ffi.Int32,
+  ffi.Uint8,
+  ffi.Uint32,
+);
+
+typedef _typedefC_35 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<obs_mouse_event>,
+  ffi.Uint8,
+);
+
+typedef _typedefC_36 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<obs_mouse_event>,
+  ffi.Int32,
+  ffi.Int32,
+);
+
+typedef _typedefC_37 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Uint8,
+);
+
+typedef _typedefC_38 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<obs_key_event>,
+  ffi.Uint8,
+);
+
+typedef _typedefC_39 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<obs_source>,
+);
+
+typedef _typedefC_40 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_41 = ffi.Uint8 Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<ffi.Uint64>,
+  ffi.Pointer<obs_source_audio_mix>,
+  ffi.Uint32,
+  ffi.Uint64,
+  ffi.Uint64,
+);
+
+typedef _typedefC_42 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<ffi.NativeFunction<obs_source_enum_proc_t>>,
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_43 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_44 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_45 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<obs_data>,
+);
+
+typedef _typedefC_46 = ffi.Pointer<obs_properties> Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_47 = ffi.Uint8 Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<ffi.Uint64>,
+  ffi.Pointer<audio_output_data>,
+  ffi.Uint64,
+  ffi.Uint64,
+);
+
+typedef _typedefC_48 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Uint8,
+);
+
+typedef _typedefC_49 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_50 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_51 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_52 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_53 = ffi.Int64 Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_54 = ffi.Int64 Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_55 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Int64,
+);
+
+typedef _typedefC_56 = ffi.Int32 Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_57 = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_58 = ffi.Pointer<ffi.Void> Function(
+  ffi.Pointer<obs_data>,
+  ffi.Pointer<obs_encoder>,
+);
+
+typedef _typedefC_59 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_60 = ffi.Uint8 Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<encoder_frame>,
+  ffi.Pointer<encoder_packet>,
+  ffi.Pointer<ffi.Uint8>,
+);
+
+typedef _typedefC_61 = ffi.Uint64 Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_62 = ffi.Void Function(
+  ffi.Pointer<obs_data>,
+);
+
+typedef _typedefC_63 = ffi.Pointer<obs_properties> Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_64 = ffi.Uint8 Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<obs_data>,
+);
+
+typedef _typedefC_65 = ffi.Uint8 Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<ffi.Pointer<ffi.Uint8>>,
+  ffi.Pointer<ffi.Uint64>,
+);
+
+typedef _typedefC_66 = ffi.Uint8 Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<ffi.Pointer<ffi.Uint8>>,
+  ffi.Pointer<ffi.Uint64>,
+);
+
+typedef _typedefC_67 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<audio_convert_info>,
+);
+
+typedef _typedefC_68 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<video_scale_info>,
+);
+
+typedef _typedefC_69 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_70 = ffi.Void Function(
+  ffi.Pointer<obs_data>,
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_71 = ffi.Pointer<obs_properties> Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_72 = ffi.Uint8 Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Uint32,
+  ffi.Int64,
+  ffi.Uint64,
+  ffi.Pointer<ffi.Uint64>,
+  ffi.Pointer<encoder_packet>,
+  ffi.Pointer<ffi.Uint8>,
+);
+
+typedef _typedefC_73 = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_74 = ffi.Pointer<ffi.Void> Function(
+  ffi.Pointer<obs_data>,
+  ffi.Pointer<obs_output>,
+);
+
+typedef _typedefC_75 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_76 = ffi.Uint8 Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_77 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Uint64,
+);
+
+typedef _typedefC_78 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<video_data>,
+);
+
+typedef _typedefC_79 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<audio_data>,
+);
+
+typedef _typedefC_80 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<encoder_packet>,
+);
+
+typedef _typedefC_81 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<obs_data>,
+);
+
+typedef _typedefC_82 = ffi.Void Function(
+  ffi.Pointer<obs_data>,
+);
+
+typedef _typedefC_83 = ffi.Pointer<obs_properties> Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_84 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_85 = ffi.Uint64 Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_86 = ffi.Int32 Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_87 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_88 = ffi.Float Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_89 = ffi.Int32 Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_90 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Uint64,
+  ffi.Pointer<audio_data>,
+);
+
+typedef _typedefC_91 = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_92 = ffi.Pointer<ffi.Void> Function(
+  ffi.Pointer<obs_data>,
+  ffi.Pointer<obs_service>,
+);
+
+typedef _typedefC_93 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_94 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<obs_data>,
+);
+
+typedef _typedefC_95 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_96 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<obs_data>,
+);
+
+typedef _typedefC_97 = ffi.Void Function(
+  ffi.Pointer<obs_data>,
+);
+
+typedef _typedefC_98 = ffi.Pointer<obs_properties> Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_99 = ffi.Uint8 Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<obs_output>,
+);
+
+typedef _typedefC_100 = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_101 = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_102 = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_103 = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_104 = ffi.Uint8 Function();
+
+typedef _typedefC_105 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+  ffi.Pointer<obs_data>,
+  ffi.Pointer<obs_data>,
+);
+
+typedef _typedefC_106 = ffi.Void Function(
+  ffi.Pointer<ffi.Void>,
+);
+
+typedef _typedefC_107 = ffi.Pointer<ffi.Int8> Function(
   ffi.Pointer<ffi.Void>,
 );

@@ -80,6 +80,8 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
             result(getPlatformVersion())
         case Method.AddSourceFrameCallback:
             result(addSourceFrameCallback(arguments))
+        case Method.CreateVideoMix:
+            result(createVideoMix(arguments))
 
         case Method.AddSource:
             ffi ? nil : result(addSource(arguments))
@@ -91,8 +93,6 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
             ffi ? nil : result(createMediaSource(arguments))
         case Method.CreateVideoSource:
             ffi ? nil : result(createVideoSource(arguments))
-        case Method.CreateVideoMix:
-            ffi ? nil : result(createVideoMix(arguments))
         case Method.CreateScene:
             ffi ? nil : result(createScene(arguments))
 

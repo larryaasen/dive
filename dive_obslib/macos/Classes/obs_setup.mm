@@ -135,9 +135,8 @@ static void remove_source(const char *uuid_str) {
     free((void *)source_uuid_list[source]);
 }
 
-static void add_videomix_callback(NSString *tracking_uuid) {
-    const char *_tracking_uuid_str = tracking_uuid.UTF8String;
-    const char *tracking_uuid_str = strdup(_tracking_uuid_str);
+static void add_videomix_callback(const char *tracking_uuid) {
+    const char *tracking_uuid_str = strdup(tracking_uuid);
     
     unsigned int index = 0;
     videomix_uuid_list[index] = tracking_uuid_str;
@@ -147,8 +146,8 @@ static void add_videomix_callback(NSString *tracking_uuid) {
     obs_add_raw_video_callback(conversion, videomix_callback, param);
 }
 
-static void remove_videomix_callback(NSString *tracking_uuid) {
-    unsigned int index=0;
+static void remove_videomix_callback(const char *tracking_uuid) {
+    unsigned int index=0;   // TODO: this should not be hard coded
     const char *tracking_uuid_str = videomix_uuid_list[index];
     void *param = (void *)tracking_uuid_str;
     obs_remove_raw_video_callback(videomix_callback, param);
@@ -423,7 +422,7 @@ static obs_source_t *_create_source(const char *source_uuid, const char *source_
     return source;
 }
 
-#pragma mark - Bridge functions
+#pragma mark - New Bridge functions to keep
 
 bool bridge_source_add_frame_callback(const char *source_uuid, int64_t source_ptr) {
     obs_source_t *source = (obs_source_t *)source_ptr;
@@ -431,6 +430,18 @@ bool bridge_source_add_frame_callback(const char *source_uuid, int64_t source_pt
     save_source(source_uuid, source);
     return true;
 }
+
+bool bridge_add_videomix(const char *tracking_uuid) {
+    add_videomix_callback(tracking_uuid);
+    return true;
+}
+
+bool bridge_remove_videomix(const char *tracking_uuid) {
+    remove_videomix_callback(tracking_uuid);
+    return true;
+}
+
+#pragma mark - Bridge functions
 
 bool bridge_create_source(const char *source_uuid, const char *source_id, const char *name, bool frame_source) {
     obs_data_t *settings = NULL;
@@ -618,16 +629,6 @@ bool bridge_sceneitem_set_info(NSString *scene_uuid, int64_t item_id, NSDictiona
     obs_sceneitem_set_info(item, &item_info);
 
     return false;
-}
-
-bool bridge_add_videomix(NSString *tracking_uuid) {
-    add_videomix_callback(tracking_uuid);
-    return true;
-}
-
-bool bridge_remove_videomix(NSString *tracking_uuid) {
-    remove_videomix_callback(tracking_uuid);
-    return true;
 }
 
 #pragma mark - Stream Controls

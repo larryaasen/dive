@@ -28,6 +28,12 @@ headers:
     - '**/obs-ui.h'
     - '**/obs-properties.h'
     - '**/obs-interaction.h'
+    - '**/obs-source.h'
+    - '**/obs-encoder.h'
+    - '**/obs-output.h'
+    - '**/obs-service.h'
+    - '**/obs-audio-controls.h'
+    - '**/obs-hotkey.h'
 
 name: 'DiveObslibFFI'
 

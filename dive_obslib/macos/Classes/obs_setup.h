@@ -33,8 +33,8 @@ int64_t bridge_add_source(NSString *scene_uuid, NSString *source_uuid);
 NSDictionary *bridge_sceneitem_get_info(NSString *scene_uuid, int64_t item_id);
 bool bridge_sceneitem_set_info(NSString *scene_uuid, int64_t item_id, NSDictionary *info);
 
-bool    bridge_add_videomix(NSString *tracking_uuid);
-bool    bridge_remove_videomix(NSString *tracking_uuid);
+bool    bridge_add_videomix(const char *tracking_uuid);
+bool    bridge_remove_videomix(const char *tracking_uuid);
 
 #pragma mark - Stream Controls
 
