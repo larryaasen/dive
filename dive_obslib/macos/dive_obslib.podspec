@@ -22,8 +22,8 @@ A new flutter plugin project.
     'OTHER_LDFLAGS' => '-lobs.0',
     'LIBRARY_SEARCH_PATHS' => [
       '$(inherited)',
-      '/Users/larry/Projects/obslib-framework/build/obslib.framework/Versions/A/Frameworks',
-      '/Users/larry/Projects/obslib-framework/build/obslib.framework/Versions/A/Libraries'
+      '/Users/larry/Projects/obslib-framework/obslib.framework/Versions/A/Frameworks',
+      '/Users/larry/Projects/obslib-framework/obslib.framework/Versions/A/Libraries'
     ]
   }
 end

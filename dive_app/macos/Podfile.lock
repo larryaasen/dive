@@ -3,7 +3,7 @@ PODS:
     - FlutterMacOS
     - obslib
   - FlutterMacOS (1.0.0)
-  - obslib (26.0.2)
+  - obslib (26.1.2)
   - path_provider_macos (0.0.1):
     - FlutterMacOS
 
@@ -24,9 +24,9 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/path_provider_macos/macos
 
 SPEC CHECKSUMS:
-  dive_obslib: 9f9c6f1366613aee58ab1bc4225bbc8cb8846966
+  dive_obslib: 93b24639690fee4f0ffa9b16704531b91119aef6
   FlutterMacOS: 57701585bf7de1b3fc2bb61f6378d73bbdea8424
-  obslib: d6d97c8d3d139f28ff2156b4942b750a8bd6e8b6
+  obslib: 52ca38e91608c382ee490bac9d20557de69c16a3
   path_provider_macos: a0a3fd666cb7cd0448e936fb4abad4052961002b
 
 PODFILE CHECKSUM: da4f98f9eb81dac062b874e144ff3571961482a8
