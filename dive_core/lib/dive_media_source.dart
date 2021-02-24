@@ -45,7 +45,6 @@ class DiveMediaSourceStateNotifier extends StateNotifier<DiveMediaSourceState> {
 
   void updateMediaState(DiveMediaSourceState stateModel) {
     state = stateModel;
-    DiveSystemLog.message("new state: $state");
   }
 }
 
@@ -55,14 +54,16 @@ class DiveMediaSource extends DiveTextureSource {
 
   Timer _playbackTimer;
 
-  DiveMediaSource({String name})
+  final String localFile;
+
+  DiveMediaSource({String name, this.localFile})
       : super(inputType: DiveInputType.mediaSource, name: name) {
     _playbackTimer =
         Timer.periodic(Duration(milliseconds: 1000), timerCallback);
   }
 
   static Future<DiveMediaSource> create(String localFile) async {
-    final source = DiveMediaSource(name: 'my media');
+    final source = DiveMediaSource(name: 'my media', localFile: localFile);
     await source.setupController(source.trackingUUID);
     source.bridgePointer =
         DiveCore.bridge.createMediaSource(source.trackingUUID, localFile);

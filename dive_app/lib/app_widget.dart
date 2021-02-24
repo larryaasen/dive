@@ -18,7 +18,7 @@ class _AppWidgetState extends State<AppWidget> {
   final _streamingOutput = DiveOutput();
   DiveScene _currentScene;
   bool _initialized = false;
-  bool _enableCameras = false;
+  bool _enableCameras = true;
 
   @override
   void didChangeDependencies() {
@@ -150,60 +150,69 @@ class _AppWidgetState extends State<AppWidget> {
   }
 
   Widget buildMaterial(BuildContext context) {
-    final camerasText = Padding(
-        padding: EdgeInsets.only(left: 10, top: 10, right: 10),
-        child: Text('Cameras',
-            style: TextStyle(color: Colors.grey, fontSize: 24)));
-    final card1 = Padding(
-        padding: EdgeInsets.all(10),
-        child: Card(
-            elevation: 10,
-            child: AspectRatio(
-                aspectRatio: 1280 / 720,
-                child: DivePreview(_videoSources.length > 0
-                    ? _videoSources[0].controller
-                    : null))));
-    final card2 = Padding(
-        padding: EdgeInsets.all(10),
-        child: Card(
-            elevation: 10,
-            child: AspectRatio(
-                aspectRatio: 1280 / 720,
-                child: DivePreview(_videoSources.length > 1
-                    ? _videoSources[1].controller
-                    : null))));
+    final card1 = SourceCard(
+        child: DivePreview(
+            _videoSources.length > 0 ? _videoSources[0].controller : null));
+    final card2 = SourceCard(
+        child: DivePreview(
+            _videoSources.length > 1 ? _videoSources[1].controller : null));
+    final card3 = SourceCard(
+        child: DivePreview(
+            _videoSources.length > 2 ? _videoSources[2].controller : null));
+    final card4 = SourceCard(
+        child:
+            MediaPreview(_mediaSources.length > 0 ? _mediaSources[0] : null));
+    final card5 = SourceCard(child: null);
+    final card6 = SourceCard(child: null);
+    final cardList = [card1, card2, card3, card4, card5, card6];
 
-    final sources =
-        Container(color: Colors.white, child: Wrap(spacing: 10, runSpacing: 0,
+    final aspectRatio = DiveCoreAspectRatio.HD.toDouble;
+
+    final widgets = List.generate(
+        20,
+        (i) => Container(
+              color: Colors.green,
+              padding: EdgeInsets.all(2),
+              child: DiveAspectRatio(
+                  aspectRatio: 1 / 3, child: Container(color: Colors.blue)),
+            ));
+    final sourceGrid = DiveGrid(aspectRatio: aspectRatio, children: widgets);
+
+    // final camerasText = Padding(
+    //     padding: EdgeInsets.only(left: 10, top: 10, right: 10),
+    //     child: Text('Cameras',
+    //         style: TextStyle(color: Colors.grey, fontSize: 24)));
+
+    final sources = Container(
+        // padding: EdgeInsets.only(bottom: 10, right: 10),
+        color: Colors.white,
+        child: Wrap(spacing: 10, runSpacing: 0,
             // mainAxisSize: MainAxisSize.max,
             // mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[camerasText, card1, card2]));
+            children: <Widget>[sourceGrid]));
 
-    final videoMix = Padding(
-        padding: EdgeInsets.only(right: 10),
-        child: Card(
-            elevation: 10,
-            child: Container(
-                color: Colors.black,
-                child: AspectRatio(
-                    aspectRatio: 1280 / 720,
-                    child: DivePreview(_videoMixes.length > 0
-                        ? _videoMixes[0].controller
-                        : null)))));
+    final videoMix = SourceCard(
+        child: Container(
+            color: Colors.black,
+            child: DivePreview(
+                _videoMixes.length > 0 ? _videoMixes[0].controller : null)));
 
-    final mainContent = Row(
-      children: [
-        Expanded(flex: 4, child: sources),
-        Expanded(flex: 6, child: videoMix)
-      ],
-    );
+    final mainContent = Padding(
+        padding: EdgeInsets.only(left: 20, top: 20),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(flex: 6, child: sources),
+            Expanded(flex: 4, child: videoMix)
+          ],
+        ));
 
     final mainContainer = Container(
       decoration: new BoxDecoration(color: Colors.white),
       child: Align(alignment: Alignment.topCenter, child: mainContent),
     );
 
-    final content = mainContainer;
+    final menuButton = IconButton(icon: Icon(Icons.menu), onPressed: () {});
 
     return MaterialApp(
         title: 'Dive App',
@@ -216,13 +225,11 @@ class _AppWidgetState extends State<AppWidget> {
           appBar: AppBar(
             title: const Text('Dive App'),
             actions: <Widget>[
-              DiveMediaButtonBar(
-                  mediaSource:
-                      _mediaSources.length == 0 ? null : _mediaSources[0]),
               DiveStreamPlayButton(streamingOutput: _streamingOutput),
+              menuButton,
             ],
           ),
-          body: content,
+          body: mainContainer,
         ));
   }
 
@@ -241,23 +248,21 @@ class _AppWidgetState extends State<AppWidget> {
       primary: false,
       padding: const EdgeInsets.all(0),
       crossAxisCount: 2,
-      childAspectRatio: 1280 / 720,
+      childAspectRatio: DiveCoreAspectRatio.HD.toDouble,
       mainAxisSpacing: 1.0,
       crossAxisSpacing: 1.0,
       children: [box1, box2, box3, box4],
       shrinkWrap: true,
     );
 
-    final videoMix = AspectRatio(
-        aspectRatio: 1280 / 720,
-        child: DivePreview(
-            _videoMixes.length > 0 ? _videoMixes[0].controller : null));
+    final videoMix =
+        DivePreview(_videoMixes.length > 0 ? _videoMixes[0].controller : null);
 
     content = GridView.count(
       primary: false,
       padding: const EdgeInsets.all(1.0),
       crossAxisCount: 2,
-      childAspectRatio: 1280 / 720,
+      childAspectRatio: DiveCoreAspectRatio.HD.toDouble,
       mainAxisSpacing: 1.0,
       crossAxisSpacing: 1.0,
       children: [

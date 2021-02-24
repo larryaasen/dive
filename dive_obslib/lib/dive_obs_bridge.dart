@@ -45,7 +45,8 @@ class DiveObsBridge {
   static const int cy = 720;
 
   bool _resetVideo() {
-    final ovi = allocate<obs_video_info>().ref
+    final ovi = allocate<obs_video_info>();
+    ovi.ref
       ..adapter = 0
       ..fps_num = 30000
       ..fps_den = 1001
@@ -57,7 +58,7 @@ class DiveObsBridge {
       ..output_height = cy
       ..colorspace = video_colorspace.VIDEO_CS_DEFAULT;
 
-    int rv = _lib.obs_reset_video(ovi.addressOf);
+    int rv = _lib.obs_reset_video(ovi);
     if (rv != OBS_VIDEO_SUCCESS) {
       print("Couldn't initialize video: $rv");
       return false; //throw "Couldn't initialize video";
@@ -66,10 +67,11 @@ class DiveObsBridge {
   }
 
   bool _resetAudio() {
-    final ai = allocate<obs_audio_info>().ref
+    final ai = allocate<obs_audio_info>();
+    ai.ref
       ..samples_per_sec = 48000
       ..speakers = speaker_layout.SPEAKERS_STEREO;
-    int rv = _lib.obs_reset_audio(ai.addressOf);
+    int rv = _lib.obs_reset_audio(ai);
     if (rv == 0) {
       print("Couldn't initialize audio: $rv");
       return false;
