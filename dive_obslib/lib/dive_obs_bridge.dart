@@ -19,14 +19,17 @@ class DiveObsBridge {
   // FYI: Don't call obs_startup because it must run on the main thread
   // and FFI does not run on the main thread.
 
-  /// Start OBS
-  bool startObs() {
+  /// Start OBS.
+  ///
+  /// Example:
+  ///   startObs(1280, 720);
+  bool startObs(int width, int height) {
     try {
       _startFFI();
 
       _lib.obs_load_all_modules();
       _lib.obs_post_load_modules();
-      if (!_resetVideo()) return false;
+      if (!_resetVideo(width, height)) return false;
       if (!_resetAudio()) return false;
 
       // Create streaming service
@@ -41,10 +44,7 @@ class DiveObsBridge {
     _lib = DiveObslibFFILoad.loadLib();
   }
 
-  static const int cx = 1280;
-  static const int cy = 720;
-
-  bool _resetVideo() {
+  bool _resetVideo(int width, int height) {
     final ovi = allocate<obs_video_info>();
     ovi.ref
       ..adapter = 0
@@ -52,10 +52,10 @@ class DiveObsBridge {
       ..fps_den = 1001
       ..graphics_module = 'libobs-opengl'.toInt8() //DL_OPENGL
       ..output_format = video_format.VIDEO_FORMAT_RGBA
-      ..base_width = cx
-      ..base_height = cy
-      ..output_width = cx
-      ..output_height = cy
+      ..base_width = width
+      ..base_height = height
+      ..output_width = width
+      ..output_height = height
       ..colorspace = video_colorspace.VIDEO_CS_DEFAULT;
 
     int rv = _lib.obs_reset_video(ovi);
@@ -242,9 +242,8 @@ class DiveObsBridge {
 
   bool createService() {
     final serviceSettings = _lib.obs_data_create();
-    final url =
-        "rtmp://live-iad05.twitch.tv/app/live_276488556_jo79ChcHLboF2N1NniLSL9yEv7ltFt";
-    final key = "live_276488556_jo79ChcHLboF2N1NniLSL9yEv7ltFt";
+    final url = "rtmp://live-iad05.twitch.tv/app/<your_stream_key>";
+    final key = "<your_stream_key>";
     _lib.obs_data_set_string(serviceSettings, "server".int8(), url.int8());
     _lib.obs_data_set_string(serviceSettings, "key".int8(), key.int8());
 

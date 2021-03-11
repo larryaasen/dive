@@ -214,8 +214,8 @@ static bool reset_audio() {
 
 static bool create_service() {
     obs_data_t *serviceSettings = obs_data_create();
-    const char *url = "rtmp://live-iad05.twitch.tv/app/live_276488556_jo79ChcHLboF2N1NniLSL9yEv7ltFt";
-    const char *key = "live_276488556_jo79ChcHLboF2N1NniLSL9yEv7ltFt";
+    const char *url = "rtmp://live-iad05.twitch.tv/app/<your_stream_key>";
+    const char *key = "<your_stream_key>";
     obs_data_set_string(serviceSettings, "server", url);
     obs_data_set_string(serviceSettings, "key", key);
 

@@ -15,16 +15,16 @@ class DiveUI {
   }
 }
 
-class SourceCard extends StatefulWidget {
+class DiveSourceCard extends StatefulWidget {
   final Widget child;
 
-  SourceCard({this.child});
+  DiveSourceCard({this.child});
 
   @override
-  _SourceCardState createState() => _SourceCardState();
+  _DiveSourceCardState createState() => _DiveSourceCardState();
 }
 
-class _SourceCardState extends State<SourceCard> {
+class _DiveSourceCardState extends State<DiveSourceCard> {
   bool _hovering = false;
 
   @override
@@ -49,10 +49,10 @@ class _SourceCardState extends State<SourceCard> {
     // This Padding breaks the aspect ratio inside of Card (widget.child)
     return Padding(
         padding: EdgeInsets.only(
-            left: 10,
-            top: 10,
-            bottom: 25,
-            right: 25), // need padding for the drop shadow
+            left: 0,
+            top: 0,
+            bottom: 15,
+            right: 15), // need padding for the drop shadow
         child: card);
   }
 
@@ -128,10 +128,7 @@ class DivePreview extends StatelessWidget {
         : Container(color: Colors.blue);
 
     if (aspectRatio != null) {
-      // Wrap the AspectRatio inside an Align widget to make the AspectRatio
-      // widget actually work.
-      texture =
-          Align(child: AspectRatio(aspectRatio: aspectRatio, child: texture));
+      texture = DiveAspectRatio(aspectRatio: aspectRatio, child: texture);
     }
 
     return texture;
@@ -328,20 +325,29 @@ class DiveStreamPlayButton extends ConsumerWidget {
 
 /// A Dive gear settings button.
 class DiveGearButton extends StatelessWidget {
-  const DiveGearButton({Key key, this.iconColor = Colors.grey})
+  const DiveGearButton({Key key, this.iconColor = Colors.white})
       : super(key: key);
 
   final Color iconColor;
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(
-        Icons.settings_outlined,
-        color: iconColor,
+    return Material(
+      color: Colors.transparent,
+      child: Center(
+        child: Ink(
+          decoration: const ShapeDecoration(
+            color: Colors.black12,
+            shape: CircleBorder(),
+          ),
+          child: IconButton(
+            icon: Icon(Icons.settings_outlined),
+            color: iconColor,
+            tooltip: 'Gear',
+            onPressed: () {},
+          ),
+        ),
       ),
-      tooltip: 'Gear',
-      onPressed: () async {},
     );
   }
 }
@@ -370,6 +376,8 @@ class DiveAspectRatio extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Wrap the AspectRatio inside an Align widget to make the AspectRatio
+    // widget actually work.
     return Align(
         child: AspectRatio(
       aspectRatio: aspectRatio,
@@ -398,7 +406,7 @@ class DiveGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.count(
       primary: false,
-      crossAxisCount: 5,
+      crossAxisCount: 4,
       childAspectRatio: aspectRatio,
       mainAxisSpacing: 1.0,
       crossAxisSpacing: 1.0,

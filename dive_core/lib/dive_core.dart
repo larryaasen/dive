@@ -14,66 +14,77 @@ export 'dive_system_log.dart';
 export 'dive_system_log.dart';
 export 'texture_controller.dart';
 
-class _DiveCoreResolution {
+class DiveCoreResolution {
   final int width;
   final int height;
-  const _DiveCoreResolution(this.width, this.height);
+  const DiveCoreResolution(this.width, this.height);
 
   String get resolution => "${width}x$height";
   double get aspectRatio => width / height;
-}
 
-abstract class DiveCoreResolution {
-  static const r7680_4320 = _DiveCoreResolution(7680, 4320);
-  static const r3840_2160 = _DiveCoreResolution(3840, 2160);
-  static const r1920_1080 = _DiveCoreResolution(1920, 1080);
-  static const r1280_720 = _DiveCoreResolution(1280, 720);
+  static const r7680_4320 = DiveCoreResolution(7680, 4320);
 
+  /// 4K resolution
+  static const r3840_2160 = DiveCoreResolution(3840, 2160);
+
+  /// Full HD resolution
+  static const r1920_1080 = DiveCoreResolution(1920, 1080);
+
+  /// HD resolution
+  static const r1280_720 = DiveCoreResolution(1280, 720);
+
+  /// 8K resolutions
   static const r8K = r7680_4320;
 
+  /// 4K resolution
   static const UHD = r3840_2160;
+
+  /// 4K resolution
   static const r4K = UHD;
 
+  /// Full HD resolution
   static const FULL_HD = r1920_1080;
+
+  /// Full HD resolution
   static const r1080p = FULL_HD;
 
+  /// HD resolution
   static const HD = r1280_720;
+
+  /// HD resolution
   static const r720p = HD;
 }
 
-class _DiveCoreAspectRatio {
+class DiveCoreAspectRatio {
   final String _sRatio;
   final double _dRatio;
 
-  const _DiveCoreAspectRatio(this._sRatio, this._dRatio);
+  const DiveCoreAspectRatio(this._sRatio, this._dRatio);
 
   double get ratio => _dRatio;
   double get toDouble => _dRatio;
-  String toString() => _sRatio;
-}
+  String get text => _sRatio;
 
-/// Various popular aspect ratios.
-abstract class DiveCoreAspectRatio {
   /// HD TV aspect ratio
-  static const r16_9 = _DiveCoreAspectRatio("16:9", 16 / 9);
+  static const r16_9 = DiveCoreAspectRatio("16:9", 16 / 9);
 
   /// SD TV aspect ratio
-  static const r4_3 = _DiveCoreAspectRatio("4:3", 4 / 3);
+  static const r4_3 = DiveCoreAspectRatio("4:3", 4 / 3);
 
   /// Square aspect ratio
-  static const r1_1 = _DiveCoreAspectRatio("1:1", 1 / 1);
+  static const r1_1 = DiveCoreAspectRatio("1:1", 1 / 1);
 
   /// Movie theater aspect ratio
-  static const r21_9 = _DiveCoreAspectRatio("21:9", 21 / 9);
+  static const r21_9 = DiveCoreAspectRatio("21:9", 21 / 9);
 
   /// Old widescreen aspect ratio
-  static const r16_10 = _DiveCoreAspectRatio("16:10", 16 / 10);
+  static const r16_10 = DiveCoreAspectRatio("16:10", 16 / 10);
 
   /// IMAX Film aspect ratio
-  static const r14_10 = _DiveCoreAspectRatio("14:10", 14 / 10);
+  static const r14_10 = DiveCoreAspectRatio("14:10", 14 / 10);
 
   /// IMAX Digital aspect ratio
-  static const r19_10 = _DiveCoreAspectRatio("19:10", 19 / 10);
+  static const r19_10 = DiveCoreAspectRatio("19:10", 19 / 10);
 
   /// HD TV aspect ratio
   static const HD = r16_9;
@@ -95,7 +106,7 @@ DiveObsBridge obsBridge;
 
 /// Usage:
 ///   final core = DiveCore();
-///   core.setupOBS();
+///   core.setupOBS(DiveCoreResolution.HD);
 ///
 class DiveCore {
   /// For use with Riverpod
@@ -113,11 +124,11 @@ class DiveCore {
         : null;
   }
 
-  void setupOBS() {
+  void setupOBS(DiveCoreResolution resolution) {
     if (obsBridge != null) return;
 
     obsBridge = DiveObsBridge();
-    obsBridge.startObs();
+    obsBridge.startObs(resolution.width, resolution.height);
   }
 }
 

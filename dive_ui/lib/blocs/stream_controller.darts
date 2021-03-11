@@ -30,11 +30,4 @@ class StreamController extends Equatable {
     this.streamUrl,
     this.streamKey,
   });
-
-  factory StreamController.defaults() => StreamController(
-        // Twitch live stream URL: rtmp://live-iad05.twitch.tv/app/live_276488556_jo79ChcHLboF2N1NniLSL9yEv7ltFt
-        streamUrl:
-            'rtmp://live-iad05.twitch.tv/app/live_276488556_jo79ChcHLboF2N1NniLSL9yEv7ltFt',
-        streamKey: 'live_276488556_jo79ChcHLboF2N1NniLSL9yEv7ltFt',
-      );
 }

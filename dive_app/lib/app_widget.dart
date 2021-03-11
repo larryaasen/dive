@@ -18,6 +18,7 @@ class _AppWidgetState extends State<AppWidget> {
   final _streamingOutput = DiveOutput();
   DiveScene _currentScene;
   bool _initialized = false;
+  bool _enableOBS = true;
   bool _enableCameras = true;
 
   @override
@@ -25,7 +26,7 @@ class _AppWidgetState extends State<AppWidget> {
     super.didChangeDependencies();
 
     _diveCore = DiveCore();
-    _diveCore.setupOBS();
+    if (_enableOBS) _diveCore.setupOBS(DiveCoreResolution.HD);
 
     if (!_initialized) {
       _initialized = true;
@@ -37,11 +38,6 @@ class _AppWidgetState extends State<AppWidget> {
 
       DiveScene.create('Scene 1').then((scene) => setup(scene));
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   void setup(DiveScene scene) {
@@ -150,33 +146,49 @@ class _AppWidgetState extends State<AppWidget> {
   }
 
   Widget buildMaterial(BuildContext context) {
-    final card1 = SourceCard(
+    final card1 = IntrinsicHeight(
+        child: DiveSourceCard(
+            child: DivePreview(
+                _videoSources.length > 0 ? _videoSources[0].controller : null,
+                aspectRatio: DiveCoreAspectRatio.HD.ratio)));
+    final card2 = DiveSourceCard(
         child: DivePreview(
-            _videoSources.length > 0 ? _videoSources[0].controller : null));
-    final card2 = SourceCard(
+            _videoSources.length > 1 ? _videoSources[1].controller : null,
+            aspectRatio: DiveCoreAspectRatio.HD.ratio));
+    final card3 = DiveSourceCard(
         child: DivePreview(
-            _videoSources.length > 1 ? _videoSources[1].controller : null));
-    final card3 = SourceCard(
-        child: DivePreview(
-            _videoSources.length > 2 ? _videoSources[2].controller : null));
-    final card4 = SourceCard(
+            _videoSources.length > 2 ? _videoSources[2].controller : null,
+            aspectRatio: DiveCoreAspectRatio.HD.ratio));
+    final card4 = DiveSourceCard(
         child:
             MediaPreview(_mediaSources.length > 0 ? _mediaSources[0] : null));
-    final card5 = SourceCard(child: null);
-    final card6 = SourceCard(child: null);
+    final card5 = DiveSourceCard(child: null);
+    final card6 = DiveSourceCard(child: null);
     final cardList = [card1, card2, card3, card4, card5, card6];
 
-    final aspectRatio = DiveCoreAspectRatio.HD.toDouble;
+    final aspectRatio = DiveCoreAspectRatio.HD.ratio;
 
-    final widgets = List.generate(
-        20,
-        (i) => Container(
-              color: Colors.green,
-              padding: EdgeInsets.all(2),
-              child: DiveAspectRatio(
-                  aspectRatio: 1 / 3, child: Container(color: Colors.blue)),
-            ));
-    final sourceGrid = DiveGrid(aspectRatio: aspectRatio, children: widgets);
+    // final widgets = List.generate(
+    //     14,
+    //     (i) => Container(
+    //           color: Colors.green,
+    //           padding: EdgeInsets.all(2),
+    //           child: Align(
+    //               alignment: Alignment.center,
+    //               child: Card(
+    //                   child: DivePreview(
+    //                       _videoSources.length > 0
+    //                           ? _videoSources[0].controller
+    //                           : null,
+    //                       aspectRatio: DiveCoreAspectRatio.HD.ratio))),
+    //         ));
+    final sourceGrid = DiveGrid(aspectRatio: aspectRatio, children: cardList);
+
+    // final sourceRow = Row(
+    //   children: [card1, card2, card3, card4],
+    //   mainAxisAlignment: MainAxisAlignment.center,
+    //   crossAxisAlignment: CrossAxisAlignment.center,
+    // );
 
     // final camerasText = Padding(
     //     padding: EdgeInsets.only(left: 10, top: 10, right: 10),
@@ -191,11 +203,13 @@ class _AppWidgetState extends State<AppWidget> {
             // mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[sourceGrid]));
 
-    final videoMix = SourceCard(
-        child: Container(
-            color: Colors.black,
-            child: DivePreview(
-                _videoMixes.length > 0 ? _videoMixes[0].controller : null)));
+    final videoMix = IntrinsicHeight(
+        child: DiveSourceCard(
+            child: Container(
+                color: Colors.black,
+                child: DivePreview(
+                    _videoMixes.length > 0 ? _videoMixes[0].controller : null,
+                    aspectRatio: DiveCoreAspectRatio.HD.ratio))));
 
     final mainContent = Padding(
         padding: EdgeInsets.only(left: 20, top: 20),
@@ -207,10 +221,13 @@ class _AppWidgetState extends State<AppWidget> {
           ],
         ));
 
-    final mainContainer = Container(
-      decoration: new BoxDecoration(color: Colors.white),
-      child: Align(alignment: Alignment.topCenter, child: mainContent),
-    );
+    // final mainLayout = Expanded(
+    //     child: Column(children: [
+    //   Row(children: [Expanded(child: Container(color: Colors.blueAccent))]),
+    //   Row(children: [Expanded(child: Container(color: Colors.orangeAccent))]),
+    // ]));
+
+    final body = Container(color: Colors.limeAccent, child: mainContent);
 
     final menuButton = IconButton(icon: Icon(Icons.menu), onPressed: () {});
 
@@ -229,7 +246,7 @@ class _AppWidgetState extends State<AppWidget> {
               menuButton,
             ],
           ),
-          body: mainContainer,
+          body: body,
         ));
   }
 
