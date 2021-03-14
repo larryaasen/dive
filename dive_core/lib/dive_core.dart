@@ -4,6 +4,7 @@ import 'package:dive_obslib/dive_obs_bridge.dart';
 import 'package:riverpod/riverpod.dart';
 
 export 'dive_format.dart';
+export 'dive_elements.dart';
 export 'dive_input_type.dart';
 export 'dive_input.dart';
 export 'dive_media_source.dart';
@@ -113,11 +114,14 @@ class DiveCore {
   static ProviderContainer providerContainer;
 
   /// Provides access to DiveObsBridge
-  static DiveObsBridge get bridge => obsBridge;
+  static DiveObsBridge get bridge {
+    assert(obsBridge != null);
+    return obsBridge;
+  }
 
   static Result notifierFor<Result>(ProviderBase<Object, Result> provider) {
     if (DiveCore.providerContainer == null) {
-      throw ProviderContainerException();
+      throw DiveCoreProviderContainerException();
     }
     return DiveCore.providerContainer != null
         ? DiveCore.providerContainer.read(provider)
@@ -132,6 +136,6 @@ class DiveCore {
   }
 }
 
-class ProviderContainerException implements Exception {
+class DiveCoreProviderContainerException implements Exception {
   String errMsg() => 'DiveCore.providerContainer should not be null.';
 }

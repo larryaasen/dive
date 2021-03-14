@@ -11,6 +11,10 @@ import 'package:uuid/uuid.dart';
 /// Simple, fast generation of RFC4122 UUIDs
 final _uuid = Uuid();
 
+abstract class DiveUuid {
+  static String newId() => _uuid.v1();
+}
+
 /// Count of scenes created
 int _sceneCount = 0;
 
@@ -62,7 +66,7 @@ class DiveTracking {
   /// A RFC4122 V1 UUID (time-based)
   String get trackingUUID => _trackingUUID;
 
-  DiveTracking() : _trackingUUID = _uuid.v1();
+  DiveTracking() : _trackingUUID = DiveUuid.newId();
 }
 
 class DiveVideoMix extends DiveTracking with DiveTextureController {
@@ -90,6 +94,11 @@ class DiveSource extends DiveTracking {
   static Future<DiveSource> create(
           {DiveInputType inputType, String name, DiveSettings settings}) =>
       null;
+
+  @override
+  String toString() {
+    return "${this.runtimeType}($name)";
+  }
 }
 
 class DiveTextureSource extends DiveSource with DiveTextureController {
@@ -126,7 +135,7 @@ class DiveVideoSource extends DiveSource with DiveTextureController {
       : super(inputType: DiveInputType.videoCaptureDevice, name: name);
 
   static Future<DiveVideoSource> create(DiveInput videoInput) async {
-    final source = DiveVideoSource(name: 'my video');
+    final source = DiveVideoSource(name: videoInput.name);
     await source.setupController(source.trackingUUID);
     source.bridgePointer = DiveCore.bridge
         .createVideoSource(source.trackingUUID, videoInput.name, videoInput.id);
