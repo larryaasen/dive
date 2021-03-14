@@ -4,11 +4,11 @@
 description: 'Dart bindings to obslib'
 output: 'ffi_bindings.dart.txt'
 
-compiler-opts: '-I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/include/'
+compiler-opts: '-I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include/'
 
 headers:
   entry-points:
-    - '/Users/larry/Projects/obslib-framework/Headers/obs.h'
+    - '/Users/larry/Projects/obslib-framework/obslib.framework/Headers/obs.h'
   include-directives:
     - '**obs.h'
     - '**/util/c99defs.h'
