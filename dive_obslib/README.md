@@ -90,12 +90,15 @@ https://github.com/dart-lang/sdk/issues/40529#issuecomment-584530622
 * Many of the functions in obs.h are inline, such as obs_source_frame_create, which is not supported in FFI.
 * vec2 and vec3 do not convert using ffigen.
 * Array members not supported in structs like audio_data and audio_output_data.
+* Cannot call obs_startup via FFI because it must run on the main thread and FFI does not run on the main thread.
 
-Completed FFI tasks:
-* experimented calling obs_startup and a few other functions which worked well.
+## Classes
+
+
+DiveObsBridge - called by DiveCore to startup obslib using FFI.
 
 ## ffigen
-Here are the results of the latest ffigen 2.2.5 using ffi 1.0.0.
+Here are the messages of the latest ffigen 2.2.5 run using ffi 1.0.0.
 ```
 $ make ffi
 flutter pub run ffigen --config ffigen-config.yaml

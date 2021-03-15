@@ -1,8 +1,8 @@
+// Copyright (c) 2021 Larry Aasen.
+
 import AVFoundation
 import Cocoa
 import FlutterMacOS
-
-// let _imageProducer = ImageFrameProducer()
 
 public class DiveObsLibPlugin: NSObject, FlutterPlugin {
     struct Method {
@@ -43,7 +43,7 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
     static var textureRegistry: FlutterTextureRegistry?
     
     /// Use Dart FFI with OBS Lib
-    static let obsFFI = true;
+    static let obsFFI = false;
     
     /// Use Flutter plugin with OBS Lib
     static let obsPlugin = !obsFFI;
@@ -56,6 +56,7 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
         registrar.addMethodCallDelegate(instance, channel: channel)
         print("DiveObsLibPlugin registered.")
         
+        // For FFI:
         // This function must be called on the main thread because of some 
         // functions used by OBS that need to be called on the main thread.
         // The other functions can be called on FFI worker threads.

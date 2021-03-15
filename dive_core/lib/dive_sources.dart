@@ -4,7 +4,7 @@ import 'package:dive_core/dive_core.dart';
 import 'package:dive_core/dive_input_type.dart';
 import 'package:dive_core/dive_input.dart';
 import 'package:dive_obslib/dive_obslib.dart';
-import 'package:dive_core/dive_plugin.dart';
+import 'package:dive_obslib/dive_plugin.dart';
 import 'package:dive_core/texture_controller.dart';
 import 'package:uuid/uuid.dart';
 
@@ -182,6 +182,7 @@ class DiveVec2 {
   DiveVec2(this.x, this.y);
 
   static DiveVec2 fromMap(Map map) {
+    assert(map != null);
     return DiveVec2(map['x'], map['y']);
   }
 }

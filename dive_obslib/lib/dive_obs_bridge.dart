@@ -5,10 +5,18 @@ import 'dive_obs_ffi.dart';
 import 'dive_ffi_load.dart';
 import 'dive_bridge_pointer.dart';
 
+/// Connects to obslib using FFI. Will load the obslib library, load modules,
+/// reset video and audio, and creating the streaming service.
 class DiveObsBridge {
   DiveObsBridge();
 
   DiveObslibFFI _lib;
+
+  /// Use Dart FFI with OBS Lib
+  static const bool obsFFI = false;
+
+  /// Use Flutter plugin with OBS Lib
+  static const bool obsPlugin = !obsFFI;
 
   /// Tracks the first scene being created, and sets the output source if first
   bool _isFirstScene = true;
@@ -19,11 +27,13 @@ class DiveObsBridge {
   // FYI: Don't call obs_startup because it must run on the main thread
   // and FFI does not run on the main thread.
 
-  /// Start OBS.
+  /// Start OBS. Connects to obslib using FFI. Will load the obslib library,
+  /// load modules, reset video and audio, and creating the streaming service.
   ///
   /// Example:
   ///   startObs(1280, 720);
   bool startObs(int width, int height) {
+    if (!obsFFI) return false;
     try {
       _startFFI();
 

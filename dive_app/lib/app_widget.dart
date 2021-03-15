@@ -45,7 +45,7 @@ class _BodyWidgetState extends State<BodyWidget> {
   final _referencePanels = DiveReferencePanelsCubit();
   bool _initialized = false;
 
-  static const bool _enableOBS = false;
+  static const bool _enableOBS = true;
   static const bool _enableCameras = _enableOBS && true;
 
   @override

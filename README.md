@@ -1,15 +1,22 @@
 # Dive
 
 Dive is a video recording and streaming platform built on top of Dart and
-Flutter with native extensions on multiple platforms.
+Flutter with native extensions on macOS.
+
+In the future it will be supported on multiple platforms.
 
 ## Introduction
 
-DiveCore - a Flutter plugin package that provides video capabilities.
+Dive is a collection of packages each providing a different level of support.
 
-DiveUI - a Flutter plugin package that provides Widgets for Flutter apps using DiveCore.
+**DiveObslib** - a Flutter plugin package that provides low level access
+to obslib.
 
-DiveApp - a Flutter app for video recording and streaming.
+**DiveCore** - a Flutter plugin package that provides video capabilities.
+
+**DiveUI** - a Flutter plugin package containing Widgets for Flutter apps.
+
+**DiveApp** - a Flutter app for video recording and streaming.
 
 ## DiveObslib
 

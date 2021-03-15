@@ -71,7 +71,6 @@ class DiveReferencePanelsCubit extends Cubit<DiveReferencePanels> {
         panels: state.panels.rebuild((b) =>
             b[panelIndex] = b[panelIndex].copyWith(assignedSource: source)));
 
-    print("DiveReferencePanelsCubit.assignSource $source to $panel");
     emit(newState);
   }
 }
