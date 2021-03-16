@@ -10,7 +10,7 @@
 #include "obslib/obs-output.h"
 #include "obslib/obs-properties.h"
 
-#include "obs_setup.h"
+#include "dive_obs_bridge.h"
 #include "TextureSource.h"
 
 template<typename T, typename D_T, D_T D>
@@ -57,7 +57,7 @@ static bool create_service();
 static void videomix_callback(void *param, struct video_data *frame);
 static void source_frame_callback(void *param, obs_source_t *source, struct obs_source_frame *frame);
 
-extern "C" void addFrameCapture(TextureSource *textureSource) {
+void addFrameCapture(TextureSource *textureSource) {
     if (textureSource == NULL) {
         printf("addFrameCapture: missing textureSource\n");
         return;
@@ -83,7 +83,7 @@ extern "C" void addFrameCapture(TextureSource *textureSource) {
     printf("addFrameCapture: added texture source: %s\n", uuid_str);
 }
 
-extern "C" void removeFrameCapture(TextureSource *textureSource) {
+void removeFrameCapture(TextureSource *textureSource) {
     if (textureSource == NULL) {
         printf("removeFrameCapture: missing textureSource\n");
         return;
@@ -168,16 +168,9 @@ bool load_obs(void)
     return true;
 }
 
-extern "C" bool create_obs(void)
+bool bridge_obs_startup(void)
 {
-    if (obs_started) return true;
-
-    if (!obs_startup("en", NULL, NULL)) {
-        printf("Couldn't create OBS\n");
-        return false; //throw "Couldn't create OBS";
-    }
-    
-    return true;
+    return obs_startup("en", NULL, NULL);
 }
 
 static const int cx = 1280;

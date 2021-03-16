@@ -72,6 +72,7 @@
 		33E5194F232828860026EE4D /* AppInfo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = AppInfo.xcconfig; sourceTree = "<group>"; };
 		4611664D256065CB00240935 /* libobs-opengl.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.bundle"; name = "libobs-opengl.so"; path = "../../../obslib-framework/build/obslib.framework/Versions/A/Libraries/libobs-opengl.so"; sourceTree = "<group>"; };
 		46846523255CD7C100BE44EE /* obslib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = obslib.framework; path = "../../../obslib-framework/build/obslib.framework"; sourceTree = "<group>"; };
+		4697B3D2260004E300A0BF11 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		488822AD10BA7E259E8DF0EE /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
@@ -148,6 +149,7 @@
 			children = (
 				33CC10F02044A3C60003C045 /* AppDelegate.swift */,
 				33CC11122044BFA00003C045 /* MainFlutterWindow.swift */,
+				4697B3D2260004E300A0BF11 /* Runner-Bridging-Header.h */,
 				33E51913231747F40026EE4D /* DebugProfile.entitlements */,
 				33E51914231749380026EE4D /* Release.entitlements */,
 				33CC11242044D66E0003C045 /* Resources */,
@@ -465,6 +467,7 @@
 					"/Users/larry/Projects/obslib-framework/obslib.framework/Versions/A/Frameworks",
 				);
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Profile;
@@ -601,6 +604,7 @@
 					"/Users/larry/Projects/obslib-framework/obslib.framework/Versions/A/Frameworks",
 				);
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -631,6 +635,7 @@
 					"/Users/larry/Projects/obslib-framework/obslib.framework/Versions/A/Frameworks",
 				);
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

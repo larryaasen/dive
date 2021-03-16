@@ -1,5 +1,5 @@
 //
-//  obs_setup.h
+//  dive_obs_bridge.h
 //
 //  Created by Larry Aasen on 11/23/20.
 //
@@ -16,7 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 void addFrameCapture(TextureSource *textureSource);
 void removeFrameCapture(TextureSource *textureSource);
 
-bool create_obs(void);
+bool bridge_obs_startup(void);
+
 bool load_obs(void);
 
 #pragma mark - Bridge functions

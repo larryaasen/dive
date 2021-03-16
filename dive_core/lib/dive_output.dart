@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:dive_core/dive_core.dart';
+import 'package:dive_obslib/dive_obslib.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:state_notifier/state_notifier.dart';
 
@@ -50,14 +51,14 @@ class DiveOutput {
   /// Sync the media state from the media source to the state provider.
   Future<void> _syncState() async {
     DiveCore.notifierFor(stateProvider).updateOutputState(
-        DiveOutputStreamingState.values[DiveCore.bridge.outputGetState()]);
+        DiveOutputStreamingState.values[obslib.outputGetState()]);
     // final state = await DivePlugin.outputGetState();
     // DiveCore.notifierFor(stateProvider)
     //     .updateOutputState(DiveOutputStreamingState.values[state]);
   }
 
   Future<bool> start() async {
-    final rv = DiveCore.bridge.streamOutputStart();
+    final rv = obslib.streamOutputStart();
     syncState(repeating: true);
     return rv;
     // return DivePlugin.startStopStream(true).then((value) {
@@ -67,7 +68,7 @@ class DiveOutput {
   }
 
   Future<bool> stop() async {
-    DiveCore.bridge.streamOutputStop();
+    obslib.streamOutputStop();
     syncState(repeating: true);
     return true;
     // return DivePlugin.startStopStream(false).then((value) {

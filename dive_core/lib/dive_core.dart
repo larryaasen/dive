@@ -1,6 +1,6 @@
 library dive_core;
 
-import 'package:dive_obslib/dive_obs_bridge.dart';
+import 'package:dive_obslib/dive_obslib.dart';
 import 'package:riverpod/riverpod.dart';
 
 export 'dive_format.dart';
@@ -9,7 +9,6 @@ export 'dive_input_type.dart';
 export 'dive_input.dart';
 export 'dive_media_source.dart';
 export 'dive_output.dart';
-// export 'dive_plugin.dart';
 export 'dive_sources.dart';
 export 'dive_system_log.dart';
 export 'dive_system_log.dart';
@@ -103,8 +102,6 @@ class DiveCoreAspectRatio {
   static const IMAX_DIGITAL = r19_10;
 }
 
-DiveObsBridge obsBridge;
-
 /// Usage:
 ///   final core = DiveCore();
 ///   core.setupOBS(DiveCoreResolution.HD);
@@ -112,12 +109,6 @@ DiveObsBridge obsBridge;
 class DiveCore {
   /// For use with Riverpod
   static ProviderContainer providerContainer;
-
-  /// Provides access to DiveObsBridge
-  static DiveObsBridge get bridge {
-    assert(obsBridge != null);
-    return obsBridge;
-  }
 
   static Result notifierFor<Result>(ProviderBase<Object, Result> provider) {
     if (DiveCore.providerContainer == null) {
@@ -129,10 +120,7 @@ class DiveCore {
   }
 
   void setupOBS(DiveCoreResolution resolution) {
-    if (obsBridge != null) return;
-
-    obsBridge = DiveObsBridge();
-    obsBridge.startObs(resolution.width, resolution.height);
+    obslib.startObs(resolution.width, resolution.height);
   }
 }
 

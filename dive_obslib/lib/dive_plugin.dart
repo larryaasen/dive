@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 
+/// Invokes methods on a channel to the plugin.
 class DivePlugin {
   static const String _channelName = 'dive_obslib.io/plugin';
   static const String _methodGetPlatformVersion = 'getPlatformVersion';

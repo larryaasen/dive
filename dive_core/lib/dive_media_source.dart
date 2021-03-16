@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:dive_core/dive_core.dart';
+import 'package:dive_obslib/dive_obslib.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:state_notifier/state_notifier.dart';
 
@@ -66,7 +67,7 @@ class DiveMediaSource extends DiveTextureSource {
     final source = DiveMediaSource(name: 'my media', localFile: localFile);
     await source.setupController(source.trackingUUID);
     source.bridgePointer =
-        DiveCore.bridge.createMediaSource(source.trackingUUID, localFile);
+        obslib.createMediaSource(source.trackingUUID, localFile);
     // if (!await DivePlugin.createMediaSource(source.trackingUUID, localFile)) {
     //   return null;
     // }
@@ -110,9 +111,9 @@ class DiveMediaSource extends DiveTextureSource {
 
   /// Get the media source state for this media source.
   Future<DiveMediaSourceState> getState() async {
-    final mediaState = DiveCore.bridge.mediaSourceGetState(bridgePointer);
-    final duration = DiveCore.bridge.mediaSourceGetDuration(bridgePointer);
-    final ms = DiveCore.bridge.mediaSourceGetTime(bridgePointer);
+    final mediaState = obslib.mediaSourceGetState(bridgePointer);
+    final duration = obslib.mediaSourceGetDuration(bridgePointer);
+    final ms = obslib.mediaSourceGetTime(bridgePointer);
     return DiveMediaSourceState(
         currentTime: ms,
         duration: duration,
@@ -127,7 +128,7 @@ class DiveMediaSource extends DiveTextureSource {
   }
 
   Future<bool> play() async {
-    DiveCore.bridge.mediaSourcePlayPause(bridgePointer, false);
+    obslib.mediaSourcePlayPause(bridgePointer, false);
     await syncState();
     return true;
     // final rv = await DivePlugin.mediaPlayPause(trackingUUID, false);
@@ -138,7 +139,7 @@ class DiveMediaSource extends DiveTextureSource {
   }
 
   Future<bool> pause() async {
-    DiveCore.bridge.mediaSourcePlayPause(bridgePointer, true);
+    obslib.mediaSourcePlayPause(bridgePointer, true);
     await syncState();
     return true;
     // final rv = await DivePlugin.mediaPlayPause(trackingUUID, true);
@@ -149,7 +150,7 @@ class DiveMediaSource extends DiveTextureSource {
   }
 
   Future<bool> restart() async {
-    DiveCore.bridge.mediaSourceRestart(bridgePointer);
+    obslib.mediaSourceRestart(bridgePointer);
     await syncState();
     return true;
     // final rv = await DivePlugin.mediaRestart(trackingUUID);
@@ -160,7 +161,7 @@ class DiveMediaSource extends DiveTextureSource {
   }
 
   Future<bool> stop() async {
-    DiveCore.bridge.mediaSourceStop(bridgePointer);
+    obslib.mediaSourceStop(bridgePointer);
     await syncState();
     return true;
     // final rv = await DivePlugin.mediaStop(trackingUUID);
@@ -171,17 +172,17 @@ class DiveMediaSource extends DiveTextureSource {
   }
 
   Future<int> getDuration() async {
-    return DiveCore.bridge.mediaSourceGetDuration(bridgePointer);
+    return obslib.mediaSourceGetDuration(bridgePointer);
     // return DivePlugin.mediaGetDuration(trackingUUID);
   }
 
   Future<int> getTime() async {
-    return DiveCore.bridge.mediaSourceGetTime(bridgePointer);
+    return obslib.mediaSourceGetTime(bridgePointer);
     // return DivePlugin.mediaGetTime(trackingUUID);
   }
 
   Future<bool> setTime(int ms) async {
-    DiveCore.bridge.mediaSourceSetTime(bridgePointer, ms);
+    obslib.mediaSourceSetTime(bridgePointer, ms);
     return true;
     // return DivePlugin.mediaSetTime(trackingUUID, ms);
   }

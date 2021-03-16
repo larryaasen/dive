@@ -1,22 +1,15 @@
-import 'dart:ffi' as ffi;
-import 'package:ffi/ffi.dart';
+import 'package:dive_obslib/dive_obslib.dart';
 
 import 'dive_obs_ffi.dart';
 import 'dive_ffi_load.dart';
-import 'dive_bridge_pointer.dart';
+
+import 'dart:ffi' as ffi;
+import 'package:ffi/ffi.dart';
 
 /// Connects to obslib using FFI. Will load the obslib library, load modules,
-/// reset video and audio, and creating the streaming service.
-class DiveObsBridge {
-  DiveObsBridge();
-
+/// reset video and audio, and create the streaming service.
+class DiveFFIObslib extends DiveBaseObslib {
   DiveObslibFFI _lib;
-
-  /// Use Dart FFI with OBS Lib
-  static const bool obsFFI = false;
-
-  /// Use Flutter plugin with OBS Lib
-  static const bool obsPlugin = !obsFFI;
 
   /// Tracks the first scene being created, and sets the output source if first
   bool _isFirstScene = true;
@@ -27,34 +20,21 @@ class DiveObsBridge {
   // FYI: Don't call obs_startup because it must run on the main thread
   // and FFI does not run on the main thread.
 
-  /// Start OBS. Connects to obslib using FFI. Will load the obslib library,
-  /// load modules, reset video and audio, and creating the streaming service.
-  ///
-  /// Example:
-  ///   startObs(1280, 720);
-  bool startObs(int width, int height) {
-    if (!obsFFI) return false;
-    try {
-      _startFFI();
-
-      _lib.obs_load_all_modules();
-      _lib.obs_post_load_modules();
-      if (!_resetVideo(width, height)) return false;
-      if (!_resetAudio()) return false;
-
-      // Create streaming service
-      return createService();
-    } catch (e) {
-      print("startObs: exception: $e");
-      return false;
-    }
-  }
-
-  void _startFFI() {
+  @override
+  void initialize() {
+    assert(_lib == null, 'initialize() has already been called once.');
     _lib = DiveObslibFFILoad.loadLib();
   }
 
-  bool _resetVideo(int width, int height) {
+  @override
+  bool loadAllModules() {
+    _lib.obs_load_all_modules();
+    _lib.obs_post_load_modules();
+    return true;
+  }
+
+  @override
+  bool resetVideo(int width, int height) {
     final ovi = allocate<obs_video_info>();
     ovi.ref
       ..adapter = 0
@@ -76,7 +56,8 @@ class DiveObsBridge {
     return true;
   }
 
-  bool _resetAudio() {
+  @override
+  bool resetAudio() {
     final ai = allocate<obs_audio_info>();
     ai.ref
       ..samples_per_sec = 48000
@@ -89,167 +70,7 @@ class DiveObsBridge {
     return true;
   }
 
-  /// Create a new OBS scene.
-  DiveBridgePointer createScene(String trackingUuid, String sceneName) {
-    final scene = _lib.obs_scene_create(sceneName.int8());
-    StringExtensions.freeInt8s();
-    if (scene == null) {
-      print("Couldn't create scene: $sceneName");
-      return null;
-    }
-
-    if (_isFirstScene) {
-      _isFirstScene = false;
-
-      // set the scene as the primary draw source and go
-      final channel = 0;
-      _lib.obs_set_output_source(channel, _lib.obs_scene_get_source(scene));
-    }
-
-    return DiveBridgePointer(trackingUuid, scene);
-  }
-
-  DiveBridgePointer createImageSource(String sourceUuid, String file) {
-    final settings = _lib.obs_data_create();
-    _lib.obs_data_set_string(settings, "file".int8(), file.int8());
-
-    return _createSourceInternal(sourceUuid, "image_source", "image", settings);
-  }
-
-  DiveBridgePointer createMediaSource(String sourceUuid, String localFile) {
-    // Load video file
-    final settings = _lib.obs_get_source_defaults("ffmpeg_source".int8());
-    _lib.obs_data_set_bool(settings, "is_local_file".int8(), 1);
-    _lib.obs_data_set_bool(settings, "looping".int8(), 0);
-    _lib.obs_data_set_bool(settings, "clear_on_media_end".int8(), 0);
-    _lib.obs_data_set_bool(settings, "close_when_inactive".int8(), 1);
-    _lib.obs_data_set_bool(settings, "restart_on_activate".int8(), 0);
-    _lib.obs_data_set_string(settings, "local_file".int8(), localFile.int8());
-
-    return _createSourceInternal(
-        sourceUuid, "ffmpeg_source", "video file", settings);
-  }
-
-  DiveBridgePointer createVideoSource(
-    String sourceUuid,
-    String deviceName,
-    String deviceUid,
-  ) {
-    final settings = _lib.obs_data_create();
-    _lib.obs_data_set_string(settings, "device_name".int8(), deviceName.int8());
-    _lib.obs_data_set_string(settings, "device".int8(), deviceUid.int8());
-
-    // TODO: creating a video source breaks the Flutter connection to the device.
-    return _createSourceInternal(
-        sourceUuid, "av_capture_input", "camera", settings);
-  }
-
-  DiveBridgePointer createSource(
-    String sourceUuid,
-    String sourceId,
-    String name,
-  ) {
-    final source = _lib.obs_source_create(
-        sourceId.int8(), name.int8(), ffi.nullptr, ffi.nullptr);
-    StringExtensions.freeInt8s();
-    if (source.address == 0) {
-      print("Could not create source");
-      return null;
-    }
-
-    return DiveBridgePointer(sourceUuid, source);
-  }
-
-  // static const except = -1;
-
-  /// If you see this message: The method 'FfiTrampoline' was called on null
-  /// make sure to use nullptr instead of null.
-  /// https://github.com/dart-lang/sdk/issues/39804#
-
-  DiveBridgePointer _createSourceInternal(
-    String sourceUuid,
-    String sourceId,
-    String name,
-    ffi.Pointer<obs_data> settings,
-  ) {
-    final source = _lib.obs_source_create(
-        sourceId.int8(), name.int8(), settings, ffi.nullptr);
-    StringExtensions.freeInt8s();
-    if (source.address == 0) {
-      print("Could not create source");
-      return null;
-    }
-
-    return DiveBridgePointer(sourceUuid, source);
-  }
-
-  /// Add an existing source to an existing scene, and return
-  int addSource(DiveBridgePointer scene, DiveBridgePointer source) {
-    final item = _lib.obs_scene_add(scene.pointer, source.pointer);
-    return _lib.obs_sceneitem_get_id(item);
-  }
-
-  /// Get the transform info for a scene item.
-  Map sceneitemGetInfo(DiveBridgePointer scene, int itemId) {
-    if (itemId < 1) {
-      print("invalid item id $itemId");
-      return null;
-    }
-
-    // final item = _lib.obs_scene_find_sceneitem_by_id(scene.pointer, itemId);
-    // obs_transform_info info;
-    // _lib.obs_sceneitem_get_info(item, info);
-    // TODO: finish this
-    return null; // _convert_transform_info_to_dict(info);
-  }
-
-  // Map _convert_transform_vec2_to_dict(vec2 vec) {
-  //   return {"x": vec.x, "y": vec.y};
-  // }
-
-  // Map _convert_transform_info_to_dict(obs_transform_info info) {
-  //   return {
-  //         "pos": _convert_transform_vec2_to_dict(info.pos),
-  //         "rot": info.rot,
-  //         "scale": _convert_transform_vec2_to_dict(info.scale),
-  //         "alignment": info->alignment,
-  //         "bounds_type": bounds_type,
-  //         "bounds_alignment": info->bounds_alignment,
-  //         "bounds": _convert_transform_vec2_to_dict(info.bounds)
-  //     };
-  // }
-
-  /// Stream Controls
-
-  /// Start the stream output.
-  bool streamOutputStart() {
-    final rv = _lib.obs_output_start(_streamOutput);
-    if (rv != 1) {
-      print("stream not started");
-    }
-    return rv == 1;
-  }
-
-  /// Stop the stream output.
-  void streamOutputStop() {
-    _lib.obs_output_stop(_streamOutput);
-  }
-
-  /// Get the output state: 1 (active), 2 (paused), or 3 (reconnecting)
-  int outputGetState() {
-    final active = _lib.obs_output_active(_streamOutput);
-    final paused = _lib.obs_output_paused(_streamOutput);
-    final reconnecting = _lib.obs_output_reconnecting(_streamOutput);
-    int state = 0;
-    if (active == 1)
-      state = 1;
-    else if (paused == 1)
-      state = 2;
-    else if (reconnecting == 1) state = 3;
-
-    return state;
-  }
-
+  @override
   bool createService() {
     final serviceSettings = _lib.obs_data_create();
     final url = "rtmp://live-iad05.twitch.tv/app/<your_stream_key>";
@@ -300,46 +121,219 @@ class DiveObsBridge {
     return true;
   }
 
+  @override
+  DivePointer createScene(String trackingUUID, String sceneName) {
+    assert(_lib != null, 'call initialize() before calling this method.');
+
+    final scene = _lib.obs_scene_create(sceneName.int8());
+    StringExtensions.freeInt8s();
+    if (scene == null) {
+      print("Couldn't create scene: $sceneName");
+      return null;
+    }
+
+    if (_isFirstScene) {
+      _isFirstScene = false;
+
+      // set the scene as the primary draw source and go
+      final channel = 0;
+      _lib.obs_set_output_source(channel, _lib.obs_scene_get_source(scene));
+    }
+
+    return DivePointer(trackingUUID, scene);
+  }
+
+  @override
+  DivePointer createImageSource(String sourceUuid, String file) {
+    final settings = _lib.obs_data_create();
+    _lib.obs_data_set_string(settings, "file".int8(), file.int8());
+
+    return _createSourceInternal(sourceUuid, "image_source", "image", settings);
+  }
+
+  @override
+  DivePointer createMediaSource(String sourceUuid, String localFile) {
+    // Load video file
+    final settings = _lib.obs_get_source_defaults("ffmpeg_source".int8());
+    _lib.obs_data_set_bool(settings, "is_local_file".int8(), 1);
+    _lib.obs_data_set_bool(settings, "looping".int8(), 0);
+    _lib.obs_data_set_bool(settings, "clear_on_media_end".int8(), 0);
+    _lib.obs_data_set_bool(settings, "close_when_inactive".int8(), 1);
+    _lib.obs_data_set_bool(settings, "restart_on_activate".int8(), 0);
+    _lib.obs_data_set_string(settings, "local_file".int8(), localFile.int8());
+
+    return _createSourceInternal(
+        sourceUuid, "ffmpeg_source", "video file", settings);
+  }
+
+  @override
+  DivePointer createVideoSource(
+      String sourceUuid, String deviceName, String deviceUid) {
+    final settings = _lib.obs_data_create();
+    _lib.obs_data_set_string(settings, "device_name".int8(), deviceName.int8());
+    _lib.obs_data_set_string(settings, "device".int8(), deviceUid.int8());
+
+    // TODO: creating a video source breaks the Flutter connection to the device.
+    return _createSourceInternal(
+        sourceUuid, "av_capture_input", "camera", settings);
+  }
+
+  @override
+  DivePointer createSource(String sourceUuid, String sourceId, String name) {
+    final source = _lib.obs_source_create(
+        sourceId.int8(), name.int8(), ffi.nullptr, ffi.nullptr);
+    StringExtensions.freeInt8s();
+    if (source.address == 0) {
+      print("Could not create source");
+      return null;
+    }
+
+    return DivePointer(sourceUuid, source);
+  }
+
+  // static const except = -1;
+
+  /// If you see this message: The method 'FfiTrampoline' was called on null
+  /// make sure to use nullptr instead of null.
+  /// https://github.com/dart-lang/sdk/issues/39804#
+
+  DivePointer _createSourceInternal(
+    String sourceUuid,
+    String sourceId,
+    String name,
+    ffi.Pointer<obs_data> settings,
+  ) {
+    final source = _lib.obs_source_create(
+        sourceId.int8(), name.int8(), settings, ffi.nullptr);
+    StringExtensions.freeInt8s();
+    if (source.address == 0) {
+      print("Could not create source");
+      return null;
+    }
+
+    return DivePointer(sourceUuid, source);
+  }
+
+  /// Add an existing source to an existing scene, and return
+  @override
+  int addSource(DivePointer scene, DivePointer source) {
+    final item = _lib.obs_scene_add(scene.pointer, source.pointer);
+    return _lib.obs_sceneitem_get_id(item);
+  }
+
+  /// Get the transform info for a scene item.
+  @override
+  Map sceneitemGetInfo(DivePointer scene, int itemId) {
+    if (itemId < 1) {
+      print("invalid item id $itemId");
+      return null;
+    }
+
+    // final item = _lib.obs_scene_find_sceneitem_by_id(scene.pointer, itemId);
+    // obs_transform_info info;
+    // _lib.obs_sceneitem_get_info(item, info);
+    // TODO: finish this
+    return null; // _convert_transform_info_to_dict(info);
+  }
+
+  // Map _convert_transform_vec2_to_dict(vec2 vec) {
+  //   return {"x": vec.x, "y": vec.y};
+  // }
+
+  // Map _convert_transform_info_to_dict(obs_transform_info info) {
+  //   return {
+  //         "pos": _convert_transform_vec2_to_dict(info.pos),
+  //         "rot": info.rot,
+  //         "scale": _convert_transform_vec2_to_dict(info.scale),
+  //         "alignment": info->alignment,
+  //         "bounds_type": bounds_type,
+  //         "bounds_alignment": info->bounds_alignment,
+  //         "bounds": _convert_transform_vec2_to_dict(info.bounds)
+  //     };
+  // }
+
+  /// Stream Controls
+
+  /// Start the stream output.
+  @override
+  bool streamOutputStart() {
+    final rv = _lib.obs_output_start(_streamOutput);
+    if (rv != 1) {
+      print("stream not started");
+    }
+    return rv == 1;
+  }
+
+  /// Stop the stream output.
+  @override
+  void streamOutputStop() {
+    _lib.obs_output_stop(_streamOutput);
+  }
+
+  /// Get the output state: 1 (active), 2 (paused), or 3 (reconnecting)
+  @override
+  int outputGetState() {
+    final active = _lib.obs_output_active(_streamOutput);
+    final paused = _lib.obs_output_paused(_streamOutput);
+    final reconnecting = _lib.obs_output_reconnecting(_streamOutput);
+    int state = 0;
+    if (active == 1)
+      state = 1;
+    else if (paused == 1)
+      state = 2;
+    else if (reconnecting == 1) state = 3;
+
+    return state;
+  }
+
   /// Media Controls
   /// TODO: implement signals from media source: obs_source_get_signal_handler
 
   /// Media control: play_pause
-  void mediaSourcePlayPause(DiveBridgePointer source, bool pause) {
+  @override
+  void mediaSourcePlayPause(DivePointer source, bool pause) {
     _lib.obs_source_media_play_pause(source.pointer, pause ? 1 : 0);
   }
 
   /// Media control: restart
-  void mediaSourceRestart(DiveBridgePointer source) {
+  @override
+  void mediaSourceRestart(DivePointer source) {
     _lib.obs_source_media_restart(source.pointer);
   }
 
   /// Media control: stop
-  void mediaSourceStop(DiveBridgePointer source) {
+  @override
+  void mediaSourceStop(DivePointer source) {
     _lib.obs_source_media_stop(source.pointer);
   }
 
   /// Media control: get time
-  int mediaSourceGetDuration(DiveBridgePointer source) {
+  @override
+  int mediaSourceGetDuration(DivePointer source) {
     return _lib.obs_source_media_get_duration(source.pointer);
   }
 
   /// Media control: get time
-  int mediaSourceGetTime(DiveBridgePointer source) {
+  @override
+  int mediaSourceGetTime(DivePointer source) {
     return _lib.obs_source_media_get_time(source.pointer);
   }
 
   /// Media control: set time
-  void mediaSourceSetTime(DiveBridgePointer source, int ms) {
+  @override
+  void mediaSourceSetTime(DivePointer source, int ms) {
     _lib.obs_source_media_set_time(source.pointer, ms);
   }
 
   /// Media control: get state
-  int mediaSourceGetState(DiveBridgePointer source) {
+  @override
+  int mediaSourceGetState(DivePointer source) {
     return _lib.obs_source_media_get_state(source.pointer);
   }
 
   /// Get a list of input types.
   /// Returns array of dictionaries with keys `id` and `name`.
+  @override
   List<Map<String, String>> inputTypes() {
     int idx = 0;
     final List<Map<String, String>> list = [];
@@ -367,6 +361,7 @@ class DiveObsBridge {
 
   /// Get a list of inputs from input type.
   /// Returns an array of maps with keys `id` and `name`.
+  @override
   List<Map<String, String>> inputsFromType(String inputTypeId) {
     final List<Map<String, String>> list = [];
 
@@ -411,40 +406,15 @@ class DiveObsBridge {
 
   /// Get a list of video capture inputs from input type `coreaudio_input_capture`.
   /// @return array of dictionaries with keys `id` and `name`.
+  @override
   List<Map<String, String>> audioInputs() {
     return inputsFromType(DiveObsAudioSourceType.INPUT_AUDIO_SOURCE);
   }
 
   /// Get a list of video capture inputs from input type `av_capture_input`.
   /// Returns an array of maps with keys `id` and `name`.
+  @override
   List<Map<String, String>> videoInputs() {
     return inputsFromType("av_capture_input");
   }
-}
-
-/// Audio Source Types
-
-abstract class DiveObsAudioSourceTypeApple {
-  static const String INPUT_AUDIO_SOURCE = 'coreaudio_input_capture';
-  static const String OUTPUT_AUDIO_SOURCE = 'coreaudio_output_capture';
-}
-
-abstract class DiveObsAudioSourceTypeWin32 {
-  static const String INPUT_AUDIO_SOURCE = 'wasapi_input_capture';
-  static const String OUTPUT_AUDIO_SOURCE = 'wasapi_output_capture';
-}
-
-abstract class DiveObsAudioSourceTypeOther {
-  static const String INPUT_AUDIO_SOURCE = 'pulse_input_capture';
-  static const String OUTPUT_AUDIO_SOURCE = 'pulse_output_capture';
-}
-
-abstract class DiveObsAudioSourceType {
-  // TODO: return based on OS
-  // ignore: non_constant_identifier_names
-  static String get INPUT_AUDIO_SOURCE =>
-      DiveObsAudioSourceTypeApple.INPUT_AUDIO_SOURCE;
-  // ignore: non_constant_identifier_names
-  static String get OUTPUT_AUDIO_SOURCE =>
-      DiveObsAudioSourceTypeApple.OUTPUT_AUDIO_SOURCE;
 }

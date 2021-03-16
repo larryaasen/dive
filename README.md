@@ -145,3 +145,54 @@ or NDI source.
 ### Encoders
 
 ### Services
+
+# Class Diagram
+
+
+FFI:
+dive_core:[DiveScene] -> dive_obslib:[DiveObsBridge -> DiveObslibFFI.dart -> |FFI| -> obslib.framework]
+dive_core:[TextureController] -> dive_obslib:[DivePlugin.dart |->| DiveObsLibPlugin.swift -> obslib.framework]
+
+Plugin:
+dive_core:[DiveScene] -> dive_obslib:[DivePlugin.dart |->| DiveObsLibPlugin.swift -> obslib.framework]
+dive_core:[TextureController] -> dive_obslib:[DivePlugin.dart |->| DiveObsLibPlugin.swift -> obslib.framework]
+
+Note: DiveObslib does not contain anything and is really nothing.
+
+      FFI             Plugin
+      ===             ======
+
+dive_core [========================= no platform code]
+   DiveScene         DiveScene
+       |                 |
+       V                 V
+dive_obslib [========================= macos platform code]
+
+ DiveObsBridge       DivePlugin
+       |                 |
+       V                 V
+ DiveObslibFFI    DiveObsLibPlugin.swift
+       |                 |
+       V                 V
+      FFI         dive_obs_bridge.mm
+       |                 |
+       V                 V
+obslib.framework  obslib.framework
+
+New:
+            DiveScene
+                |
+                V
+dive_obslib [========================= macos platform code]
+             DiveObs
+                |
+       +--------+--------+
+       |                 |
+       V                 V
+ DiveObslibFFI    DiveObsLibPlugin.swift
+       |                 |
+       V                 V
+      FFI         dive_obs_bridge.mm
+       |                 |
+       V                 V
+obslib.framework  obslib.framework

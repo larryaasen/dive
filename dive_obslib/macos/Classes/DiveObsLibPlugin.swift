@@ -55,12 +55,19 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
         let instance = DiveObsLibPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
         print("DiveObsLibPlugin registered.")
+
+        // It would be best if this Swift file could call obslib C functions directly, instead
+        // of having to call them from the obs_setup.mm file. This example of Swift code below
+        // does not compile because `obs_startup` is not found:
+//           let rv1 = obs_startup("en", nil, nil)
+        // Maybe someday in the future, this could be made to work. In the meantime,
+        // all functions in obslib are called from Objective-C files.
         
         // For FFI:
         // This function must be called on the main thread because of some 
         // functions used by OBS that need to be called on the main thread.
         // The other functions can be called on FFI worker threads.
-        let rv = create_obs()
+        let rv = bridge_obs_startup()
 
         // This is old code use for the plugin technique.
        if obsPlugin && rv {

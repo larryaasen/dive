@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dive_core/dive_core.dart';
 import 'package:dive_core/dive_input_type.dart';
 import 'package:dive_core/dive_input.dart';
+import 'package:dive_core/dive_plugin.dart';
 import 'package:dive_obslib/dive_obslib.dart';
 import 'package:dive_obslib/dive_plugin.dart';
 import 'package:dive_core/texture_controller.dart';
@@ -21,7 +22,7 @@ int _sceneCount = 0;
 class DiveInputTypes {
   DiveInputTypes();
   static Future<List<DiveInputType>> all() async =>
-      DiveCore.bridge.inputTypes().map(DiveInputType.fromJson).toList();
+      obslib.inputTypes().map(DiveInputType.fromJson).toList();
   // DivePluginExt.inputTypes();
 }
 
@@ -29,10 +30,10 @@ class DiveInputs {
   static Future<List<DiveInput>> fromType(String typeId) =>
       DivePluginExt.inputsFromType(typeId);
   static Future<List<DiveInput>> audio() async =>
-      DiveCore.bridge.audioInputs().map(DiveInput.fromMap).toList();
+      obslib.audioInputs().map(DiveInput.fromMap).toList();
   // DivePluginExt.audioInputs();
   static Future<List<DiveInput>> video() async =>
-      DiveCore.bridge.videoInputs().map(DiveInput.fromMap).toList();
+      obslib.videoInputs().map(DiveInput.fromMap).toList();
   // DivePluginExt.videoInputs();
 }
 
@@ -86,7 +87,7 @@ class DiveSource extends DiveTracking {
   final DiveInputType inputType;
   final String name;
   final DiveSettings settings;
-  DiveBridgePointer bridgePointer;
+  DivePointer bridgePointer;
 
   DiveSource({this.inputType, this.name, this.settings});
 
@@ -112,7 +113,7 @@ class DiveAudioSource extends DiveSource {
 
   static Future<DiveAudioSource> create(String name) async {
     final source = DiveAudioSource(name: name);
-    source.bridgePointer = DiveCore.bridge.createSource(
+    source.bridgePointer = obslib.createSource(
       // TODO: need to add 'device_id' for audio, such as 'default'
       source.trackingUUID,
       source.inputType.id,
@@ -137,8 +138,8 @@ class DiveVideoSource extends DiveSource with DiveTextureController {
   static Future<DiveVideoSource> create(DiveInput videoInput) async {
     final source = DiveVideoSource(name: videoInput.name);
     await source.setupController(source.trackingUUID);
-    source.bridgePointer = DiveCore.bridge
-        .createVideoSource(source.trackingUUID, videoInput.name, videoInput.id);
+    source.bridgePointer = obslib.createVideoSource(
+        source.trackingUUID, videoInput.name, videoInput.id);
     DivePlugin.addSourceFrameCallback(
         source.trackingUUID, source.bridgePointer.address);
     // if (!await DivePlugin.createVideoSource(
@@ -156,8 +157,7 @@ class DiveImageSource extends DiveTextureSource {
   static Future<DiveImageSource> create(String file) async {
     final source = DiveImageSource(name: 'my image');
     await source.setupController(source.trackingUUID);
-    source.bridgePointer =
-        DiveCore.bridge.createImageSource(source.trackingUUID, file);
+    source.bridgePointer = obslib.createImageSource(source.trackingUUID, file);
     // if (!await DivePlugin.createImageSource(source.trackingUUID, file)) {
     //   return null;
     // }
@@ -310,7 +310,7 @@ class DiveScene extends DiveTracking {
   static const MAX_CHANNELS = 64;
 
   final List<DiveSceneItem> _sceneItems = [];
-  DiveBridgePointer bridgePointer;
+  DivePointer bridgePointer;
 
   static Future<DiveScene> create(String name) async {
     if (_sceneCount > 0) {
@@ -319,7 +319,7 @@ class DiveScene extends DiveTracking {
     _sceneCount++;
 
     final scene = DiveScene();
-    scene.bridgePointer = DiveCore.bridge.createScene(scene.trackingUUID, name);
+    scene.bridgePointer = obslib.createScene(scene.trackingUUID, name);
 
     // if (!await DivePlugin.createScene(scene.trackingUUID, name)) {
     //   return null;
@@ -329,8 +329,7 @@ class DiveScene extends DiveTracking {
   }
 
   Future<DiveSceneItem> addSource(DiveSource source) async {
-    final itemId =
-        DiveCore.bridge.addSource(bridgePointer, source.bridgePointer);
+    final itemId = obslib.addSource(bridgePointer, source.bridgePointer);
     // await DivePlugin.addSource(trackingUUID, source.trackingUUID);
     if (itemId == 0) {
       return null;
