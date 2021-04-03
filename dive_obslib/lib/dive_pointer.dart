@@ -9,6 +9,15 @@ class DivePointer {
   final String trackingUuid;
   final dynamic pointer;
 
+  int toInt() {
+    try {
+      return pointer.address;
+    } catch (e) {
+      print("DivePointer exception $e");
+      return 0;
+    }
+  }
+
   void releasePointer() {
     free(pointer as ffi.Pointer<ffi.Int8>);
   }

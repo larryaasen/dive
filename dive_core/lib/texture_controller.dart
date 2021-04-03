@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:dive_obslib/dive_plugin.dart';
+import 'package:dive_obslib/dive_obslib.dart';
 
 /// The state of a [TextureController].
 class PreviewValue {
@@ -109,7 +109,7 @@ class TextureController extends ValueNotifier<PreviewValue> {
       _creatingCompleter = Completer<void>();
 
       final int textureId =
-          await DivePlugin.initializeTexture(trackingUUID: trackingUUID);
+          await obslib.initializeTexture(trackingUUID: trackingUUID);
       _textureId = textureId;
       value = value.copyWith(
         isInitialized: true,
@@ -135,7 +135,7 @@ class TextureController extends ValueNotifier<PreviewValue> {
     super.dispose();
     if (_creatingCompleter != null) {
       await _creatingCompleter.future;
-      await DivePlugin.disposeTexture(_textureId);
+      await obslib.disposeTexture(_textureId);
       await _eventSubscription?.cancel();
     }
   }

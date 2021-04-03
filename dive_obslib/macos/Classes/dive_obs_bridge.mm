@@ -441,11 +441,11 @@ bool bridge_create_source(const char *source_uuid, const char *source_id, const 
     return _create_source(source_uuid, source_id, name, settings, frame_source);
 }
 
-bool bridge_create_scene(NSString *tracking_uuid, NSString *scene_name) {
+int64_t bridge_create_scene(NSString *tracking_uuid, NSString *scene_name) {
     obs_scene_t *scene = obs_scene_create(scene_name.UTF8String);
     if (!scene) {
         printf("Couldn't create scene: %s\n", scene_name.UTF8String);
-        return false;
+        return NULL;
     }
     
     if (_isFirstScene) {
@@ -458,7 +458,7 @@ bool bridge_create_scene(NSString *tracking_uuid, NSString *scene_name) {
     
     save_scene(tracking_uuid, scene);
 
-    return true;
+    return (int64_t)scene;
 }
 
 bool bridge_release_scene(NSString *tracking_uuid) {
@@ -573,14 +573,10 @@ static NSDictionary *_convert_transform_info_to_dict(obs_transform_info *info) {
 }
 
 /// Get the transform info for a scene item.
-NSDictionary *bridge_sceneitem_get_info(NSString *scene_uuid, int64_t item_id) {
-    const char *scene_uuid_str = scene_uuid.UTF8String;
-    obs_scene_t *scene = uuid_scene_list[scene_uuid_str];
-    if (!scene) {
-        printf("%s: unknown scene %s\n", __func__, scene_uuid_str);
-        return NULL;
-    }
-    
+
+/// TODO: refactor scene_uuid into scene pointer
+NSDictionary *bridge_sceneitem_get_info(int64_t scene_pointer, int64_t item_id) {
+    obs_scene_t *scene = (obs_scene_t *)scene_pointer;
     if (item_id < 1) {
         printf("%s: unvalid item id %llu\n", __func__, item_id);
         return NULL;
@@ -593,14 +589,8 @@ NSDictionary *bridge_sceneitem_get_info(NSString *scene_uuid, int64_t item_id) {
 }
 
 /// Set the transform info for a scene item.
-bool bridge_sceneitem_set_info(NSString *scene_uuid, int64_t item_id, NSDictionary *info) {
-    const char *scene_uuid_str = scene_uuid.UTF8String;
-    obs_scene_t *scene = uuid_scene_list[scene_uuid_str];
-    if (!scene) {
-        printf("%s: unknown scene %s\n", __func__, scene_uuid_str);
-        return NULL;
-    }
-
+bool bridge_sceneitem_set_info(int64_t scene_pointer, int64_t item_id, NSDictionary *info) {
+    obs_scene_t *scene = (obs_scene_t *)scene_pointer;
     if (item_id < 1) {
         printf("%s: unvalid item id %llu\n", __func__, item_id);
         return NULL;

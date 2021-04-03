@@ -39,6 +39,7 @@ extension PointerExtensions<T extends ffi.NativeType> on ffi.Pointer<T> {
 }
 
 class DiveObslibFFILoad {
+  /// Load the libobs library using FFI.
   static DiveObslibFFI loadLib() {
     final _lib = Platform.isAndroid
         ? ffi.DynamicLibrary.open("libobs.0.dylib")

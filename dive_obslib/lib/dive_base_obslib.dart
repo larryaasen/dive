@@ -1,7 +1,11 @@
-import 'dive_pointer.dart';
+import 'dive_ffi_obslib.dart';
+import 'dive_plugin_obslib.dart';
 
-abstract class DiveBaseObslib {
-  void initialize() => throw UnimplementedError();
+class DiveBaseObslib {
+  void initialize() {
+    DiveFFIObslib.initialize();
+    DivePluginObslib.initialize();
+  }
 
   /// Start OBS. Load all modules, reset video and audio, and create the
   /// streaming service.
@@ -10,6 +14,7 @@ abstract class DiveBaseObslib {
   ///   startObs(1280, 720);
   bool startObs(int width, int height) {
     try {
+      if (!loadAllModules()) return false;
       if (!resetVideo(width, height)) return false;
       if (!resetAudio()) return false;
 
@@ -20,34 +25,6 @@ abstract class DiveBaseObslib {
       return false;
     }
   }
-
-  bool loadAllModules();
-  bool resetVideo(int width, int height);
-  bool resetAudio();
-  bool createService();
-
-  DivePointer createScene(String trackingUUID, String sceneName);
-  DivePointer createImageSource(String sourceUuid, String file);
-  DivePointer createMediaSource(String sourceUuid, String localFile);
-  DivePointer createVideoSource(
-      String sourceUuid, String deviceName, String deviceUid);
-  DivePointer createSource(String sourceUuid, String sourceId, String name);
-  int addSource(DivePointer scene, DivePointer source);
-  Map sceneitemGetInfo(DivePointer scene, int itemId);
-  bool streamOutputStart();
-  void streamOutputStop();
-  int outputGetState();
-  void mediaSourcePlayPause(DivePointer source, bool pause);
-  void mediaSourceRestart(DivePointer source);
-  void mediaSourceStop(DivePointer source);
-  int mediaSourceGetDuration(DivePointer source);
-  int mediaSourceGetTime(DivePointer source);
-  void mediaSourceSetTime(DivePointer source, int ms);
-  int mediaSourceGetState(DivePointer source);
-  List<Map<String, String>> inputTypes();
-  List<Map<String, String>> inputsFromType(String inputTypeId);
-  List<Map<String, String>> audioInputs();
-  List<Map<String, String>> videoInputs();
 }
 
 /// Audio Source Types

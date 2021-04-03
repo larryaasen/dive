@@ -6,34 +6,32 @@ import 'dive_ffi_load.dart';
 import 'dart:ffi' as ffi;
 import 'package:ffi/ffi.dart';
 
+/// The FFI loaded libobs library.
+DiveObslibFFI _lib;
+
+/// Tracks the first scene being created, and sets the output source if first
+bool _isFirstScene = true;
+
+/// The streaming service output.
+var _streamOutput;
+
 /// Connects to obslib using FFI. Will load the obslib library, load modules,
 /// reset video and audio, and create the streaming service.
-class DiveFFIObslib extends DiveBaseObslib {
-  DiveObslibFFI _lib;
-
-  /// Tracks the first scene being created, and sets the output source if first
-  bool _isFirstScene = true;
-
-  /// The streaming service output.
-  var _streamOutput;
-
+extension DiveFFIObslib on DiveBaseObslib {
   // FYI: Don't call obs_startup because it must run on the main thread
   // and FFI does not run on the main thread.
 
-  @override
-  void initialize() {
+  static void initialize() {
     assert(_lib == null, 'initialize() has already been called once.');
     _lib = DiveObslibFFILoad.loadLib();
   }
 
-  @override
   bool loadAllModules() {
     _lib.obs_load_all_modules();
     _lib.obs_post_load_modules();
     return true;
   }
 
-  @override
   bool resetVideo(int width, int height) {
     final ovi = allocate<obs_video_info>();
     ovi.ref
@@ -56,7 +54,6 @@ class DiveFFIObslib extends DiveBaseObslib {
     return true;
   }
 
-  @override
   bool resetAudio() {
     final ai = allocate<obs_audio_info>();
     ai.ref
@@ -70,7 +67,6 @@ class DiveFFIObslib extends DiveBaseObslib {
     return true;
   }
 
-  @override
   bool createService() {
     final serviceSettings = _lib.obs_data_create();
     final url = "rtmp://live-iad05.twitch.tv/app/<your_stream_key>";
@@ -121,8 +117,7 @@ class DiveFFIObslib extends DiveBaseObslib {
     return true;
   }
 
-  @override
-  DivePointer createScene(String trackingUUID, String sceneName) {
+  Future<DivePointer> createScene(String trackingUUID, String sceneName) {
     assert(_lib != null, 'call initialize() before calling this method.');
 
     final scene = _lib.obs_scene_create(sceneName.int8());
@@ -140,10 +135,9 @@ class DiveFFIObslib extends DiveBaseObslib {
       _lib.obs_set_output_source(channel, _lib.obs_scene_get_source(scene));
     }
 
-    return DivePointer(trackingUUID, scene);
+    return Future.value(DivePointer(trackingUUID, scene));
   }
 
-  @override
   DivePointer createImageSource(String sourceUuid, String file) {
     final settings = _lib.obs_data_create();
     _lib.obs_data_set_string(settings, "file".int8(), file.int8());
@@ -151,7 +145,6 @@ class DiveFFIObslib extends DiveBaseObslib {
     return _createSourceInternal(sourceUuid, "image_source", "image", settings);
   }
 
-  @override
   DivePointer createMediaSource(String sourceUuid, String localFile) {
     // Load video file
     final settings = _lib.obs_get_source_defaults("ffmpeg_source".int8());
@@ -166,7 +159,6 @@ class DiveFFIObslib extends DiveBaseObslib {
         sourceUuid, "ffmpeg_source", "video file", settings);
   }
 
-  @override
   DivePointer createVideoSource(
       String sourceUuid, String deviceName, String deviceUid) {
     final settings = _lib.obs_data_create();
@@ -178,7 +170,6 @@ class DiveFFIObslib extends DiveBaseObslib {
         sourceUuid, "av_capture_input", "camera", settings);
   }
 
-  @override
   DivePointer createSource(String sourceUuid, String sourceId, String name) {
     final source = _lib.obs_source_create(
         sourceId.int8(), name.int8(), ffi.nullptr, ffi.nullptr);
@@ -214,15 +205,14 @@ class DiveFFIObslib extends DiveBaseObslib {
     return DivePointer(sourceUuid, source);
   }
 
-  /// Add an existing source to an existing scene, and return
-  @override
+  /// Add an existing source to an existing scene, and return sceneitem id.
   int addSource(DivePointer scene, DivePointer source) {
     final item = _lib.obs_scene_add(scene.pointer, source.pointer);
     return _lib.obs_sceneitem_get_id(item);
   }
 
   /// Get the transform info for a scene item.
-  @override
+  /// TODO: this does not work because of FFI struct issues.
   Map sceneitemGetInfo(DivePointer scene, int itemId) {
     if (itemId < 1) {
       print("invalid item id $itemId");
@@ -255,7 +245,6 @@ class DiveFFIObslib extends DiveBaseObslib {
   /// Stream Controls
 
   /// Start the stream output.
-  @override
   bool streamOutputStart() {
     final rv = _lib.obs_output_start(_streamOutput);
     if (rv != 1) {
@@ -265,13 +254,11 @@ class DiveFFIObslib extends DiveBaseObslib {
   }
 
   /// Stop the stream output.
-  @override
   void streamOutputStop() {
     _lib.obs_output_stop(_streamOutput);
   }
 
   /// Get the output state: 1 (active), 2 (paused), or 3 (reconnecting)
-  @override
   int outputGetState() {
     final active = _lib.obs_output_active(_streamOutput);
     final paused = _lib.obs_output_paused(_streamOutput);
@@ -290,50 +277,42 @@ class DiveFFIObslib extends DiveBaseObslib {
   /// TODO: implement signals from media source: obs_source_get_signal_handler
 
   /// Media control: play_pause
-  @override
   void mediaSourcePlayPause(DivePointer source, bool pause) {
     _lib.obs_source_media_play_pause(source.pointer, pause ? 1 : 0);
   }
 
   /// Media control: restart
-  @override
   void mediaSourceRestart(DivePointer source) {
     _lib.obs_source_media_restart(source.pointer);
   }
 
   /// Media control: stop
-  @override
   void mediaSourceStop(DivePointer source) {
     _lib.obs_source_media_stop(source.pointer);
   }
 
   /// Media control: get time
-  @override
   int mediaSourceGetDuration(DivePointer source) {
     return _lib.obs_source_media_get_duration(source.pointer);
   }
 
   /// Media control: get time
-  @override
   int mediaSourceGetTime(DivePointer source) {
     return _lib.obs_source_media_get_time(source.pointer);
   }
 
   /// Media control: set time
-  @override
   void mediaSourceSetTime(DivePointer source, int ms) {
     _lib.obs_source_media_set_time(source.pointer, ms);
   }
 
   /// Media control: get state
-  @override
   int mediaSourceGetState(DivePointer source) {
     return _lib.obs_source_media_get_state(source.pointer);
   }
 
   /// Get a list of input types.
   /// Returns array of dictionaries with keys `id` and `name`.
-  @override
   List<Map<String, String>> inputTypes() {
     int idx = 0;
     final List<Map<String, String>> list = [];
@@ -361,7 +340,6 @@ class DiveFFIObslib extends DiveBaseObslib {
 
   /// Get a list of inputs from input type.
   /// Returns an array of maps with keys `id` and `name`.
-  @override
   List<Map<String, String>> inputsFromType(String inputTypeId) {
     final List<Map<String, String>> list = [];
 
@@ -406,14 +384,12 @@ class DiveFFIObslib extends DiveBaseObslib {
 
   /// Get a list of video capture inputs from input type `coreaudio_input_capture`.
   /// @return array of dictionaries with keys `id` and `name`.
-  @override
   List<Map<String, String>> audioInputs() {
     return inputsFromType(DiveObsAudioSourceType.INPUT_AUDIO_SOURCE);
   }
 
   /// Get a list of video capture inputs from input type `av_capture_input`.
   /// Returns an array of maps with keys `id` and `name`.
-  @override
   List<Map<String, String>> videoInputs() {
     return inputsFromType("av_capture_input");
   }

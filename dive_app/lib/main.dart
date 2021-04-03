@@ -4,7 +4,10 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/all.dart';
 
 void main() {
+  // We need the binding to be initialized before calling runApp.
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Configure globally for all Equatable instances via EquatableConfig
   EquatableConfig.stringify = true;
 
   runApp(ProviderScope(child: AppWidget()));

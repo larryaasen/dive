@@ -85,10 +85,8 @@ class _BodyWidgetState extends State<BodyWidget> {
       });
     });
 
-    DiveInputs.audio().then((audioInputs) {
-      audioInputs.forEach((audioInput) {
-        print(audioInput);
-      });
+    DiveInputs.audio().forEach((audioInput) {
+      print(audioInput);
     });
 
     DiveAudioSource.create('my audio').then((source) {
@@ -101,27 +99,25 @@ class _BodyWidgetState extends State<BodyWidget> {
     var panelIndex = 0;
 
     if (_enableCameras) {
-      DiveInputs.video().then((videoInputs) {
-        var xLoc = 50.0;
-        videoInputs.forEach((videoInput) {
-          print(videoInput);
-          DiveVideoSource.create(videoInput).then((source) {
-            setState(() {
-              _elements.videoSources.add(source);
+      var xLoc = 50.0;
+      DiveInputs.video().forEach((videoInput) {
+        print(videoInput);
+        DiveVideoSource.create(videoInput).then((source) {
+          setState(() {
+            _elements.videoSources.add(source);
 
-              // Auto assign the video source to a panel
-              _referencePanels.assignSource(
-                  source, _referencePanels.state.panels[panelIndex]);
-              panelIndex++;
-            });
-            _elements.currentScene.addSource(source).then((item) {
-              final info = DiveTransformInfo(
-                  pos: DiveVec2(xLoc, 50),
-                  bounds: DiveVec2(500, 280),
-                  boundsType: DiveBoundsType.SCALE_INNER);
-              item.updateTransformInfo(info);
-              xLoc += 680.0;
-            });
+            // Auto assign the video source to a panel
+            _referencePanels.assignSource(
+                source, _referencePanels.state.panels[panelIndex]);
+            panelIndex++;
+          });
+          _elements.currentScene.addSource(source).then((item) {
+            final info = DiveTransformInfo(
+                pos: DiveVec2(xLoc, 50),
+                bounds: DiveVec2(500, 280),
+                boundsType: DiveBoundsType.SCALE_INNER);
+            item.updateTransformInfo(info);
+            xLoc += 680.0;
           });
         });
       });
@@ -139,11 +135,11 @@ class _BodyWidgetState extends State<BodyWidget> {
           panelIndex++;
         });
         _elements.currentScene.addSource(source).then((item) {
-          // final info = DiveTransformInfo(
-          //     pos: DiveVec2(50, 330),
-          //     bounds: DiveVec2(500, 280),
-          //     boundsType: DiveBoundsType.SCALE_INNER);
-          // item.updateTransformInfo(info);
+          final info = DiveTransformInfo(
+              pos: DiveVec2(50, 330),
+              bounds: DiveVec2(500, 280),
+              boundsType: DiveBoundsType.SCALE_INNER);
+          item.updateTransformInfo(info);
         });
       }
     });
@@ -155,11 +151,11 @@ class _BodyWidgetState extends State<BodyWidget> {
           _elements.imageSources.add(source);
         });
         _elements.currentScene.addSource(source).then((item) {
-          // final info = DiveTransformInfo(
-          //     pos: DiveVec2(730, 330),
-          //     bounds: DiveVec2(500, 280),
-          //     boundsType: DiveBoundsType.SCALE_INNER);
-          // item.updateTransformInfo(info);
+          final info = DiveTransformInfo(
+              pos: DiveVec2(730, 330),
+              bounds: DiveVec2(500, 280),
+              boundsType: DiveBoundsType.SCALE_INNER);
+          item.updateTransformInfo(info);
         });
       }
     });
@@ -171,11 +167,11 @@ class _BodyWidgetState extends State<BodyWidget> {
           _elements.imageSources.add(source);
         });
         _elements.currentScene.addSource(source).then((item) {
-          // final info = DiveTransformInfo(
-          //     pos: DiveVec2(590, 298),
-          //     bounds: DiveVec2(100, 124),
-          //     boundsType: DiveBoundsType.SCALE_INNER);
-          // item.updateTransformInfo(info);
+          final info = DiveTransformInfo(
+              pos: DiveVec2(590, 298),
+              bounds: DiveVec2(100, 124),
+              boundsType: DiveBoundsType.SCALE_INNER);
+          item.updateTransformInfo(info);
         });
       }
     });

@@ -14,7 +14,7 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
         static let AddSource = "addSource"
         static let CreateSource = "createSource"
         static let CreateImageSource = "createImageSource"
-        static let CreateMediaSource = "createMediaSource"
+        // static let CreateMediaSource = "createMediaSource"
         static let CreateVideoSource = "createVideoSource"
         static let CreateVideoMix = "createVideoMix"
         static let CreateScene = "createScene"
@@ -63,16 +63,15 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
         // Maybe someday in the future, this could be made to work. In the meantime,
         // all functions in obslib are called from Objective-C files.
         
-        // For FFI:
-        // This function must be called on the main thread because of some 
+        // This function must be called on the main thread because of some
         // functions used by OBS that need to be called on the main thread.
         // The other functions can be called on FFI worker threads.
-        let rv = bridge_obs_startup()
+        bridge_obs_startup()
 
-        // This is old code use for the plugin technique.
-       if obsPlugin && rv {
-           load_obs()
-       }
+//        // This is old code use for the plugin technique.
+//       if obsPlugin && rv {
+//           load_obs()
+//       }
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -97,12 +96,12 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
             ffi ? nil : result(createSource(arguments))
         case Method.CreateImageSource:
             ffi ? nil : result(createImageSource(arguments))
-        case Method.CreateMediaSource:
-            ffi ? nil : result(createMediaSource(arguments))
+        // case Method.CreateMediaSource:
+            // ffi ? nil : result(createMediaSource(arguments))
         case Method.CreateVideoSource:
             ffi ? nil : result(createVideoSource(arguments))
-        case Method.CreateScene:
-            ffi ? nil : result(createScene(arguments))
+        // case Method.CreateScene:
+            // ffi ? nil : result(createScene(arguments))
 
         case Method.MediaPlayPause:
             ffi ? nil : result(mediaPlayPause(arguments))
@@ -222,15 +221,15 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
         return bridge_create_image_source(source_uuid, localFile)
     }
 
-    private func createMediaSource(_ arguments: [String: Any]?) -> Bool {
-        guard let args = arguments,
-            let source_uuid = args["source_uuid"] as! String?,
-            let localFile = args["local_file"] as! String?
-            else {
-                return false
-        }
-        return bridge_create_media_source(source_uuid, localFile)
-    }
+    // private func createMediaSource(_ arguments: [String: Any]?) -> Bool {
+    //     guard let args = arguments,
+    //         let source_uuid = args["source_uuid"] as! String?,
+    //         let localFile = args["local_file"] as! String?
+    //         else {
+    //             return false
+    //     }
+    //     return bridge_create_media_source(source_uuid, localFile)
+    // }
 
     private func createVideoSource(_ arguments: [String: Any]?) -> Bool {
         guard let args = arguments,
@@ -252,15 +251,15 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
         return bridge_add_videomix(tracking_uuid)
     }
 
-    private func createScene(_ arguments: [String: Any]?) -> Bool {
-        guard let args = arguments,
-            let tracking_uuid = args["tracking_uuid"] as! String?,
-            let name = args["name"] as! String?
-            else {
-                return false
-        }
-        return bridge_create_scene(tracking_uuid, name);
-    }
+    // private func createScene(_ arguments: [String: Any]?) -> Int64? {
+    //     guard let args = arguments,
+    //         let tracking_uuid = args["tracking_uuid"] as! String?,
+    //         let name = args["name"] as! String?
+    //         else {
+    //             return nil
+    //     }
+    //     return bridge_create_scene(tracking_uuid, name);
+    // }
     
     private func startStopStream(_ arguments: [String: Any]?) -> Bool {
         guard let args = arguments,
@@ -342,23 +341,23 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
 
     private func getSceneItemInfo(_ arguments: [String: Any]?) -> [String: Any] {
         guard let args = arguments,
-            let scene_uuid = args["scene_uuid"] as! String?,
+            let scene_pointer = args["scene_pointer"] as! Int64?,
             let item_id = args["item_id"] as! Int64?
             else {
                 return [:]
         }
-        return bridge_sceneitem_get_info(scene_uuid, item_id) as? [String: Any] ?? [:]
+        return bridge_sceneitem_get_info(scene_pointer, item_id) as? [String: Any] ?? [:]
     }
     
     private func setSceneItemInfo(_ arguments: [String: Any]?) -> Bool {
         guard let args = arguments,
-            let scene_uuid = args["scene_uuid"] as! String?,
+            let scene_pointer = args["scene_pointer"] as! Int64?,
             let item_id = args["item_id"] as! Int64?,
             let info = args["info"] as! [String: Any]?
             else {
                 return false
         }
-        return bridge_sceneitem_set_info(scene_uuid, item_id, info)
+        return bridge_sceneitem_set_info(scene_pointer, item_id, info)
     }
     
     private func getInputTypes() -> [[String: Any]] {

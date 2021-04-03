@@ -24,15 +24,15 @@ bool load_obs(void);
 
 bool    bridge_source_add_frame_callback(const char *source_uuid, int64_t source_ptr);
 bool    bridge_create_source(const char *source_uuid, const char *source_id, const char *name, bool frame_source);
-bool    bridge_create_scene(NSString *tracking_uuid, NSString *scene_name);
+int64_t bridge_create_scene(NSString *tracking_uuid, NSString *scene_name);
 bool    bridge_release_scene(NSString *scene_uuid);
 bool    bridge_release_source(NSString *source_uuid);
 bool    bridge_create_media_source(NSString *sourc_uuid, NSString *local_file);
 bool    bridge_create_video_source(NSString *source_uuid, NSString *device_name, NSString *device_uid);
 bool    bridge_create_image_source(NSString *source_uuid, NSString *file);
 int64_t bridge_add_source(NSString *scene_uuid, NSString *source_uuid);
-NSDictionary *bridge_sceneitem_get_info(NSString *scene_uuid, int64_t item_id);
-bool bridge_sceneitem_set_info(NSString *scene_uuid, int64_t item_id, NSDictionary *info);
+NSDictionary *bridge_sceneitem_get_info(int64_t scene_pointer, int64_t item_id);
+bool bridge_sceneitem_set_info(int64_t scene_pointer, int64_t item_id, NSDictionary *info);
 
 bool    bridge_add_videomix(const char *tracking_uuid);
 bool    bridge_remove_videomix(const char *tracking_uuid);

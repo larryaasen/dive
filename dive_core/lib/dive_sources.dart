@@ -5,7 +5,6 @@ import 'package:dive_core/dive_input_type.dart';
 import 'package:dive_core/dive_input.dart';
 import 'package:dive_core/dive_plugin.dart';
 import 'package:dive_obslib/dive_obslib.dart';
-import 'package:dive_obslib/dive_plugin.dart';
 import 'package:dive_core/texture_controller.dart';
 import 'package:uuid/uuid.dart';
 
@@ -27,12 +26,12 @@ class DiveInputTypes {
 }
 
 class DiveInputs {
-  static Future<List<DiveInput>> fromType(String typeId) =>
+  static List<DiveInput> fromType(String typeId) =>
       DivePluginExt.inputsFromType(typeId);
-  static Future<List<DiveInput>> audio() async =>
+  static List<DiveInput> audio() =>
       obslib.audioInputs().map(DiveInput.fromMap).toList();
   // DivePluginExt.audioInputs();
-  static Future<List<DiveInput>> video() async =>
+  static List<DiveInput> video() =>
       obslib.videoInputs().map(DiveInput.fromMap).toList();
   // DivePluginExt.videoInputs();
 }
@@ -76,7 +75,7 @@ class DiveVideoMix extends DiveTracking with DiveTextureController {
   static Future<DiveVideoMix> create() async {
     final video = DiveVideoMix();
     await video.setupController(video.trackingUUID);
-    if (!await DivePlugin.createVideoMix(video.trackingUUID)) {
+    if (!await obslib.createVideoMix(video.trackingUUID)) {
       return null;
     }
     return video;
@@ -87,7 +86,7 @@ class DiveSource extends DiveTracking {
   final DiveInputType inputType;
   final String name;
   final DiveSettings settings;
-  DivePointer bridgePointer;
+  DivePointer pointer;
 
   DiveSource({this.inputType, this.name, this.settings});
 
@@ -113,7 +112,7 @@ class DiveAudioSource extends DiveSource {
 
   static Future<DiveAudioSource> create(String name) async {
     final source = DiveAudioSource(name: name);
-    source.bridgePointer = obslib.createSource(
+    source.pointer = obslib.createSource(
       // TODO: need to add 'device_id' for audio, such as 'default'
       source.trackingUUID,
       source.inputType.id,
@@ -127,7 +126,7 @@ class DiveAudioSource extends DiveSource {
     //     false)) {
     //   return null;
     // }
-    return source.bridgePointer == null ? null : source;
+    return source.pointer == null ? null : source;
   }
 }
 
@@ -138,15 +137,10 @@ class DiveVideoSource extends DiveSource with DiveTextureController {
   static Future<DiveVideoSource> create(DiveInput videoInput) async {
     final source = DiveVideoSource(name: videoInput.name);
     await source.setupController(source.trackingUUID);
-    source.bridgePointer = obslib.createVideoSource(
+    source.pointer = obslib.createVideoSource(
         source.trackingUUID, videoInput.name, videoInput.id);
-    DivePlugin.addSourceFrameCallback(
-        source.trackingUUID, source.bridgePointer.address);
-    // if (!await DivePlugin.createVideoSource(
-    //     source.trackingUUID, videoInput.name, videoInput.id)) {
-    //   return null;
-    // }
-    return source.bridgePointer == null ? null : source;
+    obslib.addSourceFrameCallback(source.trackingUUID, source.pointer.address);
+    return source.pointer == null ? null : source;
   }
 }
 
@@ -157,11 +151,11 @@ class DiveImageSource extends DiveTextureSource {
   static Future<DiveImageSource> create(String file) async {
     final source = DiveImageSource(name: 'my image');
     await source.setupController(source.trackingUUID);
-    source.bridgePointer = obslib.createImageSource(source.trackingUUID, file);
+    source.pointer = obslib.createImageSource(source.trackingUUID, file);
     // if (!await DivePlugin.createImageSource(source.trackingUUID, file)) {
     //   return null;
     // }
-    return source.bridgePointer == null ? null : source;
+    return source.pointer == null ? null : source;
   }
 }
 
@@ -295,14 +289,13 @@ class DiveSceneItem {
   Future<void> updateTransformInfo(DiveTransformInfo info) async {
     // get transform info
     final currentInfo =
-        await DivePluginExt.getSceneItemInfo(scene.trackingUUID, itemId);
+        await DivePluginExt.getSceneItemInfo(scene.pointer, itemId);
 
     // update info with changes
     final newInfo = currentInfo.copyFrom(info);
 
     // set transform info
-    return await DivePluginExt.setSceneItemInfo(
-        scene.trackingUUID, itemId, newInfo);
+    return await DivePluginExt.setSceneItemInfo(scene.pointer, itemId, newInfo);
   }
 }
 
@@ -310,7 +303,7 @@ class DiveScene extends DiveTracking {
   static const MAX_CHANNELS = 64;
 
   final List<DiveSceneItem> _sceneItems = [];
-  DivePointer bridgePointer;
+  DivePointer pointer;
 
   static Future<DiveScene> create(String name) async {
     if (_sceneCount > 0) {
@@ -319,17 +312,13 @@ class DiveScene extends DiveTracking {
     _sceneCount++;
 
     final scene = DiveScene();
-    scene.bridgePointer = obslib.createScene(scene.trackingUUID, name);
-
-    // if (!await DivePlugin.createScene(scene.trackingUUID, name)) {
-    //   return null;
-    // }
+    scene.pointer = await obslib.createScene(scene.trackingUUID, name);
 
     return scene;
   }
 
   Future<DiveSceneItem> addSource(DiveSource source) async {
-    final itemId = obslib.addSource(bridgePointer, source.bridgePointer);
+    final itemId = obslib.addSource(pointer, source.pointer);
     // await DivePlugin.addSource(trackingUUID, source.trackingUUID);
     if (itemId == 0) {
       return null;

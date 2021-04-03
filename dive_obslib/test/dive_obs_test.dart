@@ -4,8 +4,8 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:dive_obslib/dive_obslib.dart';
-import 'package:dive_obslib/dive_ffi_obslib.dart';
-import 'package:dive_obslib/dive_plugin_obslib.dart';
+// import 'package:dive_obslib/dive_ffi_obslib.dart';
+// import 'package:dive_obslib/dive_plugin_obslib.dart';
 
 void main() {
   setUp(() {
@@ -14,28 +14,40 @@ void main() {
 
   tearDown(() {});
 
-  test('testing obslib', () async {
+  test('testing startObs', () async {
+    final rv = obslib.startObs(100, 100);
+    expect(rv, isTrue);
+  });
+
+  test('testing createScene', () async {
     var pointer;
 
     pointer = obslib.createScene('trackingUUID', 'name');
     expect(pointer, isNotNull);
   });
 
-  test('testing Plugin obslib', () async {
+  test('testing createScene', () async {
     var pointer;
 
-    final plugin = DivePluginObslib()..initialize();
-    expect(plugin, isNotNull);
-    pointer = plugin.createScene('trackingUUID', 'name');
+    pointer = obslib.createMediaSource('trackingUUID', 'name');
     expect(pointer, isNotNull);
   });
 
-  test('testing FFI obslib', () async {
-    var pointer;
+  // test('testing Plugin obslib', () async {
+  //   var pointer;
 
-    final ffi = DiveFFIObslib()..initialize();
-    expect(ffi, isNotNull);
-    pointer = ffi.createScene('trackingUUID', 'name');
-    expect(pointer, isNotNull);
-  });
+  //   final plugin = DivePluginObslib()..initialize();
+  //   expect(plugin, isNotNull);
+  //   pointer = plugin.createScene('trackingUUID', 'name');
+  //   expect(pointer, isNotNull);
+  // });
+
+  // test('testing FFI obslib', () async {
+  //   var pointer;
+
+  //   final ffi = DiveFFIObslib()..initialize();
+  //   expect(ffi, isNotNull);
+  //   pointer = ffi.createScene('trackingUUID', 'name');
+  //   expect(pointer, isNotNull);
+  // });
 }
