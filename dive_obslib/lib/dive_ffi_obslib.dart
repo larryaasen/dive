@@ -311,6 +311,37 @@ extension DiveFFIObslib on DiveBaseObslib {
     return _lib.obs_source_media_get_state(source.pointer);
   }
 
+  /// Create a volume meter.
+  DivePointer volumeMeterCreate({
+    int faderType = obs_fader_type.OBS_FADER_LOG,
+  }) {
+    final volmeter = _lib.obs_volmeter_create(faderType);
+    return DivePointer(null, volmeter);
+  }
+
+  /// Attache a source to a volume meter.
+  bool volumeMeterAttachSource(DivePointer volumeMeter, DivePointer source) {
+    final rv =
+        _lib.obs_volmeter_attach_source(volumeMeter.pointer, source.pointer);
+    return rv == 1;
+  }
+
+  /// Set the peak meter type for the volume meter.
+  void volumeMeterSetPeakMeterType(DivePointer volumeMeter,
+      {int meterType = obs_peak_meter_type.SAMPLE_PEAK_METER}) {
+    _lib.obs_volmeter_set_peak_meter_type(volumeMeter.pointer, meterType);
+  }
+
+  /// Get the number of channels which are configured for this source.
+  int volumeMeterGetNumberChannels(DivePointer volumeMeter) {
+    return _lib.obs_volmeter_get_nr_channels(volumeMeter.pointer);
+  }
+
+  /// Destroy a volume meter.
+  void volumeMeterDestroy(DivePointer volumeMeter) {
+    _lib.obs_volmeter_destroy(volumeMeter.pointer);
+  }
+
   /// Get a list of input types.
   /// Returns array of dictionaries with keys `id` and `name`.
   List<Map<String, String>> inputTypes() {

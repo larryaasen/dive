@@ -37,9 +37,12 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
         static let GetInputsFromType = "getInputsFromType"
         static let GetAudioInputs = "getAudioInputs"
         static let GetVideoInputs = "getVideoInputs"
+
+        static let AddVolumeMeterCallback = "addVolumeMeterCallback"
     }
     
     static let _channelName = "dive_obslib.io/plugin"
+
     static var textureRegistry: FlutterTextureRegistry?
     
     /// Use Dart FFI with OBS Lib
@@ -56,6 +59,8 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
         registrar.addMethodCallDelegate(instance, channel: channel)
         print("DiveObsLibPlugin registered.")
 
+        Callbacks.shared.register(registrar)
+
         // It would be best if this Swift file could call obslib C functions directly, instead
         // of having to call them from the obs_setup.mm file. This example of Swift code below
         // does not compile because `obs_startup` is not found:
@@ -67,15 +72,9 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
         // functions used by OBS that need to be called on the main thread.
         // The other functions can be called on FFI worker threads.
         bridge_obs_startup()
-
-//        // This is old code use for the plugin technique.
-//       if obsPlugin && rv {
-//           load_obs()
-//       }
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        print("DiveObsLibPlugin.handle method: \(call.method)")
         let arguments = call.arguments != nil ? call.arguments as? [String: Any] : nil
         
         let ffi = DiveObsLibPlugin.obsFFI
@@ -134,6 +133,8 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
             ffi ? nil : result(getAudioInputs())
         case Method.GetVideoInputs:
             ffi ? nil : result(getVideoInputs())
+        case Method.AddVolumeMeterCallback:
+            ffi ? nil : result(addVolumeMeterCallback(arguments))
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -379,5 +380,52 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
 
     private func getVideoInputs() -> [[String: Any]] {
         return bridge_video_inputs() as? [[String: Any]] ?? []
+    }
+    
+    // MARK: volumeMeter
+
+    /// Adds a callback to a volume meter.
+    /// - Returns: Number of channels which are configured for this source, or -1 when the arguments are invalid.
+    private func addVolumeMeterCallback(_ arguments: [String: Any]?) -> Int64 {
+        guard let args = arguments,
+            let volmeter_pointer = args["volmeter_pointer"] as! Int64?
+            else {
+                return -1
+        }
+        return bridge_volmeter_add_callback(volmeter_pointer)
+    }
+}
+
+/// Registers a Flutter channel for invoking methods in response to callbacks
+/// from native code.
+public class Callbacks: NSObject {
+    @objc static public let shared = Callbacks()
+
+    private static let channelNameCallback = "dive_obslib.io/plugin/callback"
+
+    private var channelCallback: FlutterMethodChannel?
+    
+    private override init() {}
+
+    public func register(_ registrar: FlutterPluginRegistrar) {
+        // Setup a channel used for Swift callbacks to send messages to Dart from Swift.
+        channelCallback = FlutterMethodChannel(name: Callbacks.channelNameCallback, binaryMessenger: registrar.messenger)
+    }
+    
+    @objc public func volMeterCallback(pointer: Int, magnitude: [Float], peak: [Float], inputPeak: [Float], arraySize: Int) {
+        guard let callbacks = channelCallback else {
+            return
+        }
+
+        let volmeter_pointer = pointer
+        let arguments = [
+            "volmeter_pointer": volmeter_pointer,
+            "magnitude": magnitude,
+            "peak": peak,
+            "inputPeak": inputPeak
+        ] as [String : Any]
+        callbacks.invokeMethod("volmeter", arguments: arguments, result: {(r:Any?) -> () in
+          // this will be called with r = "some string" (or FlutterMethodNotImplemented)
+        })
     }
 }

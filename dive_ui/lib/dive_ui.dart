@@ -10,8 +10,10 @@ import 'package:flutter_riverpod/all.dart';
 import 'package:path/path.dart' as path;
 
 import 'blocs/dive_reference_panels.dart';
+import 'dive_audio_meter.dart';
 
-export './blocs/dive_reference_panels.dart';
+export 'blocs/dive_reference_panels.dart';
+export 'dive_audio_meter.dart';
 
 class DiveUI {
   /// DiveCore and DiveUI must use the same [ProviderContainer], so it needs
@@ -104,6 +106,15 @@ class MediaPreview extends DivePreview {
     final superWidget = super.build(context);
 
     if (mediaSource == null) return superWidget;
+
+    final meter = Positioned(
+        left: 5,
+        top: 5,
+        right: 5,
+        bottom: 5,
+        child: SizedBox.expand(
+            child: DiveAudioMeter(volumeMeter: mediaSource.volumeMeter)));
+
     final file = new File(mediaSource.localFile);
     String filename = path.basename(file.path);
     final camerasText = Center(
@@ -121,10 +132,12 @@ class MediaPreview extends DivePreview {
         superWidget,
         camerasText,
         buttons,
+        meter,
       ],
     );
+    final content = Container(child: stack, color: Colors.white);
 
-    return stack;
+    return content;
   }
 }
 

@@ -12,6 +12,7 @@
 
 #include "dive_obs_bridge.h"
 #include "TextureSource.h"
+#include <dive_obslib/dive_obslib-Swift.h>
 
 template<typename T, typename D_T, D_T D>
 struct OBSUniqueHandle : std::unique_ptr<T, std::function<D_T>> {
@@ -732,6 +733,36 @@ int bridge_media_source_get_state(NSString *source_uuid) {
 
     obs_media_state state = obs_source_media_get_state(source);
     return state;
+}
+
+#pragma mark - Volume Level
+
+NSArray<NSNumber *> *toFloatArray(const float values[], int array_size) {
+    NSMutableArray<NSNumber *> *numbers = [NSMutableArray arrayWithCapacity:array_size];
+    for (int zz=0; zz!=array_size; zz++) {
+        [numbers addObject:[NSNumber numberWithFloat:values[zz]]];
+    }
+    return numbers;
+}
+
+void _volume_level_callback(void *param,
+                const float magnitude[MAX_AUDIO_CHANNELS],
+                const float peak[MAX_AUDIO_CHANNELS],
+                const float input_peak[MAX_AUDIO_CHANNELS])
+{
+    int64_t volmeter_pointer = (int64_t)param;
+    [[Callbacks shared] volMeterCallbackWithPointer:volmeter_pointer
+                                          magnitude:toFloatArray(magnitude, MAX_AUDIO_CHANNELS)
+                                               peak:toFloatArray(peak, MAX_AUDIO_CHANNELS)
+                                          inputPeak:toFloatArray(input_peak, MAX_AUDIO_CHANNELS)
+                                          arraySize:MAX_AUDIO_CHANNELS];
+}
+
+/// Adds a callback to a volume meter, and returns the number of channels which are configured for this source.
+int64_t bridge_volmeter_add_callback(int64_t volmeter_pointer) {
+    obs_volmeter_t *volmeter = (obs_volmeter_t *)volmeter_pointer;
+    obs_volmeter_add_callback(volmeter, _volume_level_callback, (void *)volmeter_pointer);
+    return obs_volmeter_get_nr_channels(volmeter);
 }
 
 #pragma mark - Inputs

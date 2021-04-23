@@ -123,9 +123,17 @@ class _BodyWidgetState extends State<BodyWidget> {
       });
     }
 
-    final localFile = '/Users/larry/Downloads/Nicholas-Nationals-Play-Ball.mp4';
+    // final localFile = '/Users/larry/Downloads/Nicholas-Nationals-Play-Ball.mp4';
+    final localFile = '/Users/larry/Downloads/SampleVideo_1280x720_5mb.mp4';
     DiveMediaSource.create(localFile).then((source) {
       if (source != null) {
+        DiveVolumeMeter()
+          ..create(source: source).then((volumeMeter) {
+            setState(() {
+              source.volumeMeter = volumeMeter;
+            });
+          });
+
         setState(() {
           _elements.mediaSources.add(source);
 
@@ -265,69 +273,4 @@ class _BodyWidgetState extends State<BodyWidget> {
       return body;
     });
   }
-
-/*
-  Widget buildStudio(BuildContext context) {
-    Widget content;
-    final box1 = DivePreview(_elements.videoSources.length > 0
-        ? _elements.videoSources[0].controller
-        : null);
-    final box2 = DivePreview(_elements.mediaSources.length > 0
-        ? _elements.mediaSources[0].controller
-        : null);
-    final box3 = DivePreview(_elements.videoSources.length > 1
-        ? _elements.videoSources[1].controller
-        : null);
-    final box4 = DivePreview(_elements.imageSources.length > 0
-        ? _elements.imageSources[0].controller
-        : null);
-
-    content = GridView.count(
-      primary: false,
-      padding: const EdgeInsets.all(0),
-      crossAxisCount: 2,
-      childAspectRatio: DiveCoreAspectRatio.HD.toDouble,
-      mainAxisSpacing: 1.0,
-      crossAxisSpacing: 1.0,
-      children: [box1, box2, box3, box4],
-      shrinkWrap: true,
-    );
-
-    final videoMix = DivePreview(_elements.videoMixes.length > 0
-        ? _elements.videoMixes[0].controller
-        : null);
-
-    content = GridView.count(
-      primary: false,
-      padding: const EdgeInsets.all(1.0),
-      crossAxisCount: 2,
-      childAspectRatio: DiveCoreAspectRatio.HD.toDouble,
-      mainAxisSpacing: 1.0,
-      crossAxisSpacing: 1.0,
-      children: [
-        content,
-        videoMix,
-        Container(decoration: new BoxDecoration(color: Colors.blue)),
-        Container(decoration: new BoxDecoration(color: Colors.blue))
-      ],
-      shrinkWrap: true,
-    );
-
-    final mainContainer = Container(
-      decoration: new BoxDecoration(color: Colors.black),
-      child: content,
-    );
-
-    content = mainContainer;
-
-    return MaterialApp(
-        title: 'Dive App',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: content);
-  }
-  */
 }

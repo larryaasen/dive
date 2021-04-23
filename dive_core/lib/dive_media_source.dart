@@ -57,6 +57,8 @@ class DiveMediaSource extends DiveTextureSource {
 
   final String localFile;
 
+  DiveVolumeMeter volumeMeter;
+
   DiveMediaSource({String name, this.localFile})
       : super(inputType: DiveInputType.mediaSource, name: name) {
     _playbackTimer =

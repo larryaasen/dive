@@ -1,6 +1,10 @@
 import 'package:flutter/services.dart';
 import 'package:dive_obslib/dive_obslib.dart';
 
+/// Signature of VolumeMeter callback.
+typedef VolumeMeterCallback = void Function(int volumeMeterPointer,
+    List<dynamic> magnitude, List<dynamic> peak, List<dynamic> inputPeak);
+
 /// Invokes methods on a channel to the plugin.
 extension DivePluginObslib on DiveBaseObslib {
   // static const String _methodGetPlatformVersion = 'getPlatformVersion';
@@ -33,11 +37,48 @@ extension DivePluginObslib on DiveBaseObslib {
   // static const String _methodGetAudioInputs = 'getAudioInputs';
   // static const String _methodGetVideoInputs = 'getVideoInputs';
 
+  static const String _methodAddVolumeMeterCallback = 'addVolumeMeterCallback';
+
   static const String _channelName = 'dive_obslib.io/plugin';
+  static const String _channelNameCallback = 'dive_obslib.io/plugin/callback';
+
   static const MethodChannel _channel =
       const MethodChannel(DivePluginObslib._channelName);
+  static const MethodChannel _channelCallback =
+      const MethodChannel(DivePluginObslib._channelNameCallback);
 
-  static void initialize() {}
+  static final _volumeMeterCallbacks = Map<int, VolumeMeterCallback>();
+
+  void setupChannels() {
+    _channelCallback.setMethodCallHandler(callbacksHandler);
+  }
+
+  Future<dynamic> callbacksHandler(MethodCall methodCall) async {
+    switch (methodCall.method) {
+      case 'volmeter':
+        final volumeMeterPointer =
+            methodCall.arguments['volmeter_pointer'] as int;
+        var magnitude;
+        try {
+          magnitude = methodCall.arguments['magnitude'] as List<dynamic>;
+        } catch (e) {
+          print("exception: $e");
+        }
+        final peak = methodCall.arguments['peak'] as List<dynamic>;
+        final inputPeak = methodCall.arguments['inputPeak'] as List<dynamic>;
+        final callback = _volumeMeterCallbacks[volumeMeterPointer];
+        if (callback != null) {
+          try {
+            callback(volumeMeterPointer, magnitude, peak, inputPeak);
+          } catch (e) {
+            print("callbacksHandler: exception calling callback: $e");
+          }
+        }
+        return true;
+      default:
+        throw MissingPluginException('not implemented');
+    }
+  }
 
   Future<bool> addSourceFrameCallback(
       String sourceUUID, dynamic sourcePtr) async {
@@ -69,4 +110,20 @@ extension DivePluginObslib on DiveBaseObslib {
     return _channel.invokeMethod(_methodSetSceneItemInfo,
         {'scene_pointer': scenePointer, 'item_id': itemId, 'info': info});
   }
+
+  Future<int> addVolumeMeterCallback(
+      int volumeMeterPointer, VolumeMeterCallback callback) {
+    _volumeMeterCallbacks[volumeMeterPointer] = callback;
+    return _channel.invokeMethod(_methodAddVolumeMeterCallback,
+        {'volmeter_pointer': volumeMeterPointer});
+  }
+
+  Future<bool> removeVolumeMeterCallback(
+      int volumeMeterPointer, VolumeMeterCallback callback) async {
+    _volumeMeterCallbacks.remove(volumeMeterPointer);
+    return true;
+    // TODO: call the method to remove callback
+  }
+
+  // TODO: look at all of the returns with await and make them consistent.
 }

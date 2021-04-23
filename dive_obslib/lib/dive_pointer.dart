@@ -1,8 +1,7 @@
 import 'dart:ffi' as ffi;
 import 'package:ffi/ffi.dart';
 
-/// Track of all created pointers where the key is a tracking UUID and the
-/// value is an object pointer.
+/// Wrap an obslib pointer in a Dart class.
 class DivePointer {
   DivePointer(this.trackingUuid, this.pointer);
 

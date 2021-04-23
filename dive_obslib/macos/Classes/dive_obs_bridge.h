@@ -53,6 +53,10 @@ int64_t bridge_media_source_get_time(NSString *source_uuid);
 bool bridge_media_source_set_time(NSString *source_uuid, int64_t ms);
 int bridge_media_source_get_state(NSString *source_uuid);
 
+#pragma mark - Volume Level
+
+int64_t bridge_volmeter_add_callback(int64_t volmeter_pointer);
+
 #pragma mark - Inputs
 
 NSArray *bridge_input_types();

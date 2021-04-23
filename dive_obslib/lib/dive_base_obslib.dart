@@ -4,7 +4,7 @@ import 'dive_plugin_obslib.dart';
 class DiveBaseObslib {
   void initialize() {
     DiveFFIObslib.initialize();
-    DivePluginObslib.initialize();
+    setupChannels();
   }
 
   /// Start OBS. Load all modules, reset video and audio, and create the
