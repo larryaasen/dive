@@ -50,23 +50,30 @@ class DiveOutput {
 
   /// Sync the media state from the media source to the state provider.
   Future<void> _syncState() async {
-    final state = await DivePlugin.outputGetState();
-    DiveCore.notifierFor(stateProvider)
-        .updateOutputState(DiveOutputStreamingState.values[state]);
-    return;
+    DiveCore.notifierFor(stateProvider).updateOutputState(
+        DiveOutputStreamingState.values[obslib.outputGetState()]);
+    // final state = await DivePlugin.outputGetState();
+    // DiveCore.notifierFor(stateProvider)
+    //     .updateOutputState(DiveOutputStreamingState.values[state]);
   }
 
   Future<bool> start() async {
-    return DivePlugin.startStopStream(true).then((value) {
-      syncState(repeating: true);
-      return value;
-    });
+    final rv = obslib.streamOutputStart();
+    syncState(repeating: true);
+    return rv;
+    // return DivePlugin.startStopStream(true).then((value) {
+    //   syncState(repeating: true);
+    //   return value;
+    // });
   }
 
   Future<bool> stop() async {
-    return DivePlugin.startStopStream(false).then((value) {
-      syncState(repeating: true);
-      return value;
-    });
+    obslib.streamOutputStop();
+    syncState(repeating: true);
+    return true;
+    // return DivePlugin.startStopStream(false).then((value) {
+    //   syncState(repeating: true);
+    //   return value;
+    // });
   }
 }

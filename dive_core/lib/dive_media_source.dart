@@ -46,7 +46,6 @@ class DiveMediaSourceStateNotifier extends StateNotifier<DiveMediaSourceState> {
 
   void updateMediaState(DiveMediaSourceState stateModel) {
     state = stateModel;
-    DiveSystemLog.message("new state: $state");
   }
 }
 
@@ -56,20 +55,25 @@ class DiveMediaSource extends DiveTextureSource {
 
   Timer _playbackTimer;
 
-  DiveMediaSource({String name})
+  final String localFile;
+
+  DiveVolumeMeter volumeMeter;
+
+  DiveMediaSource({String name, this.localFile})
       : super(inputType: DiveInputType.mediaSource, name: name) {
     _playbackTimer =
         Timer.periodic(Duration(milliseconds: 1000), timerCallback);
   }
 
   static Future<DiveMediaSource> create(String localFile) async {
-    final source = DiveMediaSource(name: 'my media');
+    final source = DiveMediaSource(name: 'my media', localFile: localFile);
     await source.setupController(source.trackingUUID);
-    if (!await DivePlugin.createMediaSource(source.trackingUUID, localFile)) {
-      return null;
-    }
+    source.pointer = obslib.createMediaSource(source.trackingUUID, localFile);
+    // if (!await DivePlugin.createMediaSource(source.trackingUUID, localFile)) {
+    //   return null;
+    // }
     await source.syncState();
-    return source;
+    return source.pointer == null ? null : source;
   }
 
   /// Remove this media source.
@@ -107,57 +111,80 @@ class DiveMediaSource extends DiveTextureSource {
   }
 
   /// Get the media source state for this media source.
-  Future<DiveMediaSourceState> getState() {
-    return DivePlugin.mediaGetState(trackingUUID).then((mediaState) =>
-        DivePlugin.mediaGetDuration(trackingUUID).then((duration) =>
-            DivePlugin.mediaGetTime(trackingUUID).then((ms) =>
-                DiveMediaSourceState(
-                    currentTime: ms,
-                    duration: duration,
-                    mediaState: DiveMediaState.values[mediaState]))));
+  Future<DiveMediaSourceState> getState() async {
+    final mediaState = obslib.mediaSourceGetState(pointer);
+    final duration = obslib.mediaSourceGetDuration(pointer);
+    final ms = obslib.mediaSourceGetTime(pointer);
+    return DiveMediaSourceState(
+        currentTime: ms,
+        duration: duration,
+        mediaState: DiveMediaState.values[mediaState]);
+    // return DivePlugin.mediaGetState(trackingUUID).then((mediaState) =>
+    //     DivePlugin.mediaGetDuration(trackingUUID).then((duration) =>
+    //         DivePlugin.mediaGetTime(trackingUUID).then((ms) =>
+    //             DiveMediaSourceState(
+    //                 currentTime: ms,
+    //                 duration: duration,
+    //                 mediaState: DiveMediaState.values[mediaState]))));
   }
 
   Future<bool> play() async {
-    final rv = await DivePlugin.mediaPlayPause(trackingUUID, false);
-    if (rv) {
-      await syncState();
-    }
-    return rv;
+    obslib.mediaSourcePlayPause(pointer, false);
+    await syncState();
+    return true;
+    // final rv = await DivePlugin.mediaPlayPause(trackingUUID, false);
+    // if (rv) {
+    //   await syncState();
+    // }
+    // return rv;
   }
 
   Future<bool> pause() async {
-    final rv = await DivePlugin.mediaPlayPause(trackingUUID, true);
-    if (rv) {
-      await syncState();
-    }
-    return rv;
+    obslib.mediaSourcePlayPause(pointer, true);
+    await syncState();
+    return true;
+    // final rv = await DivePlugin.mediaPlayPause(trackingUUID, true);
+    // if (rv) {
+    //   await syncState();
+    // }
+    // return rv;
   }
 
   Future<bool> restart() async {
-    final rv = await DivePlugin.mediaRestart(trackingUUID);
-    if (rv) {
-      await syncState();
-    }
-    return rv;
+    obslib.mediaSourceRestart(pointer);
+    await syncState();
+    return true;
+    // final rv = await DivePlugin.mediaRestart(trackingUUID);
+    // if (rv) {
+    //   await syncState();
+    // }
+    // return rv;
   }
 
   Future<bool> stop() async {
-    final rv = await DivePlugin.mediaStop(trackingUUID);
-    if (rv) {
-      await syncState();
-    }
-    return rv;
+    obslib.mediaSourceStop(pointer);
+    await syncState();
+    return true;
+    // final rv = await DivePlugin.mediaStop(trackingUUID);
+    // if (rv) {
+    //   await syncState();
+    // }
+    // return rv;
   }
 
-  Future<int> getDuration() {
-    return DivePlugin.mediaGetDuration(trackingUUID);
+  Future<int> getDuration() async {
+    return obslib.mediaSourceGetDuration(pointer);
+    // return DivePlugin.mediaGetDuration(trackingUUID);
   }
 
-  Future<int> getTime() {
-    return DivePlugin.mediaGetTime(trackingUUID);
+  Future<int> getTime() async {
+    return obslib.mediaSourceGetTime(pointer);
+    // return DivePlugin.mediaGetTime(trackingUUID);
   }
 
-  Future<bool> setTime(int ms) {
-    return DivePlugin.mediaSetTime(trackingUUID, ms);
+  Future<bool> setTime(int ms) async {
+    obslib.mediaSourceSetTime(pointer, ms);
+    return true;
+    // return DivePlugin.mediaSetTime(trackingUUID, ms);
   }
 }

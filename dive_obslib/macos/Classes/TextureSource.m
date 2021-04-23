@@ -1,6 +1,6 @@
 #include <stdio.h>
 #import <libkern/OSAtomic.h>
-
+#import <stdatomic.h>
 #import "TextureSource.h"
 
 @interface TextureSource ()
@@ -44,6 +44,7 @@
     self._sampleCount++;
     CFRetain(newBuffer);
     CVPixelBufferRef old = _latestPixelBuffer;
+//    atomic_compare_exchange_strong(<#object#>, <#expected#>, <#desired#>);
     while (!OSAtomicCompareAndSwapPtrBarrier(old, newBuffer, (void **)&_latestPixelBuffer)) {
         old = _latestPixelBuffer;
     }

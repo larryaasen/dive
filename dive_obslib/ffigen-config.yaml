@@ -1,0 +1,69 @@
+# Run:
+# $ pub run ffigen --config ffigen-config.yaml
+
+description: 'Dart bindings to obslib'
+output: 'ffi_bindings.dart.txt'
+
+compiler-opts: '-I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include/'
+
+headers:
+  entry-points:
+    - '/Users/larry/Projects/obslib-framework/obslib.framework/Headers/obs.h'
+  include-directives:
+    - '**obs.h'
+    - '**/util/c99defs.h'
+    - '**/util/bmem.h'
+    - '**/util/profiler.h'
+    - '**/util/text-lookup.h'
+    - '**/graphics/graphics.h'
+    - '**/graphics/vec2.h'
+    - '**/graphics/vec3.h'
+    - '**/media-io/audio-io.h'
+    - '**/media-io/video-io.h'
+    - '**/callback/signal.h'
+    - '**/callback/proc.h'
+    - '**/obs-config.h'
+    - '**/obs-defs.h'
+    - '**/obs-data.h'
+    - '**/obs-ui.h'
+    - '**/obs-properties.h'
+    - '**/obs-interaction.h'
+    - '**/obs-source.h'
+    - '**/obs-encoder.h'
+    - '**/obs-output.h'
+    - '**/obs-service.h'
+    - '**/obs-audio-controls.h'
+    - '**/obs-hotkey.h'
+
+name: 'DiveObslibFFI'
+
+# Do not sort the bindings according to name, but keep the order as in the source files
+sort: false
+
+dart-bool: false
+
+preamble: |
+  // ignore: slash_for_doc_comments
+  /******************************************************************************
+    Copyright (C) 2013-2021 by Hugh Bailey <jim@obsproject.com>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  ******************************************************************************/
+  
+  // The package ffigen generates code that generates warnings with the Dart
+  // analyzer, so ignore some of the rules.
+  // ignore_for_file: non_constant_identifier_names
+  // ignore_for_file: camel_case_types
+  // ignore_for_file: unused_element
+  // ignore_for_file: unused_field

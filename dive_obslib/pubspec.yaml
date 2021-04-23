@@ -5,7 +5,7 @@ author:
 homepage:
 
 environment:
-  sdk: '>=2.7.0 <3.0.0'
+  sdk: '>=2.9.0 <3.0.0'
   flutter: '>=1.20.0 <2.0.0'
 
 dependencies:
@@ -13,12 +13,14 @@ dependencies:
     sdk: flutter
 
   # From Dart team: Utilities for working with FFI code
-  # ffi: ^0.1.3
+  ffi: ^0.1.3
 
   # From: yuli.dev. Simple, fast generation of RFC4122 UUIDs
   uuid: ^2.2.2
 
 dev_dependencies:
+  ffigen: ^1.2.0
+
   flutter_test:
     sdk: flutter
 

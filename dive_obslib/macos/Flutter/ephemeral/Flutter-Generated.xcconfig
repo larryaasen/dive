@@ -2,9 +2,9 @@
 FLUTTER_ROOT=/Applications/flutter
 FLUTTER_APPLICATION_PATH=/Users/larry/Projects/dive/dive_obslib
 FLUTTER_BUILD_DIR=build
-FLUTTER_FRAMEWORK_DIR=/Applications/flutter/bin/cache/artifacts/engine/darwin-x64
 FLUTTER_BUILD_NAME=0.0.1
 FLUTTER_BUILD_NUMBER=0.0.1
+EXCLUDED_ARCHS=arm64
 DART_OBFUSCATION=false
 TRACK_WIDGET_CREATION=false
 TREE_SHAKE_ICONS=false

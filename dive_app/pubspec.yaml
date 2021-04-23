@@ -18,10 +18,17 @@ dependencies:
   dive_ui:
     path: ../dive_ui
 
-  # From fluttetcommunity.dev: Simplify Dart Equality Comparisons
-  equatable: ^1.2.5
+  # From bloclibrary.dev: easy to implement the BLoC Design Pattern
+  bloc: ^6.1.3
 
-  # flutter_bloc: ^6.0.5
+  # From dart.dev: immutable collections using the builder pattern
+  built_collection: ^5.0.0
+
+  # From bloclibrary.dev: Widgets that make it easy to use blocs and cubits
+  flutter_bloc: ^6.1.3
+
+  # From fluttetcommunity.dev: Simplify Dart Equality Comparisons
+  equatable: ^2.0.0
 
   # From darky12s@gmail.com: a state-manangement library
   flutter_riverpod: ^0.12.1

@@ -26,19 +26,7 @@
 		33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F22044A3C60003C045 /* Assets.xcassets */; };
 		33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F42044A3C60003C045 /* MainMenu.xib */; };
 		33CC11132044BFA00003C045 /* MainFlutterWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC11122044BFA00003C045 /* MainFlutterWindow.swift */; };
-		33D1A10422148B71006C7A3E /* FlutterMacOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33D1A10322148B71006C7A3E /* FlutterMacOS.framework */; };
-		33D1A10522148B93006C7A3E /* FlutterMacOS.framework in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 33D1A10322148B71006C7A3E /* FlutterMacOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		46116639255F8DB800240935 /* libobs-scripting.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 4684651B255CD53C00BE44EE /* libobs-scripting.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		4611663A255F8DBB00240935 /* libobs-frontend-api.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 4684651E255CD53C00BE44EE /* libobs-frontend-api.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		4611663B255F8DBC00240935 /* libobs.0.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 4684651D255CD53C00BE44EE /* libobs.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		4611663C255F8DBF00240935 /* libobsglad.0.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 4684651C255CD53C00BE44EE /* libobsglad.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4611664E2560661C00240935 /* libobs-opengl.so in Frameworks */ = {isa = PBXBuildFile; fileRef = 4611664D256065CB00240935 /* libobs-opengl.so */; };
-		4684651F255CD53C00BE44EE /* libobs-scripting.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4684651B255CD53C00BE44EE /* libobs-scripting.dylib */; };
-		46846520255CD53C00BE44EE /* libobsglad.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4684651C255CD53C00BE44EE /* libobsglad.0.dylib */; };
-		46846521255CD53C00BE44EE /* libobs.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4684651D255CD53C00BE44EE /* libobs.0.dylib */; };
-		46846522255CD53C00BE44EE /* libobs-frontend-api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4684651E255CD53C00BE44EE /* libobs-frontend-api.dylib */; };
-		D73912F022F37F9E000D13A0 /* App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D73912EF22F37F9E000D13A0 /* App.framework */; };
-		D73912F222F3801D000D13A0 /* App.framework in Bundle Framework */ = {isa = PBXBuildFile; fileRef = D73912EF22F37F9E000D13A0 /* App.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E371F331FB71370476A26A8F /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC6D3719D6D535C9062FD16 /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
 
@@ -59,12 +47,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				46116639255F8DB800240935 /* libobs-scripting.dylib in Bundle Framework */,
-				D73912F222F3801D000D13A0 /* App.framework in Bundle Framework */,
-				4611663A255F8DBB00240935 /* libobs-frontend-api.dylib in Bundle Framework */,
-				4611663C255F8DBF00240935 /* libobsglad.0.dylib in Bundle Framework */,
-				4611663B255F8DBC00240935 /* libobs.0.dylib in Bundle Framework */,
-				33D1A10522148B93006C7A3E /* FlutterMacOS.framework in Bundle Framework */,
 			);
 			name = "Bundle Framework";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -85,20 +67,15 @@
 		33CEB47222A05771004F2AC0 /* Flutter-Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Flutter-Debug.xcconfig"; sourceTree = "<group>"; };
 		33CEB47422A05771004F2AC0 /* Flutter-Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Flutter-Release.xcconfig"; sourceTree = "<group>"; };
 		33CEB47722A0578A004F2AC0 /* Flutter-Generated.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "Flutter-Generated.xcconfig"; path = "ephemeral/Flutter-Generated.xcconfig"; sourceTree = "<group>"; };
-		33D1A10322148B71006C7A3E /* FlutterMacOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FlutterMacOS.framework; path = Flutter/ephemeral/FlutterMacOS.framework; sourceTree = SOURCE_ROOT; };
 		33E51913231747F40026EE4D /* DebugProfile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DebugProfile.entitlements; sourceTree = "<group>"; };
 		33E51914231749380026EE4D /* Release.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Release.entitlements; sourceTree = "<group>"; };
 		33E5194F232828860026EE4D /* AppInfo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = AppInfo.xcconfig; sourceTree = "<group>"; };
 		4611664D256065CB00240935 /* libobs-opengl.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.bundle"; name = "libobs-opengl.so"; path = "../../../obslib-framework/build/obslib.framework/Versions/A/Libraries/libobs-opengl.so"; sourceTree = "<group>"; };
-		4684651B255CD53C00BE44EE /* libobs-scripting.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libobs-scripting.dylib"; path = "../../../obs-studio/build/rundir/RelWithDebInfo/bin/libobs-scripting.dylib"; sourceTree = "<group>"; };
-		4684651C255CD53C00BE44EE /* libobsglad.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libobsglad.0.dylib; path = "../../../obs-studio/build/rundir/RelWithDebInfo/bin/libobsglad.0.dylib"; sourceTree = "<group>"; };
-		4684651D255CD53C00BE44EE /* libobs.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libobs.0.dylib; path = "../../../obs-studio/build/rundir/RelWithDebInfo/bin/libobs.0.dylib"; sourceTree = "<group>"; };
-		4684651E255CD53C00BE44EE /* libobs-frontend-api.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libobs-frontend-api.dylib"; path = "../../../obs-studio/build/rundir/RelWithDebInfo/bin/libobs-frontend-api.dylib"; sourceTree = "<group>"; };
 		46846523255CD7C100BE44EE /* obslib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = obslib.framework; path = "../../../obslib-framework/build/obslib.framework"; sourceTree = "<group>"; };
+		4697B3D2260004E300A0BF11 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		488822AD10BA7E259E8DF0EE /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
-		D73912EF22F37F9E000D13A0 /* App.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = App.framework; path = Flutter/ephemeral/App.framework; sourceTree = SOURCE_ROOT; };
 		FB6B8816E9130E24CE142E6A /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -108,12 +85,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4611664E2560661C00240935 /* libobs-opengl.so in Frameworks */,
-				4684651F255CD53C00BE44EE /* libobs-scripting.dylib in Frameworks */,
-				46846520255CD53C00BE44EE /* libobsglad.0.dylib in Frameworks */,
-				46846521255CD53C00BE44EE /* libobs.0.dylib in Frameworks */,
-				46846522255CD53C00BE44EE /* libobs-frontend-api.dylib in Frameworks */,
-				D73912F022F37F9E000D13A0 /* App.framework in Frameworks */,
-				33D1A10422148B71006C7A3E /* FlutterMacOS.framework in Frameworks */,
 				E371F331FB71370476A26A8F /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -169,8 +140,6 @@
 				33CEB47222A05771004F2AC0 /* Flutter-Debug.xcconfig */,
 				33CEB47422A05771004F2AC0 /* Flutter-Release.xcconfig */,
 				33CEB47722A0578A004F2AC0 /* Flutter-Generated.xcconfig */,
-				D73912EF22F37F9E000D13A0 /* App.framework */,
-				33D1A10322148B71006C7A3E /* FlutterMacOS.framework */,
 			);
 			path = Flutter;
 			sourceTree = "<group>";
@@ -180,6 +149,7 @@
 			children = (
 				33CC10F02044A3C60003C045 /* AppDelegate.swift */,
 				33CC11122044BFA00003C045 /* MainFlutterWindow.swift */,
+				4697B3D2260004E300A0BF11 /* Runner-Bridging-Header.h */,
 				33E51913231747F40026EE4D /* DebugProfile.entitlements */,
 				33E51914231749380026EE4D /* Release.entitlements */,
 				33CC11242044D66E0003C045 /* Resources */,
@@ -203,10 +173,6 @@
 			children = (
 				4611664D256065CB00240935 /* libobs-opengl.so */,
 				46846523255CD7C100BE44EE /* obslib.framework */,
-				4684651E255CD53C00BE44EE /* libobs-frontend-api.dylib */,
-				4684651B255CD53C00BE44EE /* libobs-scripting.dylib */,
-				4684651D255CD53C00BE44EE /* libobs.0.dylib */,
-				4684651C255CD53C00BE44EE /* libobsglad.0.dylib */,
 				1AC6D3719D6D535C9062FD16 /* Pods_Runner.framework */,
 			);
 			name = Frameworks;
@@ -227,7 +193,6 @@
 				3399D490228B24CF009A79C7 /* ShellScript */,
 				355C401F1253C163D0A8E9DF /* [CP] Embed Pods Frameworks */,
 				46116B592560690A00240935 /* ShellScript */,
-				46116B5A25607E2F00240935 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -312,7 +277,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"$PRODUCT_NAME.app\" > \"$PROJECT_DIR\"/Flutter/ephemeral/.app_filename\n";
+			shellScript = "echo \"$PRODUCT_NAME.app\" > \"$PROJECT_DIR\"/Flutter/ephemeral/.app_filename && \"$FLUTTER_ROOT\"/packages/flutter_tools/bin/macos_assemble.sh embed\n";
 		};
 		33CC111E2044C6BF0003C045 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -340,9 +305,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/dive_obslib/dive_obslib.framework",
+				"${PODS_ROOT}/../../../../obslib-framework/obslib.framework",
+				"${BUILT_PRODUCTS_DIR}/path_provider_macos/path_provider_macos.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/dive_obslib.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/path_provider_macos.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -365,23 +337,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Copy the framework resources to a specific folder in the app Resources\ncp -R ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework/Resources/data ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\nrsync ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework/PlugIns/* ${TARGET_BUILD_DIR}/${PLUGINS_FOLDER_PATH}\n";
-		};
-		46116B5A25607E2F00240935 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n";
 		};
 		506E67825491E83E8724D879 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -479,7 +434,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -504,13 +459,15 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks/obslib.framework/Versions/A/Frameworks",
 					"@loader_path/../Frameworks/obslib.framework/Versions/A/Libraries",
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"/Users/larry/Projects/obslib-framework/build/obslib.framework/Versions/A/Libraries",
-					"/Users/larry/Projects/obslib-framework/build/obslib.framework/Versions/A/Frameworks",
+					"/Users/larry/Projects/obslib-framework/obslib.framework/Versions/A/Libraries",
+					"/Users/larry/Projects/obslib-framework/obslib.framework/Versions/A/Frameworks",
 				);
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Profile;
@@ -567,7 +524,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -614,7 +571,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -639,13 +596,15 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks/obslib.framework/Versions/A/Frameworks",
 					"@loader_path/../Frameworks/obslib.framework/Versions/A/Libraries",
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"/Users/larry/Projects/obslib-framework/build/obslib.framework/Versions/A/Libraries",
-					"/Users/larry/Projects/obslib-framework/build/obslib.framework/Versions/A/Frameworks",
+					"/Users/larry/Projects/obslib-framework/obslib.framework/Versions/A/Libraries",
+					"/Users/larry/Projects/obslib-framework/obslib.framework/Versions/A/Frameworks",
 				);
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -668,13 +627,15 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks/obslib.framework/Versions/A/Frameworks",
 					"@loader_path/../Frameworks/obslib.framework/Versions/A/Libraries",
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"/Users/larry/Projects/obslib-framework/build/obslib.framework/Versions/A/Libraries",
-					"/Users/larry/Projects/obslib-framework/build/obslib.framework/Versions/A/Frameworks",
+					"/Users/larry/Projects/obslib-framework/obslib.framework/Versions/A/Libraries",
+					"/Users/larry/Projects/obslib-framework/obslib.framework/Versions/A/Frameworks",
 				);
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
