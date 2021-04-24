@@ -17993,15 +17993,30 @@ class base_allocator extends ffi.Struct {
   ffi.Pointer<ffi.NativeFunction<_typedefC_3>> free;
 }
 
-class profiler_snapshot extends ffi.Struct {}
+class profiler_snapshot extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class profiler_snapshot_entry extends ffi.Struct {}
+class profiler_snapshot_entry extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class profiler_time_entry extends ffi.Struct {}
+class profiler_time_entry extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class profiler_name_store extends ffi.Struct {}
+class profiler_name_store extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class text_lookup extends ffi.Struct {}
+class text_lookup extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
 class vec2 extends ffi.Struct {
   @ffi.Double()
@@ -18011,19 +18026,40 @@ class vec2 extends ffi.Struct {
   double y;
 }
 
-class vec3 extends ffi.Struct {}
+class vec3 extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class vec4 extends ffi.Struct {}
+class vec4 extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class quat extends ffi.Struct {}
+class quat extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class axisang extends ffi.Struct {}
+class axisang extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class plane extends ffi.Struct {}
+class plane extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class matrix3 extends ffi.Struct {}
+class matrix3 extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class matrix4 extends ffi.Struct {}
+class matrix4 extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
 abstract class gs_draw_mode {
   static const int GS_POINTS = 0;
@@ -18247,43 +18283,100 @@ class gs_rect extends ffi.Struct {
   int cy;
 }
 
-class gs_texture extends ffi.Struct {}
+class gs_texture extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class gs_stage_surface extends ffi.Struct {}
+class gs_stage_surface extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class gs_zstencil_buffer extends ffi.Struct {}
+class gs_zstencil_buffer extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class gs_vertex_buffer extends ffi.Struct {}
+class gs_vertex_buffer extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class gs_index_buffer extends ffi.Struct {}
+class gs_index_buffer extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class gs_sampler_state extends ffi.Struct {}
+class gs_sampler_state extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class gs_shader extends ffi.Struct {}
+class gs_shader extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class gs_swap_chain extends ffi.Struct {}
+class gs_swap_chain extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class gs_timer extends ffi.Struct {}
+class gs_timer extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class gs_texrender extends ffi.Struct {}
+class gs_texrender extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class gs_shader_param extends ffi.Struct {}
+class gs_shader_param extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class gs_effect extends ffi.Struct {}
+class gs_effect extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class gs_effect_technique extends ffi.Struct {}
+class gs_effect_technique extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class gs_effect_pass extends ffi.Struct {}
+class gs_effect_pass extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class gs_effect_param extends ffi.Struct {}
+class gs_effect_param extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class gs_device extends ffi.Struct {}
+class gs_device extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class graphics_subsystem extends ffi.Struct {}
+class graphics_subsystem extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class gs_timer_range extends ffi.Struct {}
+class gs_timer_range extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class gs_texture_render extends ffi.Struct {}
+class gs_texture_render extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
 abstract class gs_shader_param_type {
   static const int GS_SHADER_PARAM_UNKNOWN = 0;
@@ -18332,9 +18425,15 @@ class objc_ivar extends ffi.Struct {
   int space;
 }
 
-class objc_ivar_list extends ffi.Struct {}
+class objc_ivar_list extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class SEL extends ffi.Struct {}
+class SEL extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
 class objc_method extends ffi.Struct {
   ffi.Pointer<SEL> method_name;
@@ -18344,11 +18443,20 @@ class objc_method extends ffi.Struct {
   ffi.Pointer<ffi.NativeFunction<IMP>> method_imp;
 }
 
-class objc_method_list extends ffi.Struct {}
+class objc_method_list extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class objc_cache extends ffi.Struct {}
+class objc_cache extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class objc_protocol_list extends ffi.Struct {}
+class objc_protocol_list extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
 class Class extends ffi.Struct {
   ffi.Pointer<Class> isa;
@@ -18383,11 +18491,20 @@ class gs_window extends ffi.Struct {
   ffi.Pointer<id> view;
 }
 
-class gs_init_data extends ffi.Struct {}
+class gs_init_data extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class input_t extends ffi.Struct {}
+class input_t extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class audio_output extends ffi.Struct {}
+class audio_output extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
 abstract class audio_format {
   static const int AUDIO_FORMAT_UNKNOWN = 0;
@@ -18434,9 +18551,15 @@ abstract class speaker_layout {
   static const int SPEAKERS_7POINT1 = 8;
 }
 
-class audio_data extends ffi.Struct {}
+class audio_data extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class audio_output_data extends ffi.Struct {}
+class audio_output_data extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
 class audio_output_info extends ffi.Struct {
   ffi.Pointer<ffi.Int8> name;
@@ -18466,9 +18589,15 @@ class audio_convert_info extends ffi.Struct {
   int speakers;
 }
 
-class video_frame extends ffi.Struct {}
+class video_frame extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class video_output extends ffi.Struct {}
+class video_output extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
 abstract class video_format {
   static const int VIDEO_FORMAT_NONE = 0;
@@ -18503,7 +18632,10 @@ abstract class video_range_type {
   static const int VIDEO_RANGE_FULL = 2;
 }
 
-class video_data extends ffi.Struct {}
+class video_data extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
 class video_output_info extends ffi.Struct {
   ffi.Pointer<ffi.Int8> name;
@@ -18558,7 +18690,10 @@ class video_scale_info extends ffi.Struct {
   int colorspace;
 }
 
-class signal_handler extends ffi.Struct {}
+class signal_handler extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
 class calldata_t extends ffi.Struct {
   ffi.Pointer<ffi.Uint8> stack;
@@ -18573,13 +18708,25 @@ class calldata_t extends ffi.Struct {
   int fixed;
 }
 
-class proc_handler extends ffi.Struct {}
+class proc_handler extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class obs_data extends ffi.Struct {}
+class obs_data extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class obs_data_item extends ffi.Struct {}
+class obs_data_item extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class obs_data_array extends ffi.Struct {}
+class obs_data_array extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
 abstract class obs_data_type {
   static const int OBS_DATA_NULL = 0;
@@ -18733,9 +18880,15 @@ abstract class obs_group_type {
   static const int OBS_GROUP_CHECKABLE = 2;
 }
 
-class obs_properties extends ffi.Struct {}
+class obs_properties extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class obs_property extends ffi.Struct {}
+class obs_property extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
 abstract class obs_interaction_flags {
   static const int INTERACT_NONE = 0;
@@ -18786,35 +18939,80 @@ class obs_key_event extends ffi.Struct {
   int native_vkey;
 }
 
-class obs_display extends ffi.Struct {}
+class obs_display extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class obs_view extends ffi.Struct {}
+class obs_view extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class obs_source extends ffi.Struct {}
+class obs_source extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class obs_scene extends ffi.Struct {}
+class obs_scene extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class obs_scene_item extends ffi.Struct {}
+class obs_scene_item extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class obs_output extends ffi.Struct {}
+class obs_output extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class obs_encoder extends ffi.Struct {}
+class obs_encoder extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class obs_service extends ffi.Struct {}
+class obs_service extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class obs_module extends ffi.Struct {}
+class obs_module extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class obs_fader extends ffi.Struct {}
+class obs_fader extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class obs_volmeter extends ffi.Struct {}
+class obs_volmeter extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class obs_weak_source extends ffi.Struct {}
+class obs_weak_source extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class obs_weak_output extends ffi.Struct {}
+class obs_weak_output extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class obs_weak_encoder extends ffi.Struct {}
+class obs_weak_encoder extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class obs_weak_service extends ffi.Struct {}
+class obs_weak_service extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
 abstract class obs_source_type {
   static const int OBS_SOURCE_TYPE_INPUT = 0;
@@ -18857,7 +19055,10 @@ abstract class obs_media_state {
   static const int OBS_MEDIA_STATE_ERROR = 7;
 }
 
-class obs_source_audio_mix extends ffi.Struct {}
+class obs_source_audio_mix extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
 /// Source asynchronous video output structure.  Used with
 /// obs_source_output_video to output asynchronous video.  Video is buffered as
@@ -18870,11 +19071,17 @@ class obs_source_audio_mix extends ffi.Struct {}
 /// NOTE: Non-YUV formats will always be treated as full range with this
 /// structure!  Use obs_source_frame2 along with obs_source_output_video2
 /// instead if partial range support is desired for non-YUV video formats.
-class obs_source_frame extends ffi.Struct {}
+class obs_source_frame extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
 /// Sent to source filters via the filter_audio callback to allow filtering of
 /// audio data
-class obs_audio_data extends ffi.Struct {}
+class obs_audio_data extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
 /// Source definition structure
 class obs_source_info extends ffi.Struct {
@@ -19221,7 +19428,10 @@ class encoder_packet extends ffi.Struct {
 }
 
 /// Encoder input frame
-class encoder_frame extends ffi.Struct {}
+class encoder_frame extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
 /// Encoder interface
 ///
@@ -20141,9 +20351,15 @@ class obs_key_combination extends ffi.Struct {
   int key;
 }
 
-class obs_hotkey extends ffi.Struct {}
+class obs_hotkey extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class obs_hotkey_binding extends ffi.Struct {}
+class obs_hotkey_binding extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
 abstract class obs_hotkey_registerer_type {
   static const int OBS_HOTKEY_REGISTERER_FRONTEND = 0;
@@ -20231,7 +20447,10 @@ class obs_hotkeys_translations extends ffi.Struct {
   ffi.Pointer<ffi.Int8> escape;
 }
 
-class dstr extends ffi.Struct {}
+class dstr extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
 /// Used for changing the order of items (for example, filters in a source,
 /// or items in a scene)
@@ -20285,7 +20504,10 @@ abstract class obs_bounds_type {
   static const int OBS_BOUNDS_MAX_ONLY = 6;
 }
 
-class obs_transform_info extends ffi.Struct {}
+class obs_transform_info extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
 /// Video initialization structure
 class obs_video_info extends ffi.Struct {
@@ -20352,9 +20574,15 @@ class obs_audio_info extends ffi.Struct {
 
 /// Source audio output structure.  Used with obs_source_output_audio to output
 /// source audio.  Audio is automatically resampled and remixed as necessary.
-class obs_source_audio extends ffi.Struct {}
+class obs_source_audio extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
-class obs_source_frame2 extends ffi.Struct {}
+class obs_source_frame2 extends ffi.Struct {
+  @ffi.Int64()
+  int incomplete_struct;
+}
 
 /// Access to the argc/argv used to start OBS. What you see is what you get.
 class obs_cmdline_args extends ffi.Struct {

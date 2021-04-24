@@ -33,7 +33,7 @@ extension DiveFFIObslib on DiveBaseObslib {
   }
 
   bool resetVideo(int width, int height) {
-    final ovi = allocate<obs_video_info>();
+    final ovi = calloc<obs_video_info>();
     ovi.ref
       ..adapter = 0
       ..fps_num = 30000
@@ -55,7 +55,7 @@ extension DiveFFIObslib on DiveBaseObslib {
   }
 
   bool resetAudio() {
-    final ai = allocate<obs_audio_info>();
+    final ai = calloc<obs_audio_info>();
     ai.ref
       ..samples_per_sec = 48000
       ..speakers = speaker_layout.SPEAKERS_STEREO;
@@ -348,8 +348,8 @@ extension DiveFFIObslib on DiveBaseObslib {
     int idx = 0;
     final List<Map<String, String>> list = [];
 
-    ffi.Pointer<ffi.Pointer<ffi.Int8>> typeId = allocate();
-    ffi.Pointer<ffi.Pointer<ffi.Int8>> unversionedTypeId = allocate();
+    ffi.Pointer<ffi.Pointer<ffi.Int8>> typeId = calloc();
+    ffi.Pointer<ffi.Pointer<ffi.Int8>> unversionedTypeId = calloc();
 
     while (_lib.obs_enum_input_types2(idx++, typeId, unversionedTypeId) != 0) {
       final name = _lib.obs_source_get_display_name(typeId.value);
@@ -377,7 +377,7 @@ extension DiveFFIObslib on DiveBaseObslib {
     final sourceProps = _lib.obs_get_source_properties(inputTypeId.int8());
 
     if (sourceProps != null) {
-      ffi.Pointer<ffi.Pointer<obs_property>> propertyOut = allocate();
+      ffi.Pointer<ffi.Pointer<obs_property>> propertyOut = calloc();
 
       var property = _lib.obs_properties_first(sourceProps);
       while (property != null) {

@@ -7,11 +7,11 @@ List<ffi.Pointer<ffi.Int8>> _int8s = [];
 
 extension StringExtensions on String {
   static String fromInt8(ffi.Pointer<ffi.Int8> pointer) {
-    return pointer.address == 0 ? null : Utf8.fromUtf8(pointer.cast<Utf8>());
+    return pointer.address == 0 ? null : pointer.cast<Utf8>().toDartString();
   }
 
   ffi.Pointer<ffi.Int8> toInt8() {
-    return Utf8.toUtf8(this).cast<ffi.Int8>();
+    return this.toNativeUtf8().cast<ffi.Int8>();
   }
 
   /// Convert String to Int8, store in private list, and return Int8.
@@ -23,7 +23,7 @@ extension StringExtensions on String {
 
   /// Free all allocated Int8s in private list.
   static void freeInt8s() {
-    _int8s.forEach((element) => free(element));
+    _int8s.forEach((element) => calloc.free(element));
     _int8s.clear();
   }
 }
@@ -31,7 +31,8 @@ extension StringExtensions on String {
 extension PointerExtensions<T extends ffi.NativeType> on ffi.Pointer<T> {
   String toStr() {
     if (T == ffi.Int8) {
-      return Utf8.fromUtf8(cast<Utf8>());
+      throw UnsupportedError('$T unsupported');
+      // return Utf8.fromUtf8(cast<Utf8>());
     }
 
     throw UnsupportedError('$T unsupported');
