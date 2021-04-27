@@ -13,7 +13,7 @@ dependencies:
     path: ../
 
   # From darky12s@gmail.com: a state-manangement library
-  flutter_riverpod: ^0.12.1
+  flutter_riverpod: ^0.13.1
 
 dev_dependencies:
   flutter_test:

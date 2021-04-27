@@ -27,8 +27,10 @@ extension DiveFFIObslib on DiveBaseObslib {
   }
 
   bool loadAllModules() {
+    print("dive_obslib: load_all_modules");
     _lib.obs_load_all_modules();
     _lib.obs_post_load_modules();
+    print("dive_obslib: post_load_modules");
     return true;
   }
 
@@ -48,7 +50,7 @@ extension DiveFFIObslib on DiveBaseObslib {
 
     int rv = _lib.obs_reset_video(ovi);
     if (rv != OBS_VIDEO_SUCCESS) {
-      print("Couldn't initialize video: $rv");
+      print("dive_obslib: Couldn't initialize video: $rv");
       return false; //throw "Couldn't initialize video";
     }
     return true;

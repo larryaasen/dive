@@ -195,7 +195,7 @@ class _BodyWidgetState extends State<BodyWidget> {
     switch (type) {
       case DiveMediaSource:
         widget = DiveSourceCard(
-          child: MediaPreview(source as DiveMediaSource),
+          child: DiveMediaPreview(source as DiveMediaSource),
           elements: _elements,
           referencePanels: referencePanels,
           panel: panel,

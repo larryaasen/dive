@@ -6,7 +6,7 @@ import 'dart:math';
 import 'package:dive_core/dive_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as path;
 
 import 'blocs/dive_reference_panels.dart';
@@ -92,12 +92,9 @@ class DiveSourcePreview extends StatelessWidget {
   }
 }
 
-class MediaPreview extends DivePreview {
-  MediaPreview(this.mediaSource)
+class DiveMediaPreview extends DivePreview {
+  DiveMediaPreview(this.mediaSource)
       : super(mediaSource == null ? null : mediaSource.controller);
-
-  // /// The controller for the texture that the preview is shown for.
-  // final TextureController controller;
 
   final DiveMediaSource mediaSource;
 
@@ -141,6 +138,54 @@ class MediaPreview extends DivePreview {
   }
 }
 
+/// A [DivePreview] with a [DiveAudioMeter] overlay using a [DiveVolumeMeter].
+class DiveMeterPreview extends DivePreview {
+  DiveMeterPreview({
+    TextureController controller,
+    this.volumeMeter,
+    Key key,
+    double aspectRatio,
+  }) : super(controller, key: key, aspectRatio: aspectRatio);
+
+  /// The volume meter to display over the preview.
+  final DiveVolumeMeter volumeMeter;
+
+  @override
+  Widget build(BuildContext context) {
+    final superWidget = super.build(context);
+    if (volumeMeter == null) return superWidget;
+
+    final meterH = Positioned(
+        left: 17,
+        top: 5,
+        right: 5,
+        bottom: 4,
+        child: SizedBox.expand(
+            child: DiveAudioMeter(
+          volumeMeter: volumeMeter,
+          vertical: false,
+        )));
+    final meterV = Positioned(
+        left: 5,
+        top: 5,
+        right: 5,
+        bottom: 5,
+        child:
+            SizedBox.expand(child: DiveAudioMeter(volumeMeter: volumeMeter)));
+
+    final stack = Stack(
+      children: <Widget>[
+        superWidget,
+        meterV,
+        meterH,
+      ],
+    );
+    final content = stack; // Container(child: stack, color: Colors.white);
+
+    return content;
+  }
+}
+
 /// A widget showing a preview of a video/image frame using a [Texture] widget.
 class DivePreview extends StatelessWidget {
   /// Creates a preview widget for the given texture preview controller.
@@ -167,14 +212,6 @@ class DivePreview extends StatelessWidget {
         : texture;
 
     return widget;
-
-    // return Padding(
-    //     padding: EdgeInsets.only(
-    //         left: 10,
-    //         top: 5,
-    //         bottom: 10,
-    //         right: 10), // need padding for the drop shadow
-    //     child: Material(elevation: 8, child: widget));
   }
 }
 
@@ -283,15 +320,17 @@ class DiveMediaDuration extends ConsumerWidget {
         Duration(milliseconds: stateModel.currentTime));
     final dur =
         DiveFormat.formatDuration(Duration(milliseconds: stateModel.duration));
-    final msg = "$cur / $dur";
+    final curWide = cur.padLeft(dur.length - cur.length);
+    final msg = "$curWide / $dur";
     return Text(
       msg,
       style: TextStyle(color: textColor),
+      textWidthBasis: TextWidthBasis.parent,
     );
   }
 }
 
-class DiveMediaButtonBar extends ConsumerWidget {
+class DiveMediaButtonBar extends StatelessWidget {
   const DiveMediaButtonBar(
       {Key key,
       @required DiveMediaSource mediaSource,
@@ -303,14 +342,13 @@ class DiveMediaButtonBar extends ConsumerWidget {
   final Color iconColor;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context) {
     if (mediaSource == null) {
       return Container();
     }
 
-    // final state = watch(mediaSource.stateProvider.state);
-
     final row = Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         DiveMediaDuration(mediaSource: mediaSource, textColor: iconColor),
         DiveMediaPlayButton(mediaSource: mediaSource, iconColor: iconColor),

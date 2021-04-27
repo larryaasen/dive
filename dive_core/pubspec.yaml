@@ -20,7 +20,7 @@ dependencies:
   intl: ^0.16.1
 
   # From darky12s@gmail.com: a state-manangement library
-  riverpod: ^0.12.1
+  riverpod: ^0.13.1
 
   # From: yuli.dev. Simple, fast generation of RFC4122 UUIDs
   uuid: ^2.2.2
