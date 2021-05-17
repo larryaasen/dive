@@ -2,12 +2,14 @@ import 'package:dive_core/dive_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// A widget to display a multi-channel audio meter. It can be displayed
+/// either horizonally or verically (default).
 class DiveAudioMeter extends ConsumerWidget {
   const DiveAudioMeter(
       {Key key, @required this.volumeMeter, this.vertical = true})
       : super(key: key);
 
-  final DiveVolumeMeter volumeMeter;
+  final DiveAudioMeterSource volumeMeter;
   final bool vertical;
 
   @override
@@ -27,7 +29,7 @@ class DiveAudioMeter extends ConsumerWidget {
 DateTime lastUpdateTime;
 
 class DiveAudioMeterPainter extends CustomPainter {
-  final DiveVolumeMeterState state;
+  final DiveAudioMeterState state;
   final bool vertical;
 
   final gap = 2;
@@ -51,9 +53,9 @@ class DiveAudioMeterPainter extends CustomPainter {
             margin,
             thickness,
             size.height.round() - (margin * 2) + 1,
-            state.magnitude[channelIndex],
-            state.peak[channelIndex],
-            state.inputPeak[channelIndex],
+            state.magnitudeAttacked[channelIndex],
+            state.peakDecayed[channelIndex],
+            state.peakHold[channelIndex],
             state.noSignal,
           );
         } catch (e) {
@@ -69,9 +71,10 @@ class DiveAudioMeterPainter extends CustomPainter {
             y,
             size.width.round() - (margin * 2),
             thickness,
-            state.magnitude[channelIndex],
-            state.peak[channelIndex],
-            state.inputPeak[channelIndex],
+            state.magnitudeAttacked[channelIndex],
+            state.peakDecayed[channelIndex],
+            state.peakHold[channelIndex],
+            state.inputPeakHold[channelIndex],
             state.noSignal,
           );
         } catch (e) {
@@ -84,7 +87,7 @@ class DiveAudioMeterPainter extends CustomPainter {
   // Levels in dB
   final errorLevel = -9.0;
   final warningLevel = -20.0;
-  final minimumLevel = -60.0;
+  final minimumLevel = DiveAudioMeterSource.audioMinLevel;
   final minimumInputLevel = -50.0;
   final clipLevel = -0.5;
 
@@ -126,6 +129,7 @@ class DiveAudioMeterPainter extends CustomPainter {
     double magnitude,
     double peak,
     double peakHold,
+    double inputPeakHold,
     bool noSignal,
   ) {
     final scale = width / minimumLevel;
@@ -193,41 +197,38 @@ class DiveAudioMeterPainter extends CustomPainter {
 
     if (noSignal) return;
 
-    print("peakPosition=$peakPosition, peakHoldPosition=$peakHoldPosition");
+    // Mini peak box
     if (peakHoldPosition - miniBox < minimumPosition) {
-      print("peakHoldPosition1");
     } else if (peakHoldPosition < warningPosition) {
-      print("peakHoldPosition2");
       fillRect(canvas, foregroundColor, peakHoldPosition - miniBox, y, miniBox,
           height);
     } else if (peakHoldPosition < errorPosition) {
-      print("peakHoldPosition3");
       fillRect(canvas, foregroundWarningColor, peakHoldPosition - miniBox, y,
           miniBox, height);
     } else {
-      print("peakHoldPosition4");
       fillRect(canvas, foregroundErrorColor, peakHoldPosition - miniBox, y,
           miniBox, height);
     }
 
+    // Mini trailing box
     if (magnitudePosition - miniBox >= minimumPosition)
       fillRect(canvas, magnitudeColor, magnitudePosition - miniBox, y, miniBox,
           height);
 
-    // peak box
-    Color peakColor;
-    if (peakHold < minimumInputLevel)
-      peakColor = backgroundColor;
-    else if (peakHold < warningLevel)
-      peakColor = foregroundColor;
-    else if (peakHold < errorLevel)
-      peakColor = foregroundWarningColor;
-    else if (peakHold <= clipLevel)
-      peakColor = foregroundErrorColor;
-    else
-      peakColor = clipColor;
+    //   // summary box
+    //   Color peakColor;
+    //   if (inputPeakHold < minimumInputLevel)
+    //     peakColor = backgroundColor;
+    //   else if (inputPeakHold < warningLevel)
+    //     peakColor = foregroundColor;
+    //   else if (inputPeakHold < errorLevel)
+    //     peakColor = foregroundWarningColor;
+    //   else if (inputPeakHold <= clipLevel)
+    //     peakColor = foregroundErrorColor;
+    //   else
+    //     peakColor = clipColor;
 
-    fillRect(canvas, peakColor, 0, y, miniBox, height);
+    //   fillRect(canvas, peakColor, 0, y, miniBox, height);
   }
 
   void paintVertical(
@@ -307,6 +308,7 @@ class DiveAudioMeterPainter extends CustomPainter {
 
     if (noSignal) return;
 
+    // Mini box
     if (peakHoldPosition + miniBox > minimumPosition) {
     } else if (peakHoldPosition > warningPosition)
       fillRect(canvas, foregroundColor, x, peakHoldPosition + miniBox, width,

@@ -90,7 +90,7 @@ class _BodyWidgetState extends State<BodyWidget> {
     final localFile = '/Users/larry/Downloads/SampleVideo_1280x720_5mb.mp4';
     DiveMediaSource.create(localFile).then((source) {
       if (source != null) {
-        DiveVolumeMeter()
+        DiveAudioMeterSource()
           ..create(source: source).then((volumeMeter) {
             setState(() {
               source.volumeMeter = volumeMeter;
@@ -142,7 +142,7 @@ class _BodyWidgetState extends State<BodyWidget> {
       children: [
         videoMix,
         mediaButtons,
-        audio,
+        // audio,
       ],
     );
 

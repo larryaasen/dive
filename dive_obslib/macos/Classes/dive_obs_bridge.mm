@@ -274,16 +274,51 @@ void BufferReleaseBytesCallback(void *releaseRefCon, const void *baseAddress) {
     return;
 }
 
+bool captureSampleFrame = false;
+bool useSampleFrame = false;
+int frameCount = 0;
+NSData *theData = NULL;
 
 static void copy_frame_to_texture(size_t width, size_t height, OSType pixelFormatType, size_t linesize, uint8_t *data,
                                   TextureSource *textureSource, bool shouldSwapRedBlue=false)
 {
-    CVPixelBufferRef pxbuffer = NULL;
-    CVPixelBufferReleaseBytesCallback releaseCallback = shouldSwapRedBlue ? BufferReleaseBytesCallback : NULL;
-    
-    if (shouldSwapRedBlue) {
-        data = swap_blue_red_colors(data, linesize*height);
+    if (captureSampleFrame) {
+        frameCount++;
+        if (frameCount == 100) {
+            NSMutableArray *lines = [NSMutableArray new];
+            [lines addObject:[NSString stringWithFormat:@"\n"]];
+            [lines addObject:[NSString stringWithFormat:@"width=%ld;", width]];
+            [lines addObject:[NSString stringWithFormat:@"height=%ld;", height]];
+            [lines addObject:[NSString stringWithFormat:@"pixelFormatType=%d;", pixelFormatType]];
+            [lines addObject:[NSString stringWithFormat:@"linesize=%ld;", linesize]];
+            
+            NSData *theData = [NSData dataWithBytesNoCopy:&data[0]
+                                                   length:linesize*height
+                                             freeWhenDone:NO];
+            [theData writeToFile:@"demo_frame" atomically:NO];
+            printf([[lines componentsJoinedByString:@"\n"] cStringUsingEncoding:NSASCIIStringEncoding]);
+        }
+//        if (frameCount > 100) {
+//            return;
+//        }
     }
+    else if (useSampleFrame) {
+        if (theData == NULL) {
+            NSString *path =
+              [[NSBundle mainBundle] pathForResource:@"demo_frame"
+                                              ofType:@""];
+            theData = [NSData dataWithContentsOfFile:path];
+        }
+        data = (uint8_t *)[theData bytes];
+    }
+    else {
+        if (shouldSwapRedBlue) {
+           data = swap_blue_red_colors(data, linesize*height);
+       }
+    }
+
+    CVPixelBufferRef pxbuffer = NULL;
+    CVPixelBufferReleaseBytesCallback releaseCallback = shouldSwapRedBlue && !useSampleFrame ? BufferReleaseBytesCallback : NULL;
 
     CVReturn status = CVPixelBufferCreateWithBytes(kCFAllocatorDefault,
                                                    width,

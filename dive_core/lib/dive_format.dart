@@ -1,10 +1,10 @@
 import 'package:intl/intl.dart';
 
 class DiveFormat {
-  static final formatterLong = DateFormat('H:mm:ss.S');
-  static final formatterMedium = DateFormat('m:ss.S');
-  static final formatterShort = DateFormat('s.S');
-  static final formatterLog = DateFormat('y/M/d H:mm:ss.S');
+  static final formatterLong = DateFormat('H:mm:ss');
+  static final formatterMedium = DateFormat('mm:ss');
+  static final formatterShort = DateFormat('mm:ss');
+  static final formatterLog = DateFormat('y/M/d H:mm:ss');
 
   /// For example, for 42 milliseconds
   ///

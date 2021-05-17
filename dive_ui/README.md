@@ -11,3 +11,7 @@ MediaPreview - stack, text, buttons
 DivePreview - Texture or Container
 DiveGrid - GridView
 
+# Audio
+
+DiveAudioMeter: A widget to display a multi-channel audio meter.
+DiveAudioMeterSource: A class for the volume meter data and processing.

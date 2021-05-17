@@ -2,6 +2,9 @@ import 'dive_ffi_obslib.dart';
 import 'dive_plugin_obslib.dart';
 
 class DiveBaseObslib {
+  /// Audio meter minumum level (dB)
+  static const double audioMinLevel = -60.0;
+
   void initialize() {
     DiveFFIObslib.initialize();
     setupChannels();

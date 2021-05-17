@@ -138,7 +138,7 @@ class DiveMediaPreview extends DivePreview {
   }
 }
 
-/// A [DivePreview] with a [DiveAudioMeter] overlay using a [DiveVolumeMeter].
+/// A [DivePreview] with a [DiveAudioMeter] overlay using a [DiveAudioMeterSource].
 class DiveMeterPreview extends DivePreview {
   DiveMeterPreview({
     TextureController controller,
@@ -148,7 +148,7 @@ class DiveMeterPreview extends DivePreview {
   }) : super(controller, key: key, aspectRatio: aspectRatio);
 
   /// The volume meter to display over the preview.
-  final DiveVolumeMeter volumeMeter;
+  final DiveAudioMeterSource volumeMeter;
 
   @override
   Widget build(BuildContext context) {
