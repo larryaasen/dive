@@ -141,8 +141,8 @@ class DiveAudioMeterSource {
     int channelCount =
         await obslib.addVolumeMeterCallback(_pointer.address, _onMeterUpdated);
 
-    DiveCore.notifierFor(stateProvider)
-        .updateState(DiveAudioMeterState(channelCount: channelCount));
+    DiveCore.notifierFor(stateProvider).updateState(
+        _clearDerived(DiveAudioMeterState(channelCount: channelCount)));
 
     return this;
   }
@@ -176,9 +176,6 @@ class DiveAudioMeterSource {
     const double peakDecayRate = 20.0 / 1.7;
     final peakDecay = peakDecayRate * elapsedTime;
 
-    if (currentState.inputPeakHold == null) {
-      currentState = _clearDerived(currentState);
-    }
     final inputPeakHold = currentState.inputPeakHold;
     final magnitudeAttacked = currentState.magnitudeAttacked;
     final peakDecayed = currentState.peakDecayed;
@@ -221,7 +218,6 @@ class DiveAudioMeterSource {
       }
 
       // Peak hold
-      print("peak=${peak[channel]}, peakHold=${peakHold[channel]}");
       if (peak[channel] >= peakHold[channel]) {
         peakHold[channel] = peak[channel];
         peakHoldLastUpdateTime[channel] = now;
@@ -268,15 +264,13 @@ class DiveAudioMeterSource {
     var currentState = DiveCore.notifierFor(stateProvider).stateModel;
 
     // Update the state and notify
-    currentState = _clearDerived(currentState);
-    final newState = currentState.copyWith(
-      noSignal: true,
-    );
+    final newState = _clearDerived(currentState);
     DiveCore.notifierFor(stateProvider).updateState(newState);
   }
 
   DiveAudioMeterState _clearDerived(DiveAudioMeterState state) =>
       state.copyWith(
+        noSignal: true,
         inputPeakHold: List.filled(state.channelCount, initialLevel),
         magnitudeAttacked: List.filled(state.channelCount, initialLevel),
         peakDecayed: List.filled(state.channelCount, initialLevel),

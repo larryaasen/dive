@@ -38,10 +38,11 @@ class DiveMediaSourceState {
   }
 }
 
-class DiveMediaSourceStateNotifier extends StateNotifier<DiveMediaSourceState> {
+class _DiveMediaSourceStateNotifier
+    extends StateNotifier<DiveMediaSourceState> {
   DiveMediaSourceState get stateModel => state;
 
-  DiveMediaSourceStateNotifier(DiveMediaSourceState stateModel)
+  _DiveMediaSourceStateNotifier(DiveMediaSourceState stateModel)
       : super(stateModel ?? DiveMediaSourceState());
 
   void updateMediaState(DiveMediaSourceState stateModel) {
@@ -50,8 +51,8 @@ class DiveMediaSourceStateNotifier extends StateNotifier<DiveMediaSourceState> {
 }
 
 class DiveMediaSource extends DiveTextureSource {
-  final stateProvider = StateNotifierProvider<DiveMediaSourceStateNotifier>(
-      (ref) => DiveMediaSourceStateNotifier(null));
+  final stateProvider = StateNotifierProvider<_DiveMediaSourceStateNotifier>(
+      (ref) => _DiveMediaSourceStateNotifier(null));
 
   Timer _playbackTimer;
 

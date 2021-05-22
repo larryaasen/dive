@@ -24,6 +24,12 @@ dependencies:
   # From dart.dev: immutable collections using the builder pattern
   built_collection: ^5.0.0
 
+  # From flutter.dev: A Flutter plugin that manages files and interactions with file dialogs.
+  file_selector: ^0.8.2
+
+  # From flutter.dev: The macOS implementation of file_selector.
+  file_selector_macos: ^0.0.4
+
   # From bloclibrary.dev: Widgets that make it easy to use blocs and cubits
   flutter_bloc: ^6.1.3
   

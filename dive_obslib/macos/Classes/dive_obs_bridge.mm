@@ -277,6 +277,7 @@ void BufferReleaseBytesCallback(void *releaseRefCon, const void *baseAddress) {
 bool captureSampleFrame = false;
 bool useSampleFrame = false;
 int frameCount = 0;
+
 NSData *theData = NULL;
 
 static void copy_frame_to_texture(size_t width, size_t height, OSType pixelFormatType, size_t linesize, uint8_t *data,

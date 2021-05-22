@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:dive_core/dive_core.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -40,7 +41,6 @@ class _DiveSourceCardState extends State<DiveSourceCard> {
 
   @override
   Widget build(BuildContext context) {
-    // print("SourceCard.build: $this hovering=$_hovering");
     final stack = FocusableActionDetector(
         onShowHoverHighlight: _handleHoverHighlight,
         child: Container(
@@ -505,7 +505,7 @@ class DiveSourceMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // id, menu text, icon, sub menu?
-    final _sourceItems = elements.videoSources
+    final _sourceItems = elements.state.videoSources
         .map((source) => {
               'id': source.trackingUUID,
               'title': source.name,
@@ -653,5 +653,30 @@ class DiveSubMenu extends StatelessWidget {
             }
           },
         ));
+  }
+}
+
+class DiveVideoPickerButton extends StatelessWidget {
+  final DiveCoreElements elements;
+
+  DiveVideoPickerButton({this.elements});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+        icon: Icon(Icons.add_a_photo_sharp),
+        onPressed: () {
+          _addVideoPressed();
+        });
+  }
+
+  void _addVideoPressed() async {
+    final typeGroup = XTypeGroup(label: 'videos', extensions: ['mov', 'mp4']);
+    openFile(acceptedTypeGroups: [typeGroup]).then((file) {
+      if (file == null) return;
+      print("file=${file.path}");
+      // final localFile = '/Users/larry/Downloads/SampleVideo_1280x720_5mb.mp4';
+      elements.addVideoSource(file.path);
+    });
   }
 }

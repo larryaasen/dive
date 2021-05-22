@@ -1,4 +1,5 @@
 import 'package:dive_ui/dive_ui.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,9 +9,10 @@ void main() {
   // We need the binding to be initialized before calling runApp.
   WidgetsFlutterBinding.ensureInitialized();
 
-  // // Configure globally for all Equatable instances via EquatableConfig
-  // EquatableConfig.stringify = true;
+  // Configure globally for all Equatable instances via EquatableConfig
+  EquatableConfig.stringify = true;
 
+  // Setup [ProviderContainer] so DiveCore and other modules use the same one
   runApp(ProviderScope(child: AppWidget()));
 }
 
@@ -20,7 +22,7 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Dive UI Example',
+        title: 'Dive Example 1',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -29,6 +31,9 @@ class AppWidget extends StatelessWidget {
         home: Scaffold(
           appBar: AppBar(
             title: const Text('Dive Media Player Example'),
+            actions: <Widget>[
+              DiveVideoPickerButton(elements: _elements),
+            ],
           ),
           body: BodyWidget(elements: _elements),
         ));
@@ -49,66 +54,49 @@ class _BodyWidgetState extends State<BodyWidget> {
   DiveCoreElements _elements;
   bool _initialized = false;
 
-  static const bool _enableOBS = true; // Set to false for debugging
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
+  void _initialize(BuildContext context) {
     if (_initialized) return;
-
-    _elements = widget.elements;
-    _diveCore = DiveCore();
-    if (_enableOBS) {
-      _diveCore.setupOBS(DiveCoreResolution.HD);
-      DiveScene.create('Scene 1').then((scene) => setup(scene));
-    }
 
     /// DiveCore and other modules must use the same [ProviderContainer], so
     /// it needs to be passed to DiveCore at the start.
     DiveCore.providerContainer = ProviderScope.containerOf(context);
 
+    _elements = widget.elements;
+    _diveCore = DiveCore();
+    _diveCore.setupOBS(DiveCoreResolution.HD);
+
+    DiveScene.create('Scene 1').then((scene) {
+      _elements.updateState((state) => state.currentScene = scene);
+
+      DiveVideoMix.create().then((mix) {
+        _elements.updateState((state) => state.videoMixes.add(mix));
+      });
+    });
+
     _initialized = true;
-  }
-
-  void setup(DiveScene scene) {
-    _elements.currentScene = scene;
-
-    DiveVideoMix.create().then((mix) {
-      setState(() {
-        _elements.videoMixes.add(mix);
-      });
-    });
-
-    DiveAudioSource.create('my audio').then((source) {
-      setState(() {
-        _elements.audioSources.add(source);
-      });
-      _elements.currentScene.addSource(source).then((item) {});
-    });
-
-    final localFile = '/Users/larry/Downloads/SampleVideo_1280x720_5mb.mp4';
-    DiveMediaSource.create(localFile).then((source) {
-      if (source != null) {
-        DiveAudioMeterSource()
-          ..create(source: source).then((volumeMeter) {
-            setState(() {
-              source.volumeMeter = volumeMeter;
-            });
-          });
-
-        setState(() {
-          _elements.mediaSources.add(source);
-        });
-        _elements.currentScene.addSource(source);
-      }
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_elements.mediaSources.length == 0 ||
-        _elements.videoMixes.length == 0) {
+    _initialize(context);
+    return MediaPlayer(context: context, elements: _elements);
+  }
+}
+
+class MediaPlayer extends ConsumerWidget {
+  const MediaPlayer({
+    Key key,
+    @required this.elements,
+    @required this.context,
+  }) : super(key: key);
+
+  final DiveCoreElements elements;
+  final BuildContext context;
+
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
+    final state = watch(elements.stateProvider.state);
+    if (state.mediaSources.length == 0 || state.videoMixes.length == 0) {
       return Container(color: Colors.purple);
     }
 
@@ -120,29 +108,19 @@ class _BodyWidgetState extends State<BodyWidget> {
                 alignment: Alignment.center,
                 child: DiveMediaButtonBar(
                     iconColor: Colors.white54,
-                    mediaSource: _elements.mediaSources[0]))));
+                    mediaSource: state.mediaSources[0]))));
 
     final videoMix = DiveMeterPreview(
-      volumeMeter: _elements.mediaSources[0].volumeMeter,
-      controller: _elements.videoMixes[0].controller,
+      volumeMeter: state.mediaSources[0].volumeMeter,
+      controller: state.videoMixes[0].controller,
       aspectRatio: DiveCoreAspectRatio.HD.ratio,
     );
-
-    final audio = Container(
-        height: 40,
-        color: Colors.black,
-        padding: EdgeInsets.all(5),
-        child: SizedBox.expand(
-            child: DiveAudioMeter(
-                volumeMeter: _elements.mediaSources[0].volumeMeter,
-                vertical: false)));
 
     final mainContent = Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         videoMix,
         mediaButtons,
-        // audio,
       ],
     );
 

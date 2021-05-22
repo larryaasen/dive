@@ -21,7 +21,8 @@ class AppWidget extends StatelessWidget {
           appBar: AppBar(
             title: const Text('Dive App'),
             actions: <Widget>[
-              DiveStreamPlayButton(streamingOutput: _elements.streamingOutput),
+              DiveStreamPlayButton(
+                  streamingOutput: _elements.state.streamingOutput),
               menuButton,
             ],
           ),
@@ -70,7 +71,7 @@ class _BodyWidgetState extends State<BodyWidget> {
   }
 
   void setup(DiveScene scene) {
-    _elements.currentScene = scene;
+    _elements.updateState((state) => state.currentScene = scene);
 
     // Print all input types to the log
     DiveInputTypes.all().then((inputTypes) {
@@ -81,7 +82,7 @@ class _BodyWidgetState extends State<BodyWidget> {
 
     DiveVideoMix.create().then((mix) {
       setState(() {
-        _elements.videoMixes.add(mix);
+        _elements.updateState((state) => state.videoMixes.add(mix));
       });
     });
 
@@ -91,9 +92,9 @@ class _BodyWidgetState extends State<BodyWidget> {
 
     DiveAudioSource.create('my audio').then((source) {
       setState(() {
-        _elements.audioSources.add(source);
+        _elements.updateState((state) => state.audioSources.add(source));
       });
-      _elements.currentScene.addSource(source).then((item) {});
+      _elements.updateState((state) => state.currentScene.addSource(source));
     });
 
     var panelIndex = 0;
@@ -104,21 +105,22 @@ class _BodyWidgetState extends State<BodyWidget> {
         print(videoInput);
         DiveVideoSource.create(videoInput).then((source) {
           setState(() {
-            _elements.videoSources.add(source);
+            _elements.updateState((state) => state.videoSources.add(source));
 
             // Auto assign the video source to a panel
             _referencePanels.assignSource(
                 source, _referencePanels.state.panels[panelIndex]);
             panelIndex++;
           });
-          _elements.currentScene.addSource(source).then((item) {
-            final info = DiveTransformInfo(
-                pos: DiveVec2(xLoc, 50),
-                bounds: DiveVec2(500, 280),
-                boundsType: DiveBoundsType.SCALE_INNER);
-            item.updateTransformInfo(info);
-            xLoc += 680.0;
-          });
+          _elements.updateState(
+              (state) => state.currentScene.addSource(source).then((item) {
+                    final info = DiveTransformInfo(
+                        pos: DiveVec2(xLoc, 50),
+                        bounds: DiveVec2(500, 280),
+                        boundsType: DiveBoundsType.SCALE_INNER);
+                    item.updateTransformInfo(info);
+                    xLoc += 680.0;
+                  }));
         });
       });
     }
@@ -135,20 +137,21 @@ class _BodyWidgetState extends State<BodyWidget> {
           });
 
         setState(() {
-          _elements.mediaSources.add(source);
+          _elements.updateState((state) => state.mediaSources.add(source));
 
           // Auto assign the video source to a panel
           _referencePanels.assignSource(
               source, _referencePanels.state.panels[panelIndex]);
           panelIndex++;
         });
-        _elements.currentScene.addSource(source).then((item) {
-          final info = DiveTransformInfo(
-              pos: DiveVec2(50, 330),
-              bounds: DiveVec2(500, 280),
-              boundsType: DiveBoundsType.SCALE_INNER);
-          item.updateTransformInfo(info);
-        });
+        _elements.updateState(
+            (state) => state.currentScene.addSource(source).then((item) {
+                  final info = DiveTransformInfo(
+                      pos: DiveVec2(50, 330),
+                      bounds: DiveVec2(500, 280),
+                      boundsType: DiveBoundsType.SCALE_INNER);
+                  item.updateTransformInfo(info);
+                }));
       }
     });
 
@@ -156,15 +159,16 @@ class _BodyWidgetState extends State<BodyWidget> {
     DiveImageSource.create(file1).then((source) {
       if (source != null) {
         setState(() {
-          _elements.imageSources.add(source);
+          _elements.updateState((state) => state.imageSources.add(source));
         });
-        _elements.currentScene.addSource(source).then((item) {
-          final info = DiveTransformInfo(
-              pos: DiveVec2(730, 330),
-              bounds: DiveVec2(500, 280),
-              boundsType: DiveBoundsType.SCALE_INNER);
-          item.updateTransformInfo(info);
-        });
+        _elements.updateState(
+            (state) => state.currentScene.addSource(source).then((item) {
+                  final info = DiveTransformInfo(
+                      pos: DiveVec2(730, 330),
+                      bounds: DiveVec2(500, 280),
+                      boundsType: DiveBoundsType.SCALE_INNER);
+                  item.updateTransformInfo(info);
+                }));
       }
     });
 
@@ -172,15 +176,16 @@ class _BodyWidgetState extends State<BodyWidget> {
     DiveImageSource.create(file2).then((source) {
       if (source != null) {
         setState(() {
-          _elements.imageSources.add(source);
+          _elements.updateState((state) => state.imageSources.add(source));
         });
-        _elements.currentScene.addSource(source).then((item) {
-          final info = DiveTransformInfo(
-              pos: DiveVec2(590, 298),
-              bounds: DiveVec2(100, 124),
-              boundsType: DiveBoundsType.SCALE_INNER);
-          item.updateTransformInfo(info);
-        });
+        _elements.updateState(
+            (state) => state.currentScene.addSource(source).then((item) {
+                  final info = DiveTransformInfo(
+                      pos: DiveVec2(590, 298),
+                      bounds: DiveVec2(100, 124),
+                      boundsType: DiveBoundsType.SCALE_INNER);
+                  item.updateTransformInfo(info);
+                }));
       }
     });
   }
@@ -253,8 +258,8 @@ class _BodyWidgetState extends State<BodyWidget> {
           padding: EdgeInsets.only(left: 1, right: 0),
           child: IntrinsicHeight(
               child: DivePreview(
-                  _elements.videoMixes.length > 0
-                      ? _elements.videoMixes[0].controller
+                  _elements.state.videoMixes.length > 0
+                      ? _elements.state.videoMixes[0].controller
                       : null,
                   aspectRatio: DiveCoreAspectRatio.HD.ratio)));
 

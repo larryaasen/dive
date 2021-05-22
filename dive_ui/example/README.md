@@ -2,6 +2,21 @@
 
 Demonstrates how to use the dive_ui plugin.
 
+## Example 1 - Media Player
+
+This example shows how to use dive_ui, dive_core, and dive_obslib to build a
+media player. This media player demonstrates these features using 129 lines of code:
+* Display a file selector button `DiveVideoPickerButton` that opens the file selector dialog.
+* Display a file selector dialog to select a media/video file.
+* Use `DiveCoreElements` to track the scene, video mix (`DiveVideoMix`), audio source, and media source.
+* Create a scene (`DiveScene`) and display the video mix using the `DiveMeterPreview` widget playing the video.
+* Display audio meters in both horizontal and vertical orientations.
+* Display media player control bar `DiveMediaButtonBar` with play/pause buttom, stop buttons, and elapsed
+time.
+* Usage: flutter run lib/main_example1.dart -d macos
+
+![image](example1-media-player.png)
+
 ## Writing an app with Dive UI
 
 1. Add dive_ui to your pubspec.yaml file.
@@ -19,3 +34,12 @@ cp -R ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework/Resources/d
 rsync ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework/PlugIns/* ${TARGET_BUILD_DIR}/${PLUGINS_FOLDER_PATH}
 ```
 1. From command line: flutter run -d macos
+
+## TODO - Examples to be created
+
+1. Example showing how to display an image.
+1. Example showing how to display a video camera.
+1. Example showing how to stream a video mix.
+1. Example showing how to scrub a video forward and backward.
+1. Example showing 720p and 1080p videos.
+1. Example showing how to position an image in the mix.
