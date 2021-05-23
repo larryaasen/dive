@@ -4,10 +4,18 @@ import 'package:dive_core/dive_core.dart';
 import 'package:dive_ui/dive_ui.dart';
 
 class AppWidget extends StatelessWidget {
-  final _elements = DiveCoreElements();
+  DiveCoreElements _elements;
 
   @override
   Widget build(BuildContext context) {
+    // DiveCore and DiveApp must use the same [BuildContext], so it needs
+    // to be passed to DiveCore at the start. The method [DiveUI.setup] must
+    // be called after [initState] completes.
+    DiveUI.setup(context);
+
+    // Setup the core elements state for the app.
+    _elements = _elements ?? DiveCoreElements();
+
     final menuButton = IconButton(icon: Icon(Icons.menu), onPressed: () {});
 
     return MaterialApp(
@@ -61,11 +69,6 @@ class _BodyWidgetState extends State<BodyWidget> {
       _diveCore.setupOBS(DiveCoreResolution.HD);
       DiveScene.create('Scene 1').then((scene) => setup(scene));
     }
-
-    // DiveCore and DiveApp must use the same [BuildContext], so it needs
-    // to be passed to DiveCore at the start. The method [DiveUI.setup] must
-    // be called after [initState] completes.
-    DiveUI.setup(this.context);
 
     _initialized = true;
   }

@@ -126,5 +126,5 @@ class DiveCore {
 }
 
 class DiveCoreProviderContainerException implements Exception {
-  String errMsg() => 'DiveCore.providerContainer should not be null.';
+  String toString() => 'DiveCore.providerContainer should not be null.';
 }

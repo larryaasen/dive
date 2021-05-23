@@ -56,16 +56,16 @@ class _BodyWidgetState extends State<BodyWidget> {
 
     if (_initialized) return;
 
+    /// DiveCore and other modules must use the same [ProviderContainer], so
+    /// it needs to be passed to DiveCore at the start.
+    DiveCore.providerContainer = ProviderScope.containerOf(context);
+
     _elements = widget.elements;
     _diveCore = DiveCore();
     if (_enableOBS) {
       _diveCore.setupOBS(DiveCoreResolution.HD);
       DiveScene.create('Scene 1').then((scene) => setup(scene));
     }
-
-    /// DiveCore and other modules must use the same [ProviderContainer], so
-    /// it needs to be passed to DiveCore at the start.
-    DiveCore.providerContainer = ProviderScope.containerOf(context);
 
     _initialized = true;
   }
