@@ -134,6 +134,7 @@ class DiveAudioMeterSource {
     _pointer = obslib.volumeMeterCreate();
     final rv = obslib.volumeMeterAttachSource(_pointer, source.pointer);
     if (!rv) {
+      print("DiveAudioMeterSource.create: volumeMeterAttachSource failed");
       dispose();
       return null;
     }
@@ -143,7 +144,6 @@ class DiveAudioMeterSource {
 
     DiveCore.notifierFor(stateProvider).updateState(
         _clearDerived(DiveAudioMeterState(channelCount: channelCount)));
-
     return this;
   }
 
@@ -279,4 +279,9 @@ class DiveAudioMeterSource {
             List.filled(state.channelCount, DateTime.now()),
         peakHoldLastUpdateTime: List.filled(state.channelCount, DateTime.now()),
       );
+
+  @override
+  String toString() {
+    return "DiveAudioMeterSource: pointer: ${pointer.address}";
+  }
 }

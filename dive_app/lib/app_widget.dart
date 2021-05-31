@@ -4,7 +4,7 @@ import 'package:dive_core/dive_core.dart';
 import 'package:dive_ui/dive_ui.dart';
 
 class AppWidget extends StatelessWidget {
-  DiveCoreElements _elements;
+  final DiveCoreElements _elements = DiveCoreElements();
 
   @override
   Widget build(BuildContext context) {
@@ -13,8 +13,8 @@ class AppWidget extends StatelessWidget {
     // be called after [initState] completes.
     DiveUI.setup(context);
 
-    // Setup the core elements state for the app.
-    _elements = _elements ?? DiveCoreElements();
+    // // Setup the core elements state for the app.
+    // _elements = _elements ?? DiveCoreElements();
 
     final menuButton = IconButton(icon: Icon(Icons.menu), onPressed: () {});
 

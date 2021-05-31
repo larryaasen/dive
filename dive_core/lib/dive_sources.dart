@@ -107,6 +107,7 @@ class DiveTextureSource extends DiveSource with DiveTextureController {
 }
 
 class DiveAudioSource extends DiveSource {
+  DiveAudioMeterSource volumeMeter;
   DiveAudioSource({String name})
       : super(inputType: DiveInputType.audioSource, name: name);
 
@@ -131,6 +132,8 @@ class DiveAudioSource extends DiveSource {
 }
 
 class DiveVideoSource extends DiveSource with DiveTextureController {
+  DiveAudioMeterSource volumeMeter;
+
   DiveVideoSource({String name})
       : super(inputType: DiveInputType.videoCaptureDevice, name: name);
 
@@ -297,12 +300,20 @@ class DiveSceneItem {
     // set transform info
     return await DivePluginExt.setSceneItemInfo(scene.pointer, itemId, newInfo);
   }
+
+  /// Remove the item from the scene.
+  void remove() {
+    obslib.removeSceneItem(scene.pointer, itemId);
+  }
 }
 
 class DiveScene extends DiveTracking {
   static const MAX_CHANNELS = 64;
 
+  // TODO: needs to be immutable state
   final List<DiveSceneItem> _sceneItems = [];
+  List<DiveSceneItem> get sceneItems => _sceneItems;
+
   DivePointer pointer;
 
   static Future<DiveScene> create(String name) async {
@@ -317,6 +328,8 @@ class DiveScene extends DiveTracking {
     return scene;
   }
 
+  /// Add a source to a scene.
+  /// Returns a new scene item.
   Future<DiveSceneItem> addSource(DiveSource source) async {
     final itemId = obslib.addSource(pointer, source.pointer);
     // await DivePlugin.addSource(trackingUUID, source.trackingUUID);
@@ -327,6 +340,13 @@ class DiveScene extends DiveTracking {
         DiveSceneItem(itemId: itemId, source: source, scene: this);
     _sceneItems.add(sceneItem);
     return sceneItem;
+  }
+
+  /// Remove the item from the scene.
+  void removeSceneItem(DiveSceneItem sceneItem) {
+    if (_sceneItems.remove(sceneItem)) {
+      sceneItem.remove();
+    }
   }
 }
 

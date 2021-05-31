@@ -5,7 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dive_core/dive_core.dart';
 
-/// Dive Example 1 - Media Player
+/// Dive Example 2 - Image Viewer
 void main() {
   // We need the binding to be initialized before calling runApp.
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +23,7 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Dive Example 1',
+        title: 'Dive Example 2',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -31,9 +31,9 @@ class AppWidget extends StatelessWidget {
         ),
         home: Scaffold(
           appBar: AppBar(
-            title: const Text('Dive Media Player Example'),
+            title: const Text('Dive Image Viewer Example'),
             actions: <Widget>[
-              DiveVideoPickerButton(elements: _elements),
+              DiveImagePickerButton(elements: _elements),
             ],
           ),
           body: BodyWidget(elements: _elements),
@@ -97,23 +97,12 @@ class MediaPlayer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final state = watch(elements.stateProvider.state);
-    if (state.mediaSources.length == 0 || state.videoMixes.length == 0) {
+    if (state.videoMixes.length == 0) {
       return Container(color: Colors.purple);
     }
 
-    final mediaButtons = Container(
-        height: 40,
-        color: Colors.black,
-        child: SizedBox.expand(
-            child: Container(
-                alignment: Alignment.center,
-                child: DiveMediaButtonBar(
-                    iconColor: Colors.white54,
-                    mediaSource: state.mediaSources[0]))));
-
-    final videoMix = DiveMeterPreview(
-      volumeMeter: state.mediaSources[0].volumeMeter,
-      controller: state.videoMixes[0].controller,
+    final videoMix = DivePreview(
+      state.videoMixes[0].controller,
       aspectRatio: DiveCoreAspectRatio.HD.ratio,
     );
 
@@ -121,7 +110,6 @@ class MediaPlayer extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         videoMix,
-        mediaButtons,
       ],
     );
 

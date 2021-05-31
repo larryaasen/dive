@@ -145,39 +145,35 @@ class DiveMeterPreview extends DivePreview {
     this.volumeMeter,
     Key key,
     double aspectRatio,
+    this.meterVertical = false,
   }) : super(controller, key: key, aspectRatio: aspectRatio);
 
   /// The volume meter to display over the preview.
   final DiveAudioMeterSource volumeMeter;
 
+  /// Volume meter should be displayed vertically.
+  final bool meterVertical;
+
+  static const vPos = RelativeRect.fromLTRB(5, 5, 5, 5);
+  static const hPos = RelativeRect.fromLTRB(5, 5, 5, 5);
+
   @override
   Widget build(BuildContext context) {
     final superWidget = super.build(context);
     if (volumeMeter == null) return superWidget;
+    final child = SizedBox.expand(
+        child: DiveAudioMeter(
+      volumeMeter: volumeMeter,
+      vertical: meterVertical,
+    ));
 
-    final meterH = Positioned(
-        left: 17,
-        top: 5,
-        right: 5,
-        bottom: 4,
-        child: SizedBox.expand(
-            child: DiveAudioMeter(
-          volumeMeter: volumeMeter,
-          vertical: false,
-        )));
-    final meterV = Positioned(
-        left: 5,
-        top: 5,
-        right: 5,
-        bottom: 5,
-        child:
-            SizedBox.expand(child: DiveAudioMeter(volumeMeter: volumeMeter)));
+    final rect = meterVertical ? vPos : hPos;
+    final meter = Positioned.fromRelativeRect(rect: rect, child: child);
 
     final stack = Stack(
       children: <Widget>[
         superWidget,
-        meterV,
-        meterH,
+        meter,
       ],
     );
     final content = stack; // Container(child: stack, color: Colors.white);
@@ -656,6 +652,39 @@ class DiveSubMenu extends StatelessWidget {
   }
 }
 
+class DiveImagePickerButton extends StatelessWidget {
+  final DiveCoreElements elements;
+
+  DiveImagePickerButton({this.elements});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+        icon: Icon(Icons.add_a_photo_outlined),
+        onPressed: () {
+          _addIconPressed();
+        });
+  }
+
+  void _addIconPressed() async {
+    final typeGroup = XTypeGroup(label: 'images', extensions: [
+      'bmp',
+      'tga',
+      'png',
+      'jpeg',
+      'jpg',
+      'gif',
+      'psd',
+      'webp',
+    ]);
+    openFile(acceptedTypeGroups: [typeGroup]).then((file) {
+      if (file == null) return;
+      print("file=${file.path}");
+      elements.addImageSource(file.path);
+    });
+  }
+}
+
 class DiveVideoPickerButton extends StatelessWidget {
   final DiveCoreElements elements;
 
@@ -666,17 +695,59 @@ class DiveVideoPickerButton extends StatelessWidget {
     return IconButton(
         icon: Icon(Icons.add_a_photo_sharp),
         onPressed: () {
-          _addVideoPressed();
+          _addIconPressed();
         });
   }
 
-  void _addVideoPressed() async {
+  void _addIconPressed() async {
     final typeGroup = XTypeGroup(label: 'videos', extensions: ['mov', 'mp4']);
     openFile(acceptedTypeGroups: [typeGroup]).then((file) {
       if (file == null) return;
       print("file=${file.path}");
-      // final localFile = '/Users/larry/Downloads/SampleVideo_1280x720_5mb.mp4';
       elements.addVideoSource(file.path);
     });
+  }
+}
+
+/// A widget that displays a vertical list of the video cameras.
+class DiveCameraList extends StatefulWidget {
+  const DiveCameraList({
+    Key key,
+    @required this.elements,
+    @required this.state,
+  }) : super(key: key);
+
+  final DiveCoreElements elements;
+  final DiveCoreElementsState state;
+
+  @override
+  _DiveCameraListState createState() => _DiveCameraListState();
+}
+
+class _DiveCameraListState extends State<DiveCameraList> {
+  int _selectedIndex = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: 300,
+        child: ListView.builder(
+          itemCount: widget.state.videoSources.length,
+          itemBuilder: (context, index) {
+            return Card(
+                child: ListTile(
+              title: Text("Camera:\n${widget.state.videoSources[index].name}"),
+              selected: index == _selectedIndex,
+              onTap: () {
+                widget.elements.updateState((state) => state.currentScene
+                    .removeSceneItem(state.currentScene.sceneItems.first));
+                widget.elements.updateState((state) => state.currentScene
+                    .addSource(widget.state.videoSources[index]));
+                setState(() {
+                  _selectedIndex = index;
+                });
+              },
+            ));
+          },
+        ));
   }
 }

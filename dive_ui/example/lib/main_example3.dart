@@ -1,11 +1,10 @@
 import 'package:dive_ui/dive_ui.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dive_core/dive_core.dart';
 
-/// Dive Example 1 - Media Player
+/// Dive Example 3 - Video Camera
 void main() {
   // We need the binding to be initialized before calling runApp.
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +22,7 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Dive Example 1',
+        title: 'Dive Example 3',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -31,10 +30,7 @@ class AppWidget extends StatelessWidget {
         ),
         home: Scaffold(
           appBar: AppBar(
-            title: const Text('Dive Media Player Example'),
-            actions: <Widget>[
-              DiveVideoPickerButton(elements: _elements),
-            ],
+            title: const Text('Dive Video Camera Example'),
           ),
           body: BodyWidget(elements: _elements),
         ));
@@ -72,6 +68,32 @@ class _BodyWidgetState extends State<BodyWidget> {
       DiveVideoMix.create().then((mix) {
         _elements.updateState((state) => state.videoMixes.add(mix));
       });
+
+      DiveAudioSource.create('main audio').then((source) {
+        setState(() {
+          _elements.updateState((state) => state.audioSources.add(source));
+        });
+        _elements.updateState((state) => state.currentScene.addSource(source));
+
+        DiveAudioMeterSource()
+          ..create(source: source).then((volumeMeter) {
+            setState(() {
+              source.volumeMeter = volumeMeter;
+            });
+          });
+      });
+
+      DiveInputs.video().forEach((videoInput) {
+        print(videoInput);
+        DiveVideoSource.create(videoInput).then((source) {
+          _elements.updateState((state) => state.videoSources.add(source));
+
+          if (_elements.state.videoSources.length == 1) {
+            _elements
+                .updateState((state) => state.currentScene.addSource(source));
+          }
+        });
+      });
     });
 
     _initialized = true;
@@ -97,31 +119,27 @@ class MediaPlayer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final state = watch(elements.stateProvider.state);
-    if (state.mediaSources.length == 0 || state.videoMixes.length == 0) {
+    if (state.videoMixes.length == 0) {
       return Container(color: Colors.purple);
     }
 
-    final mediaButtons = Container(
-        height: 40,
-        color: Colors.black,
-        child: SizedBox.expand(
-            child: Container(
-                alignment: Alignment.center,
-                child: DiveMediaButtonBar(
-                    iconColor: Colors.white54,
-                    mediaSource: state.mediaSources[0]))));
+    final volumeMeterSource =
+        state.audioSources.firstWhere((source) => source.volumeMeter != null);
+    final volumeMeter =
+        volumeMeterSource != null ? volumeMeterSource.volumeMeter : null;
 
     final videoMix = DiveMeterPreview(
-      volumeMeter: state.mediaSources[0].volumeMeter,
       controller: state.videoMixes[0].controller,
+      volumeMeter: volumeMeter,
       aspectRatio: DiveCoreAspectRatio.HD.ratio,
     );
 
-    final mainContent = Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+    final cameras = DiveCameraList(elements: elements, state: state);
+
+    final mainContent = Row(
       children: [
+        if (state.videoSources.length > 0) cameras,
         videoMix,
-        mediaButtons,
       ],
     );
 

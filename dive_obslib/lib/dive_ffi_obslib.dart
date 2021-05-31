@@ -213,6 +213,14 @@ extension DiveFFIObslib on DiveBaseObslib {
     return _lib.obs_sceneitem_get_id(item);
   }
 
+  /// Remove an existing scene item from a source.
+  void removeSceneItem(DivePointer scene, int sceneItemId) {
+    final item =
+        _lib.obs_scene_find_sceneitem_by_id(scene.pointer, sceneItemId);
+
+    _lib.obs_sceneitem_remove(item);
+  }
+
   /// Get the transform info for a scene item.
   /// TODO: this does not work because of FFI struct issues.
   Map sceneitemGetInfo(DivePointer scene, int itemId) {

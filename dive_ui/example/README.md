@@ -1,6 +1,6 @@
-# Dive UI Example
+# Dive UI Examples
 
-Demonstrates how to use the dive_ui plugin.
+Demonstrates how to use the dive_ui plugin to build a media app.
 
 ## Example 1 - Media Player
 
@@ -16,6 +16,41 @@ time.
 * Usage: flutter run lib/main_example1.dart -d macos
 
 ![image](example1-media-player.png)
+
+## Example 2 - Image Viewer
+
+This example shows how to use dive_ui, dive_core, and dive_obslib to display
+an image in the video mix.
+* Display a file selector button `DiveImagePickerButton` that opens the file selector dialog.
+* Display a file selector dialog to select an image (bmp/tga/png/jpeg/jpg/gif/psd/webp) file.
+* Use `DiveCoreElements` to track the scene, video mix (`DiveVideoMix`), audio source, and media source.
+* Create a scene (`DiveScene`) and display the video mix using the `DiveMeterPreview` widget playing the video.
+* Display audio meters in both horizontal and vertical orientations.
+* Display media player control bar `DiveMediaButtonBar` with play/pause buttom, stop buttons, and elapsed
+time.
+* Usage: flutter run lib/main_example2.dart -d macos
+
+![image](example2-media-player.png)
+
+## Example 3 - Video Camera
+
+This example shows how to use dive_ui, dive_core, and dive_obslib to display
+multiple video cameras in a list, and select one for the video mix.
+* Use `DiveCoreElements` to track the scene, video mix (`DiveVideoMix`), audio source, and media source.
+* Create a scene (`DiveScene`) and display the video mix using the `DiveMeterPreview` widget showing the video mix.
+* Create a DiveAudioSource for the main audio.
+* Create a video source (`DiveVideoSource`) for each video input (`DiveInputs.video()`).
+* Display an audio meter in the horizontal orientation on the video mix.
+* Display the list of video camera sources in a list (`DiveCameraList`).
+* Usage: flutter run lib/main_example3.dart -d macos
+
+![image](example3-media-player.png)
+
+## Example 6 - Counter
+
+This example shows how to run the counter sample without any dive_ui code, linking
+in the obslib into the macos app.
+
 
 ## Writing an app with Dive UI
 
@@ -37,9 +72,8 @@ rsync ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework/PlugIns/* $
 
 ## TODO - Examples to be created
 
-1. Example showing how to display an image.
-1. Example showing how to display a video camera.
+1. Example showing how to stream a video mix from command line.
 1. Example showing how to stream a video mix.
-1. Example showing how to scrub a video forward and backward.
 1. Example showing 720p and 1080p videos.
+1. Example showing how to scrub a video forward and backward.
 1. Example showing how to position an image in the mix.

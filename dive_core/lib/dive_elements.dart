@@ -28,10 +28,30 @@ class _DiveCoreElementsStateNotifier
   }
 }
 
+/// The core elements used in a Dive app.
 class DiveCoreElements {
   final stateProvider = StateNotifierProvider<_DiveCoreElementsStateNotifier>(
       (ref) => _DiveCoreElementsStateNotifier(null));
 
+  /// Add an image source.
+  void addImageSource(final localFile) {
+    DiveImageSource.create(localFile).then((source) {
+      if (source != null) {
+        final state = DiveCore.notifierFor(stateProvider).stateModel;
+        state.imageSources.add(source);
+        state.currentScene.addSource(source).then((item) {
+          DiveCore.notifierFor(stateProvider).updateState(state);
+          final info = DiveTransformInfo(
+              pos: DiveVec2(140, 120),
+              bounds: DiveVec2(1000, 560),
+              boundsType: DiveBoundsType.SCALE_INNER);
+          item.updateTransformInfo(info);
+        });
+      }
+    });
+  }
+
+  /// Add a video source.
   void addVideoSource(final localFile) {
     DiveMediaSource.create(localFile).then((source) {
       if (source != null) {
