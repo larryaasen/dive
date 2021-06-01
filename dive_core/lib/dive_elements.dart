@@ -12,7 +12,7 @@ class DiveCoreElementsState {
   final List<DiveMediaSource> mediaSources = [];
   final List<DiveVideoSource> videoSources = [];
   final List<DiveVideoMix> videoMixes = [];
-  final streamingOutput = DiveOutput();
+  DiveOutput streamingOutput;
   DiveScene currentScene;
 }
 

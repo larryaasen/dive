@@ -52,28 +52,35 @@ class DiveOutput {
   Future<void> _syncState() async {
     DiveCore.notifierFor(stateProvider).updateOutputState(
         DiveOutputStreamingState.values[obslib.outputGetState()]);
-    // final state = await DivePlugin.outputGetState();
-    // DiveCore.notifierFor(stateProvider)
-    //     .updateOutputState(DiveOutputStreamingState.values[state]);
+  }
+
+  static DiveOutput create({
+    String serviceUrl = 'rtmp://live-iad05.twitch.tv/app/<your_stream_key>',
+    String serviceKey = '<your_stream_key>',
+    String serviceId = 'rtmp_common',
+    String outputType = 'rtmp_output',
+  }) {
+    final output = DiveOutput();
+
+    // Create streaming service
+    final rv = obslib.createService(
+      serviceUrl: serviceUrl,
+      serviceKey: serviceKey,
+      serviceId: serviceId,
+      outputType: outputType,
+    );
+    return rv ? output : null;
   }
 
   Future<bool> start() async {
     final rv = obslib.streamOutputStart();
     syncState(repeating: true);
     return rv;
-    // return DivePlugin.startStopStream(true).then((value) {
-    //   syncState(repeating: true);
-    //   return value;
-    // });
   }
 
   Future<bool> stop() async {
     obslib.streamOutputStop();
     syncState(repeating: true);
     return true;
-    // return DivePlugin.startStopStream(false).then((value) {
-    //   syncState(repeating: true);
-    //   return value;
-    // });
   }
 }

@@ -69,23 +69,25 @@ extension DiveFFIObslib on DiveBaseObslib {
     return true;
   }
 
-  bool createService() {
+  bool createService({
+    String serviceUrl = 'rtmp://live-iad05.twitch.tv/app/<your_stream_key>',
+    String serviceKey = '<your_stream_key>',
+    String serviceId = 'rtmp_common',
+    String outputType = 'rtmp_output',
+  }) {
     final serviceSettings = _lib.obs_data_create();
-    final url = "rtmp://live-iad05.twitch.tv/app/<your_stream_key>";
-    final key = "<your_stream_key>";
-    _lib.obs_data_set_string(serviceSettings, "server".int8(), url.int8());
-    _lib.obs_data_set_string(serviceSettings, "key".int8(), key.int8());
+    _lib.obs_data_set_string(
+        serviceSettings, "server".int8(), serviceUrl.int8());
+    _lib.obs_data_set_string(serviceSettings, "key".int8(), serviceKey.int8());
 
-    final serviceId = "rtmp_common";
     final serviceObj = _lib.obs_service_create(serviceId.int8(),
         "default_service".int8(), serviceSettings, ffi.nullptr);
     //  _lib.obs_service_release(service_obj);
 
-    final type = "rtmp_output";
     _streamOutput = _lib.obs_output_create(
-        type.int8(), "adv_stream".int8(), ffi.nullptr, ffi.nullptr);
+        outputType.int8(), "adv_stream".int8(), ffi.nullptr, ffi.nullptr);
     if (_streamOutput == null) {
-      print("creation of stream output type $type failed");
+      print("creation of stream output type $outputType failed");
       return false;
     }
 
@@ -110,11 +112,6 @@ extension DiveFFIObslib on DiveBaseObslib {
         outputSettings, "low_latency_mode_enabled".int8(), 0);
     _lib.obs_data_set_bool(outputSettings, "dyn_bitrate".int8(), 0);
     _lib.obs_output_update(_streamOutput, outputSettings);
-
-    // if (_lib.obs_output_start(stream_output) == 0) {
-    //   print("output start failed");
-    //   return false;
-    // }
 
     return true;
   }

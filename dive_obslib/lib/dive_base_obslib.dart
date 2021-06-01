@@ -20,13 +20,11 @@ class DiveBaseObslib {
       if (!loadAllModules()) return false;
       if (!resetVideo(width, height)) return false;
       if (!resetAudio()) return false;
-
-      // Create streaming service
-      return createService();
     } catch (e) {
       print("startObs: exception: $e");
       return false;
     }
+    return true;
   }
 }
 

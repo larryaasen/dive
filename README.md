@@ -1,9 +1,11 @@
 # Dive
 
-Dive is a video recording and streaming platform built on top of Dart and
+Dive is a video recording and streaming toolkit built on top of Dart and
 Flutter with native extensions on macOS.
 
-In the future it will be supported on multiple platforms.
+It is a group of Flutter packages that are used to build Flutter media apps.
+
+In the future support for multiple platforms will be added.
 
 ## Introduction
 
@@ -34,8 +36,8 @@ dive_obslib pod has a dependency on the obslib CocoaPods library.
 
 ## DiveCore
 
-The DiveCore package is a Flutter plugin that provides basic services for
-video playback, camera devices, live streaming, and audio.
+The DiveCore package is a Flutter package that provides basic services for
+video playback, camera devices, audio, and streaming.
 
 ## DiveUI
 
@@ -69,7 +71,7 @@ is built by an Xcode project.
 The framework folder contains an example macOS application that consumes the
 obslib framework without using CocoaPods and is used to test the framework.
 
-### Components of the framework
+### Components of the obslib framework
 
 * header files
 * data files
@@ -126,6 +128,7 @@ Plugins:
 dive
  |-- dive_app
  |-- dive_core
+ |-- dive_obslib
  |-- dive_ui
 ```
 
