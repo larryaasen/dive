@@ -56,6 +56,7 @@ class DiveCoreResolution {
   static const r720p = HD;
 }
 
+/// Aspect ratios.
 class DiveCoreAspectRatio {
   final String _sRatio;
   final double _dRatio;
@@ -110,6 +111,8 @@ class DiveCoreAspectRatio {
 class DiveCore {
   /// For use with Riverpod
   static ProviderContainer providerContainer;
+
+  static bool get initialized => DiveCore.providerContainer != null;
 
   static Result notifierFor<Result>(ProviderBase<Object, Result> provider) {
     if (DiveCore.providerContainer == null) {

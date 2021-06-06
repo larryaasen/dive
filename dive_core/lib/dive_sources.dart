@@ -119,14 +119,6 @@ class DiveAudioSource extends DiveSource {
       source.inputType.id,
       name,
     );
-    // if (!await DivePlugin.createSource(
-    //     // TODO: need to add 'device_id' for audio, such as 'default'
-    //     source.trackingUUID,
-    //     source.inputType.id,
-    //     name,
-    //     false)) {
-    //   return null;
-    // }
     return source.pointer == null ? null : source;
   }
 }
@@ -347,6 +339,14 @@ class DiveScene extends DiveTracking {
     if (_sceneItems.remove(sceneItem)) {
       sceneItem.remove();
     }
+  }
+
+  /// Remove all items from the scene.
+  void removeAllSceneItems() {
+    _sceneItems.forEach((sceneItem) {
+      sceneItem.remove();
+    });
+    _sceneItems.clear();
   }
 }
 

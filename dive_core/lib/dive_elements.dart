@@ -7,6 +7,7 @@ import 'package:state_notifier/state_notifier.dart';
 
 /// The state model for core elements.
 class DiveCoreElementsState {
+  // TODO: Make the class DiveCoreElementsState immutable
   final List<DiveAudioSource> audioSources = [];
   final List<DiveImageSource> imageSources = [];
   final List<DiveMediaSource> mediaSources = [];

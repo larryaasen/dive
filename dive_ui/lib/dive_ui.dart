@@ -24,6 +24,33 @@ class DiveUI {
   }
 }
 
+/// Use [DiveUIApp] to setup DiveUI before the first [build] is called.
+class DiveUIApp extends StatefulWidget {
+  DiveUIApp({Key key, this.child}) : super(key: key);
+
+  /// The [child] contained by the widget.
+  final Widget child;
+
+  @override
+  _DiveUIAppState createState() => _DiveUIAppState();
+}
+
+class _DiveUIAppState extends State<DiveUIApp> {
+  bool _initialized = false;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_initialized) {
+      _initialized = true;
+
+      /// DiveCore and other modules must use the same [ProviderContainer], so
+      /// it needs to be passed to DiveCore at the start.
+      DiveUI.setup(context);
+    }
+    return widget.child;
+  }
+}
+
 class DiveSourceCard extends StatefulWidget {
   DiveSourceCard({this.child, this.elements, this.referencePanels, this.panel});
 
@@ -352,6 +379,26 @@ class DiveMediaButtonBar extends StatelessWidget {
       ],
     );
     return row;
+  }
+}
+
+class DiveOutputButton extends ConsumerWidget {
+  const DiveOutputButton({
+    Key key,
+    @required this.elements,
+  }) : super(key: key);
+
+  final DiveCoreElements elements;
+
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
+    if (elements == null) return Container();
+
+    final state = watch(elements.stateProvider.state);
+    if (state.streamingOutput == null) return Container();
+
+    return DiveStreamPlayButton(
+        streamingOutput: elements.state.streamingOutput);
   }
 }
 
@@ -715,10 +762,12 @@ class DiveCameraList extends StatefulWidget {
     Key key,
     @required this.elements,
     @required this.state,
+    this.nameOnly = false,
   }) : super(key: key);
 
   final DiveCoreElements elements;
   final DiveCoreElementsState state;
+  final bool nameOnly;
 
   @override
   _DiveCameraListState createState() => _DiveCameraListState();
@@ -733,9 +782,15 @@ class _DiveCameraListState extends State<DiveCameraList> {
         child: ListView.builder(
           itemCount: widget.state.videoSources.length,
           itemBuilder: (context, index) {
+            final content = widget.nameOnly
+                ? Text("Camera:\n${widget.state.videoSources[index].name}")
+                : DiveAspectRatio(
+                    aspectRatio: DiveCoreAspectRatio.HD.ratio,
+                    child: DivePreview(
+                        widget.state.videoSources[index].controller));
             return Card(
                 child: ListTile(
-              title: Text("Camera:\n${widget.state.videoSources[index].name}"),
+              title: content,
               selected: index == _selectedIndex,
               onTap: () {
                 widget.elements.updateState((state) => state.currentScene

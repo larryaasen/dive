@@ -55,10 +55,8 @@ class DiveExample {
 
       // Create the streaming output
       final output = DiveOutput.create(
-        serviceUrl:
-            'rtmp://live-iad05.twitch.tv/app/live_276488556_QcnnM2B44HuMyIG5grmw2dsbEErqFn',
-        serviceKey:
-            'live_276488556_QcnnM2B44HuMyIG5grmw2dsbEErqFn', // TODO: remove PIA
+        serviceUrl: 'rtmp://live-iad05.twitch.tv/app/<your_key_here>',
+        serviceKey: '<your_key_here>',
       );
       _elements.updateState((state) => state.streamingOutput = output);
 
