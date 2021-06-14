@@ -6,6 +6,7 @@ class DiveInput {
   final String id;
 
   /// The input type id, such as `image_source` or `av_capture_input`.
+  /// TODO: Should eventually be changed to [DiveInputType].
   final String typeId;
 
   DiveInput({this.name, this.id, this.typeId});

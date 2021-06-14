@@ -5,15 +5,14 @@ import 'package:dive_obslib/dive_obslib.dart';
 
 class DivePluginExt {
   static Future<DiveTransformInfo> getSceneItemInfo(
-      DivePointer scenePointer, int itemId) async {
-    final Map info =
-        await obslib.getSceneItemInfoMap(scenePointer.toInt(), itemId);
+      DivePointerSceneItem item) async {
+    final Map info = await obslib.getSceneItemInfoMap(item.toInt());
     return DiveTransformInfo.fromMap(info);
   }
 
   static Future<bool> setSceneItemInfo(
-      DivePointer scenePointer, int itemId, DiveTransformInfo info) {
-    return obslib.setSceneItemInfo(scenePointer.toInt(), itemId, info.toMap());
+      DivePointerSceneItem item, DiveTransformInfo info) {
+    return obslib.setSceneItemInfo(item.toInt(), info.toMap());
   }
 
   static List<DiveInputType> inputTypes() {

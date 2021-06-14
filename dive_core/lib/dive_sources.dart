@@ -4,8 +4,8 @@ import 'package:dive_core/dive_core.dart';
 import 'package:dive_core/dive_input_type.dart';
 import 'package:dive_core/dive_input.dart';
 import 'package:dive_core/dive_plugin.dart';
-import 'package:dive_obslib/dive_obslib.dart';
 import 'package:dive_core/texture_controller.dart';
+import 'package:dive_obslib/dive_obslib.dart';
 import 'package:uuid/uuid.dart';
 
 /// Simple, fast generation of RFC4122 UUIDs
@@ -97,7 +97,7 @@ class DiveSource extends DiveTracking {
 
   @override
   String toString() {
-    return "${this.runtimeType}($name)";
+    return "${this.runtimeType}(${this.hashCode}, $name)";
   }
 }
 
@@ -107,18 +107,29 @@ class DiveTextureSource extends DiveSource with DiveTextureController {
 }
 
 class DiveAudioSource extends DiveSource {
-  DiveAudioMeterSource volumeMeter;
-  DiveAudioSource({String name})
-      : super(inputType: DiveInputType.audioSource, name: name);
+  DiveAudioSource({String name, this.input, DiveInputType inputType})
+      : super(name: name, inputType: inputType);
 
-  static Future<DiveAudioSource> create(String name) async {
-    final source = DiveAudioSource(name: name);
+  final DiveInput input;
+  DiveAudioMeterSource volumeMeter;
+
+  static Future<DiveAudioSource> create(String name, {DiveInput input}) async {
+    final source = DiveAudioSource(
+        name: name, input: input, inputType: DiveInputType.audioSource);
+
+    final data = obslib.createData();
+    final deviceId = source.input == null ? "default" : source.input.id;
+    data.setString("device_id", deviceId);
+
+    print("DiveAudioSource.create: device_id=$deviceId");
     source.pointer = obslib.createSource(
-      // TODO: need to add 'device_id' for audio, such as 'default'
-      source.trackingUUID,
-      source.inputType.id,
-      name,
+      sourceUuid: source.trackingUUID,
+      inputTypeId: source.inputType.id,
+      name: source.name,
+      settings: data,
     );
+
+    data.dispose();
     return source.pointer == null ? null : source;
   }
 }
@@ -274,28 +285,50 @@ class DiveTransformInfo {
   }
 }
 
+/// Used for changing the order of items (for example, filters in a source,
+/// or items in a scene)
+enum DiveSceneItemMovement {
+  MOVE_UP,
+  MOVE_DOWN,
+  MOVE_TOP,
+  MOVE_BOTTOM,
+}
+
 class DiveSceneItem {
-  final int itemId;
+  final DivePointerSceneItem item;
   final DiveSource source;
   final DiveScene scene;
 
-  DiveSceneItem({this.itemId, this.source, this.scene});
+  DiveSceneItem({this.item, this.source, this.scene});
 
   Future<void> updateTransformInfo(DiveTransformInfo info) async {
     // get transform info
-    final currentInfo =
-        await DivePluginExt.getSceneItemInfo(scene.pointer, itemId);
+    final currentInfo = await DivePluginExt.getSceneItemInfo(item);
 
     // update info with changes
     final newInfo = currentInfo.copyFrom(info);
 
     // set transform info
-    return await DivePluginExt.setSceneItemInfo(scene.pointer, itemId, newInfo);
+    return await DivePluginExt.setSceneItemInfo(item, newInfo);
+  }
+
+  /// Set the Z order of a scene item within the scene.
+  void setOrder(DiveSceneItemMovement movement) {
+    obslib.sceneItemSetOrder(item, movement.index);
   }
 
   /// Remove the item from the scene.
   void remove() {
-    obslib.removeSceneItem(scene.pointer, itemId);
+    obslib.sceneItemRemove(item);
+  }
+
+  /// Make the item visible.
+  set visible(bool visible) {
+    obslib.sceneItemSetVisible(item, visible);
+  }
+
+  bool get visible {
+    return obslib.sceneItemIsVisible(item);
   }
 }
 
@@ -323,15 +356,16 @@ class DiveScene extends DiveTracking {
   /// Add a source to a scene.
   /// Returns a new scene item.
   Future<DiveSceneItem> addSource(DiveSource source) async {
-    final itemId = obslib.addSource(pointer, source.pointer);
-    // await DivePlugin.addSource(trackingUUID, source.trackingUUID);
-    if (itemId == 0) {
-      return null;
-    }
-    final sceneItem =
-        DiveSceneItem(itemId: itemId, source: source, scene: this);
+    final item = obslib.sceneAddSource(pointer, source.pointer);
+    final sceneItem = DiveSceneItem(item: item, source: source, scene: this);
     _sceneItems.add(sceneItem);
     return sceneItem;
+  }
+
+  /// Finds the scene item for source in this scene.
+  DiveSceneItem findSceneItem(DiveSource source) {
+    return _sceneItems.firstWhere((sceneItem) => sceneItem.source == source,
+        orElse: () => null);
   }
 
   /// Remove the item from the scene.

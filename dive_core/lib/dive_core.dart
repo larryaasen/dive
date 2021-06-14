@@ -15,6 +15,21 @@ export 'dive_system_log.dart';
 export 'dive_system_log.dart';
 export 'texture_controller.dart';
 
+/*
+  TODO: Review use of Riverpod.
+  
+  Notes:
+    HookWidget;
+    flutter_hooks;
+    useProvider(elements.stateProvider);
+    useMemoized();
+    Riverpod Discord.
+
+    Flutter Snippets ad-on;
+    Dart Data Class Generator ad-on;
+    dart-import ad-on;
+*/
+
 class DiveCoreResolution {
   final int width;
   final int height;

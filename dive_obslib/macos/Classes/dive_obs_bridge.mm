@@ -612,26 +612,16 @@ static NSDictionary *_convert_transform_info_to_dict(obs_transform_info *info) {
 /// Get the transform info for a scene item.
 
 /// TODO: refactor scene_uuid into scene pointer
-NSDictionary *bridge_sceneitem_get_info(int64_t scene_pointer, int64_t item_id) {
-    obs_scene_t *scene = (obs_scene_t *)scene_pointer;
-    if (item_id < 1) {
-        printf("%s: unvalid item id %llu\n", __func__, item_id);
-        return NULL;
-    }
-
-    obs_sceneitem_t *item = obs_scene_find_sceneitem_by_id(scene, item_id);
+NSDictionary *bridge_sceneitem_get_info(int64_t sceneitem_pointer) {
+    obs_sceneitem_t *item = (obs_sceneitem_t *)sceneitem_pointer;
     obs_transform_info info;
     obs_sceneitem_get_info(item, &info);
     return _convert_transform_info_to_dict(&info);
 }
 
 /// Set the transform info for a scene item.
-bool bridge_sceneitem_set_info(int64_t scene_pointer, int64_t item_id, NSDictionary *info) {
-    obs_scene_t *scene = (obs_scene_t *)scene_pointer;
-    if (item_id < 1) {
-        printf("%s: unvalid item id %llu\n", __func__, item_id);
-        return NULL;
-    }
+bool bridge_sceneitem_set_info(int64_t sceneitem_pointer, NSDictionary *info) {
+    obs_sceneitem_t *item = (obs_sceneitem_t *)sceneitem_pointer;
 
     obs_transform_info item_info;
     item_info.pos.x = [info[@"pos"][@"x"] floatValue];
@@ -645,7 +635,6 @@ bool bridge_sceneitem_set_info(int64_t scene_pointer, int64_t item_id, NSDiction
     item_info.bounds.x = [info[@"bounds"][@"x"] floatValue];
     item_info.bounds.y = [info[@"bounds"][@"y"] floatValue];
     
-    obs_sceneitem_t *item = obs_scene_find_sceneitem_by_id(scene, item_id);
     obs_sceneitem_set_info(item, &item_info);
 
     return false;

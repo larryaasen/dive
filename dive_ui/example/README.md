@@ -38,7 +38,7 @@ This example shows how to use dive_ui, dive_core, and dive_obslib to display
 multiple video cameras in a list, and select one for the video mix.
 * Use `DiveCoreElements` to track the scene, video mix (`DiveVideoMix`), audio source, and video source.
 * Create a scene (`DiveScene`) and display the video mix using the `DiveMeterPreview` widget showing the video mix.
-* Create a DiveAudioSource for the main audio.
+* Create a `DiveAudioSource` for the main audio.
 * Create a video source (`DiveVideoSource`) for each video input (`DiveInputs.video()`).
 * Display an audio meter in the horizontal orientation on the video mix.
 * Display the list of video camera sources in a list (`DiveCameraList`).
@@ -52,7 +52,7 @@ This example shows how to use dive_core and dive_obslib to create a non-UI
 app that will stream to Twitch.
 * Use `DiveCoreElements` to track the scene, audio source, and video source.
 * Create a scene (`DiveScene`).
-* Create a DiveAudioSource for the main audio.
+* Create a `DiveAudioSource` for the main audio.
 * Create a video source (`DiveVideoSource`) for the last video input (`DiveInputs.video()`).
 * Create the streaming output `DiveOutput`.
 * Start streaming to Twitch.
@@ -63,13 +63,16 @@ app that will stream to Twitch.
 This example shows how to use dive_ui, dive_core, and dive_obslib to display
 multiple video cameras in a list with preview, select one for the video mix,
 animate to show all three cameras in mix, and stream to Twitch.
-* Use `DiveCoreElements` to track the scene, video mix (`DiveVideoMix`), audio source, and video source.
+* Use `DiveCoreElements` to track the scene, video mix (`DiveVideoMix`), audio source, and video sources.
 * Create a scene (`DiveScene`) and display the video mix using the `DiveMeterPreview` widget showing the video mix.
-* Create a DiveAudioSource for the main audio.
+* Create a `DiveAudioSource` for the main audio.
 * Create a video source (`DiveVideoSource`) for each video input (`DiveInputs.video()`).
 * Display an audio meter in the horizontal orientation on the video mix.
 * Display the list of video camera sources in a list (`DiveCameraList`).
+* Display a `DiveOutputButton` used to start the stream.
 * Usage: flutter run lib/main_example5.dart -d macos
+
+![image](example5-video-mix.png)
 
 ## Example 6 - Counter
 
@@ -80,15 +83,14 @@ in the obslib into the macos app.
 ## Example 7 - Audio Inputs
 
 This example shows how to use dive_ui, dive_core, and dive_obslib to display
-multiple audio inputs in a list, and select one for the video mix.
-* Use `DiveCoreElements` to track the scene, video mix (`DiveVideoMix`), audio source, and video source.
+multiple audio inputs in a list.
+* Use `DiveCoreElements` to track the scene, video mix (`DiveVideoMix`), audio sources, and video source.
 * Create a scene (`DiveScene`) and display the video mix using the `DiveMeterPreview` widget showing the video mix.
-* Create a DiveAudioSource for the main audio.
-* Create a video source (`DiveVideoSource`) for each video input (`DiveInputs.video()`).
-* Display an audio meter in the horizontal orientation on the video mix.
-* Display the list of video camera sources in a list (`DiveCameraList`).
-* Usage: flutter run lib/main_example5.dart -d macos
-
+* Create an audio source (`DiveAudioSource`) for each audio input.
+* Create a video source (`DiveVideoSource`) for one video input (`DiveInputs.video()`).
+* Display an audio meter in the vertical orientation on the video mix.
+* Display the list of audio sources in a list (`DiveAudioList`).
+* Usage: flutter run lib/main_example7.dart -d macos
 
 ## Writing an app with Dive UI
 
@@ -110,7 +112,7 @@ rsync ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework/PlugIns/* $
 
 ## TODO - Examples to be created
 
-1. Example showing how to display multiple audio inputs in a list, and select one for the video mix.
+1. Example showing how to display multiple audio inputs in a list.
 1. Example showing 720p and 1080p videos.
 1. Example showing how to scrub a video forward and backward.
 1. Example showing how to position an image in the mix.

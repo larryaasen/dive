@@ -5,7 +5,7 @@ import 'package:ffi/ffi.dart';
 class DivePointer {
   DivePointer(this.trackingUuid, this.pointer);
 
-  final String trackingUuid;
+  final String trackingUuid; // TODO: do we really need this trackingUuid?
   final dynamic pointer;
 
   int toInt() {
@@ -22,4 +22,12 @@ class DivePointer {
   }
 
   int get address => (pointer as ffi.Pointer).address;
+}
+
+class DivePointerData extends DivePointer {
+  DivePointerData(dynamic pointer) : super(null, pointer);
+}
+
+class DivePointerSceneItem extends DivePointer {
+  DivePointerSceneItem(dynamic pointer) : super(null, pointer);
 }

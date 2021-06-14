@@ -58,8 +58,8 @@ class DiveAudioMeterPainter extends CustomPainter {
             state.peakHold[channelIndex],
             state.noSignal,
           );
-        } catch (e) {
-          print("paintVertical exception: $e");
+        } catch (e, s) {
+          print("DiveAudioMeterPainter.paintVertical exception: $e\n$s");
         }
       } else {
         int y = size.height.round() - margin - thickness;
@@ -77,8 +77,8 @@ class DiveAudioMeterPainter extends CustomPainter {
             state.inputPeakHold[channelIndex],
             state.noSignal,
           );
-        } catch (e) {
-          print("paintHorizontal exception: $e");
+        } catch (e, s) {
+          print("DiveAudioMeterPainter.paintHorizontal exception: $e\n$s");
         }
       }
     }
@@ -109,15 +109,19 @@ class DiveAudioMeterPainter extends CustomPainter {
 
   void fillRect(
       Canvas canvas, Color color, int left, int top, int width, int height) {
-    top = positionOffset == null ? top : positionOffset - top;
-    height = positionOffset == null ? height : positionOffset - height;
-    final rect = Rect.fromLTWH(
-        left.toDouble(), top.toDouble(), width.toDouble(), height.toDouble());
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
+    try {
+      top = positionOffset == null ? top : positionOffset - top;
+      height = positionOffset == null ? height : positionOffset - height;
+      final rect = Rect.fromLTWH(
+          left.toDouble(), top.toDouble(), width.toDouble(), height.toDouble());
+      final paint = Paint()
+        ..color = color
+        ..style = PaintingStyle.fill;
 
-    canvas.drawRect(rect, paint);
+      canvas.drawRect(rect, paint);
+    } catch (e) {
+      print("DiveAudioMeterPainter.fillRect exception: $e");
+    }
   }
 
   void paintHorizontal(
@@ -140,7 +144,11 @@ class DiveAudioMeterPainter extends CustomPainter {
     int maximumPosition = x + width;
     int magnitudePosition = (maximumPosition - (magnitude * scale)).floor();
     int peakPosition = (maximumPosition - (peak * scale)).floor();
+
+    // print(
+    //     "maximumPosition=$maximumPosition, peak=$peak, peakHold=$peakHold, scale=$scale");
     int peakHoldPosition = (maximumPosition - (peakHold * scale)).floor();
+
     int warningPosition = (maximumPosition - (warningLevel * scale)).floor();
     int errorPosition = (maximumPosition - (errorLevel * scale)).floor();
 

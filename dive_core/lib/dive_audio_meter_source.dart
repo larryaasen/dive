@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:core';
 import 'package:dive_core/dive_core.dart';
 import 'package:dive_obslib/dive_obslib.dart';
 import 'package:riverpod/riverpod.dart';
@@ -148,8 +149,8 @@ class DiveAudioMeterSource {
   }
 
   /// Called when the volume meter is updated.
-  void _onMeterUpdated(int volumeMeterPointer, List<dynamic> magnitude,
-      List<dynamic> peak, List<dynamic> inputPeak) {
+  void _onMeterUpdated(int volumeMeterPointer, List<double> magnitude,
+      List<double> peak, List<double> inputPeak) {
     assert(magnitude.length == peak.length && peak.length == inputPeak.length);
     if (_pointer.toInt() != volumeMeterPointer) return;
 
@@ -187,17 +188,25 @@ class DiveAudioMeterSource {
     // For each channel
     for (var channel = 0; channel < currentState.channelCount; channel++) {
       // Magnitude attacked
-      if (magnitudeAttacked[channel] == initialLevel) {
+      if (magnitude[channel].isInfinite) {
+      } else if (magnitudeAttacked[channel] == initialLevel) {
         magnitudeAttacked[channel] = magnitude[channel];
       } else {
         final value =
             (magnitude[channel] - magnitudeAttacked[channel]) * attack;
-        magnitudeAttacked[channel] = (magnitudeAttacked[channel] + value)
-            .clamp(DiveBaseObslib.audioMinLevel, 0.0);
+        try {
+          magnitudeAttacked[channel] = clamp(magnitudeAttacked[channel] + value,
+              DiveBaseObslib.audioMinLevel, 0.0);
+        } catch (e) {
+          print("DiveAudioMeterSource._onMeterUpdated: exception 1: $e\n"
+              "range ${DiveBaseObslib.audioMinLevel}, 0.0\n"
+              "values ${magnitudeAttacked[channel]} + value");
+        }
       }
 
       // Input peak hold
-      if (inputPeak[channel] >= inputPeakHold[channel]) {
+      if (inputPeak[channel].isInfinite) {
+      } else if (inputPeak[channel] >= inputPeakHold[channel]) {
         inputPeakHold[channel] = inputPeak[channel];
         inputPeakHoldLastUpdateTime[channel] = now;
       } else {
@@ -210,15 +219,23 @@ class DiveAudioMeterSource {
       }
 
       // Peak decayed
-      if (peak[channel] >= peakDecayed[channel]) {
+      if (peak[channel].isInfinite) {
+      } else if (peak[channel] >= peakDecayed[channel]) {
         peakDecayed[channel] = peak[channel];
       } else {
-        peakDecayed[channel] =
-            (peakDecayed[channel] - peakDecay).clamp(peak[channel], 0.0);
+        try {
+          peakDecayed[channel] =
+              clamp(peakDecayed[channel] - peakDecay, peak[channel], 0.0);
+        } catch (e) {
+          print("DiveAudioMeterSource._onMeterUpdated: exception 2: $e\n"
+              "range ${peak[channel]}, 0.0\n"
+              "values ${peakDecayed[channel]}, $peakDecay");
+        }
       }
 
       // Peak hold
-      if (peak[channel] >= peakHold[channel]) {
+      if (peak[channel].isInfinite) {
+      } else if (peak[channel] >= peakHold[channel]) {
         peakHold[channel] = peak[channel];
         peakHoldLastUpdateTime[channel] = now;
       } else {
@@ -247,6 +264,13 @@ class DiveAudioMeterSource {
     DiveCore.notifierFor(stateProvider).updateState(newState);
 
     _startNoSignalTimer();
+  }
+
+  /// Returns this num clamped to be in the range [lowerLimit]-[uppperLimit].
+  /// This method ensures lowerLimit is not greater than upperLimit.
+  num clamp(num value, num lowerLimit, num upperLimit) {
+    if (lowerLimit > upperLimit) lowerLimit = upperLimit;
+    return value.clamp(lowerLimit, upperLimit);
   }
 
   /// Start the no signal timer

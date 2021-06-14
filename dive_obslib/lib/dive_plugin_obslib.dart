@@ -3,7 +3,7 @@ import 'package:dive_obslib/dive_obslib.dart';
 
 /// Signature of VolumeMeter callback.
 typedef VolumeMeterCallback = void Function(int volumeMeterPointer,
-    List<dynamic> magnitude, List<dynamic> peak, List<dynamic> inputPeak);
+    List<double> magnitude, List<double> peak, List<double> inputPeak);
 
 /// Invokes methods on a channel to the plugin.
 extension DivePluginObslib on DiveBaseObslib {
@@ -58,20 +58,23 @@ extension DivePluginObslib on DiveBaseObslib {
       case 'volmeter':
         final volumeMeterPointer =
             methodCall.arguments['volmeter_pointer'] as int;
-        var magnitude;
+
+        var magnitude, peak, inputPeak;
         try {
-          magnitude = methodCall.arguments['magnitude'] as List<dynamic>;
-        } catch (e) {
-          print("exception: $e");
+          magnitude = methodCall.arguments['magnitude'].cast<double>().toList();
+          peak = methodCall.arguments['peak'].cast<double>().toList();
+          inputPeak = methodCall.arguments['inputPeak'].cast<double>().toList();
+        } catch (e, s) {
+          print("exception: $e\n$s");
         }
-        final peak = methodCall.arguments['peak'] as List<dynamic>;
-        final inputPeak = methodCall.arguments['inputPeak'] as List<dynamic>;
+
         final callback = _volumeMeterCallbacks[volumeMeterPointer];
         if (callback != null) {
           try {
             callback(volumeMeterPointer, magnitude, peak, inputPeak);
-          } catch (e) {
-            print("callbacksHandler: exception calling callback: $e");
+          } catch (e, s) {
+            print(
+                "DivePluginObslib.callbacksHandler: exception calling callback: $e\n$s");
           }
         }
         return true;
@@ -96,9 +99,9 @@ extension DivePluginObslib on DiveBaseObslib {
         .invokeMethod(_methodDisposeTexture, {"texture_id": textureId});
   }
 
-  Future<Map> getSceneItemInfoMap(int scenePointer, int itemId) {
-    return _channel.invokeMethod(_methodGetSceneItemInfo,
-        {'scene_pointer': scenePointer, 'item_id': itemId});
+  Future<Map> getSceneItemInfoMap(int itemPointer) {
+    return _channel.invokeMethod(
+        _methodGetSceneItemInfo, {'sceneitem_pointer': itemPointer});
   }
 
   Future<int> initializeTexture({String trackingUUID}) async {
@@ -106,9 +109,9 @@ extension DivePluginObslib on DiveBaseObslib {
         _methodInitializeTexture, {'tracking_uuid': trackingUUID});
   }
 
-  Future<bool> setSceneItemInfo(int scenePointer, int itemId, Map info) {
+  Future<bool> setSceneItemInfo(int itemPointer, Map info) {
     return _channel.invokeMethod(_methodSetSceneItemInfo,
-        {'scene_pointer': scenePointer, 'item_id': itemId, 'info': info});
+        {'sceneitem_pointer': itemPointer, 'info': info});
   }
 
   Future<int> addVolumeMeterCallback(

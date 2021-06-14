@@ -158,21 +158,33 @@ extension DiveFFIObslib on DiveBaseObslib {
         sourceUuid, "ffmpeg_source", "video file", settings);
   }
 
+  DiveObslibData createData() => DiveObslibData();
+
   DivePointer createVideoSource(
       String sourceUuid, String deviceName, String deviceUid) {
-    final settings = _lib.obs_data_create();
-    _lib.obs_data_set_string(settings, "device_name".int8(), deviceName.int8());
-    _lib.obs_data_set_string(settings, "device".int8(), deviceUid.int8());
+    final data = DiveObslibData();
+    data.setString("device_name", deviceName);
+    data.setString("device", deviceUid);
 
     // TODO: creating a video source breaks the Flutter connection to the device.
-    return _createSourceInternal(
-        sourceUuid, "av_capture_input", "camera", settings);
+    final pointer = _createSourceInternal(
+        sourceUuid, "av_capture_input", "camera", data.pointer);
+    data.dispose();
+    return pointer;
   }
 
-  DivePointer createSource(String sourceUuid, String sourceId, String name) {
+  /// Creates a source of the specified type with the specified settings.
+  DivePointer createSource({
+    String sourceUuid,
+    String inputTypeId,
+    String name,
+    DiveObslibData settings,
+  }) {
+    print("obs_source_create: creating $inputTypeId - $name");
     final source = _lib.obs_source_create(
-        sourceId.int8(), name.int8(), ffi.nullptr, ffi.nullptr);
+        inputTypeId.int8(), name.int8(), settings.pointer, ffi.nullptr);
     StringExtensions.freeInt8s();
+    print("obs_source_create: returned $source");
     if (source.address == 0) {
       print("Could not create source");
       return null;
@@ -188,7 +200,7 @@ extension DiveFFIObslib on DiveBaseObslib {
   /// https://github.com/dart-lang/sdk/issues/39804#
 
   DivePointer _createSourceInternal(
-    String sourceUuid,
+    String sourceUuid, // TODO: do we really need this sourceUuid?
     String sourceId,
     String name,
     ffi.Pointer<obs_data> settings,
@@ -205,27 +217,33 @@ extension DiveFFIObslib on DiveBaseObslib {
   }
 
   /// Add an existing source to an existing scene, and return sceneitem id.
-  int addSource(DivePointer scene, DivePointer source) {
+  DivePointerSceneItem sceneAddSource(DivePointer scene, DivePointer source) {
     final item = _lib.obs_scene_add(scene.pointer, source.pointer);
-    return _lib.obs_sceneitem_get_id(item);
+    return DivePointerSceneItem(item);
+  }
+
+  bool sceneItemIsVisible(DivePointerSceneItem item) {
+    final rv = _lib.obs_sceneitem_visible(item.pointer);
+    return rv == 1;
+  }
+
+  bool sceneItemSetVisible(DivePointerSceneItem item, bool visible) {
+    final rv = _lib.obs_sceneitem_set_visible(item.pointer, visible ? 1 : 0);
+    return rv == 1;
+  }
+
+  void sceneItemSetOrder(DivePointerSceneItem item, int movement) {
+    _lib.obs_sceneitem_set_order(item.pointer, movement);
   }
 
   /// Remove an existing scene item from a source.
-  void removeSceneItem(DivePointer scene, int sceneItemId) {
-    final item =
-        _lib.obs_scene_find_sceneitem_by_id(scene.pointer, sceneItemId);
-
-    _lib.obs_sceneitem_remove(item);
+  void sceneItemRemove(DivePointerSceneItem item) {
+    _lib.obs_sceneitem_remove(item.pointer);
   }
 
   /// Get the transform info for a scene item.
   /// TODO: this does not work because of FFI struct issues.
-  Map sceneitemGetInfo(DivePointer scene, int itemId) {
-    if (itemId < 1) {
-      print("invalid item id $itemId");
-      return null;
-    }
-
+  Map sceneItemGetInfo(DivePointerSceneItem item) {
     // final item = _lib.obs_scene_find_sceneitem_by_id(scene.pointer, itemId);
     // obs_transform_info info;
     // _lib.obs_sceneitem_get_info(item, info);
@@ -431,4 +449,31 @@ extension DiveFFIObslib on DiveBaseObslib {
   List<Map<String, String>> videoInputs() {
     return inputsFromType("av_capture_input");
   }
+}
+
+/// A wrapper around [obs_data] and the [obs_data_*] functions.
+class DiveObslibData {
+  DiveObslibData() {
+    _data = _lib.obs_data_create();
+  }
+
+  ffi.Pointer<obs_data> _data;
+  ffi.Pointer<obs_data> get pointer => _data;
+
+  void dispose() {
+    _lib.obs_data_release(_data);
+    StringExtensions.freeInt8s();
+  }
+
+  void setBool(String name, bool value) =>
+      _lib.obs_data_set_bool(_data, name.int8(), value ? 1 : 0);
+
+  void setString(String name, String value) =>
+      _lib.obs_data_set_string(_data, name.int8(), value.int8());
+}
+
+void exampleUseData() {
+  final data = DiveObslibData();
+  data.setBool("is_local_file", true);
+  data.dispose();
 }

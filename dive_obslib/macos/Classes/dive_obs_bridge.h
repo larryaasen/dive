@@ -31,8 +31,8 @@ bool    bridge_create_media_source(NSString *sourc_uuid, NSString *local_file);
 bool    bridge_create_video_source(NSString *source_uuid, NSString *device_name, NSString *device_uid);
 bool    bridge_create_image_source(NSString *source_uuid, NSString *file);
 int64_t bridge_add_source(NSString *scene_uuid, NSString *source_uuid);
-NSDictionary *bridge_sceneitem_get_info(int64_t scene_pointer, int64_t item_id);
-bool bridge_sceneitem_set_info(int64_t scene_pointer, int64_t item_id, NSDictionary *info);
+NSDictionary *bridge_sceneitem_get_info(int64_t sceneitem_pointer);
+bool bridge_sceneitem_set_info(int64_t sceneitem_pointer, NSDictionary *info);
 
 bool    bridge_add_videomix(const char *tracking_uuid);
 bool    bridge_remove_videomix(const char *tracking_uuid);

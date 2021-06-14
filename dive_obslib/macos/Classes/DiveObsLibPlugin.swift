@@ -342,23 +342,21 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
 
     private func getSceneItemInfo(_ arguments: [String: Any]?) -> [String: Any] {
         guard let args = arguments,
-            let scene_pointer = args["scene_pointer"] as! Int64?,
-            let item_id = args["item_id"] as! Int64?
+            let sceneitem_pointer = args["sceneitem_pointer"] as! Int64?
             else {
                 return [:]
         }
-        return bridge_sceneitem_get_info(scene_pointer, item_id) as? [String: Any] ?? [:]
+        return bridge_sceneitem_get_info(sceneitem_pointer) as? [String: Any] ?? [:]
     }
     
     private func setSceneItemInfo(_ arguments: [String: Any]?) -> Bool {
         guard let args = arguments,
-            let scene_pointer = args["scene_pointer"] as! Int64?,
-            let item_id = args["item_id"] as! Int64?,
+            let sceneitem_pointer = args["sceneitem_pointer"] as! Int64?,
             let info = args["info"] as! [String: Any]?
             else {
                 return false
         }
-        return bridge_sceneitem_set_info(scene_pointer, item_id, info)
+        return bridge_sceneitem_set_info(sceneitem_pointer, info)
     }
     
     private func getInputTypes() -> [[String: Any]] {

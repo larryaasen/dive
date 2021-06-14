@@ -17,7 +17,8 @@ void main() {
   // Configure globally for all Equatable instances via EquatableConfig
   EquatableConfig.stringify = true;
 
-  // Setup [ProviderContainer] so DiveCore and other modules use the same one
+  // Use [ProviderScope] so DiveCore and other modules use
+  // the same [ProviderContainer].
   runApp(ProviderScope(child: DiveUIApp(child: AppWidget())));
 }
 
@@ -139,12 +140,10 @@ class _BodyWidgetState extends State<BodyWidget> {
       DiveInputs.video().forEach((videoInput) {
         print(videoInput);
         DiveVideoSource.create(videoInput).then((source) {
-          _elements.updateState((state) => state.videoSources.add(source));
-
-          if (_elements.state.videoSources.length == 1) {
-            _elements
-                .updateState((state) => state.currentScene.addSource(source));
-          }
+          _elements.updateState((state) {
+            state.videoSources.add(source);
+            state.currentScene.addSource(source);
+          });
         });
       });
 
@@ -198,7 +197,19 @@ class MediaPlayer extends ConsumerWidget {
           aspectRatio: DiveCoreAspectRatio.HD.ratio,
         ));
 
-    final cameras = DiveCameraList(elements: elements, state: state);
+    final cameras = DiveCameraList(
+        elements: elements,
+        state: state,
+        onTap: (int currentIndex, int newIndex) {
+          elements.updateState((state) {
+            final source = state.videoSources[newIndex];
+            final sceneItem = state.currentScene.findSceneItem(source);
+            if (sceneItem != null) {
+              sceneItem.setOrder(DiveSceneItemMovement.MOVE_TOP);
+            }
+          });
+          return true;
+        });
 
     final mainContent = Row(
       children: [

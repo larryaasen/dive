@@ -756,6 +756,10 @@ class DiveVideoPickerButton extends StatelessWidget {
   }
 }
 
+/// Signature for when a tap has occurred.
+/// Returns true when selection should be updated, or false to ignore tap.
+typedef DiveListTapCallback = bool Function(int currentIndex, int newIndex);
+
 /// A widget that displays a vertical list of the video cameras.
 class DiveCameraList extends StatefulWidget {
   const DiveCameraList({
@@ -763,11 +767,15 @@ class DiveCameraList extends StatefulWidget {
     @required this.elements,
     @required this.state,
     this.nameOnly = false,
+    this.onTap,
   }) : super(key: key);
 
   final DiveCoreElements elements;
   final DiveCoreElementsState state;
   final bool nameOnly;
+
+  /// Called when the user taps this list tile.
+  final DiveListTapCallback onTap;
 
   @override
   _DiveCameraListState createState() => _DiveCameraListState();
@@ -793,13 +801,81 @@ class _DiveCameraListState extends State<DiveCameraList> {
               title: content,
               selected: index == _selectedIndex,
               onTap: () {
-                widget.elements.updateState((state) => state.currentScene
-                    .removeSceneItem(state.currentScene.sceneItems.first));
-                widget.elements.updateState((state) => state.currentScene
-                    .addSource(widget.state.videoSources[index]));
-                setState(() {
-                  _selectedIndex = index;
-                });
+                bool rv = true;
+                if (widget.onTap != null) {
+                  rv = widget.onTap(_selectedIndex, index);
+                }
+                if (rv) {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                }
+              },
+            ));
+          },
+        ));
+  }
+}
+
+/// A widget that displays a vertical list of the video cameras.
+class DiveAudioList extends StatefulWidget {
+  const DiveAudioList({
+    Key key,
+    @required this.elements,
+    @required this.state,
+    this.nameOnly = false,
+    this.onTap,
+  }) : super(key: key);
+
+  final DiveCoreElements elements;
+  final DiveCoreElementsState state;
+  final bool nameOnly;
+
+  /// Called when the user taps this list tile.
+  final DiveListTapCallback onTap;
+
+  @override
+  _DiveAudioListState createState() => _DiveAudioListState();
+}
+
+class _DiveAudioListState extends State<DiveAudioList> {
+  int _selectedIndex = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: 300,
+        child: ListView.builder(
+          itemCount: widget.state.audioSources.length,
+          itemBuilder: (context, index) {
+            final vol = widget.state.audioSources[index].volumeMeter ?? null;
+            final meter = Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(widget.state.audioSources[index].input.id),
+                if (vol != null)
+                  Container(
+                      height: 20,
+                      width: double.infinity,
+                      padding: EdgeInsets.only(top: 5, bottom: 5),
+                      child: DiveAudioMeter(vertical: false, volumeMeter: vol))
+              ],
+            );
+
+            return Card(
+                child: ListTile(
+              title: Text(widget.state.audioSources[index].input.name),
+              subtitle: meter,
+              selected: index == _selectedIndex,
+              onTap: () {
+                bool rv = true;
+                if (widget.onTap != null) {
+                  rv = widget.onTap(_selectedIndex, index);
+                }
+                if (rv) {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                }
               },
             ));
           },
