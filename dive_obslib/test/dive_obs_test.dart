@@ -15,7 +15,7 @@ void main() {
   tearDown(() {});
 
   test('testing startObs', () async {
-    final rv = obslib.startObs(100, 100);
+    final rv = obslib.startObs(100, 100, 100, 100);
     expect(rv, isTrue);
   });
 

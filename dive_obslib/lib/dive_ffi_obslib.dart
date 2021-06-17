@@ -34,7 +34,7 @@ extension DiveFFIObslib on DiveBaseObslib {
     return true;
   }
 
-  bool resetVideo(int width, int height) {
+  bool resetVideo(int baseWidth, int baseHeight, int outWidth, int outHeight) {
     final ovi = calloc<obs_video_info>();
     ovi.ref
       ..adapter = 0
@@ -42,10 +42,10 @@ extension DiveFFIObslib on DiveBaseObslib {
       ..fps_den = 1001
       ..graphics_module = 'libobs-opengl'.toInt8() //DL_OPENGL
       ..output_format = video_format.VIDEO_FORMAT_RGBA
-      ..base_width = width
-      ..base_height = height
-      ..output_width = width
-      ..output_height = height
+      ..base_width = baseWidth
+      ..base_height = baseHeight
+      ..output_width = outWidth
+      ..output_height = outHeight
       ..colorspace = video_colorspace.VIDEO_CS_DEFAULT;
 
     int rv = _lib.obs_reset_video(ovi);

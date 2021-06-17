@@ -2,41 +2,17 @@ import 'package:flutter/services.dart';
 import 'package:dive_obslib/dive_obslib.dart';
 
 /// Signature of VolumeMeter callback.
-typedef VolumeMeterCallback = void Function(int volumeMeterPointer,
+typedef DiveVolumeMeterCallback = void Function(int volumeMeterPointer,
     List<double> magnitude, List<double> peak, List<double> inputPeak);
 
 /// Invokes methods on a channel to the plugin.
 extension DivePluginObslib on DiveBaseObslib {
-  // static const String _methodGetPlatformVersion = 'getPlatformVersion';
-  // static const String _methodLoadImage = 'loadImage';
   static const String _methodDisposeTexture = 'disposeTexture';
   static const String _methodInitializeTexture = 'initializeTexture';
-
   static const String _methodAddSourceFrameCallback = 'addSourceFrameCallback';
-
-  // static const String _methodAddSource = 'addSource';
-  // static const String _methodCreateSource = 'createSource';
-  // static const String _methodCreateImageSource = 'createImageSource';
-  // static const String _methodCreateMediaSource = 'createMediaSource';
-  // static const String _methodCreateVideoSource = 'createVideoSource';
   static const String _methodCreateVideoMix = 'createVideoMix';
-  // static const String _methodCreateScene = 'createScene';
   static const String _methodGetSceneItemInfo = 'getSceneItemInfo';
   static const String _methodSetSceneItemInfo = 'setSceneItemInfo';
-
-  // static const String _methodStartStopStream = 'startStopStream';
-  // static const String _methodOutputGetState = 'outputGetState';
-
-  // static const String _methodMediaPlayPause = 'mediaPlayPause';
-  // static const String _methodMediaRestart = 'mediaRestart';
-  // static const String _methodMediaStop = 'mediaStop';
-  // static const String _methodMediaGetState = 'mediaGetState';
-
-  // static const String _methodGetInputTypes = 'getInputTypes';
-  // static const String _methodGetInputsFromType = 'getInputsFromType';
-  // static const String _methodGetAudioInputs = 'getAudioInputs';
-  // static const String _methodGetVideoInputs = 'getVideoInputs';
-
   static const String _methodAddVolumeMeterCallback = 'addVolumeMeterCallback';
 
   static const String _channelName = 'dive_obslib.io/plugin';
@@ -47,7 +23,7 @@ extension DivePluginObslib on DiveBaseObslib {
   static const MethodChannel _channelCallback =
       const MethodChannel(DivePluginObslib._channelNameCallback);
 
-  static final _volumeMeterCallbacks = Map<int, VolumeMeterCallback>();
+  static final _volumeMeterCallbacks = Map<int, DiveVolumeMeterCallback>();
 
   void setupChannels() {
     _channelCallback.setMethodCallHandler(callbacksHandler);
@@ -115,14 +91,14 @@ extension DivePluginObslib on DiveBaseObslib {
   }
 
   Future<int> addVolumeMeterCallback(
-      int volumeMeterPointer, VolumeMeterCallback callback) {
+      int volumeMeterPointer, DiveVolumeMeterCallback callback) {
     _volumeMeterCallbacks[volumeMeterPointer] = callback;
     return _channel.invokeMethod(_methodAddVolumeMeterCallback,
         {'volmeter_pointer': volumeMeterPointer});
   }
 
   Future<bool> removeVolumeMeterCallback(
-      int volumeMeterPointer, VolumeMeterCallback callback) async {
+      int volumeMeterPointer, DiveVolumeMeterCallback callback) async {
     _volumeMeterCallbacks.remove(volumeMeterPointer);
     return true;
     // TODO: call the method to remove callback

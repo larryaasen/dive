@@ -5,15 +5,15 @@ import 'package:flutter/widgets.dart';
 import 'package:dive_obslib/dive_obslib.dart';
 
 /// The state of a [TextureController].
-class PreviewValue {
+class DivePreviewValue {
   /// Creates a new controller state.
-  const PreviewValue({
+  const DivePreviewValue({
     this.isInitialized,
     this.errorDescription,
   });
 
   /// Creates a new controller state for an uninitialzed controller.
-  const PreviewValue.uninitialized()
+  const DivePreviewValue.uninitialized()
       : this(
           isInitialized: false,
         );
@@ -36,11 +36,11 @@ class PreviewValue {
   ///
   /// Explicitly specified fields get the specified value, all other fields get
   /// the same value of the current object.
-  PreviewValue copyWith({
+  DivePreviewValue copyWith({
     bool isInitialized,
     String errorDescription,
   }) {
-    return PreviewValue(
+    return DivePreviewValue(
       isInitialized: isInitialized ?? this.isInitialized,
       errorDescription: errorDescription,
     );
@@ -56,9 +56,9 @@ class PreviewValue {
 }
 
 /// This is thrown when the plugin reports an error.
-class PreviewException implements Exception {
+class DivePreviewException implements Exception {
   /// Creates a new exception with the given error code and description.
-  PreviewException(this.code, this.description);
+  DivePreviewException(this.code, this.description);
 
   /// Error code.
   String code;
@@ -76,12 +76,13 @@ class PreviewException implements Exception {
 ///
 /// To show the texture preview on the screen use a [TexturePreview] widget.
 /// TODO: do we need this ValueNotifier?
-class TextureController extends ValueNotifier<PreviewValue> {
+/// TODO: rename TextureController with a Dive prefix.
+class TextureController extends ValueNotifier<DivePreviewValue> {
   final String trackingUUID;
 
   /// Creates a new controller in an uninitialized state.
   TextureController({this.trackingUUID})
-      : super(const PreviewValue.uninitialized());
+      : super(const DivePreviewValue.uninitialized());
 
   int _textureId;
   int get textureId => _textureId;
@@ -99,7 +100,7 @@ class TextureController extends ValueNotifier<PreviewValue> {
 
   /// Initializes the texture.
   ///
-  /// Throws a [PreviewException] if the initialization fails.
+  /// Throws a [DivePreviewException] if the initialization fails.
   Future<void> initialize() async {
     ArgumentError.checkNotNull(trackingUUID, 'trackingUUID');
     if (_isDisposed || value.isInitialized) {
@@ -115,7 +116,7 @@ class TextureController extends ValueNotifier<PreviewValue> {
         isInitialized: true,
       );
     } on PlatformException catch (e) {
-      throw PreviewException(e.code, e.message);
+      throw DivePreviewException(e.code, e.message);
     }
     // _eventSubscription =
     //     EventChannel('dive.io/texture_preview/previewEvents$_textureId')

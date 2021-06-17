@@ -138,8 +138,17 @@ class DiveCore {
         : null;
   }
 
-  void setupOBS(DiveCoreResolution resolution) {
-    obslib.startObs(resolution.width, resolution.height);
+  void setupOBS(
+    DiveCoreResolution baseResolution, {
+    DiveCoreResolution outResolution,
+  }) {
+    outResolution = outResolution ?? baseResolution;
+    obslib.startObs(
+      baseResolution.width,
+      baseResolution.height,
+      outResolution.width,
+      outResolution.height,
+    );
   }
 }
 

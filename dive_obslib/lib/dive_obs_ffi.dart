@@ -10684,6 +10684,9 @@ class DiveObslibFFI {
 
   _dart_obs_remove_data_path _obs_remove_data_path;
 
+  // FYI: Don't call obs_startup because it must run on the main thread
+  // and FFI does not run on the main thread.
+
   /// Initializes OBS
   ///
   /// @param  locale              The locale to use for modules

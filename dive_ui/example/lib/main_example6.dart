@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -5,23 +6,11 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -29,15 +18,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   final String title;
 
@@ -50,56 +30,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
       _counter++;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
+      appBar: AppBar(title: Text(widget.title)),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            Text('You have pushed the button this many times:'),
+            Text('$_counter', style: Theme.of(context).textTheme.headline4),
+            SourceMenu(),
           ],
         ),
       ),
@@ -107,7 +52,140 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
+  }
+}
+
+class SourceMenu extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.only(left: 0.0, right: 0.0),
+        child: PopupMenuButton<int>(
+          child: Icon(Icons.settings_outlined,
+              color: Theme.of(context).buttonColor),
+          tooltip: 'Source menu',
+          padding: EdgeInsets.only(right: 0.0),
+          offset: Offset(0.0, 0.0),
+          itemBuilder: (BuildContext context) {
+            return [
+              PopupMenuItem<int>(
+                key: Key('SourceMenu_1'),
+                value: 1,
+                child: Row(
+                  children: <Widget>[
+                    Icon(Icons.clear, color: Colors.grey),
+                    Padding(
+                        padding: EdgeInsets.only(left: 6.0),
+                        child: Text('Clear')),
+                  ],
+                ),
+              ),
+              PopupMenuItem<int>(
+                key: Key('SourceMenu_2'),
+                value: 2,
+                child: Row(
+                  children: <Widget>[
+                    Icon(Icons.clear, color: Colors.grey),
+                    Padding(
+                        padding: EdgeInsets.only(left: 6.0),
+                        child: DiveSubMenu(
+                            'Select source',
+                            [
+                              {
+                                'id': '111',
+                                'title': 'Camera 1',
+                                'icon': Icons.clear,
+                                'subMenu': null,
+                              }
+                            ].toList())),
+                  ],
+                ),
+              ),
+            ].toList();
+          },
+          onSelected: (int item) {
+            // TODO: this is not being called
+            print("onSelected: $item");
+          },
+          onCanceled: () {
+            // TODO: this is not being called
+            print("onCanceled");
+          },
+        ));
+  }
+}
+
+class DiveSubMenu extends StatelessWidget {
+  DiveSubMenu(this.title, this.popupItems, {this.onSelected, this.onCanceled});
+
+  final String title;
+  final List<Map<String, Object>> popupItems;
+
+  /// Called when the user selects a value from the popup menu created by this
+  /// menu.
+  /// If the popup menu is dismissed without selecting a value, [onCanceled] is
+  /// called instead.
+  final void Function(Map<String, Object> item) onSelected;
+
+  /// Called when the user dismisses the popup menu without selecting an item.
+  ///
+  /// If the user selects a value, [onSelected] is called instead.
+  final void Function() onCanceled;
+
+  @override
+  Widget build(BuildContext context) {
+    final mainChild = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Text(title),
+        // Spacer(),
+        Icon(Icons.arrow_right, size: 30.0),
+      ],
+    );
+    return Padding(
+        padding: EdgeInsets.only(left: 0.0, right: 0.0),
+        child: PopupMenuButton<Map<String, Object>>(
+          child: mainChild,
+          tooltip: title,
+          padding: EdgeInsets.only(right: 0.0),
+          offset: Offset(0.0, 0.0),
+          itemBuilder: (BuildContext context) {
+            return popupItems.map((Map<String, dynamic> item) {
+              return PopupMenuItem<Map<String, Object>>(
+                  key: Key('diveSubMenu_${item['id']}'),
+                  value: item,
+                  child: Flexible(
+                      child: Row(children: <Widget>[
+                    Icon(item['icon'], color: Colors.grey),
+                    Padding(
+                        padding: EdgeInsets.only(left: 6.0),
+                        child: Text(
+                          item['title'].toString().substring(
+                              0, min(14, item['title'].toString().length)),
+                          softWrap: false,
+                          overflow: TextOverflow.ellipsis,
+                        )),
+                  ])));
+            }).toList();
+          },
+          onSelected: (item) {
+            if (this.onSelected != null) {
+              this.onSelected(item);
+            }
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            }
+          },
+          onCanceled: () {
+            if (this.onSelected != null) {
+              this.onCanceled();
+            }
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            }
+          },
+        ));
   }
 }

@@ -15,10 +15,10 @@ class DiveBaseObslib {
   ///
   /// Example:
   ///   startObs(1280, 720);
-  bool startObs(int width, int height) {
+  bool startObs(int baseWidth, int baseHeight, int outWidth, int outHeight) {
     try {
       if (!loadAllModules()) return false;
-      if (!resetVideo(width, height)) return false;
+      if (!resetVideo(baseWidth, baseHeight, outWidth, outHeight)) return false;
       if (!resetAudio()) return false;
     } catch (e) {
       print("startObs: exception: $e");

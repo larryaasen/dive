@@ -52,8 +52,6 @@ static NSMutableDictionary *_textureSources = [NSMutableDictionary new];
 /// Tracks the first scene being created, and sets the output source if it is the first
 static bool _isFirstScene = true;
 
-static bool reset_video();
-static bool reset_audio();
 static bool create_service();
 static void videomix_callback(void *param, struct video_data *frame);
 static void source_frame_callback(void *param, obs_source_t *source, struct obs_source_frame *frame);
@@ -157,56 +155,12 @@ static void remove_videomix_callback(const char *tracking_uuid) {
     free((void *)tracking_uuid_str);
 }
 
-bool load_obs(void)
-{
-    obs_load_all_modules();
-    obs_post_load_modules();
-
-    if (!reset_video()) return false;
-    if (!reset_audio()) return false;
-    if (!create_service()) return false;
-    
-    return true;
-}
-
 bool bridge_obs_startup(void)
 {
+    // You must call obs_startup in this plugin because it must run on
+    // the main thread. Do not call in FFI because it does not run on the
+    // main thread.
     return obs_startup("en", NULL, NULL);
-}
-
-static const int cx = 1280;
-static const int cy = 720;
-
-static bool reset_video() {
-    struct obs_video_info ovi;
-    ovi.adapter = 0;
-    ovi.fps_num = 30000;
-    ovi.fps_den = 1001;
-    ovi.graphics_module = "libobs-opengl"; //DL_OPENGL
-    ovi.output_format = VIDEO_FORMAT_RGBA;
-    ovi.base_width = cx;
-    ovi.base_height = cy;
-    ovi.output_width = cx;
-    ovi.output_height = cy;
-    ovi.colorspace = VIDEO_CS_DEFAULT;
-
-    int rv = obs_reset_video(&ovi);
-    if (rv != OBS_VIDEO_SUCCESS) {
-        printf("Couldn't initialize video: %d\n", rv);
-        return false; //throw "Couldn't initialize video";
-    }
-    return true;
-}
-
-static bool reset_audio() {
-    struct obs_audio_info ai;
-    ai.samples_per_sec = 48000;
-    ai.speakers = SPEAKERS_STEREO;
-    if (!obs_reset_audio(&ai)) {
-        printf("Couldn't initialize audio\n");
-        return false;
-    }
-    return true;
 }
 
 static bool create_service() {

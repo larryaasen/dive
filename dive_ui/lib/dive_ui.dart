@@ -16,6 +16,9 @@ import 'dive_audio_meter.dart';
 export 'blocs/dive_reference_panels.dart';
 export 'dive_audio_meter.dart';
 
+/// Signature for a callback with a boolean value.
+typedef DiveBoolCallback = void Function(bool value);
+
 class DiveUI {
   /// DiveCore and DiveUI must use the same [ProviderContainer], so it needs
   /// to be passed to DiveCore at the start.
@@ -65,9 +68,12 @@ class DiveSourceCard extends StatefulWidget {
 
 class _DiveSourceCardState extends State<DiveSourceCard> {
   bool _hovering = false;
+  bool _menuDisplayed = false;
 
   @override
   Widget build(BuildContext context) {
+    print(
+        "DiveSourceCard.build: _hovering=$_hovering, _menuDisplayed=$_menuDisplayed");
     final stack = FocusableActionDetector(
         onShowHoverHighlight: _handleHoverHighlight,
         child: Container(
@@ -76,14 +82,20 @@ class _DiveSourceCardState extends State<DiveSourceCard> {
             child: Stack(
               children: <Widget>[
                 widget.child ?? Container(),
-                if (_hovering)
+                if (_hovering || _menuDisplayed)
                   Positioned(
                       right: 5,
                       top: 5,
                       child: DiveSourceMenu(
-                          elements: widget.elements,
-                          referencePanels: widget.referencePanels,
-                          panel: widget.panel)),
+                        elements: widget.elements,
+                        referencePanels: widget.referencePanels,
+                        panel: widget.panel,
+                        onDisplayed: (bool displayed) {
+                          setState(() {
+                            _menuDisplayed = displayed;
+                          });
+                        },
+                      )),
               ],
             )));
 
@@ -538,17 +550,43 @@ class DiveGrid extends StatelessWidget {
   }
 }
 
-class DiveSourceMenu extends StatelessWidget {
-  DiveSourceMenu({this.elements, this.referencePanels, this.panel});
+class DiveSourceMenu extends StatefulWidget {
+  DiveSourceMenu(
+      {this.elements, this.referencePanels, this.panel, this.onDisplayed});
 
   final DiveCoreElements elements;
   final DiveReferencePanelsCubit referencePanels;
   final DiveReferencePanel panel;
+  final DiveBoolCallback onDisplayed;
+
+  @override
+  _DiveSourceMenuState createState() => _DiveSourceMenuState();
+}
+
+class _DiveSourceMenuState extends State<DiveSourceMenu> {
+  bool _menuDisplayed = false;
+
+  void _onClear() {
+    print("_onClear");
+    if (widget.referencePanels != null) {
+      print("DiveSourceMenu: assign");
+      widget.referencePanels.assignSource(null, widget.panel);
+    }
+  }
+
+  void _onPosition() {
+    print("_onPosition");
+  }
+
+  void _onSelect() {
+    print("_onSelect");
+    // TODO: the menu needs to be popped.
+  }
 
   @override
   Widget build(BuildContext context) {
     // id, menu text, icon, sub menu?
-    final _sourceItems = elements.state.videoSources
+    final _sourceItems = widget.elements.state.videoSources
         .map((source) => {
               'id': source.trackingUUID,
               'title': source.name,
@@ -560,16 +598,24 @@ class DiveSourceMenu extends StatelessWidget {
     final _popupItems = [
       // id, menu text, icon, sub menu?
       {
-        'id': 1,
+        'id': 0,
         'title': 'Clear',
         'icon': Icons.clear,
         'subMenu': null,
+        'callback': _onClear,
       },
       {
-        'id': 2,
+        'id': 1,
         'title': 'Select source',
         'icon': Icons.select_all,
         'subMenu': _sourceItems,
+        'callback': _onSelect,
+      },
+      {
+        'id': 2,
+        'title': 'Position',
+        'icon': Icons.grid_on,
+        'callback': _onPosition,
       },
     ];
 
@@ -582,14 +628,23 @@ class DiveSourceMenu extends StatelessWidget {
           padding: EdgeInsets.only(right: 0.0),
           offset: Offset(0.0, 0.0),
           itemBuilder: (BuildContext context) {
+            print("DiveSourceMenu: displayed");
+            setState(() {
+              _menuDisplayed = true;
+            });
+            if (widget.onDisplayed != null) {
+              widget.onDisplayed(true);
+            }
+
             return _popupItems.map((Map<String, dynamic> item) {
               final child = item['subMenu'] != null
                   ? DiveSubMenu(
                       item['title'],
                       item['subMenu'],
                       onSelected: (item) {
-                        if (referencePanels != null) {
-                          referencePanels.assignSource(item['source'], panel);
+                        if (widget.referencePanels != null) {
+                          widget.referencePanels
+                              .assignSource(item['source'], widget.panel);
                         }
                       },
                     )
@@ -607,20 +662,27 @@ class DiveSourceMenu extends StatelessWidget {
             }).toList();
           },
           onSelected: (int item) {
-            // TODO: this is not being called
-            print("onSelected: $item");
-            // If `clear` menu item
-            if (item == 1) {
-              print("onSelected: item 1");
-              if (referencePanels != null) {
-                print("onSelected: assign");
-                referencePanels.assignSource(null, panel);
-              }
+            print("DiveSourceMenu.onSelected: $item");
+            setState(() {
+              _menuDisplayed = false;
+            });
+            if (widget.onDisplayed != null) {
+              widget.onDisplayed(false);
+            }
+
+            final callback = _popupItems[item]['callback'] as Function;
+            if (callback != null) {
+              callback();
             }
           },
           onCanceled: () {
-            // TODO: this is not being called
-            print("onCanceled");
+            print("DiveSourceMenu.onCanceled");
+            setState(() {
+              _menuDisplayed = false;
+            });
+            if (widget.onDisplayed != null) {
+              widget.onDisplayed(false);
+            }
           },
         ));
   }
@@ -689,7 +751,13 @@ class DiveSubMenu extends StatelessWidget {
           },
           onCanceled: () {
             if (this.onSelected != null) {
-              this.onCanceled();
+              try {
+                // TODO: Fix this exception thrown on this call:
+                //   NoSuchMethodError: The method 'call' was called on null.
+                this.onCanceled();
+              } catch (e) {
+                print("Exception in DiveSubMenu onCanceled: $e");
+              }
             }
             if (Navigator.canPop(context)) {
               Navigator.pop(context);
@@ -880,5 +948,27 @@ class _DiveAudioListState extends State<DiveAudioList> {
             ));
           },
         ));
+  }
+}
+
+class DivePositionDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFF6200EE),
+        title: Text('Position Dialog'),
+      ),
+      body: Center(
+        child: DivePositionWidget(),
+      ),
+    );
+  }
+}
+
+class DivePositionWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(child: Text('X, Y, Z'));
   }
 }

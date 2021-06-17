@@ -77,7 +77,7 @@ animate to show all three cameras in mix, and stream to Twitch.
 ## Example 6 - Counter
 
 This example shows how to run the counter sample without any dive_ui code, linking
-in the obslib into the macos app.
+in the obslib into the macos app. Also shows the use of a popup menu.
 * Usage: flutter run lib/main_example6.dart -d macos
 
 ## Example 7 - Audio Inputs
@@ -91,6 +91,13 @@ multiple audio inputs in a list.
 * Display an audio meter in the vertical orientation on the video mix.
 * Display the list of audio sources in a list (`DiveAudioList`).
 * Usage: flutter run lib/main_example7.dart -d macos
+
+## Example 8 - Positioning
+
+This example shows how to use dive_ui, dive_core, and dive_obslib to
+position a video camera in the video mix.
+* Usage: flutter run lib/main_example8.dart -d macos
+* use popup menu
 
 ## Writing an app with Dive UI
 
@@ -112,7 +119,13 @@ rsync ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework/PlugIns/* $
 
 ## TODO - Examples to be created
 
-1. Example showing how to display multiple audio inputs in a list.
-1. Example showing 720p and 1080p videos.
+1. (Need to Record) Example 7 showing how to display multiple audio inputs in a list.
+1. Example showing how to position a video camera in the mix using popup menu to open dialog. (Position=Position X, Y; Zoom X, Y; Rotation X, Y, X; Z-Priority)
+1. Example showing 720p and 1080p resolutions.
+1. Example showing 720p and 1080p videos. (what does this mean?)
 1. Example showing how to scrub a video forward and backward.
 1. Example showing how to position an image in the mix.
+1. Example showing how to change the volume of an audio source.
+1. Example showing how to configure streaming.
+1. Determine best copyright for examples.
+1. Properly Copyright example code.

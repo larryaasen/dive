@@ -18,8 +18,6 @@ void removeFrameCapture(TextureSource *textureSource);
 
 bool bridge_obs_startup(void);
 
-bool load_obs(void);
-
 #pragma mark - Bridge functions
 
 bool    bridge_source_add_frame_callback(const char *source_uuid, int64_t source_ptr);
