@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:dive_core/dive_core.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as path;
@@ -18,6 +19,16 @@ export 'dive_audio_meter.dart';
 
 /// Signature for a callback with a boolean value.
 typedef DiveBoolCallback = void Function(bool value);
+
+/// Signature for when a tap has occurred.
+/// Return true when selection should be updated, or false to ignore tap.
+typedef DiveListTapCallback = bool Function(int currentIndex, int newIndex);
+
+/// Signature for when transform info needs to be applied.
+typedef DiveTransformApplyCallback = void Function(DiveTransformInfo info);
+
+/// Signature for move edit actoin was pressed.
+typedef DiveMoveEditItemCallback = void Function(DiveSceneItemMovement move);
 
 class DiveUI {
   /// DiveCore and DiveUI must use the same [ProviderContainer], so it needs
@@ -55,9 +66,11 @@ class _DiveUIAppState extends State<DiveUIApp> {
 }
 
 class DiveSourceCard extends StatefulWidget {
-  DiveSourceCard({this.child, this.elements, this.referencePanels, this.panel});
+  DiveSourceCard(
+      {this.child, this.item, this.elements, this.referencePanels, this.panel});
 
   final Widget child;
+  final DiveSceneItem item;
   final DiveCoreElements elements;
   final DiveReferencePanelsCubit referencePanels;
   final DiveReferencePanel panel;
@@ -72,8 +85,6 @@ class _DiveSourceCardState extends State<DiveSourceCard> {
 
   @override
   Widget build(BuildContext context) {
-    print(
-        "DiveSourceCard.build: _hovering=$_hovering, _menuDisplayed=$_menuDisplayed");
     final stack = FocusableActionDetector(
         onShowHoverHighlight: _handleHoverHighlight,
         child: Container(
@@ -87,6 +98,7 @@ class _DiveSourceCardState extends State<DiveSourceCard> {
                       right: 5,
                       top: 5,
                       child: DiveSourceMenu(
+                        item: widget.item,
                         elements: widget.elements,
                         referencePanels: widget.referencePanels,
                         panel: widget.panel,
@@ -103,8 +115,6 @@ class _DiveSourceCardState extends State<DiveSourceCard> {
   }
 
   void _handleHoverHighlight(bool value) {
-    // print("SourceCard.onShowHoverHighlight: $this hovering=$value");
-
     // Sometimes the hover state is invokes twice for the same value, so
     // it should be ignored if it did not change.
     if (_hovering == value) return;
@@ -552,8 +562,13 @@ class DiveGrid extends StatelessWidget {
 
 class DiveSourceMenu extends StatefulWidget {
   DiveSourceMenu(
-      {this.elements, this.referencePanels, this.panel, this.onDisplayed});
+      {this.item,
+      this.elements,
+      this.referencePanels,
+      this.panel,
+      this.onDisplayed});
 
+  final DiveSceneItem item;
   final DiveCoreElements elements;
   final DiveReferencePanelsCubit referencePanels;
   final DiveReferencePanel panel;
@@ -564,8 +579,6 @@ class DiveSourceMenu extends StatefulWidget {
 }
 
 class _DiveSourceMenuState extends State<DiveSourceMenu> {
-  bool _menuDisplayed = false;
-
   void _onClear() {
     print("_onClear");
     if (widget.referencePanels != null) {
@@ -576,6 +589,11 @@ class _DiveSourceMenuState extends State<DiveSourceMenu> {
 
   void _onPosition() {
     print("_onPosition");
+    DiveSideSheet.showSideSheet(
+        context: context,
+        rightSide: false,
+        builder: (BuildContext context) =>
+            DivePositionDialog(item: widget.item));
   }
 
   void _onSelect() {
@@ -629,9 +647,6 @@ class _DiveSourceMenuState extends State<DiveSourceMenu> {
           offset: Offset(0.0, 0.0),
           itemBuilder: (BuildContext context) {
             print("DiveSourceMenu: displayed");
-            setState(() {
-              _menuDisplayed = true;
-            });
             if (widget.onDisplayed != null) {
               widget.onDisplayed(true);
             }
@@ -663,9 +678,6 @@ class _DiveSourceMenuState extends State<DiveSourceMenu> {
           },
           onSelected: (int item) {
             print("DiveSourceMenu.onSelected: $item");
-            setState(() {
-              _menuDisplayed = false;
-            });
             if (widget.onDisplayed != null) {
               widget.onDisplayed(false);
             }
@@ -677,9 +689,6 @@ class _DiveSourceMenuState extends State<DiveSourceMenu> {
           },
           onCanceled: () {
             print("DiveSourceMenu.onCanceled");
-            setState(() {
-              _menuDisplayed = false;
-            });
             if (widget.onDisplayed != null) {
               widget.onDisplayed(false);
             }
@@ -824,10 +833,6 @@ class DiveVideoPickerButton extends StatelessWidget {
   }
 }
 
-/// Signature for when a tap has occurred.
-/// Returns true when selection should be updated, or false to ignore tap.
-typedef DiveListTapCallback = bool Function(int currentIndex, int newIndex);
-
 /// A widget that displays a vertical list of the video cameras.
 class DiveCameraList extends StatefulWidget {
   const DiveCameraList({
@@ -951,24 +956,295 @@ class _DiveAudioListState extends State<DiveAudioList> {
   }
 }
 
-class DivePositionDialog extends StatelessWidget {
+/// Update the position of a scene item.
+class DivePositionDialog extends StatefulWidget {
+  DivePositionDialog({Key key, this.item}) : super(key: key);
+
+  final DiveSceneItem item;
+
+  @override
+  _DivePositionDialogState createState() => _DivePositionDialogState();
+}
+
+class _DivePositionDialogState extends State<DivePositionDialog> {
+  DiveTransformInfo _transformInfo;
+
+  @override
+  void initState() {
+    widget.item.getTransformInfo().then((info) {
+      setState(() {
+        _transformInfo = info;
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF6200EE),
-        title: Text('Position Dialog'),
+        title: Text('Position Properties'),
       ),
       body: Center(
-        child: DivePositionWidget(),
+        child: Column(children: [
+          DivePositionEdit(
+              transformInfo: _transformInfo, onApplyCallback: onApply),
+          DiveMoveItemEdit(onSetOrderCallback: onSetOrder),
+        ]),
       ),
     );
   }
+
+  void onApply(DiveTransformInfo info) {
+    if (widget.item != null) {
+      widget.item.updateTransformInfo(info);
+    }
+  }
+
+  void onSetOrder(DiveSceneItemMovement move) {
+    if (widget.item != null) {
+      widget.item.setOrder(move);
+    }
+  }
 }
 
-class DivePositionWidget extends StatelessWidget {
+class DivePositionEdit extends StatefulWidget {
+  DivePositionEdit({Key key, this.transformInfo, this.onApplyCallback})
+      : super(key: key);
+
+  final DiveTransformInfo transformInfo;
+  final DiveTransformApplyCallback onApplyCallback;
+
+  @override
+  _DivePositionEditState createState() => _DivePositionEditState();
+}
+
+class _DivePositionEditState extends State<DivePositionEdit> {
+  TextEditingController _posXCont = TextEditingController();
+  TextEditingController _posYCont = TextEditingController();
+  TextEditingController _scaleXCont = TextEditingController();
+  TextEditingController _scaleYCont = TextEditingController();
+  bool _initialState = true;
+
   @override
   Widget build(BuildContext context) {
-    return Container(child: Text('X, Y, Z'));
+    if (_initialState && widget.transformInfo != null) {
+      _useInitialState();
+      _initialState = false;
+    }
+    final decoration = InputDecoration(isDense: true, counterText: "");
+
+    final position = Padding(
+        padding: EdgeInsets.only(top: 20),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+                width: 60, child: Text('Position', textAlign: TextAlign.end)),
+            Container(width: 8),
+            Text('X:'),
+            Container(width: 5),
+            SizedBox(
+                width: 50,
+                child: TextField(
+                  controller: _posXCont,
+                  maxLength: 4,
+                  decoration: decoration,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  ],
+                )),
+            SizedBox(width: 10),
+            Container(width: 5),
+            Text('Y:'),
+            Container(width: 5),
+            SizedBox(
+                width: 50,
+                child: TextField(
+                  controller: _posYCont,
+                  maxLength: 4,
+                  decoration: decoration,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  ],
+                )),
+            SizedBox(width: 10),
+          ],
+        ));
+    final scale = Padding(
+        padding: EdgeInsets.only(top: 20),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(width: 60, child: Text('Scale', textAlign: TextAlign.end)),
+            Container(width: 8),
+            Text('X:'),
+            Container(width: 5),
+            SizedBox(
+                width: 50,
+                child: TextField(
+                  controller: _scaleXCont,
+                  decoration: decoration,
+                )),
+            SizedBox(width: 10, child: Text('%')),
+            Container(width: 5),
+            Text('Y:'),
+            Container(width: 5),
+            SizedBox(
+                width: 50,
+                child: TextField(
+                  controller: _scaleYCont,
+                  decoration: decoration,
+                )),
+            SizedBox(width: 10, child: Text('%')),
+          ],
+        ));
+    final buttons = Padding(
+        padding: EdgeInsets.only(top: 20),
+        child: Row(mainAxisSize: MainAxisSize.min, children: [
+          ElevatedButton(child: Text('Reset'), onPressed: () => _onReset()),
+          Container(width: 15),
+          ElevatedButton(
+              child: Text('Apply'),
+              onPressed: widget.onApplyCallback == null ? null : _onApply),
+        ]));
+    final col = Column(children: [
+      position,
+      scale,
+      buttons,
+    ]);
+    return col;
+  }
+
+  void _useInitialState() {
+    final pos = widget.transformInfo != null ? widget.transformInfo.pos : null;
+    final scale =
+        widget.transformInfo != null ? widget.transformInfo.scale : null;
+
+    _posXCont.text = pos == null ? '' : pos.x.toInt().toString();
+    _posYCont.text = pos == null ? '' : pos.y.toInt().toString();
+
+    _scaleXCont.text =
+        scale == null ? '' : (scale.x * 100.0).toStringAsFixed(1);
+    _scaleYCont.text =
+        scale == null ? '' : (scale.y * 100.0).toStringAsFixed(1);
+  }
+
+  void _onReset() {
+    setState(() {
+      _useInitialState();
+    });
+
+    ScaffoldMessenger.maybeOf(context).showSnackBar(SnackBar(
+      content: Text("Properties set back to their original values."),
+    ));
+  }
+
+  void _onApply() {
+    if (widget.onApplyCallback == null) return;
+    // TODO: improve error handling with text
+    final pos =
+        DiveVec2(double.parse(_posXCont.text), double.parse(_posYCont.text));
+    final scale = DiveVec2(double.parse(_scaleXCont.text) / 100.0,
+        double.parse(_scaleYCont.text) / 100.0);
+    final info = DiveTransformInfo(pos: pos, scale: scale);
+
+    widget.onApplyCallback(info);
+
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text("Properties have been applied."),
+    ));
+  }
+}
+
+class DiveMoveItemEdit extends StatefulWidget {
+  const DiveMoveItemEdit({Key key, this.onSetOrderCallback}) : super(key: key);
+
+  final DiveMoveEditItemCallback onSetOrderCallback;
+
+  @override
+  _DiveMoveItemEditState createState() => _DiveMoveItemEditState();
+}
+
+class _DiveMoveItemEditState extends State<DiveMoveItemEdit> {
+  @override
+  Widget build(BuildContext context) {
+    final header =
+        Padding(padding: EdgeInsets.only(top: 20), child: Text('Z-Priority'));
+    final buttons1 = Padding(
+        padding: EdgeInsets.only(top: 20),
+        child: Row(mainAxisSize: MainAxisSize.min, children: [
+          ElevatedButton(
+              child: Text('Move Up'),
+              onPressed: () => _onMovePressed(DiveSceneItemMovement.MOVE_UP)),
+          Container(width: 15),
+          ElevatedButton(
+              child: Text('Move Top'),
+              onPressed: () => _onMovePressed(DiveSceneItemMovement.MOVE_TOP)),
+        ]));
+    final buttons2 = Padding(
+        padding: EdgeInsets.only(top: 20),
+        child: Row(mainAxisSize: MainAxisSize.min, children: [
+          ElevatedButton(
+              child: Text('Move Down'),
+              onPressed: () => _onMovePressed(DiveSceneItemMovement.MOVE_DOWN)),
+          Container(width: 15),
+          ElevatedButton(
+              child: Text('Move Bottom'),
+              onPressed: () =>
+                  _onMovePressed(DiveSceneItemMovement.MOVE_BOTTOM)),
+        ]));
+    final col = Column(children: [
+      header,
+      buttons1,
+      buttons2,
+    ]);
+    return col;
+  }
+
+  void _onMovePressed(DiveSceneItemMovement move) {
+    if (widget.onSetOrderCallback != null) {
+      widget.onSetOrderCallback(move);
+    }
+  }
+}
+
+/// Show a Material side sheet.
+class DiveSideSheet {
+  static showSideSheet({
+    BuildContext context,
+    Widget Function(BuildContext) builder,
+    bool rightSide = true,
+    Duration animationDuration = const Duration(milliseconds: 300),
+  }) {
+    showGeneralDialog(
+      barrierLabel: "dive_side_sheet",
+      barrierDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionDuration: animationDuration,
+      context: context,
+      pageBuilder: (context, animation1, animation2) {
+        return Align(
+          alignment: (rightSide ? Alignment.centerRight : Alignment.centerLeft),
+          child: Container(
+            child: builder(context),
+            height: double.infinity,
+            width: 300,
+            decoration: BoxDecoration(
+              color: Colors.white,
+            ),
+          ),
+        );
+      },
+      transitionBuilder: (context, animation1, animation2, child) {
+        return SlideTransition(
+          position:
+              Tween(begin: Offset((rightSide ? 1 : -1), 0), end: Offset(0, 0))
+                  .animate(animation1),
+          child: child,
+        );
+      },
+    );
   }
 }

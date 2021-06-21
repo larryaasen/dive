@@ -32,6 +32,9 @@ class AppWidget extends StatelessWidget {
         home: Scaffold(
           appBar: AppBar(
             title: const Text('Dive Positioning Example'),
+            actions: <Widget>[
+              DiveImagePickerButton(elements: _elements),
+            ],
           ),
           body: BodyWidget(elements: _elements),
         ));
@@ -114,30 +117,22 @@ class MediaPlayer extends ConsumerWidget {
           aspectRatio: DiveCoreAspectRatio.HD.ratio,
         ));
 
-    // final cameras = DiveCameraList(
-    //     elements: elements,
-    //     state: state,
-    //     onTap: (int currentIndex, int newIndex) {
-    //       elements.updateState((state) {
-    //         final source = state.videoSources[newIndex];
-    //         final sceneItem = state.currentScene.findSceneItem(source);
-    //         if (sceneItem != null) {
-    //           sceneItem.setOrder(DiveSceneItemMovement.MOVE_TOP);
-    //         }
-    //       });
-    //       return true;
-    //     });
+    final item = state.currentScene.sceneItems.isEmpty
+        ? null
+        : state.currentScene.sceneItems[0];
 
-    final camera = state.videoSources.length == 0
-        ? Container()
-        : Container(
-            height: 200,
-            width: 200 * DiveCoreAspectRatio.HD.ratio,
-            child: DiveSourceCard(
-              child: DivePreview((state.videoSources[0]).controller,
-                  aspectRatio: DiveCoreAspectRatio.HD.ratio),
-              elements: elements,
-            ));
+    final camera = Container(
+        height: 200,
+        width: 200 * DiveCoreAspectRatio.HD.ratio,
+        child: DiveSourceCard(
+          item: item,
+          child: DivePreview(
+              state.videoSources.length == 0
+                  ? null
+                  : (state.videoSources[0]).controller,
+              aspectRatio: DiveCoreAspectRatio.HD.ratio),
+          elements: elements,
+        ));
 
     final mainContent = Row(
       children: [

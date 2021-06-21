@@ -96,8 +96,12 @@ multiple audio inputs in a list.
 
 This example shows how to use dive_ui, dive_core, and dive_obslib to
 position a video camera in the video mix.
+* Use `DiveCoreElements` to track the scene, video mix (`DiveVideoMix`), and video source.
+* Create a scene (`DiveScene`) and display the video mix using the `DiveMeterPreview` widget showing the video mix.
+* Display a file selector button `DiveImagePickerButton` that opens the file selector dialog to load an image.
+* Show the [DiveSubMenu] popup menu.
+* Show the [DivePositionDialog] dialog.
 * Usage: flutter run lib/main_example8.dart -d macos
-* use popup menu
 
 ## Writing an app with Dive UI
 
@@ -119,8 +123,6 @@ rsync ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework/PlugIns/* $
 
 ## TODO - Examples to be created
 
-1. (Need to Record) Example 7 showing how to display multiple audio inputs in a list.
-1. Example showing how to position a video camera in the mix using popup menu to open dialog. (Position=Position X, Y; Zoom X, Y; Rotation X, Y, X; Z-Priority)
 1. Example showing 720p and 1080p resolutions.
 1. Example showing 720p and 1080p videos. (what does this mean?)
 1. Example showing how to scrub a video forward and backward.

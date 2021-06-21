@@ -1,4 +1,4 @@
-import 'package:dive_core/dive_sources.dart';
+import 'package:dive_core/dive_transform_info.dart';
 import 'package:dive_core/dive_input.dart';
 import 'package:dive_core/dive_input_type.dart';
 import 'package:dive_obslib/dive_obslib.dart';

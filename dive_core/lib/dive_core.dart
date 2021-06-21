@@ -13,6 +13,7 @@ export 'dive_output.dart';
 export 'dive_sources.dart';
 export 'dive_system_log.dart';
 export 'dive_system_log.dart';
+export 'dive_transform_info.dart';
 export 'texture_controller.dart';
 
 /*

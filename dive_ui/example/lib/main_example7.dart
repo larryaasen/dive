@@ -81,7 +81,7 @@ class _BodyWidgetState extends State<BodyWidget> {
       });
 
       DiveInputs.video().forEach((videoInput) {
-        if (videoInput.name.contains('mmhmm')) {
+        if (videoInput.name.contains('C920')) {
           print(videoInput);
           DiveVideoSource.create(videoInput).then((source) {
             _elements.updateState((state) => state.videoSources.add(source));
