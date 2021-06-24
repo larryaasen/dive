@@ -103,6 +103,14 @@ position a video camera in the video mix.
 * Show the [DivePositionDialog] dialog.
 * Usage: flutter run lib/main_example8.dart -d macos
 
+![image](example8-position.png)
+
+## Example 9 - Resolutions
+
+This example shows how to use dive_ui, dive_core, and dive_obslib to
+change the output resolution of the video mix.
+* Use `DiveCoreElements` to track the scene, video mix (`DiveVideoMix`), and video source.
+
 ## Writing an app with Dive UI
 
 1. Add dive_ui to your pubspec.yaml file.
@@ -124,6 +132,7 @@ rsync ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework/PlugIns/* $
 ## TODO - Examples to be created
 
 1. Example showing 720p and 1080p resolutions.
+1. Example showing how to subclass or override wigets to customize.
 1. Example showing 720p and 1080p videos. (what does this mean?)
 1. Example showing how to scrub a video forward and backward.
 1. Example showing how to position an image in the mix.
