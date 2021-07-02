@@ -8,10 +8,12 @@ export 'dive_plugin_obslib.dart';
 import 'dive_base_obslib.dart';
 
 /// Global variable for the Dive obslib class.
-/// It points to either DivePluginObslib or DiveFFIObslib.
 final DiveBaseObslib obslib = DiveBaseObslib()..initialize();
 
+/// New name examples.
 final DiveBaseObslib divelib = obslib;
 final DiveBaseObslib dive = obslib;
 final DiveBaseObslib divebase = obslib;
 final DiveBaseObslib divesys = obslib;
+final DiveBaseObslib divemixer = obslib;
+final DiveBaseObslib mixer = obslib;

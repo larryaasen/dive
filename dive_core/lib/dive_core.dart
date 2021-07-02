@@ -1,5 +1,7 @@
 library dive_core;
 
+import 'dart:math';
+
 import 'package:dive_obslib/dive_obslib.dart';
 import 'package:riverpod/riverpod.dart';
 
@@ -31,24 +33,68 @@ export 'texture_controller.dart';
     dart-import ad-on;
 */
 
+/// The various different frame rates (FPS).
+class DiveCoreFPS {
+  const DiveCoreFPS(this.frameRate, this.numerator, this.denominator);
+
+  factory DiveCoreFPS.values(int numerator, int denominator) => DiveCoreFPS(
+        (numerator / denominator).roundAsFixed(2),
+        numerator,
+        denominator,
+      );
+
+  final double frameRate;
+  final int numerator;
+  final int denominator;
+
+  /// Frame Rate 59.94 FPS.
+  static const fps59_94 = DiveCoreFPS(59.94, 60000, 1001);
+
+  /// Frame Rate 29.97 FPS.
+  static const fps29_97 = DiveCoreFPS(29.97, 30000, 1001);
+
+  /// A list of all of the predefined items in [DiveCoreFPS].
+  static const all = [fps59_94, fps29_97];
+
+  /// Find the index of [input] in all of the items in [DiveCoreFPS].
+  static int indexOf(DiveCoreFPS input) {
+    int foundIndex = -1;
+    var index = 0;
+    DiveCoreFPS.all.forEach((fps) {
+      if (input.frameRate == fps.frameRate) {
+        foundIndex = index;
+        return;
+      }
+      index++;
+    });
+    return foundIndex;
+  }
+
+  @override
+  String toString() => "frameRate=$frameRate";
+}
+
+/// The various different video resolutions.
 class DiveCoreResolution {
+  const DiveCoreResolution(this.name, this.width, this.height);
+
+  final String name;
   final int width;
   final int height;
-  const DiveCoreResolution(this.width, this.height);
 
-  String get resolution => "${width}x$height";
+  String get resolution => "${width}x$height ($name)";
   double get aspectRatio => width / height;
 
-  static const r7680_4320 = DiveCoreResolution(7680, 4320);
+  static const r7680_4320 = DiveCoreResolution('8K', 7680, 4320);
 
   /// 4K resolution
-  static const r3840_2160 = DiveCoreResolution(3840, 2160);
+  static const r3840_2160 = DiveCoreResolution('4K UHD', 3840, 2160);
 
   /// Full HD resolution
-  static const r1920_1080 = DiveCoreResolution(1920, 1080);
+  static const r1920_1080 = DiveCoreResolution('Full HD', 1920, 1080);
 
   /// HD resolution
-  static const r1280_720 = DiveCoreResolution(1280, 720);
+  static const r1280_720 = DiveCoreResolution('HD', 1280, 720);
 
   /// 8K resolutions
   static const r8K = r7680_4320;
@@ -70,14 +116,43 @@ class DiveCoreResolution {
 
   /// HD resolution
   static const r720p = HD;
+
+  /// A list of all of the predefined items in [DiveCoreResolution].
+
+  static const all = [r8K, UHD, FULL_HD, HD];
+
+  /// Find the index of [input] in all of the items in [DiveCoreResolution].
+  static int indexOf(DiveCoreResolution input) {
+    int foundIndex = -1;
+    var index = 0;
+    DiveCoreResolution.all.forEach((resolution) {
+      if (input.width == resolution.width &&
+          input.height == resolution.height) {
+        foundIndex = index;
+        return;
+      }
+      index++;
+    });
+    return foundIndex;
+  }
+
+  /// Find the name of the resolution with this [width] and [height].
+  static String nameOf(int width, int height) {
+    DiveCoreResolution.all.forEach((resolution) {
+      if (width == resolution.width && height == resolution.height) {
+        return resolution.name;
+      }
+    });
+    return null;
+  }
 }
 
 /// Aspect ratios.
 class DiveCoreAspectRatio {
+  const DiveCoreAspectRatio(this._sRatio, this._dRatio);
+
   final String _sRatio;
   final double _dRatio;
-
-  const DiveCoreAspectRatio(this._sRatio, this._dRatio);
 
   double get ratio => _dRatio;
   double get toDouble => _dRatio;
@@ -142,6 +217,7 @@ class DiveCore {
   void setupOBS(
     DiveCoreResolution baseResolution, {
     DiveCoreResolution outResolution,
+    DiveCoreFPS fps = DiveCoreFPS.fps29_97,
   }) {
     outResolution = outResolution ?? baseResolution;
     obslib.startObs(
@@ -149,10 +225,24 @@ class DiveCore {
       baseResolution.height,
       outResolution.width,
       outResolution.height,
+      fps.numerator,
+      fps.denominator,
     );
   }
 }
 
 class DiveCoreProviderContainerException implements Exception {
   String toString() => 'DiveCore.providerContainer should not be null.';
+}
+
+extension DoubleRound on double {
+  double roundAsFixed(int places) {
+    double mod = pow(10.0, places);
+    return ((this * mod).round().toDouble() / mod);
+  }
+}
+
+double roundAsFixed(double value, int places) {
+  double mod = pow(10.0, places);
+  return ((value * mod).round().toDouble() / mod);
 }

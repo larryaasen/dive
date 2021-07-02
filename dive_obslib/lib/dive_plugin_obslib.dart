@@ -11,6 +11,9 @@ extension DivePluginObslib on DiveBaseObslib {
   static const String _methodInitializeTexture = 'initializeTexture';
   static const String _methodAddSourceFrameCallback = 'addSourceFrameCallback';
   static const String _methodCreateVideoMix = 'createVideoMix';
+  static const String _methodRemoveVideoMix = 'removeVideoMix';
+  static const String _methodChangeFrameRate = 'changeFrameRate';
+  static const String _methodChangeResolution = 'changeResolution';
   static const String _methodGetSceneItemInfo = 'getSceneItemInfo';
   static const String _methodSetSceneItemInfo = 'setSceneItemInfo';
   static const String _methodAddVolumeMeterCallback = 'addVolumeMeterCallback';
@@ -66,8 +69,32 @@ extension DivePluginObslib on DiveBaseObslib {
   }
 
   Future<bool> createVideoMix(String trackingUUID) async {
-    return await _channel
+    final rv = await _channel
         .invokeMethod(_methodCreateVideoMix, {'tracking_uuid': trackingUUID});
+    return rv;
+  }
+
+  Future<bool> removeVideoMix(String trackingUUID) async {
+    final rv = await _channel
+        .invokeMethod(_methodRemoveVideoMix, {'tracking_uuid': trackingUUID});
+    return rv;
+  }
+
+  Future<bool> changeFrameRate(int numerator, int denominator) async {
+    final rv = await _channel.invokeMethod(_methodChangeFrameRate,
+        {'numerator': numerator, 'denominator': denominator});
+    return rv;
+  }
+
+  Future<bool> changeResolution(
+      int baseWidth, int baseHeight, int outputWidth, int outputHeight) async {
+    final rv = await _channel.invokeMethod(_methodChangeResolution, {
+      'base_width': baseWidth,
+      'base_height': baseHeight,
+      'output_width': outputWidth,
+      'output_height': outputHeight
+    });
+    return rv;
   }
 
   Future<String> disposeTexture(int textureId) async {

@@ -29,9 +29,6 @@ struct key_cmp_str
    }
 };
 
-// obs is not designed for hot reload, so only start it once
-bool obs_started = false;
-
 /// Map of all created scenes where the key is a scene UUID and the value is a scene pointer
 static std::map<const char *, obs_scene_t *, key_cmp_str> uuid_scene_list;
 static std::map<obs_scene_t *, const char *> scene_uuid_list;
@@ -42,19 +39,21 @@ static std::map<obs_source_t *, const char *> source_uuid_list;
 
 static std::map<unsigned int, const char *> videomix_uuid_list;
 
-static obs_output_t *stream_output;
-
 /// Map of all texture sources where the key is a source UUID and the value is a texture source pointer
 static std::map<const char *, TextureSource *, key_cmp_str> _textureSourceMap;
 /// A duplicate map of all texture source that provides Objective-C reference counting
 static NSMutableDictionary *_textureSources = [NSMutableDictionary new];
 
-/// Tracks the first scene being created, and sets the output source if it is the first
-static bool _isFirstScene = true;
-
-static bool create_service();
 static void videomix_callback(void *param, struct video_data *frame);
 static void source_frame_callback(void *param, obs_source_t *source, struct obs_source_frame *frame);
+
+bool bridge_obs_startup(void)
+{
+    // You must call obs_startup in this plugin because it must run on
+    // the main thread. Do not call in FFI because it does not run on the
+    // main thread.
+    return obs_startup("en", NULL, NULL);
+}
 
 void addFrameCapture(TextureSource *textureSource) {
     if (textureSource == NULL) {
@@ -134,79 +133,104 @@ static void remove_source(const char *uuid_str) {
     free((void *)source_uuid_list[source]);
 }
 
+void logMessage(const char *function_name, int line, const char *msg) {
+    printf("%s:%d %s\n", function_name, line, msg);
+}
+
+void logVideoActive(const char *function_name, int line) {
+    const char *msg = obs_video_active() == 1 ? "OBS video(active)" : "OBS video(not active)";
+    logMessage(function_name, line, msg);
+}
+
 static void add_videomix_callback(const char *tracking_uuid) {
     const char *tracking_uuid_str = strdup(tracking_uuid);
     
-    unsigned int index = 0;
+    unsigned int index=0;   // TODO: this should not be hard coded
     videomix_uuid_list[index] = tracking_uuid_str;
     
     struct video_scale_info *conversion = NULL;
     void *param = (void *)tracking_uuid_str;
     obs_add_raw_video_callback(conversion, videomix_callback, param);
+    printf("%s: videomix added\n", __func__);
 }
 
-static void remove_videomix_callback(const char *tracking_uuid) {
+static bool remove_videomix_callback() {
     unsigned int index=0;   // TODO: this should not be hard coded
     const char *tracking_uuid_str = videomix_uuid_list[index];
+    if (tracking_uuid_str == NULL) return false;
     void *param = (void *)tracking_uuid_str;
     obs_remove_raw_video_callback(videomix_callback, param);
 
+    printf("%s: videomix removed\n", __func__);
     videomix_uuid_list.erase(index);
     free((void *)tracking_uuid_str);
+    return true;
 }
 
-bool bridge_obs_startup(void)
-{
-    // You must call obs_startup in this plugin because it must run on
-    // the main thread. Do not call in FFI because it does not run on the
-    // main thread.
-    return obs_startup("en", NULL, NULL);
+/// The videomix callback causes the video output to be enabled. Sometimes, such as during
+/// a framerate change, the video output cannot be enabled. Use this method to disable
+/// the video output, temporarily. Works with [_unsuspend_videomix].
+const char *_suspend_videomix() {
+    unsigned int index=0;   // TODO: this should not be hard coded
+    const char *tracking_uuid_str = strdup(videomix_uuid_list[index]);
+    if (tracking_uuid_str == NULL) return NULL;
+    remove_videomix_callback();
+    printf("%s: videomix suspended\n", __func__);
+    return tracking_uuid_str;
 }
 
-static bool create_service() {
-    obs_data_t *serviceSettings = obs_data_create();
-    const char *url = "rtmp://live-iad05.twitch.tv/app/<your_stream_key>";
-    const char *key = "<your_stream_key>";
-    obs_data_set_string(serviceSettings, "server", url);
-    obs_data_set_string(serviceSettings, "key", key);
+void _unsuspend_videomix(const char *tracking_uuid_str) {
+    add_videomix_callback(tracking_uuid_str);
+    printf("%s: videomix unsuspended\n", __func__);
+}
 
-    const char *service_id = "rtmp_common";
-    obs_service_t *service_obj = obs_service_create(
-        service_id, "default_service", serviceSettings, nullptr);
-//    obs_service_release(service_obj);
-
-    const char *type = "rtmp_output";
-    stream_output = obs_output_create(type, "adv_stream", nullptr, nullptr);
-    if (!stream_output) {
-        printf("%s: creation of stream output type '%s' failed\n", __func__, type);
-        return false;
+int _change_video_framerate(int32_t numerator, int32_t denominator) {
+    struct obs_video_info ovi;
+    int rv = OBS_VIDEO_FAIL;
+    if (obs_get_video_info(&ovi)) {
+        ovi.fps_num = numerator;
+        ovi.fps_den = denominator;
+        rv = obs_reset_video(&ovi);
     }
+    printf("%s: framerate changed\n", __func__);
+    return rv;
+}
 
-    obs_encoder_t *vencoder = obs_video_encoder_create("obs_x264", "test_x264",
-                               nullptr, nullptr);
-//    obs_encoder_release(vencoder);
-    obs_encoder_t *aencoder = obs_audio_encoder_create("ffmpeg_aac", "test_aac",
-                               nullptr, 0, nullptr);
-//    obs_encoder_release(aencoder);
-    obs_encoder_set_video(vencoder, obs_get_video());
-    obs_encoder_set_audio(aencoder, obs_get_audio());
-    obs_output_set_video_encoder(stream_output, vencoder);
-    obs_output_set_audio_encoder(stream_output, aencoder, 0);
-    
-    obs_output_set_service(stream_output, service_obj);
-    
-    obs_data_t *outputSettings = obs_data_create();
-    obs_data_set_string(outputSettings, "bind_ip", "default");
-    obs_data_set_bool(outputSettings, "new_socket_loop_enabled", false);
-    obs_data_set_bool(outputSettings, "low_latency_mode_enabled", false);
-    obs_data_set_bool(outputSettings, "dyn_bitrate", false);
-    obs_output_update(stream_output, outputSettings);
-    
-//    if (!obs_output_start(stream_output)) {
-//        printf("%s: output start failed\n", __func__);
-//        return false;
-//    }
+int _change_video_resolution(int32_t base_width, int32_t base_height, int32_t output_width, int32_t output_height) {
+    struct obs_video_info ovi;
+    int rv = OBS_VIDEO_FAIL;
+    if (obs_get_video_info(&ovi)) {
+        ovi.base_width = base_width;
+        ovi.base_height = base_height;
+        ovi.output_width = output_width;
+        ovi.output_height = output_height;
+        rv = obs_reset_video(&ovi);
+    }
+    printf("%s: resolution changed\n", __func__);
+    return rv;
+}
 
+/// Change the frame rate.
+/// When video output is active, like with a video mix, it must be removed temporarily during
+/// the called to `obs_reset_video()`.
+bool bridge_change_video_framerate(int32_t numerator, int32_t denominator) {
+    const char *tracking_uuid_str = _suspend_videomix();
+    if (tracking_uuid_str == NULL) return false;
+    if (_change_video_framerate(numerator, denominator) != OBS_VIDEO_SUCCESS) return false;
+    _unsuspend_videomix(tracking_uuid_str);
+    free((void *)tracking_uuid_str);
+    return true;
+}
+
+/// Change the frame rate.
+/// When video output is active, like with a video mix, it must be removed temporarily during
+/// the called to `obs_reset_video()`.
+bool bridge_change_video_resolution(int32_t base_width, int32_t base_height, int32_t output_width, int32_t output_height) {
+    const char *tracking_uuid_str = _suspend_videomix();
+    if (tracking_uuid_str == NULL) return false;
+    if (_change_video_resolution(base_width, base_height, output_width, output_height) != OBS_VIDEO_SUCCESS) return false;
+    _unsuspend_videomix(tracking_uuid_str);
+    free((void *)tracking_uuid_str);
     return true;
 }
 
@@ -251,7 +275,7 @@ static void copy_frame_to_texture(size_t width, size_t height, OSType pixelForma
                                                    length:linesize*height
                                              freeWhenDone:NO];
             [theData writeToFile:@"demo_frame" atomically:NO];
-            printf([[lines componentsJoinedByString:@"\n"] cStringUsingEncoding:NSASCIIStringEncoding]);
+            printf("%s", [[lines componentsJoinedByString:@"\n"] cStringUsingEncoding:NSASCIIStringEncoding]);
         }
 //        if (frameCount > 100) {
 //            return;
@@ -274,6 +298,11 @@ static void copy_frame_to_texture(size_t width, size_t height, OSType pixelForma
 
     CVPixelBufferRef pxbuffer = NULL;
     CVPixelBufferReleaseBytesCallback releaseCallback = shouldSwapRedBlue && !useSampleFrame ? BufferReleaseBytesCallback : NULL;
+    NSDictionary* attributes = @{
+        (id)kCVPixelBufferPixelFormatTypeKey : @(pixelFormatType),
+        (id)kCVPixelBufferOpenGLCompatibilityKey : @YES,
+        (id)kCVPixelBufferMetalCompatibilityKey : @YES
+    };
 
     CVReturn status = CVPixelBufferCreateWithBytes(kCFAllocatorDefault,
                                                    width,
@@ -283,7 +312,7 @@ static void copy_frame_to_texture(size_t width, size_t height, OSType pixelForma
                                                    linesize,
                                                    releaseCallback,
                                                    NULL,
-                                                   NULL,
+                                                   (__bridge CFDictionaryRef)attributes,
                                                    &pxbuffer);
     if (status != kCVReturnSuccess) {
         NSLog(@"copy_frame_to_source: Operation failed");
@@ -306,7 +335,12 @@ static void copy_planar_frame_to_texture(size_t width, size_t height, OSType pix
         (planeBytesPerRows[0]*planeHeights[0]) +
         (planeBytesPerRows[1]*planeHeights[1]) +
         (planeBytesPerRows[2]*planeHeights[2]);
-    
+    NSDictionary* attributes = @{
+        (id)kCVPixelBufferPixelFormatTypeKey : @(pixelFormatType),
+        (id)kCVPixelBufferOpenGLCompatibilityKey : @YES,
+        (id)kCVPixelBufferMetalCompatibilityKey : @YES
+    };
+
     CVReturn status = CVPixelBufferCreateWithPlanarBytes(
                                        kCFAllocatorDefault,
                                        width,
@@ -321,7 +355,7 @@ static void copy_planar_frame_to_texture(size_t width, size_t height, OSType pix
                                        planeBytesPerRows,
                                        NULL,
                                        NULL,
-                                       NULL,
+                                       (__bridge CFDictionaryRef)attributes,
                                        &pixelBufferOut);
 
     if (status != kCVReturnSuccess) {
@@ -373,6 +407,7 @@ static void source_frame_callback(void *param, obs_source_t *source, struct obs_
 static void videomix_callback(void *param, struct video_data *frame) {
 //    printf("%s linesize[0] %d\n", __func__, frame->linesize[0]);
 
+    // TODO: need lock around the use of videomix_uuid_list. Maybe use @synchronized (_textureSources) below
     unsigned int index = 0;
     const char *uuid_str = videomix_uuid_list[index];
     @synchronized (_textureSources) {
@@ -421,7 +456,7 @@ bool bridge_add_videomix(const char *tracking_uuid) {
 }
 
 bool bridge_remove_videomix(const char *tracking_uuid) {
-    remove_videomix_callback(tracking_uuid);
+    remove_videomix_callback();
     return true;
 }
 
@@ -430,38 +465,6 @@ bool bridge_remove_videomix(const char *tracking_uuid) {
 bool bridge_create_source(const char *source_uuid, const char *source_id, const char *name, bool frame_source) {
     obs_data_t *settings = NULL;
     return _create_source(source_uuid, source_id, name, settings, frame_source);
-}
-
-int64_t bridge_create_scene(NSString *tracking_uuid, NSString *scene_name) {
-    obs_scene_t *scene = obs_scene_create(scene_name.UTF8String);
-    if (!scene) {
-        printf("Couldn't create scene: %s\n", scene_name.UTF8String);
-        return NULL;
-    }
-    
-    if (_isFirstScene) {
-        _isFirstScene = false;
-
-        /* set the scene as the primary draw source and go */
-        uint32_t channel = 0;
-        obs_set_output_source(channel, obs_scene_get_source(scene));
-    }
-    
-    save_scene(tracking_uuid, scene);
-
-    return (int64_t)scene;
-}
-
-bool bridge_release_scene(NSString *tracking_uuid) {
-    const char *uuid_str = tracking_uuid.UTF8String;
-    obs_scene_t *scene = uuid_scene_list[uuid_str];
-    if (!scene) {
-        printf("%s: unknown scene %s\n", __func__, uuid_str);
-        return false;
-    }
-    obs_scene_release(scene);
-    remove_scene(uuid_str);
-    return true;
 }
 
 bool bridge_release_source(NSString *source_uuid) {
@@ -592,36 +595,6 @@ bool bridge_sceneitem_set_info(int64_t sceneitem_pointer, NSDictionary *info) {
     obs_sceneitem_set_info(item, &item_info);
 
     return false;
-}
-
-#pragma mark - Stream Controls
-
-/// Start the stream output.
-bool bridge_stream_output_start() {
-    bool rv = obs_output_start(stream_output);
-    if (!rv) {
-        printf("%s: stream not started\n", __func__);
-    }
-    return rv;
-}
-
-/// Stop the stream output.
-bool bridge_stream_output_stop() {
-    obs_output_stop(stream_output);
-    return true;
-}
-
-/// Get the output state: 1 (active), 2 (paused), or 3 (reconnecting)
-int bridge_output_get_state() {
-    bool active = obs_output_active(stream_output);
-    bool paused = obs_output_paused(stream_output);
-    bool reconnecting = obs_output_reconnecting(stream_output);
-    int state = 0;
-    if (active) state = 1;
-    else if (paused) state = 2;
-    else if (reconnecting) state = 3;
-
-    return state;
 }
 
 #pragma mark - Media Controls

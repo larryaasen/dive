@@ -110,6 +110,10 @@ position a video camera in the video mix.
 This example shows how to use dive_ui, dive_core, and dive_obslib to
 change the output resolution of the video mix.
 * Use `DiveCoreElements` to track the scene, video mix (`DiveVideoMix`), and video source.
+* Create a scene (`DiveScene`) and display the video mix using the `DiveMeterPreview` widget showing the video mix.
+* Display a settings icon button `DiveSettingsButton` that opens the output settings dialog.
+* Show the [DiveVideoSettingsDialog] dialog.
+* Usage: flutter run lib/main_example9.dart -d macos
 
 ## Writing an app with Dive UI
 
@@ -131,12 +135,14 @@ rsync ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework/PlugIns/* $
 
 ## TODO - Examples to be created
 
-1. Example showing 720p and 1080p resolutions.
-1. Example showing how to subclass or override wigets to customize.
-1. Example showing 720p and 1080p videos. (what does this mean?)
-1. Example showing how to scrub a video forward and backward.
-1. Example showing how to position an image in the mix.
-1. Example showing how to change the volume of an audio source.
+1. Example showing how to subclass and override icons with icon set replacement.
 1. Example showing how to configure streaming.
 1. Determine best copyright for examples.
 1. Properly Copyright example code.
+1. Prepare for release.
+
+
+Maybe later:
+1. Example showing how to scrub a video forward and backward.
+1. Example showing how to position an image in the mix.
+1. Example showing how to change the volume of an audio source.

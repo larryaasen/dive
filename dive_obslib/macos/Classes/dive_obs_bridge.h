@@ -22,8 +22,6 @@ bool bridge_obs_startup(void);
 
 bool    bridge_source_add_frame_callback(const char *source_uuid, int64_t source_ptr);
 bool    bridge_create_source(const char *source_uuid, const char *source_id, const char *name, bool frame_source);
-int64_t bridge_create_scene(NSString *tracking_uuid, NSString *scene_name);
-bool    bridge_release_scene(NSString *scene_uuid);
 bool    bridge_release_source(NSString *source_uuid);
 bool    bridge_create_media_source(NSString *sourc_uuid, NSString *local_file);
 bool    bridge_create_video_source(NSString *source_uuid, NSString *device_name, NSString *device_uid);
@@ -34,12 +32,8 @@ bool bridge_sceneitem_set_info(int64_t sceneitem_pointer, NSDictionary *info);
 
 bool    bridge_add_videomix(const char *tracking_uuid);
 bool    bridge_remove_videomix(const char *tracking_uuid);
-
-#pragma mark - Stream Controls
-
-bool bridge_stream_output_start();
-bool bridge_stream_output_stop();
-int bridge_output_get_state();
+bool    bridge_change_video_framerate(int32_t numerator, int32_t denominator);
+bool    bridge_change_video_resolution(int32_t base_width, int32_t base_height, int32_t output_width, int32_t output_height);
 
 #pragma mark - Media Controls
 

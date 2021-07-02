@@ -6,16 +6,19 @@ import 'dart:math';
 import 'package:dive_core/dive_core.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as path;
 
 import 'blocs/dive_reference_panels.dart';
 import 'dive_audio_meter.dart';
+import 'dive_position_dialog.dart';
+import 'dive_side_sheet.dart';
 
 export 'blocs/dive_reference_panels.dart';
 export 'dive_audio_meter.dart';
+export 'dive_position_edit.dart';
+export 'dive_side_sheet.dart';
 
 /// Signature for a callback with a boolean value.
 typedef DiveBoolCallback = void Function(bool value);
@@ -23,12 +26,6 @@ typedef DiveBoolCallback = void Function(bool value);
 /// Signature for when a tap has occurred.
 /// Return true when selection should be updated, or false to ignore tap.
 typedef DiveListTapCallback = bool Function(int currentIndex, int newIndex);
-
-/// Signature for when transform info needs to be applied.
-typedef DiveTransformApplyCallback = void Function(DiveTransformInfo info);
-
-/// Signature for move edit actoin was pressed.
-typedef DiveMoveEditItemCallback = void Function(DiveSceneItemMovement move);
 
 class DiveUI {
   /// DiveCore and DiveUI must use the same [ProviderContainer], so it needs
@@ -785,12 +782,10 @@ class DiveImagePickerButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
         icon: Icon(Icons.add_a_photo_outlined),
-        onPressed: () {
-          _addIconPressed();
-        });
+        onPressed: () => _buttonPressed(context));
   }
 
-  void _addIconPressed() async {
+  void _buttonPressed(BuildContext context) async {
     final typeGroup = XTypeGroup(label: 'images', extensions: [
       'bmp',
       'tga',
@@ -953,298 +948,5 @@ class _DiveAudioListState extends State<DiveAudioList> {
             ));
           },
         ));
-  }
-}
-
-/// Update the position of a scene item.
-class DivePositionDialog extends StatefulWidget {
-  DivePositionDialog({Key key, this.item}) : super(key: key);
-
-  final DiveSceneItem item;
-
-  @override
-  _DivePositionDialogState createState() => _DivePositionDialogState();
-}
-
-class _DivePositionDialogState extends State<DivePositionDialog> {
-  DiveTransformInfo _transformInfo;
-
-  @override
-  void initState() {
-    widget.item.getTransformInfo().then((info) {
-      setState(() {
-        _transformInfo = info;
-      });
-    });
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFF6200EE),
-        title: Text('Position Properties'),
-      ),
-      body: Center(
-        child: Column(children: [
-          DivePositionEdit(
-              transformInfo: _transformInfo, onApplyCallback: onApply),
-          DiveMoveItemEdit(onSetOrderCallback: onSetOrder),
-        ]),
-      ),
-    );
-  }
-
-  void onApply(DiveTransformInfo info) {
-    if (widget.item != null) {
-      widget.item.updateTransformInfo(info);
-    }
-  }
-
-  void onSetOrder(DiveSceneItemMovement move) {
-    if (widget.item != null) {
-      widget.item.setOrder(move);
-    }
-  }
-}
-
-class DivePositionEdit extends StatefulWidget {
-  DivePositionEdit({Key key, this.transformInfo, this.onApplyCallback})
-      : super(key: key);
-
-  final DiveTransformInfo transformInfo;
-  final DiveTransformApplyCallback onApplyCallback;
-
-  @override
-  _DivePositionEditState createState() => _DivePositionEditState();
-}
-
-class _DivePositionEditState extends State<DivePositionEdit> {
-  TextEditingController _posXCont = TextEditingController();
-  TextEditingController _posYCont = TextEditingController();
-  TextEditingController _scaleXCont = TextEditingController();
-  TextEditingController _scaleYCont = TextEditingController();
-  bool _initialState = true;
-
-  @override
-  Widget build(BuildContext context) {
-    if (_initialState && widget.transformInfo != null) {
-      _useInitialState();
-      _initialState = false;
-    }
-    final decoration = InputDecoration(isDense: true, counterText: "");
-
-    final position = Padding(
-        padding: EdgeInsets.only(top: 20),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-                width: 60, child: Text('Position', textAlign: TextAlign.end)),
-            Container(width: 8),
-            Text('X:'),
-            Container(width: 5),
-            SizedBox(
-                width: 50,
-                child: TextField(
-                  controller: _posXCont,
-                  maxLength: 4,
-                  decoration: decoration,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  ],
-                )),
-            SizedBox(width: 10),
-            Container(width: 5),
-            Text('Y:'),
-            Container(width: 5),
-            SizedBox(
-                width: 50,
-                child: TextField(
-                  controller: _posYCont,
-                  maxLength: 4,
-                  decoration: decoration,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  ],
-                )),
-            SizedBox(width: 10),
-          ],
-        ));
-    final scale = Padding(
-        padding: EdgeInsets.only(top: 20),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(width: 60, child: Text('Scale', textAlign: TextAlign.end)),
-            Container(width: 8),
-            Text('X:'),
-            Container(width: 5),
-            SizedBox(
-                width: 50,
-                child: TextField(
-                  controller: _scaleXCont,
-                  decoration: decoration,
-                )),
-            SizedBox(width: 10, child: Text('%')),
-            Container(width: 5),
-            Text('Y:'),
-            Container(width: 5),
-            SizedBox(
-                width: 50,
-                child: TextField(
-                  controller: _scaleYCont,
-                  decoration: decoration,
-                )),
-            SizedBox(width: 10, child: Text('%')),
-          ],
-        ));
-    final buttons = Padding(
-        padding: EdgeInsets.only(top: 20),
-        child: Row(mainAxisSize: MainAxisSize.min, children: [
-          ElevatedButton(child: Text('Reset'), onPressed: () => _onReset()),
-          Container(width: 15),
-          ElevatedButton(
-              child: Text('Apply'),
-              onPressed: widget.onApplyCallback == null ? null : _onApply),
-        ]));
-    final col = Column(children: [
-      position,
-      scale,
-      buttons,
-    ]);
-    return col;
-  }
-
-  void _useInitialState() {
-    final pos = widget.transformInfo != null ? widget.transformInfo.pos : null;
-    final scale =
-        widget.transformInfo != null ? widget.transformInfo.scale : null;
-
-    _posXCont.text = pos == null ? '' : pos.x.toInt().toString();
-    _posYCont.text = pos == null ? '' : pos.y.toInt().toString();
-
-    _scaleXCont.text =
-        scale == null ? '' : (scale.x * 100.0).toStringAsFixed(1);
-    _scaleYCont.text =
-        scale == null ? '' : (scale.y * 100.0).toStringAsFixed(1);
-  }
-
-  void _onReset() {
-    setState(() {
-      _useInitialState();
-    });
-
-    ScaffoldMessenger.maybeOf(context).showSnackBar(SnackBar(
-      content: Text("Properties set back to their original values."),
-    ));
-  }
-
-  void _onApply() {
-    if (widget.onApplyCallback == null) return;
-    // TODO: improve error handling with text
-    final pos =
-        DiveVec2(double.parse(_posXCont.text), double.parse(_posYCont.text));
-    final scale = DiveVec2(double.parse(_scaleXCont.text) / 100.0,
-        double.parse(_scaleYCont.text) / 100.0);
-    final info = DiveTransformInfo(pos: pos, scale: scale);
-
-    widget.onApplyCallback(info);
-
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text("Properties have been applied."),
-    ));
-  }
-}
-
-class DiveMoveItemEdit extends StatefulWidget {
-  const DiveMoveItemEdit({Key key, this.onSetOrderCallback}) : super(key: key);
-
-  final DiveMoveEditItemCallback onSetOrderCallback;
-
-  @override
-  _DiveMoveItemEditState createState() => _DiveMoveItemEditState();
-}
-
-class _DiveMoveItemEditState extends State<DiveMoveItemEdit> {
-  @override
-  Widget build(BuildContext context) {
-    final header =
-        Padding(padding: EdgeInsets.only(top: 20), child: Text('Z-Priority'));
-    final buttons1 = Padding(
-        padding: EdgeInsets.only(top: 20),
-        child: Row(mainAxisSize: MainAxisSize.min, children: [
-          ElevatedButton(
-              child: Text('Move Up'),
-              onPressed: () => _onMovePressed(DiveSceneItemMovement.MOVE_UP)),
-          Container(width: 15),
-          ElevatedButton(
-              child: Text('Move Top'),
-              onPressed: () => _onMovePressed(DiveSceneItemMovement.MOVE_TOP)),
-        ]));
-    final buttons2 = Padding(
-        padding: EdgeInsets.only(top: 20),
-        child: Row(mainAxisSize: MainAxisSize.min, children: [
-          ElevatedButton(
-              child: Text('Move Down'),
-              onPressed: () => _onMovePressed(DiveSceneItemMovement.MOVE_DOWN)),
-          Container(width: 15),
-          ElevatedButton(
-              child: Text('Move Bottom'),
-              onPressed: () =>
-                  _onMovePressed(DiveSceneItemMovement.MOVE_BOTTOM)),
-        ]));
-    final col = Column(children: [
-      header,
-      buttons1,
-      buttons2,
-    ]);
-    return col;
-  }
-
-  void _onMovePressed(DiveSceneItemMovement move) {
-    if (widget.onSetOrderCallback != null) {
-      widget.onSetOrderCallback(move);
-    }
-  }
-}
-
-/// Show a Material side sheet.
-class DiveSideSheet {
-  static showSideSheet({
-    BuildContext context,
-    Widget Function(BuildContext) builder,
-    bool rightSide = true,
-    Duration animationDuration = const Duration(milliseconds: 300),
-  }) {
-    showGeneralDialog(
-      barrierLabel: "dive_side_sheet",
-      barrierDismissible: true,
-      barrierColor: Colors.black.withOpacity(0.5),
-      transitionDuration: animationDuration,
-      context: context,
-      pageBuilder: (context, animation1, animation2) {
-        return Align(
-          alignment: (rightSide ? Alignment.centerRight : Alignment.centerLeft),
-          child: Container(
-            child: builder(context),
-            height: double.infinity,
-            width: 300,
-            decoration: BoxDecoration(
-              color: Colors.white,
-            ),
-          ),
-        );
-      },
-      transitionBuilder: (context, animation1, animation2, child) {
-        return SlideTransition(
-          position:
-              Tween(begin: Offset((rightSide ? 1 : -1), 0), end: Offset(0, 0))
-                  .animate(animation1),
-          child: child,
-        );
-      },
-    );
   }
 }

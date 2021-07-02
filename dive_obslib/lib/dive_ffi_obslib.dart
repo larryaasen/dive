@@ -1,4 +1,5 @@
 import 'package:dive_obslib/dive_obslib.dart';
+import 'package:flutter/foundation.dart';
 
 import 'dive_obs_ffi.dart';
 import 'dive_ffi_load.dart';
@@ -34,26 +35,71 @@ extension DiveFFIObslib on DiveBaseObslib {
     return true;
   }
 
-  bool resetVideo(int baseWidth, int baseHeight, int outWidth, int outHeight) {
+  /// Reset OBS video.
+  ///
+  /// Example:
+  ///   resetVideo(1280, 720, 1280, 720, 30000, 1001);
+  bool resetVideo(
+    int baseWidth,
+    int baseHeight,
+    int outWidth,
+    int outHeight,
+    int fpsNumerator,
+    int fpsDenominator,
+  ) {
     final ovi = calloc<obs_video_info>();
     ovi.ref
       ..adapter = 0
-      ..fps_num = 30000
-      ..fps_den = 1001
+      ..fps_num = fpsNumerator // Output FPS numerator
+      ..fps_den = fpsDenominator // Output FPS denominator
       ..graphics_module = 'libobs-opengl'.toInt8() //DL_OPENGL
-      ..output_format = video_format.VIDEO_FORMAT_RGBA
       ..base_width = baseWidth
       ..base_height = baseHeight
       ..output_width = outWidth
       ..output_height = outHeight
+      ..output_format = video_format.VIDEO_FORMAT_RGBA
       ..colorspace = video_colorspace.VIDEO_CS_DEFAULT;
 
     int rv = _lib.obs_reset_video(ovi);
+    calloc.free(ovi);
+
+    var msg;
+    switch (rv) {
+      case OBS_VIDEO_SUCCESS:
+        msg = 'success';
+        break;
+      case OBS_VIDEO_FAIL:
+        msg = 'fail';
+        break;
+      case OBS_VIDEO_NOT_SUPPORTED:
+        msg = 'not supported';
+        break;
+      case OBS_VIDEO_INVALID_PARAM:
+        msg = 'invalid parameter';
+        break;
+      case OBS_VIDEO_CURRENTLY_ACTIVE:
+        msg = 'currently active';
+        break;
+      case OBS_VIDEO_MODULE_NOT_FOUND:
+        msg = 'module not found';
+        break;
+      default:
+        msg = 'fail';
+        break;
+    }
+
     if (rv != OBS_VIDEO_SUCCESS) {
-      print("dive_obslib: Couldn't initialize video: $rv");
-      return false; //throw "Couldn't initialize video";
+      print("dive_obslib: Couldn't initialize video: $msg ($rv)");
+      return false;
     }
     return true;
+  }
+
+  void logVideoActive() {
+    final msg = _lib.obs_video_active() == 1
+        ? 'OBS video(active)'
+        : 'OBS video(not active)';
+    debugPrintStack(label: msg, maxFrames: 3);
   }
 
   bool resetAudio() {
@@ -62,11 +108,39 @@ extension DiveFFIObslib on DiveBaseObslib {
       ..samples_per_sec = 48000
       ..speakers = speaker_layout.SPEAKERS_STEREO;
     int rv = _lib.obs_reset_audio(ai);
+    calloc.free(ai);
     if (rv == 0) {
       print("Couldn't initialize audio: $rv");
       return false;
     }
+
     return true;
+  }
+
+  /// Gets the current video settings, returns null if no video.
+  Map<String, dynamic> videoGetInfo() {
+    Map<String, dynamic> info;
+    final ovi = calloc<obs_video_info>();
+    final rv = _lib.obs_get_video_info(ovi);
+    if (rv == 1) {
+      info = {
+        'graphics_module': StringExtensions.fromInt8(ovi.ref.graphics_module),
+        'fps_num': ovi.ref.fps_num,
+        'fps_den': ovi.ref.fps_den,
+        'base_width': ovi.ref.base_width,
+        'base_height': ovi.ref.base_height,
+        'output_width': ovi.ref.output_width,
+        'output_height': ovi.ref.output_height,
+        'output_format': ovi.ref.output_format,
+        'adapter': ovi.ref.adapter,
+        'gpu_conversion': ovi.ref.gpu_conversion == 1,
+        'colorspace': ovi.ref.colorspace,
+        'range': ovi.ref.range,
+        'scale_type': ovi.ref.scale_type,
+      };
+    }
+    calloc.free(ovi);
+    return info;
   }
 
   bool createService({
@@ -125,7 +199,6 @@ extension DiveFFIObslib on DiveBaseObslib {
       print("Couldn't create scene: $sceneName");
       return null;
     }
-
     if (_isFirstScene) {
       _isFirstScene = false;
 
@@ -391,6 +464,8 @@ extension DiveFFIObslib on DiveBaseObslib {
         "name": StringExtensions.fromInt8(name)
       });
     }
+    calloc.free(typeId);
+    calloc.free(unversionedTypeId);
     return list;
   }
 
@@ -432,6 +507,7 @@ extension DiveFFIObslib on DiveBaseObslib {
         property = rv == 1 ? propertyOut.value : null;
       }
       _lib.obs_properties_destroy(sourceProps);
+      calloc.free(propertyOut);
     }
     StringExtensions.freeInt8s();
 

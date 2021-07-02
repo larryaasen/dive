@@ -5,6 +5,23 @@ import 'package:dive_core/dive_output.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:state_notifier/state_notifier.dart';
 
+class DiveVideoSettingsState {}
+
+class _DiveVideoSettingsStateNotifier
+    extends StateNotifier<DiveVideoSettingsState> {
+  DiveVideoSettingsState get stateModel => state;
+
+  _DiveVideoSettingsStateNotifier(DiveCoreElementsState stateModel)
+      : super(stateModel ?? DiveVideoSettingsState());
+
+  void updateState(DiveVideoSettingsState stateModel) => state = stateModel;
+}
+
+class DiveVideoSettings {
+  final stateProvider = StateNotifierProvider<_DiveVideoSettingsStateNotifier>(
+      (ref) => _DiveVideoSettingsStateNotifier(null));
+}
+
 /// The state model for core elements.
 class DiveCoreElementsState {
   // TODO: Make the class DiveCoreElementsState immutable
@@ -24,9 +41,7 @@ class _DiveCoreElementsStateNotifier
   _DiveCoreElementsStateNotifier(DiveCoreElementsState stateModel)
       : super(stateModel ?? DiveCoreElementsState());
 
-  void updateState(DiveCoreElementsState stateModel) {
-    state = stateModel;
-  }
+  void updateState(DiveCoreElementsState stateModel) => state = stateModel;
 }
 
 /// The core elements used in a Dive app.
@@ -42,6 +57,7 @@ class DiveCoreElements {
         state.imageSources.add(source);
         state.currentScene.addSource(source).then((item) {
           DiveCore.notifierFor(stateProvider).updateState(state);
+          assert(false, "Remove this auto transform");
           final info = DiveTransformInfo(
               pos: DiveVec2(140, 120),
               bounds: DiveVec2(1000, 560),

@@ -5,6 +5,7 @@ class DiveBaseObslib {
   /// Audio meter minumum level (dB)
   static const double audioMinLevel = -60.0;
 
+  /// Must be called to initialize the FFI library and the Flutter plugin.
   void initialize() {
     DiveFFIObslib.initialize();
     setupChannels();
@@ -14,11 +15,25 @@ class DiveBaseObslib {
   /// streaming service.
   ///
   /// Example:
-  ///   startObs(1280, 720);
-  bool startObs(int baseWidth, int baseHeight, int outWidth, int outHeight) {
+  ///   startObs(1280, 720, 1280, 720, 30000, 1001);
+  bool startObs(
+    int baseWidth,
+    int baseHeight,
+    int outWidth,
+    int outHeight,
+    int fpsNumerator,
+    int fpsDenominator,
+  ) {
     try {
       if (!loadAllModules()) return false;
-      if (!resetVideo(baseWidth, baseHeight, outWidth, outHeight)) return false;
+      if (!resetVideo(
+        baseWidth,
+        baseHeight,
+        outWidth,
+        outHeight,
+        fpsNumerator,
+        fpsDenominator,
+      )) return false;
       if (!resetAudio()) return false;
     } catch (e) {
       print("startObs: exception: $e");

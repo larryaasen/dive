@@ -17,6 +17,9 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
         // static let CreateMediaSource = "createMediaSource"
         static let CreateVideoSource = "createVideoSource"
         static let CreateVideoMix = "createVideoMix"
+        static let RemoveVideoMix = "removeVideoMix"
+        static let ChangeFrameRate = "changeFrameRate"
+        static let ChangeResolution = "changeResolution"
         static let CreateScene = "createScene"
 
         static let MediaPlayPause = "mediaPlayPause"
@@ -30,9 +33,6 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
         static let GetSceneItemInfo = "getSceneItemInfo"
         static let SetSceneItemInfo = "setSceneItemInfo"
 
-        static let StartStopStream = "startStopStream"
-        static let OutputGetState = "outputGetState"
-
         static let GetInputTypes = "getInputTypes"
         static let GetInputsFromType = "getInputsFromType"
         static let GetAudioInputs = "getAudioInputs"
@@ -44,13 +44,7 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
     static let _channelName = "dive_obslib.io/plugin"
 
     static var textureRegistry: FlutterTextureRegistry?
-    
-    /// Use Dart FFI with OBS Lib
-    static let obsFFI = false;
-    
-    /// Use Flutter plugin with OBS Lib
-    static let obsPlugin = !obsFFI;
-    
+        
     public static func register(with registrar: FlutterPluginRegistrar) {
         textureRegistry = registrar.textures
         
@@ -77,8 +71,6 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         let arguments = call.arguments != nil ? call.arguments as? [String: Any] : nil
         
-        let ffi = DiveObsLibPlugin.obsFFI
-
         switch call.method {
         case Method.InitializeTexture:
             result(initializeTexture(arguments))
@@ -88,53 +80,55 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
             result(addSourceFrameCallback(arguments))
         case Method.CreateVideoMix:
             result(createVideoMix(arguments))
+        case Method.RemoveVideoMix:
+            result(removeVideoMix(arguments))
+        case Method.ChangeFrameRate:
+            result(changeFrameRate(arguments))
+        case Method.ChangeResolution:
+            result(changeResolution(arguments))
 
-        case Method.AddSource:
-            ffi ? nil : result(addSource(arguments))
-        case Method.CreateSource:
-            ffi ? nil : result(createSource(arguments))
-        case Method.CreateImageSource:
-            ffi ? nil : result(createImageSource(arguments))
-        // case Method.CreateMediaSource:
-            // ffi ? nil : result(createMediaSource(arguments))
-        case Method.CreateVideoSource:
-            ffi ? nil : result(createVideoSource(arguments))
-        // case Method.CreateScene:
-            // ffi ? nil : result(createScene(arguments))
-
-        case Method.MediaPlayPause:
-            ffi ? nil : result(mediaPlayPause(arguments))
-        case Method.MediaRestart:
-            ffi ? nil : result(mediaRestart(arguments))
-        case Method.MediaStop:
-            ffi ? nil : result(mediaStop(arguments))
-        case Method.MediaGetDuration:
-            ffi ? nil : result(mediaGetDuration(arguments))
-        case Method.MediaGetTime:
-            ffi ? nil : result(mediaGetTime(arguments))
-        case Method.MediaSetTime:
-            ffi ? nil : result(mediaSetTime(arguments))
-        case Method.MediaGetState:
-            ffi ? nil : result(mediaGetState(arguments))
-
-        case Method.GetSceneItemInfo:
-            ffi ? nil : result(getSceneItemInfo(arguments))
-        case Method.SetSceneItemInfo:
-            ffi ? nil : result(setSceneItemInfo(arguments))
-        case Method.StartStopStream:
-            ffi ? nil : result(startStopStream(arguments))
-        case Method.OutputGetState:
-            ffi ? nil : result(outputGetState())
-        case Method.GetInputTypes:
-            ffi ? nil : result(getInputTypes())
-        case Method.GetInputsFromType:
-            ffi ? nil : result(getInputsFromType(arguments))
-        case Method.GetAudioInputs:
-            ffi ? nil : result(getAudioInputs())
-        case Method.GetVideoInputs:
-            ffi ? nil : result(getVideoInputs())
-        case Method.AddVolumeMeterCallback:
-            ffi ? nil : result(addVolumeMeterCallback(arguments))
+//        case Method.AddSource:
+//            ffi ? nil : result(addSource(arguments))
+//        case Method.CreateSource:
+//            ffi ? nil : result(createSource(arguments))
+//        case Method.CreateImageSource:
+//            ffi ? nil : result(createImageSource(arguments))
+//        // case Method.CreateMediaSource:
+//            // ffi ? nil : result(createMediaSource(arguments))
+//        case Method.CreateVideoSource:
+//            ffi ? nil : result(createVideoSource(arguments))
+//        // case Method.CreateScene:
+//            // ffi ? nil : result(createScene(arguments))
+//
+//        case Method.MediaPlayPause:
+//            ffi ? nil : result(mediaPlayPause(arguments))
+//        case Method.MediaRestart:
+//            ffi ? nil : result(mediaRestart(arguments))
+//        case Method.MediaStop:
+//            ffi ? nil : result(mediaStop(arguments))
+//        case Method.MediaGetDuration:
+//            ffi ? nil : result(mediaGetDuration(arguments))
+//        case Method.MediaGetTime:
+//            ffi ? nil : result(mediaGetTime(arguments))
+//        case Method.MediaSetTime:
+//            ffi ? nil : result(mediaSetTime(arguments))
+//        case Method.MediaGetState:
+//            ffi ? nil : result(mediaGetState(arguments))
+//
+//        case Method.GetSceneItemInfo:
+//            ffi ? nil : result(getSceneItemInfo(arguments))
+//        case Method.SetSceneItemInfo:
+//            ffi ? nil : result(setSceneItemInfo(arguments))
+//        case Method.GetInputTypes:
+//            ffi ? nil : result(getInputTypes())
+//        case Method.GetInputsFromType:
+//            ffi ? nil : result(getInputsFromType(arguments))
+//        case Method.GetAudioInputs:
+//            ffi ? nil : result(getAudioInputs())
+//        case Method.GetVideoInputs:
+//            ffi ? nil : result(getVideoInputs())
+//        case Method.AddVolumeMeterCallback:
+//            ffi ? nil : result(addVolumeMeterCallback(arguments))
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -252,27 +246,41 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
         return bridge_add_videomix(tracking_uuid)
     }
 
-    // private func createScene(_ arguments: [String: Any]?) -> Int64? {
-    //     guard let args = arguments,
-    //         let tracking_uuid = args["tracking_uuid"] as! String?,
-    //         let name = args["name"] as! String?
-    //         else {
-    //             return nil
-    //     }
-    //     return bridge_create_scene(tracking_uuid, name);
-    // }
-    
-    private func startStopStream(_ arguments: [String: Any]?) -> Bool {
+    private func removeVideoMix(_ arguments: [String: Any]?) -> Bool {
         guard let args = arguments,
-            let start = args["start"] as! Bool?
+            let tracking_uuid = args["tracking_uuid"] as! String?
             else {
                 return false
         }
-        return start ? bridge_stream_output_start() : bridge_stream_output_stop()
+        return bridge_remove_videomix(tracking_uuid)
     }
 
-    private func outputGetState() -> Int {
-        return Int(bridge_output_get_state());
+    /// Change the video frame rate.
+    /// When video output is active, like with a video mix, it must be removed temporarily during
+    /// the call to `obs_reset_video()`.
+    private func changeFrameRate(_ arguments: [String: Any]?) -> Bool {
+        guard let args = arguments,
+            let numerator = args["numerator"] as! Int32?,
+            let denominator = args["denominator"] as! Int32?
+            else {
+                return false
+        }
+        return bridge_change_video_framerate(numerator, denominator)
+    }
+
+    /// Change the base and output video resolution.
+    /// When video output is active, like with a video mix, it must be removed temporarily during
+    /// the call to `obs_reset_video()`.
+    private func changeResolution(_ arguments: [String: Any]?) -> Bool {
+        guard let args = arguments,
+            let base_width = args["base_width"] as! Int32?,
+            let base_height = args["base_height"] as! Int32?,
+            let output_width = args["output_width"] as! Int32?,
+            let output_height = args["output_height"] as! Int32?
+            else {
+                return false
+        }
+        return bridge_change_video_resolution(base_width, base_height, output_width, output_height)
     }
 
     private func mediaPlayPause(_ arguments: [String: Any]?) -> Bool {
