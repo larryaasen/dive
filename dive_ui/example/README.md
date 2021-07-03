@@ -115,6 +115,16 @@ change the output resolution of the video mix.
 * Show the [DiveVideoSettingsDialog] dialog.
 * Usage: flutter run lib/main_example9.dart -d macos
 
+
+## Example 10 - Icon Set
+
+This example shows how to use dive_ui, dive_core, and dive_obslib to
+change the output resolution of the video mix.
+* Use `DiveCoreElements` to track the scene, video mix (`DiveVideoMix`), and video source.
+* Create a scene (`DiveScene`) and display the video mix using the `DiveMeterPreview` widget showing the video mix.
+* Display a settings icon button `DiveSettingsButton` that opens the output settings dialog.
+* Usage: flutter run lib/main_example10.dart -d macos
+
 ## Writing an app with Dive UI
 
 1. Add dive_ui to your pubspec.yaml file.
@@ -135,8 +145,9 @@ rsync ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework/PlugIns/* $
 
 ## TODO - Examples to be created
 
-1. Example showing how to subclass and override icons with icon set replacement.
 1. Example showing how to configure streaming.
+1. Search for memory leaks using Intruments.
+1. Resolve some of the TODOs.
 1. Determine best copyright for examples.
 1. Properly Copyright example code.
 1. Prepare for release.

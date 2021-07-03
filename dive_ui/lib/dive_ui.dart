@@ -27,12 +27,38 @@ typedef DiveBoolCallback = void Function(bool value);
 /// Return true when selection should be updated, or false to ignore tap.
 typedef DiveListTapCallback = bool Function(int currentIndex, int newIndex);
 
+/// The default icons for dive_ui widgets.
+/// Override these methods to provide custom icons.
+class DiveIconSet {
+  IconData get imagePickerButton => Icons.add_a_photo_outlined;
+  IconData get mediaPauseButton => Icons.pause_circle_filled_outlined;
+  IconData get mediaPlayButton => Icons.play_circle_fill_outlined;
+  IconData get mediaStopButton => Icons.stop_circle_outlined;
+  IconData get settingsButton => Icons.settings;
+  IconData get sourceMenuClear => Icons.clear;
+  IconData get sourceMenuPosition => Icons.grid_on;
+  IconData get sourceMenuSelect => Icons.select_all;
+  IconData get sourceMenuSubmenu => Icons.clear;
+  IconData get sourceMenuSubmenuRight => Icons.arrow_right;
+  IconData get sourceSettingsButton => Icons.settings_outlined;
+  IconData get streamStartButton => Icons.live_tv;
+  IconData get streamStopButton => Icons.connected_tv;
+  IconData get videoPickerButton => Icons.add_a_photo_sharp;
+}
+
+/// Setup the default icon set.
+DiveIconSet _iconSet = DiveIconSet();
+
 class DiveUI {
   /// DiveCore and DiveUI must use the same [ProviderContainer], so it needs
   /// to be passed to DiveCore at the start.
   static void setup(BuildContext context) {
     DiveCore.providerContainer = ProviderScope.containerOf(context);
   }
+
+  /// The default icon set.
+  static DiveIconSet get iconSet => _iconSet;
+  static set iconSet(DiveIconSet iconSet) => _iconSet = iconSet;
 }
 
 /// Use [DiveUIApp] to setup DiveUI before the first [build] is called.
@@ -279,8 +305,8 @@ class DiveMediaPlayButton extends ConsumerWidget {
     return IconButton(
       icon: Icon(
         stateModel.mediaState == DiveMediaState.PLAYING
-            ? Icons.pause_circle_filled_outlined
-            : Icons.play_circle_fill_outlined,
+            ? DiveUI.iconSet.mediaPauseButton
+            : DiveUI.iconSet.mediaPlayButton,
         color: iconColor,
       ),
       tooltip: stateModel.mediaState == DiveMediaState.PLAYING
@@ -330,10 +356,7 @@ class DiveMediaStopButton extends StatelessWidget {
     }
 
     return IconButton(
-      icon: Icon(
-        Icons.stop_circle_outlined,
-        color: iconColor,
-      ),
+      icon: Icon(DiveUI.iconSet.mediaStopButton, color: iconColor),
       tooltip: 'Stop video',
       onPressed: () async {
         await mediaSource.stop().then((value) {
@@ -442,14 +465,8 @@ class DiveStreamPlayButton extends ConsumerWidget {
 
     return IconButton(
       icon: state == DiveOutputStreamingState.active
-          ? Icon(
-              Icons.connected_tv,
-              color: iconColor,
-            )
-          : Icon(
-              Icons.live_tv,
-              color: iconColor,
-            ),
+          ? Icon(DiveUI.iconSet.streamStopButton, color: iconColor)
+          : Icon(DiveUI.iconSet.streamStartButton, color: iconColor),
       tooltip: state == DiveOutputStreamingState.active
           ? 'Stop streaming'
           : 'Start streaming',
@@ -460,34 +477,6 @@ class DiveStreamPlayButton extends ConsumerWidget {
           streamingOutput.start();
         }
       },
-    );
-  }
-}
-
-/// A Dive gear settings button.
-class DiveGearButton extends StatelessWidget {
-  const DiveGearButton({Key key, this.iconColor = Colors.white})
-      : super(key: key);
-
-  final Color iconColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: Center(
-        child: Ink(
-          decoration: const ShapeDecoration(
-            color: Colors.black12,
-            shape: CircleBorder(),
-          ),
-          child: IconButton(
-            icon: Icon(Icons.settings_outlined),
-            color: iconColor,
-            onPressed: () {},
-          ),
-        ),
-      ),
     );
   }
 }
@@ -605,7 +594,7 @@ class _DiveSourceMenuState extends State<DiveSourceMenu> {
         .map((source) => {
               'id': source.trackingUUID,
               'title': source.name,
-              'icon': Icons.clear,
+              'icon': DiveUI.iconSet.sourceMenuSubmenu,
               'source': source,
               'subMenu': null,
             })
@@ -615,21 +604,21 @@ class _DiveSourceMenuState extends State<DiveSourceMenu> {
       {
         'id': 0,
         'title': 'Clear',
-        'icon': Icons.clear,
+        'icon': DiveUI.iconSet.sourceMenuClear,
         'subMenu': null,
         'callback': _onClear,
       },
       {
         'id': 1,
         'title': 'Select source',
-        'icon': Icons.select_all,
+        'icon': DiveUI.iconSet.sourceMenuSelect,
         'subMenu': _sourceItems,
         'callback': _onSelect,
       },
       {
         'id': 2,
         'title': 'Position',
-        'icon': Icons.grid_on,
+        'icon': DiveUI.iconSet.sourceMenuPosition,
         'callback': _onPosition,
       },
     ];
@@ -637,7 +626,7 @@ class _DiveSourceMenuState extends State<DiveSourceMenu> {
     return Padding(
         padding: EdgeInsets.only(left: 0.0, right: 0.0),
         child: PopupMenuButton<int>(
-          child: Icon(Icons.settings_outlined,
+          child: Icon(DiveUI.iconSet.sourceSettingsButton,
               color: Theme.of(context).buttonColor),
           tooltip: 'Source menu',
           padding: EdgeInsets.only(right: 0.0),
@@ -718,7 +707,7 @@ class DiveSubMenu extends StatelessWidget {
       children: <Widget>[
         Text(title),
         // Spacer(),
-        Icon(Icons.arrow_right, size: 30.0),
+        Icon(DiveUI.iconSet.sourceMenuSubmenuRight, size: 30.0),
       ],
     );
     return Padding(
@@ -781,7 +770,7 @@ class DiveImagePickerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-        icon: Icon(Icons.add_a_photo_outlined),
+        icon: Icon(DiveUI.iconSet.imagePickerButton),
         onPressed: () => _buttonPressed(context));
   }
 
@@ -812,7 +801,7 @@ class DiveVideoPickerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-        icon: Icon(Icons.add_a_photo_sharp),
+        icon: Icon(DiveUI.iconSet.videoPickerButton),
         onPressed: () {
           _addIconPressed();
         });

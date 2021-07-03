@@ -2,6 +2,7 @@ import 'package:dive_core/dive_core.dart';
 import 'package:dive_core/dive_video_info.dart';
 import 'package:flutter/material.dart';
 import 'dive_side_sheet.dart';
+import 'dive_ui.dart';
 
 /// Signature for when a tap has occurred.
 /// Return true when selection should be updated, or false to ignore tap.
@@ -18,7 +19,7 @@ class DiveSettingsButton extends StatelessWidget {
   }
 
   /// Override this method to provide a custom icon.
-  Icon icon() => Icon(Icons.settings);
+  Icon icon() => Icon(DiveUI.iconSet.settingsButton);
 
   /// Override this method to provide custom button pressed behavior.
   void buttonPressed(BuildContext context) => presentDialog(context);
