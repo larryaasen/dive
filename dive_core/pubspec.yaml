@@ -2,7 +2,6 @@ name: dive_core
 description: A new flutter plugin project.
 version: 0.0.1
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-author:
 homepage:
 
 environment:

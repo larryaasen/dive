@@ -7,6 +7,7 @@ class DiveSideSheet {
     Widget Function(BuildContext) builder,
     bool rightSide = true,
     Duration animationDuration = const Duration(milliseconds: 300),
+    double width = 300,
   }) {
     showGeneralDialog(
       barrierLabel: "dive_side_sheet",
@@ -20,7 +21,7 @@ class DiveSideSheet {
           child: Container(
             child: builder(context),
             height: double.infinity,
-            width: 300,
+            width: width,
             decoration: BoxDecoration(
               color: Colors.white,
             ),

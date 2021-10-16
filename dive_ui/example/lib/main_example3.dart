@@ -87,11 +87,8 @@ class _BodyWidgetState extends State<BodyWidget> {
         print(videoInput);
         DiveVideoSource.create(videoInput).then((source) {
           _elements.updateState((state) => state.videoSources.add(source));
-
-          if (_elements.state.videoSources.length == 1) {
-            _elements
-                .updateState((state) => state.currentScene.addSource(source));
-          }
+          _elements
+              .updateState((state) => state.currentScene.addSource(source));
         });
       });
     });

@@ -261,6 +261,13 @@ NSData *theData = NULL;
 static void copy_frame_to_texture(size_t width, size_t height, OSType pixelFormatType, size_t linesize, uint8_t *data,
                                   TextureSource *textureSource, bool shouldSwapRedBlue=false)
 {
+//    NSLog(@"pixelFormatType=%@, linesize=%ld", NSFileTypeForHFSTypeCode(pixelFormatType), linesize);
+////     If pixel format is 2vuy
+//    if (pixelFormatType == kCVPixelFormatType_422YpCbCr8) {
+//        NSLog(@"%s: pixelFormatType %@ not yet supported", __func__, NSFileTypeForHFSTypeCode(pixelFormatType));
+//        return;
+//    }
+
     if (captureSampleFrame) {
         frameCount++;
         if (frameCount == 100) {
@@ -297,30 +304,43 @@ static void copy_frame_to_texture(size_t width, size_t height, OSType pixelForma
     }
 
     CVPixelBufferRef pxbuffer = NULL;
-    CVPixelBufferReleaseBytesCallback releaseCallback = shouldSwapRedBlue && !useSampleFrame ? BufferReleaseBytesCallback : NULL;
+//    CVPixelBufferReleaseBytesCallback releaseCallback = shouldSwapRedBlue && !useSampleFrame ? BufferReleaseBytesCallback : NULL;
     NSDictionary* attributes = @{
         (id)kCVPixelBufferPixelFormatTypeKey : @(pixelFormatType),
         (id)kCVPixelBufferOpenGLCompatibilityKey : @YES,
         (id)kCVPixelBufferMetalCompatibilityKey : @YES
     };
 
-    CVReturn status = CVPixelBufferCreateWithBytes(kCFAllocatorDefault,
-                                                   width,
-                                                   height,
-                                                   pixelFormatType,
-                                                   data,
-                                                   linesize,
-                                                   releaseCallback,
-                                                   NULL,
-                                                   (__bridge CFDictionaryRef)attributes,
-                                                   &pxbuffer);
+//    CVReturn status = CVPixelBufferCreateWithBytes(kCFAllocatorDefault,
+//                                                   width,
+//                                                   height,
+//                                                   pixelFormatType,
+//                                                   data,
+//                                                   linesize,
+//                                                   releaseCallback,
+//                                                   NULL,
+//                                                   (__bridge CFDictionaryRef)attributes,
+//                                                   &pxbuffer);
+    CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault, width, height, pixelFormatType, (__bridge CFDictionaryRef)attributes, &pxbuffer);
     if (status != kCVReturnSuccess) {
         NSLog(@"copy_frame_to_source: Operation failed");
         return;
     }
+    
+    CVPixelBufferLockBaseAddress(pxbuffer, 0);
+
+//    NSLog(@"%s: width=%d, height=%d, linesize=%d, pixelFormatType=%@", __func__, (int)width, (int)height, (int)linesize, NSFileTypeForHFSTypeCode(pixelFormatType));
+    void *copyBaseAddress = CVPixelBufferGetBaseAddress(pxbuffer);
+    memcpy(copyBaseAddress, data, linesize*height);
+
+    CVPixelBufferUnlockBaseAddress(pxbuffer, 0);
+
+    if (shouldSwapRedBlue) {
+        free(data);
+    }
 
     [textureSource captureSample: pxbuffer];
-    CFRelease(pxbuffer);
+//    CFRelease(pxbuffer);
 }
 
 static void copy_planar_frame_to_texture(size_t width, size_t height, OSType pixelFormatType, uint32_t linesize[], uint8_t *data[], TextureSource *textureSource)
@@ -364,7 +384,7 @@ static void copy_planar_frame_to_texture(size_t width, size_t height, OSType pix
     }
     
     [textureSource captureSample: pixelBufferOut];
-    CFRelease(pixelBufferOut);
+//    CFRelease(pixelBufferOut);
 }
 
 static void copy_source_frame_to_texture(struct obs_source_frame *frame, TextureSource *textureSource)
@@ -689,8 +709,13 @@ int bridge_media_source_get_state(NSString *source_uuid) {
 
 #pragma mark - Volume Level
 
-NSArray<NSNumber *> *toFloatArray(const float values[], int array_size) {
-    NSMutableArray<NSNumber *> *numbers = [NSMutableArray arrayWithCapacity:array_size];
+NSMutableArray<NSNumber *> *_magnitudeNumbers = [NSMutableArray arrayWithCapacity:MAX_AUDIO_CHANNELS];
+NSMutableArray<NSNumber *> *_peakNumbers = [NSMutableArray arrayWithCapacity:MAX_AUDIO_CHANNELS];
+NSMutableArray<NSNumber *> *_inputPeakNumbers = [NSMutableArray arrayWithCapacity:MAX_AUDIO_CHANNELS];
+NSNumber *zeroNumber = @0;
+
+NSArray<NSNumber *> *toFloatArray(NSMutableArray<NSNumber *> *numbers, const float values[], int array_size) {
+    [numbers removeAllObjects];
     for (int zz=0; zz!=array_size; zz++) {
         [numbers addObject:[NSNumber numberWithFloat:values[zz]]];
     }
@@ -703,11 +728,13 @@ void _volume_level_callback(void *param,
                 const float input_peak[MAX_AUDIO_CHANNELS])
 {
     int64_t volmeter_pointer = (int64_t)param;
-    [[Callbacks shared] volMeterCallbackWithPointer:volmeter_pointer
-                                          magnitude:toFloatArray(magnitude, MAX_AUDIO_CHANNELS)
-                                               peak:toFloatArray(peak, MAX_AUDIO_CHANNELS)
-                                          inputPeak:toFloatArray(input_peak, MAX_AUDIO_CHANNELS)
-                                          arraySize:MAX_AUDIO_CHANNELS];
+    @synchronized (_magnitudeNumbers) {
+        [[Callbacks shared] volMeterCallbackWithPointer:volmeter_pointer
+                                              magnitude:toFloatArray(_magnitudeNumbers, magnitude, MAX_AUDIO_CHANNELS)
+                                                   peak:toFloatArray(_peakNumbers, peak, MAX_AUDIO_CHANNELS)
+                                              inputPeak:toFloatArray(_inputPeakNumbers, input_peak, MAX_AUDIO_CHANNELS)
+                                              arraySize:MAX_AUDIO_CHANNELS];
+    }
 }
 
 /// Adds a callback to a volume meter, and returns the number of channels which are configured for this source.

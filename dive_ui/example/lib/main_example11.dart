@@ -1,6 +1,3 @@
-import 'dart:async';
-import 'dart:math';
-
 import 'package:dive_ui/dive_ui.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +6,7 @@ import 'package:dive_core/dive_core.dart';
 
 bool multiCamera = false;
 
-/// Dive Example 5 - Multi Camera Mix
+/// Dive Example 11 - Configure Stream
 void main() {
   // We need the binding to be initialized before calling runApp.
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +25,7 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Dive Example 5',
+        title: 'Dive Example 11',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -36,62 +33,14 @@ class AppWidget extends StatelessWidget {
         ),
         home: Scaffold(
           appBar: AppBar(
-            title: const Text('Dive Multi Camera Mix Example'),
+            title: const Text('Dive Configure Stream Example'),
             actions: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.all_inbox_rounded),
-                  onPressed: () => _switchToMultiCamera()),
+              DiveStreamSettingsButton(elements: _elements),
               DiveOutputButton(elements: _elements),
             ],
           ),
           body: BodyWidget(elements: _elements),
         ));
-  }
-
-  void _switchToMultiCamera() {
-    final points = [
-      Point<double>(680, 100),
-      Point<double>(200, 370),
-      Point<double>(0, 0)
-    ];
-    multiCamera = true;
-    _elements.updateState((state) {
-      state.currentScene.removeAllSceneItems();
-
-      var index = 0;
-      state.videoSources.forEach((videoSource) {
-        state.currentScene.addSource(videoSource).then((item) {
-          final point = points[index];
-          index++;
-          final info = DiveTransformInfo(
-            pos: DiveVec2(point.x, point.y),
-            bounds: DiveVec2(350 * DiveCoreAspectRatio.HD.ratio, 0),
-            boundsType: DiveBoundsType.SCALE_INNER,
-          );
-          item.updateTransformInfo(info);
-        });
-      });
-    });
-
-    // Set animation timer
-    final ticks = 10;
-    int tickCount = 0;
-    Timer.periodic(Duration(milliseconds: 80), (timer) {
-      _elements.updateState((state) {
-        state.currentScene.sceneItems.forEach((item) {
-          final height = 350.0;
-          final x =
-              (height * DiveCoreAspectRatio.HD.ratio) * (tickCount / ticks);
-          final y = height * (tickCount / ticks);
-          final info = DiveTransformInfo(bounds: DiveVec2(x, y));
-          item.updateTransformInfo(info);
-        });
-      });
-      tickCount++;
-      if (tickCount == ticks) {
-        timer.cancel();
-      }
-    });
   }
 }
 
@@ -114,7 +63,7 @@ class _BodyWidgetState extends State<BodyWidget> {
 
     _elements = widget.elements;
     _diveCore = DiveCore();
-    _diveCore.setupOBS(DiveCoreResolution.FULL_HD);
+    _diveCore.setupOBS(DiveCoreResolution.HD);
 
     DiveScene.create('Scene 1').then((scene) {
       _elements.updateState((state) => state.currentScene = scene);
@@ -137,6 +86,7 @@ class _BodyWidgetState extends State<BodyWidget> {
           });
       });
 
+      bool firstVideo = true;
       DiveInputs.video().forEach((videoInput) {
         print(videoInput);
         DiveVideoSource.create(videoInput).then((source) {
@@ -145,13 +95,11 @@ class _BodyWidgetState extends State<BodyWidget> {
             state.currentScene.addSource(source);
           });
         });
+        firstVideo = false;
       });
 
       // Create the streaming output
-      final output = DiveOutput();
-      output.serviceUrl =
-          'rtmp://live-iad05.twitch.tv/app/live_276488556_uIKncv1zAGQ3kz5aVzCvfshg8W4ENC';
-      output.serviceKey = 'live_276488556_uIKncv1zAGQ3kz5aVzCvfshg8W4ENC';
+      final output = DiveOutput.create();
       _elements.updateState((state) => state.streamingOutput = output);
     });
 

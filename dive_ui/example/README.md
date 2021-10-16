@@ -115,7 +115,6 @@ change the output resolution of the video mix.
 * Show the [DiveVideoSettingsDialog] dialog.
 * Usage: flutter run lib/main_example9.dart -d macos
 
-
 ## Example 10 - Icon Set
 
 This example shows how to use dive_ui, dive_core, and dive_obslib to
@@ -125,28 +124,45 @@ change the output resolution of the video mix.
 * Display a settings icon button `DiveSettingsButton` that opens the output settings dialog.
 * Usage: flutter run lib/main_example10.dart -d macos
 
+## Example 11 - Configure Stream
+
+This example shows how to use dive_ui, dive_core, and dive_obslib to
+configure the RTMP stream.
+* Use `DiveCoreElements` to track the scene, video mix (`DiveVideoMix`), audio source, and video sources.
+* Create a scene (`DiveScene`) and display the video mix using the `DiveMeterPreview` widget showing the video mix.
+* Create a `DiveAudioSource` for the main audio.
+* Create a video source (`DiveVideoSource`) for each video input (`DiveInputs.video()`).
+* Display an audio meter in the horizontal orientation on the video mix.
+* Display the list of video camera sources in a list (`DiveCameraList`).
+* Display a `DiveStreamSettingsButton` to open the settings.
+* Display a `DiveOutputButton` used to start the stream.
+* Usage: flutter run lib/main_example11.dart -d macos
+
+![image](example11-stream-settings.png)
+
 ## Writing an app with Dive UI
 
 1. Add dive_ui to your pubspec.yaml file.
-1. In the macos/Podfile, in the target 'Runner' section, add: ```pod 'obslib', :path => '/Users/larry/Projects/obslib-framework'```
-1. Open Xcode and load the Runner.xcworkspace file.
-1. Select the Runner target, under the General tab. Change the Deployment Target to 10.13.
-1. In section Signing & Capabilities, in the App Sandbox, check both Network boxes, 
+2. In the macos/Podfile, in the target 'Runner' section, add: ```pod 'obslib', :path => '/Users/larry/Projects/obslib-framework'```
+3. Open Xcode and load the Runner.xcworkspace file.
+4. Select the Runner target, under the General tab. Change the Deployment Target to 10.13.
+5. In section Signing & Capabilities, in the App Sandbox, check both Network boxes, 
 Camera, Audio Input, USB, and in File Access set all to Read/Write.
-1. In the Info section, add the Privacy keys for Desktop Folder, Camera, Microphone, Documents Folder,
+6. In the Info section, add the Privacy keys for Desktop Folder, Camera, Microphone, Documents Folder,
 and Downloads Folder.
-1. In the Build Phases section, add a New Run Script Phase. Add this to the Shell:
+7. In the Build Phases section, add a New Run Script Phase. Add this to the Shell:
 ```
 # Copy the framework resources to a specific folder in the app Resources
 cp -R ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework/Resources/data ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}
 rsync ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework/PlugIns/* ${TARGET_BUILD_DIR}/${PLUGINS_FOLDER_PATH}
 ```
-1. From command line: flutter run -d macos
+8. From command line: flutter run -d macos
 
 ## TODO - Examples to be created
 
-1. Example showing how to configure streaming.
-1. Search for memory leaks using Intruments.
+1. Make everything work on latest master and stable channels.
+1. Search for memory leaks using Instruments.
+1. Rename dive_obslib to dive_mixer.
 1. Resolve some of the TODOs.
 1. Determine best copyright for examples.
 1. Properly Copyright example code.
@@ -155,5 +171,7 @@ rsync ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework/PlugIns/* $
 
 Maybe later:
 1. Example showing how to scrub a video forward and backward.
+1. Example of live streaming setup with multiple services using dropdown list.
 1. Example showing how to position an image in the mix.
 1. Example showing how to change the volume of an audio source.
+1. Example showing how to save settings.

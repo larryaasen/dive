@@ -17,8 +17,10 @@ import 'dive_side_sheet.dart';
 
 export 'blocs/dive_reference_panels.dart';
 export 'dive_audio_meter.dart';
-export 'dive_position_edit.dart';
+export 'dive_position_dialog.dart';
 export 'dive_side_sheet.dart';
+export 'dive_stream_settings_dialog.dart';
+export 'dive_video_settings_dialog.dart';
 
 /// Signature for a callback with a boolean value.
 typedef DiveBoolCallback = void Function(bool value);
@@ -35,6 +37,7 @@ class DiveIconSet {
   IconData get mediaPlayButton => Icons.play_circle_fill_outlined;
   IconData get mediaStopButton => Icons.stop_circle_outlined;
   IconData get settingsButton => Icons.settings;
+  IconData get streamSettingsButton => Icons.settings;
   IconData get sourceMenuClear => Icons.clear;
   IconData get sourceMenuPosition => Icons.grid_on;
   IconData get sourceMenuSelect => Icons.select_all;
@@ -789,6 +792,11 @@ class DiveImagePickerButton extends StatelessWidget {
       if (file == null) return;
       print("file=${file.path}");
       elements.addImageSource(file.path);
+      // final info = DiveTransformInfo(
+      //     pos: DiveVec2(140, 120),
+      //     bounds: DiveVec2(1000, 560),
+      //     boundsType: DiveBoundsType.SCALE_INNER);
+      // item.updateTransformInfo(info);
     });
   }
 }

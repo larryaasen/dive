@@ -18,6 +18,11 @@ class DiveOutputStateNotifier extends StateNotifier<DiveOutputStreamingState> {
 }
 
 class DiveOutput {
+  String serviceUrl = 'rtmp://live-iad05.twitch.tv/app/<your_stream_key>';
+  String serviceKey = '<your_stream_key>';
+  String serviceId = 'rtmp_common';
+  String outputType = 'rtmp_output';
+
   final stateProvider = StateNotifierProvider<DiveOutputStateNotifier>((ref) {
     return DiveOutputStateNotifier(DiveOutputStreamingState.stopped);
   }, name: 'name-DiveMediaSource');
@@ -54,32 +59,31 @@ class DiveOutput {
         DiveOutputStreamingState.values[obslib.outputGetState()]);
   }
 
-  static DiveOutput create({
-    String serviceUrl = 'rtmp://live-iad05.twitch.tv/app/<your_stream_key>',
-    String serviceKey = '<your_stream_key>',
-    String serviceId = 'rtmp_common',
-    String outputType = 'rtmp_output',
-  }) {
+  static DiveOutput create() {
     final output = DiveOutput();
+    return output;
+  }
 
+  bool start() {
     // Create streaming service
-    final rv = obslib.createService(
+    bool rv = obslib.streamOutputCreate(
       serviceUrl: serviceUrl,
       serviceKey: serviceKey,
       serviceId: serviceId,
       outputType: outputType,
     );
-    return rv ? output : null;
-  }
+    if (!rv) return false;
 
-  Future<bool> start() async {
-    final rv = obslib.streamOutputStart();
-    syncState(repeating: true);
+    rv = obslib.streamOutputStart();
+    if (rv) {
+      syncState(repeating: true);
+    }
     return rv;
   }
 
-  Future<bool> stop() async {
+  bool stop() {
     obslib.streamOutputStop();
+    obslib.streamOutputRelease();
     syncState(repeating: true);
     return true;
   }

@@ -86,6 +86,12 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
             result(changeFrameRate(arguments))
         case Method.ChangeResolution:
             result(changeResolution(arguments))
+        case Method.AddVolumeMeterCallback:
+            result(addVolumeMeterCallback(arguments))
+        case Method.GetSceneItemInfo:
+            result(getSceneItemInfo(arguments))
+        case Method.SetSceneItemInfo:
+            result(setSceneItemInfo(arguments))
 
 //        case Method.AddSource:
 //            ffi ? nil : result(addSource(arguments))
@@ -115,10 +121,6 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
 //        case Method.MediaGetState:
 //            ffi ? nil : result(mediaGetState(arguments))
 //
-//        case Method.GetSceneItemInfo:
-//            ffi ? nil : result(getSceneItemInfo(arguments))
-//        case Method.SetSceneItemInfo:
-//            ffi ? nil : result(setSceneItemInfo(arguments))
 //        case Method.GetInputTypes:
 //            ffi ? nil : result(getInputTypes())
 //        case Method.GetInputsFromType:
@@ -127,8 +129,6 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
 //            ffi ? nil : result(getAudioInputs())
 //        case Method.GetVideoInputs:
 //            ffi ? nil : result(getVideoInputs())
-//        case Method.AddVolumeMeterCallback:
-//            ffi ? nil : result(addVolumeMeterCallback(arguments))
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -429,6 +429,9 @@ public class Callbacks: NSObject {
             "magnitude": magnitude,
             "peak": peak,
             "inputPeak": inputPeak
+//            "magnitude": [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1], //magnitude,
+//            "peak": [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1], // peak,
+//            "inputPeak": [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1] //inputPeak
         ] as [String : Any]
         callbacks.invokeMethod("volmeter", arguments: arguments, result: {(r:Any?) -> () in
           // this will be called with r = "some string" (or FlutterMethodNotImplemented)

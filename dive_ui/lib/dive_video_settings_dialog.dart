@@ -4,11 +4,6 @@ import 'package:flutter/material.dart';
 import 'dive_side_sheet.dart';
 import 'dive_ui.dart';
 
-/// Signature for when a tap has occurred.
-/// Return true when selection should be updated, or false to ignore tap.
-typedef DiveChangeFrameRateCallback = bool Function(
-    int currentIndex, int newIndex);
-
 /// An icon button that presents the settings dialog.
 class DiveSettingsButton extends StatelessWidget {
   const DiveSettingsButton({Key key}) : super(key: key);

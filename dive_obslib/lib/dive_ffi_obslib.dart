@@ -143,53 +143,6 @@ extension DiveFFIObslib on DiveBaseObslib {
     return info;
   }
 
-  bool createService({
-    String serviceUrl = 'rtmp://live-iad05.twitch.tv/app/<your_stream_key>',
-    String serviceKey = '<your_stream_key>',
-    String serviceId = 'rtmp_common',
-    String outputType = 'rtmp_output',
-  }) {
-    final serviceSettings = _lib.obs_data_create();
-    _lib.obs_data_set_string(
-        serviceSettings, "server".int8(), serviceUrl.int8());
-    _lib.obs_data_set_string(serviceSettings, "key".int8(), serviceKey.int8());
-
-    final serviceObj = _lib.obs_service_create(serviceId.int8(),
-        "default_service".int8(), serviceSettings, ffi.nullptr);
-    //  _lib.obs_service_release(service_obj);
-
-    _streamOutput = _lib.obs_output_create(
-        outputType.int8(), "adv_stream".int8(), ffi.nullptr, ffi.nullptr);
-    if (_streamOutput == null) {
-      print("creation of stream output type $outputType failed");
-      return false;
-    }
-
-    final vencoder = _lib.obs_video_encoder_create(
-        "obs_x264".int8(), "test_x264".int8(), ffi.nullptr, ffi.nullptr);
-    //  _lib.obs_encoder_release(vencoder);
-    final aencoder = _lib.obs_audio_encoder_create(
-        "ffmpeg_aac".int8(), "test_aac".int8(), ffi.nullptr, 0, ffi.nullptr);
-    //  _lib.obs_encoder_release(aencoder);
-    _lib.obs_encoder_set_video(vencoder, _lib.obs_get_video());
-    _lib.obs_encoder_set_audio(aencoder, _lib.obs_get_audio());
-    _lib.obs_output_set_video_encoder(_streamOutput, vencoder);
-    _lib.obs_output_set_audio_encoder(_streamOutput, aencoder, 0);
-
-    _lib.obs_output_set_service(_streamOutput, serviceObj);
-
-    final outputSettings = _lib.obs_data_create();
-    _lib.obs_data_set_string(
-        outputSettings, "bind_ip".int8(), "default".int8());
-    _lib.obs_data_set_bool(outputSettings, "new_socket_loop_enabled".int8(), 0);
-    _lib.obs_data_set_bool(
-        outputSettings, "low_latency_mode_enabled".int8(), 0);
-    _lib.obs_data_set_bool(outputSettings, "dyn_bitrate".int8(), 0);
-    _lib.obs_output_update(_streamOutput, outputSettings);
-
-    return true;
-  }
-
   Future<DivePointer> createScene(String trackingUUID, String sceneName) {
     assert(_lib != null, 'call initialize() before calling this method.');
 
@@ -342,6 +295,62 @@ extension DiveFFIObslib on DiveBaseObslib {
 
   /// Stream Controls
 
+  /// Create the stream output.
+  bool streamOutputCreate({
+    String serviceUrl = 'rtmp://live-iad05.twitch.tv/app/<your_stream_key>',
+    String serviceKey = '<your_stream_key>',
+    String serviceId = 'rtmp_common',
+    String outputType = 'rtmp_output',
+  }) {
+    if (_streamOutput != null) return false;
+    final serviceSettings = DiveObslibData();
+    serviceSettings.setString("server", serviceUrl);
+    serviceSettings.setString("key", serviceKey);
+
+    final serviceObj = _lib.obs_service_create(serviceId.int8(),
+        "default_service".int8(), serviceSettings.pointer, ffi.nullptr);
+    serviceSettings.dispose();
+
+    _streamOutput = _lib.obs_output_create(
+        outputType.int8(), "adv_stream".int8(), ffi.nullptr, ffi.nullptr);
+    if (_streamOutput == null) {
+      print("creation of stream output type $outputType failed");
+      return false;
+    }
+
+    final vencoder = _lib.obs_video_encoder_create(
+        "obs_x264".int8(), "test_x264".int8(), ffi.nullptr, ffi.nullptr);
+    final aencoder = _lib.obs_audio_encoder_create(
+        "ffmpeg_aac".int8(), "test_aac".int8(), ffi.nullptr, 0, ffi.nullptr);
+    _lib.obs_encoder_set_video(vencoder, _lib.obs_get_video());
+    _lib.obs_encoder_set_audio(aencoder, _lib.obs_get_audio());
+    _lib.obs_output_set_video_encoder(_streamOutput, vencoder);
+    _lib.obs_output_set_audio_encoder(_streamOutput, aencoder, 0);
+
+    // _lib.obs_encoder_release(vencoder);
+    // _lib.obs_encoder_release(aencoder);
+
+    _lib.obs_output_set_service(_streamOutput, serviceObj);
+
+    final outputSettings = DiveObslibData();
+    outputSettings.setString("bind_ip", "default");
+    outputSettings.setBool("new_socket_loop_enabled", false);
+    outputSettings.setBool("low_latency_mode_enabled", false);
+    outputSettings.setBool("dyn_bitrate", false);
+    _lib.obs_output_update(_streamOutput, outputSettings.pointer);
+    outputSettings.dispose();
+
+    return true;
+  }
+
+  /// Release the stream output.
+  bool streamOutputRelease() {
+    if (_streamOutput == null) return false;
+    _lib.obs_output_release(_streamOutput);
+    _streamOutput = null;
+    return true;
+  }
+
   /// Start the stream output.
   bool streamOutputStart() {
     final rv = _lib.obs_output_start(_streamOutput);
@@ -356,8 +365,9 @@ extension DiveFFIObslib on DiveBaseObslib {
     _lib.obs_output_stop(_streamOutput);
   }
 
-  /// Get the output state: 1 (active), 2 (paused), or 3 (reconnecting)
+  /// Get the output state: 0 (stopped), 1 (active), 2 (paused), or 3 (reconnecting)
   int outputGetState() {
+    if (_streamOutput == null) return 0;
     final active = _lib.obs_output_active(_streamOutput);
     final paused = _lib.obs_output_paused(_streamOutput);
     final reconnecting = _lib.obs_output_reconnecting(_streamOutput);

@@ -57,12 +57,6 @@ class DiveCoreElements {
         state.imageSources.add(source);
         state.currentScene.addSource(source).then((item) {
           DiveCore.notifierFor(stateProvider).updateState(state);
-          assert(false, "Remove this auto transform");
-          final info = DiveTransformInfo(
-              pos: DiveVec2(140, 120),
-              bounds: DiveVec2(1000, 560),
-              boundsType: DiveBoundsType.SCALE_INNER);
-          item.updateTransformInfo(info);
         });
       }
     });

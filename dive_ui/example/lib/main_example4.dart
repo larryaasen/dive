@@ -54,10 +54,9 @@ class DiveExample {
       });
 
       // Create the streaming output
-      final output = DiveOutput.create(
-        serviceUrl: 'rtmp://live-iad05.twitch.tv/app/<your_key_here>',
-        serviceKey: '<your_key_here>',
-      );
+      final output = DiveOutput();
+      output.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/<your_key_here>';
+      output.serviceKey = '<your_key_here>';
       _elements.updateState((state) => state.streamingOutput = output);
 
       // Start streaming
