@@ -31,6 +31,8 @@
 
 /// Copy the contents of the texture into a `CVPixelBuffer`. */
 /// Conforms to the protocol FlutterTexture.
+/// As o f 10/19/2021: Expects texture format of kCVPixelFormatType_32ARGB, to be used with GL_RGBA8 in CVOpenGLTextureCacheCreateTextureFromImage.
+/// https://github.com/flutter/engine/blob/eaf77ff9e96bbe79c7377b7376c73b9d9243cf7c/shell/platform/darwin/macos/framework/Source/FlutterExternalTextureGL.mm#L62
 - (CVPixelBufferRef)copyPixelBuffer {
 //    NSLog(@"%s: start", __func__);
     CVPixelBufferRef pixelBuffer = _latestPixelBuffer;

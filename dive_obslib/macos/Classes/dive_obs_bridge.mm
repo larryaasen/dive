@@ -247,6 +247,7 @@ static uint8_t *swap_blue_red_colors(uint8_t *data, size_t dataSize) {
     return newData;
 }
 
+// TODO: remove this
 void BufferReleaseBytesCallback(void *releaseRefCon, const void *baseAddress) {
     free((void *)baseAddress);
     return;
@@ -284,9 +285,6 @@ static void copy_frame_to_texture(size_t width, size_t height, OSType pixelForma
             [theData writeToFile:@"demo_frame" atomically:NO];
             printf("%s", [[lines componentsJoinedByString:@"\n"] cStringUsingEncoding:NSASCIIStringEncoding]);
         }
-//        if (frameCount > 100) {
-//            return;
-//        }
     }
     else if (useSampleFrame) {
         if (theData == NULL) {
@@ -304,24 +302,18 @@ static void copy_frame_to_texture(size_t width, size_t height, OSType pixelForma
     }
 
     CVPixelBufferRef pxbuffer = NULL;
-//    CVPixelBufferReleaseBytesCallback releaseCallback = shouldSwapRedBlue && !useSampleFrame ? BufferReleaseBytesCallback : NULL;
     NSDictionary* attributes = @{
         (id)kCVPixelBufferPixelFormatTypeKey : @(pixelFormatType),
         (id)kCVPixelBufferOpenGLCompatibilityKey : @YES,
         (id)kCVPixelBufferMetalCompatibilityKey : @YES
     };
 
-//    CVReturn status = CVPixelBufferCreateWithBytes(kCFAllocatorDefault,
-//                                                   width,
-//                                                   height,
-//                                                   pixelFormatType,
-//                                                   data,
-//                                                   linesize,
-//                                                   releaseCallback,
-//                                                   NULL,
-//                                                   (__bridge CFDictionaryRef)attributes,
-//                                                   &pxbuffer);
-    CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault, width, height, pixelFormatType, (__bridge CFDictionaryRef)attributes, &pxbuffer);
+    CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault,
+                                          width,
+                                          height,
+                                          pixelFormatType,
+                                          (__bridge CFDictionaryRef)attributes,
+                                          &pxbuffer);
     if (status != kCVReturnSuccess) {
         NSLog(@"copy_frame_to_source: Operation failed");
         return;
@@ -329,7 +321,6 @@ static void copy_frame_to_texture(size_t width, size_t height, OSType pixelForma
     
     CVPixelBufferLockBaseAddress(pxbuffer, 0);
 
-//    NSLog(@"%s: width=%d, height=%d, linesize=%d, pixelFormatType=%@", __func__, (int)width, (int)height, (int)linesize, NSFileTypeForHFSTypeCode(pixelFormatType));
     void *copyBaseAddress = CVPixelBufferGetBaseAddress(pxbuffer);
     memcpy(copyBaseAddress, data, linesize*height);
 
@@ -340,7 +331,10 @@ static void copy_frame_to_texture(size_t width, size_t height, OSType pixelForma
     }
 
     [textureSource captureSample: pxbuffer];
-//    CFRelease(pxbuffer);
+    
+    // On Flutter <=2.0, the release must be called here.
+    // On Flutter >=2.2, this release will break things.
+    CFRelease(pxbuffer);
 }
 
 static void copy_planar_frame_to_texture(size_t width, size_t height, OSType pixelFormatType, uint32_t linesize[], uint8_t *data[], TextureSource *textureSource)
@@ -384,7 +378,7 @@ static void copy_planar_frame_to_texture(size_t width, size_t height, OSType pix
     }
     
     [textureSource captureSample: pixelBufferOut];
-//    CFRelease(pixelBufferOut);
+    CFRelease(pixelBufferOut);
 }
 
 static void copy_source_frame_to_texture(struct obs_source_frame *frame, TextureSource *textureSource)

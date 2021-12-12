@@ -60,7 +60,13 @@ class DiveExample {
       _elements.updateState((state) => state.streamingOutput = output);
 
       // Start streaming
+      print("Dive example 4: Starting stream.");
       output.start();
+
+      Future.delayed(Duration(seconds: 10), () {
+        print("Dive example 4: Stopping stream.");
+        output.stop();
+      });
     });
 
     _initialized = true;
