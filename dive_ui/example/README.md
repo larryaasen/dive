@@ -163,6 +163,7 @@ rsync ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework/PlugIns/* $
 1. Make everything work on latest master and stable channels.
 1. Search for memory leaks using Instruments.
 1. Rename dive_obslib to dive_mixer.
+1. Add features to remove a source that had been created, for example 4.
 1. Resolve some of the TODOs.
 1. Determine best copyright for examples.
 1. Properly Copyright example code.

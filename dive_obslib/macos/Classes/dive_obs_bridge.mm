@@ -14,6 +14,8 @@
 #include "TextureSource.h"
 #include <dive_obslib/dive_obslib-Swift.h>
 
+#include <Accelerate/Accelerate.h>
+
 template<typename T, typename D_T, D_T D>
 struct OBSUniqueHandle : std::unique_ptr<T, std::function<D_T>> {
     using base = std::unique_ptr<T, std::function<D_T>>;
@@ -256,34 +258,17 @@ void BufferReleaseBytesCallback(void *releaseRefCon, const void *baseAddress) {
 bool captureSampleFrame = false;
 bool useSampleFrame = false;
 int frameCount = 0;
-
 NSData *theData = NULL;
 
-static void copy_frame_to_texture(size_t width, size_t height, OSType pixelFormatType, size_t linesize, uint8_t *data,
-                                  TextureSource *textureSource, bool shouldSwapRedBlue=false)
+uint8_t *capture_frames(size_t width, size_t height, OSType pixelFormatType, size_t linesize, uint8_t *data)
 {
-//    NSLog(@"pixelFormatType=%@, linesize=%ld", NSFileTypeForHFSTypeCode(pixelFormatType), linesize);
-////     If pixel format is 2vuy
-//    if (pixelFormatType == kCVPixelFormatType_422YpCbCr8) {
-//        NSLog(@"%s: pixelFormatType %@ not yet supported", __func__, NSFileTypeForHFSTypeCode(pixelFormatType));
-//        return;
-//    }
-
+    frameCount++;
     if (captureSampleFrame) {
-        frameCount++;
         if (frameCount == 100) {
-            NSMutableArray *lines = [NSMutableArray new];
-            [lines addObject:[NSString stringWithFormat:@"\n"]];
-            [lines addObject:[NSString stringWithFormat:@"width=%ld;", width]];
-            [lines addObject:[NSString stringWithFormat:@"height=%ld;", height]];
-            [lines addObject:[NSString stringWithFormat:@"pixelFormatType=%d;", pixelFormatType]];
-            [lines addObject:[NSString stringWithFormat:@"linesize=%ld;", linesize]];
-            
             NSData *theData = [NSData dataWithBytesNoCopy:&data[0]
                                                    length:linesize*height
                                              freeWhenDone:NO];
             [theData writeToFile:@"demo_frame" atomically:NO];
-            printf("%s", [[lines componentsJoinedByString:@"\n"] cStringUsingEncoding:NSASCIIStringEncoding]);
         }
     }
     else if (useSampleFrame) {
@@ -295,10 +280,75 @@ static void copy_frame_to_texture(size_t width, size_t height, OSType pixelForma
         }
         data = (uint8_t *)[theData bytes];
     }
-    else {
-        if (shouldSwapRedBlue) {
-           data = swap_blue_red_colors(data, linesize*height);
-       }
+    return data;
+}
+
+vImage_YpCbCrToARGB conversion_info;
+bool conversion_info_available = false;
+
+uint8_t *upscale_image(size_t width, size_t height, OSType pixelFormatType, size_t linesize, uint8_t *data)
+{
+    if (!conversion_info_available) {
+        vImage_YpCbCrPixelRange pixelRange = (vImage_YpCbCrPixelRange){ 16, 128, 235, 240, 255, 0, 255, 1 };      // video range 8-bit, unclamped
+    //        vImage_YpCbCrPixelRange pixelRange = (vImage_YpCbCrPixelRange){ 16, 128, 235, 240, 235, 16, 240, 16 };    // video range 8-bit, clamped to video range
+    //        vImage_YpCbCrPixelRange pixelRange = (vImage_YpCbCrPixelRange){ 0, 128, 255, 255, 255, 1, 255, 0 };       // full range 8-bit, clamped to full range
+        vImage_Error convertError = vImageConvert_YpCbCrToARGB_GenerateConversion(kvImage_YpCbCrToARGBMatrix_ITU_R_709_2,
+                                                              &pixelRange,
+                                                              &conversion_info,
+                                                              kvImage422YpCbYpCr8,
+                                                              kvImageARGB8888,
+                                                              kvImagePrintDiagnosticsToConsole);
+        conversion_info_available = convertError == kvImageNoError;
+    }
+    
+    uint8_t *upscaleImageData = NULL;
+    if (conversion_info_available) {
+        vImage_Buffer src;
+        src.data = data;
+        src.width = width;
+        src.height = height;
+        src.rowBytes = linesize;
+        
+        upscaleImageData = (uint8_t *)malloc(width*height*4);
+        vImage_Buffer dest;
+        dest.data = upscaleImageData;
+        dest.width = width;
+        dest.height = height;
+        dest.rowBytes = width * 4;
+        uint8_t permuteMap[4] = {3, 2, 1, 0};
+        const uint8_t alpha = 255;
+        vImage_Flags flags = kvImagePrintDiagnosticsToConsole;
+        vImage_Error imageError = vImageConvert_422CbYpCrYp8ToARGB8888(&src, &dest, &conversion_info, permuteMap, alpha, flags);
+        if (imageError != kvImageNoError) {
+            free((void *)upscaleImageData);
+            upscaleImageData = NULL;
+        }
+        else {
+            NSLog(@"image covert error: %ld", imageError);
+        }
+    }
+    return upscaleImageData;
+}
+
+static void copy_frame_to_texture(size_t width, size_t height, OSType pixelFormatType, size_t linesize, uint8_t *data,
+                                  TextureSource *textureSource, bool shouldSwapRedBlue=false)
+{
+    data = capture_frames(width, height, pixelFormatType, linesize, data);
+    bool upscaleImage = false;
+    uint8_t *upscaleImageData = NULL;
+
+    // If pixel format is 2vuy
+    if (pixelFormatType == kCVPixelFormatType_422YpCbCr8) {
+        upscaleImage = true;
+        upscaleImageData = upscale_image(width, height, pixelFormatType, linesize, data);
+        if (upscaleImageData) {
+            data = upscaleImageData;
+            linesize = width * 4;
+            pixelFormatType = kCVPixelFormatType_32ARGB;
+        }
+    }
+    if (shouldSwapRedBlue) {
+       data = swap_blue_red_colors(data, linesize*height);
     }
 
     CVPixelBufferRef pxbuffer = NULL;
@@ -318,7 +368,7 @@ static void copy_frame_to_texture(size_t width, size_t height, OSType pixelForma
         NSLog(@"copy_frame_to_source: Operation failed");
         return;
     }
-    
+
     CVPixelBufferLockBaseAddress(pxbuffer, 0);
 
     void *copyBaseAddress = CVPixelBufferGetBaseAddress(pxbuffer);
@@ -332,9 +382,9 @@ static void copy_frame_to_texture(size_t width, size_t height, OSType pixelForma
 
     [textureSource captureSample: pxbuffer];
     
-    // On Flutter <=2.0, the release must be called here.
-    // On Flutter >=2.2, this release will break things.
-    CFRelease(pxbuffer);
+    if (upscaleImage && upscaleImageData != NULL) {
+        free((void *)upscaleImageData);
+    }
 }
 
 static void copy_planar_frame_to_texture(size_t width, size_t height, OSType pixelFormatType, uint32_t linesize[], uint8_t *data[], TextureSource *textureSource)
@@ -383,6 +433,8 @@ static void copy_planar_frame_to_texture(size_t width, size_t height, OSType pix
 
 static void copy_source_frame_to_texture(struct obs_source_frame *frame, TextureSource *textureSource)
 {
+    // TODO: Save a copy of the frame now, and convert it to a texture later when needed
+
     if (frame->format == VIDEO_FORMAT_UYVY) {
         copy_frame_to_texture(frame->width, frame->height, kCVPixelFormatType_422YpCbCr8, frame->linesize[0], frame->data[0], textureSource);
     } else if (frame->format == VIDEO_FORMAT_I420) {
@@ -419,8 +471,6 @@ static void source_frame_callback(void *param, obs_source_t *source, struct obs_
 }
 
 static void videomix_callback(void *param, struct video_data *frame) {
-//    printf("%s linesize[0] %d\n", __func__, frame->linesize[0]);
-
     // TODO: need lock around the use of videomix_uuid_list. Maybe use @synchronized (_textureSources) below
     unsigned int index = 0;
     const char *uuid_str = videomix_uuid_list[index];

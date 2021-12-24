@@ -11,7 +11,7 @@ A new flutter plugin project.
   s.author           = { 'Your Company' => 'email@example.com' }
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*.{swift,h,m,mm}'
-  s.frameworks  = 'AVFoundation'
+  s.frameworks  = 'AVFoundation', 'Accelerate'
   s.dependency 'FlutterMacOS'
   s.dependency 'obslib'
 

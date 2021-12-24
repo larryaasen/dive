@@ -29,7 +29,7 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/path_provider_macos/macos
 
 SPEC CHECKSUMS:
-  dive_obslib: 93b24639690fee4f0ffa9b16704531b91119aef6
+  dive_obslib: a7da6b7135ca8aca33d5ba614fc5a0a9cbd2b8e9
   file_selector_macos: ff6dc948d4ddd34e8602a1f60b7d0b4cc6051a47
   FlutterMacOS: 57701585bf7de1b3fc2bb61f6378d73bbdea8424
   obslib: 5fb12f5406e00069d27de6264f09fdca2c51aacb
