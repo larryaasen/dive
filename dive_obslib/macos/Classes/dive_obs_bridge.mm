@@ -320,11 +320,9 @@ uint8_t *upscale_image(size_t width, size_t height, OSType pixelFormatType, size
         vImage_Flags flags = kvImagePrintDiagnosticsToConsole;
         vImage_Error imageError = vImageConvert_422CbYpCrYp8ToARGB8888(&src, &dest, &conversion_info, permuteMap, alpha, flags);
         if (imageError != kvImageNoError) {
+            NSLog(@"image covert error: %ld", imageError);
             free((void *)upscaleImageData);
             upscaleImageData = NULL;
-        }
-        else {
-            NSLog(@"image covert error: %ld", imageError);
         }
     }
     return upscaleImageData;

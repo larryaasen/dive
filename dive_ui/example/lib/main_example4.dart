@@ -55,15 +55,16 @@ class DiveExample {
 
       // Create the streaming output
       final output = DiveOutput();
-      output.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/<your_key_here>';
       output.serviceKey = '<your_key_here>';
+      output.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/${output.serviceKey}';
       _elements.updateState((state) => state.streamingOutput = output);
 
       // Start streaming
       print("Dive example 4: Starting stream.");
       output.start();
 
-      Future.delayed(Duration(seconds: 10), () {
+      print("Dive example 4: Waiting 60 seconds.");
+      Future.delayed(Duration(seconds: 60), () {
         print("Dive example 4: Stopping stream.");
         output.stop();
       });
