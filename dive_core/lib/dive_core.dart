@@ -17,6 +17,7 @@ export 'dive_sources.dart';
 export 'dive_system_log.dart';
 export 'dive_system_log.dart';
 export 'dive_transform_info.dart';
+export 'dive_uuid.dart';
 export 'texture_controller.dart';
 
 /*

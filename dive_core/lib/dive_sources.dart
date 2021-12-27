@@ -1,34 +1,9 @@
 import 'dart:async';
 
-import 'package:dive_core/dive_core.dart';
-import 'package:dive_core/dive_plugin.dart';
 import 'package:dive_obslib/dive_obslib.dart';
-import 'package:uuid/uuid.dart';
 
-/// Simple, fast generation of RFC4122 UUIDs
-final _uuid = Uuid();
-
-abstract class DiveUuid {
-  static String newId() => _uuid.v1();
-}
-
-class DiveInputTypes {
-  DiveInputTypes();
-  static Future<List<DiveInputType>> all() async =>
-      obslib.inputTypes().map(DiveInputType.fromJson).toList();
-  // DivePluginExt.inputTypes();
-}
-
-class DiveInputs {
-  static List<DiveInput> fromType(String typeId) =>
-      DivePluginExt.inputsFromType(typeId);
-  static List<DiveInput> audio() =>
-      obslib.audioInputs().map(DiveInput.fromMap).toList();
-  // DivePluginExt.audioInputs();
-  static List<DiveInput> video() =>
-      obslib.videoInputs().map(DiveInput.fromMap).toList();
-  // DivePluginExt.videoInputs();
-}
+import 'dive_core.dart';
+import 'dive_plugin.dart';
 
 // TODO: DiveSettings needs to be implemented
 class DiveSettings {}
@@ -163,7 +138,8 @@ class DiveVideoSource extends DiveSource with DiveTextureController {
     await source.setupController(source.trackingUUID);
     source.pointer = obslib.createVideoSource(
         source.trackingUUID, videoInput.name, videoInput.id);
-    obslib.addSourceFrameCallback(source.trackingUUID, source.pointer.address);
+    await obslib.addSourceFrameCallback(
+        source.trackingUUID, source.pointer.address);
     return source.pointer == null ? null : source;
   }
 
