@@ -1,6 +1,5 @@
 import 'package:dive_core/dive_core.dart';
 import 'package:flutter/material.dart';
-import 'dive_side_sheet.dart';
 import 'dive_ui.dart';
 
 /// An icon button that presents the stream settings dialog.

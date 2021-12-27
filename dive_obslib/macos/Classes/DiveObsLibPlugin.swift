@@ -10,9 +10,9 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
         static let DisposeTexture = "disposeTexture"
         static let InitializeTexture = "initializeTexture"
         static let AddSourceFrameCallback = "addSourceFrameCallback"
+        static let RemoveSourceFrameCallback = "removeSourceFrameCallback"
 
         static let AddSource = "addSource"
-        static let CreateSource = "createSource"
         static let CreateImageSource = "createImageSource"
         // static let CreateMediaSource = "createMediaSource"
         static let CreateVideoSource = "createVideoSource"
@@ -74,10 +74,14 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
         switch call.method {
         case Method.InitializeTexture:
             result(initializeTexture(arguments))
+        case Method.DisposeTexture:
+            result(disposeTexture(arguments))
         case Method.GetPlatformVersion:
             result(getPlatformVersion())
         case Method.AddSourceFrameCallback:
             result(addSourceFrameCallback(arguments))
+        case Method.RemoveSourceFrameCallback:
+            result(removeSourceFrameCallback(arguments))
         case Method.CreateVideoMix:
             result(createVideoMix(arguments))
         case Method.RemoveVideoMix:
@@ -95,8 +99,6 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
 
 //        case Method.AddSource:
 //            ffi ? nil : result(addSource(arguments))
-//        case Method.CreateSource:
-//            ffi ? nil : result(createSource(arguments))
 //        case Method.CreateImageSource:
 //            ffi ? nil : result(createImageSource(arguments))
 //        // case Method.CreateMediaSource:
@@ -176,6 +178,17 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
         return bridge_source_add_frame_callback(source_uuid, source_ptr)
     }
 
+    private func removeSourceFrameCallback(_ arguments: [String: Any]?) -> Bool {
+        guard let args = arguments,
+            let source_uuid = args["source_uuid"] as! String?,
+            let source_ptr = args["source_ptr"] as! Int64?
+            else {
+                return false
+        }
+        
+        return bridge_source_remove_frame_callback(source_uuid, source_ptr)
+    }
+
     func bridge<T : AnyObject>(_ obj : T) -> UnsafeRawPointer {
         return UnsafeRawPointer(Unmanaged.passUnretained(obj).toOpaque())
     }
@@ -183,19 +196,7 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
     func bridge<T : AnyObject>(ptr : UnsafeRawPointer) -> T {
         return Unmanaged<T>.fromOpaque(ptr).takeUnretainedValue()
     }
-    
-    private func createSource(_ arguments: [String: Any]?) -> Bool {
-        guard let args = arguments,
-            let source_uuid = args["source_uuid"] as! String?,
-            let source_id = args["source_id"] as! String?,
-            let name = args["name"] as! String?,
-            let frame_source = args["frame_source"] as! Bool?
-            else {
-                return false
-        }
-        return bridge_create_source(source_uuid, source_id, name, frame_source)
-    }
-    
+        
     private func addSource(_ arguments: [String: Any]?) -> Int64 {
         guard let args = arguments,
             let scene_uuid = args["scene_uuid"] as! String?,

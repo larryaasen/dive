@@ -1,5 +1,4 @@
 import 'package:dive_ui/dive_ui.dart';
-import 'package:dive_ui/dive_video_settings_dialog.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

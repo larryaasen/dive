@@ -86,7 +86,6 @@ class _BodyWidgetState extends State<BodyWidget> {
           });
       });
 
-      bool firstVideo = true;
       DiveInputs.video().forEach((videoInput) {
         print(videoInput);
         DiveVideoSource.create(videoInput).then((source) {
@@ -95,11 +94,10 @@ class _BodyWidgetState extends State<BodyWidget> {
             state.currentScene.addSource(source);
           });
         });
-        firstVideo = false;
       });
 
       // Create the streaming output
-      final output = DiveOutput.create();
+      final output = DiveOutput();
       _elements.updateState((state) => state.streamingOutput = output);
     });
 

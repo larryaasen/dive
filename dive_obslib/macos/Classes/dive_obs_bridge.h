@@ -21,7 +21,7 @@ bool bridge_obs_startup(void);
 #pragma mark - Bridge functions
 
 bool    bridge_source_add_frame_callback(const char *source_uuid, int64_t source_ptr);
-bool    bridge_create_source(const char *source_uuid, const char *source_id, const char *name, bool frame_source);
+bool    bridge_source_remove_frame_callback(const char *source_uuid, int64_t source_ptr);
 bool    bridge_release_source(NSString *source_uuid);
 bool    bridge_create_media_source(NSString *sourc_uuid, NSString *local_file);
 bool    bridge_create_video_source(NSString *source_uuid, NSString *device_name, NSString *device_uid);

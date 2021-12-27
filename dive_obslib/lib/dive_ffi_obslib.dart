@@ -143,7 +143,7 @@ extension DiveFFIObslib on DiveBaseObslib {
     return info;
   }
 
-  Future<DivePointer> createScene(String trackingUUID, String sceneName) {
+  DivePointer createScene(String trackingUUID, String sceneName) {
     assert(_lib != null, 'call initialize() before calling this method.');
 
     final scene = _lib.obs_scene_create(sceneName.int8());
@@ -160,7 +160,12 @@ extension DiveFFIObslib on DiveBaseObslib {
       _lib.obs_set_output_source(channel, _lib.obs_scene_get_source(scene));
     }
 
-    return Future.value(DivePointer(trackingUUID, scene));
+    return DivePointer(trackingUUID, scene);
+  }
+
+  void deleteScene(DivePointer scene) {
+    _lib.obs_set_output_source(0, ffi.nullptr);
+    _lib.obs_scene_release(scene.pointer);
   }
 
   DivePointer createImageSource(String sourceUuid, String file) {
@@ -205,19 +210,8 @@ extension DiveFFIObslib on DiveBaseObslib {
     String inputTypeId,
     String name,
     DiveObslibData settings,
-  }) {
-    print("obs_source_create: creating $inputTypeId - $name");
-    final source = _lib.obs_source_create(
-        inputTypeId.int8(), name.int8(), settings.pointer, ffi.nullptr);
-    StringExtensions.freeInt8s();
-    print("obs_source_create: returned $source");
-    if (source.address == 0) {
-      print("Could not create source");
-      return null;
-    }
-
-    return DivePointer(sourceUuid, source);
-  }
+  }) =>
+      _createSourceInternal(sourceUuid, inputTypeId, name, settings.pointer);
 
   // static const except = -1;
 
@@ -235,11 +229,17 @@ extension DiveFFIObslib on DiveBaseObslib {
         sourceId.int8(), name.int8(), settings, ffi.nullptr);
     StringExtensions.freeInt8s();
     if (source.address == 0) {
-      print("Could not create source");
+      debugPrint("_createSourceInternal: Could not create source");
       return null;
     }
 
     return DivePointer(sourceUuid, source);
+  }
+
+  /// Releases a reference to a source.  When the last reference is released,
+  /// the source is destroyed.
+  void releaseSource(DivePointer source) {
+    _lib.obs_source_release(source.pointer);
   }
 
   /// Add an existing source to an existing scene, and return sceneitem id.
@@ -297,8 +297,8 @@ extension DiveFFIObslib on DiveBaseObslib {
 
   /// Create the stream output.
   bool streamOutputCreate({
-    String serviceUrl = 'rtmp://live-iad05.twitch.tv/app/<your_stream_key>',
-    String serviceKey = '<your_stream_key>',
+    String serviceUrl,
+    String serviceKey,
     String serviceId = 'rtmp_common',
     String outputType = 'rtmp_output',
   }) {
@@ -362,6 +362,7 @@ extension DiveFFIObslib on DiveBaseObslib {
 
   /// Stop the stream output.
   void streamOutputStop() {
+    if (_streamOutput == null) return;
     _lib.obs_output_stop(_streamOutput);
   }
 

@@ -159,20 +159,9 @@ rsync ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework/PlugIns/* $
 8. From command line: flutter run -d macos
 
 ## TODO - Examples to be created
-
-1. Make everything work on latest master and stable channels.
-1. Search for memory leaks using Instruments.
-1. Rename dive_obslib to dive_mixer.
-1. Add features to remove a source that had been created, for example 4.
-1. Resolve some of the TODOs.
-1. Determine best copyright for examples.
-1. Properly Copyright example code.
-1. Prepare for release.
-
-
-Maybe later:
 1. Example showing how to scrub a video forward and backward.
 1. Example of live streaming setup with multiple services using dropdown list.
 1. Example showing how to position an image in the mix.
 1. Example showing how to change the volume of an audio source.
 1. Example showing how to save settings.
+1. Create example with all widgets displayed.

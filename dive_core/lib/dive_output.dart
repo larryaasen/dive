@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:dive_core/dive_core.dart';
 import 'package:dive_obslib/dive_obslib.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:state_notifier/state_notifier.dart';
 
 enum DiveOutputStreamingState { stopped, active, paused, reconnecting }
 
@@ -59,11 +58,6 @@ class DiveOutput {
         DiveOutputStreamingState.values[obslib.outputGetState()]);
   }
 
-  static DiveOutput create() {
-    final output = DiveOutput();
-    return output;
-  }
-
   bool start() {
     // Create streaming service
     bool rv = obslib.streamOutputCreate(
@@ -74,6 +68,7 @@ class DiveOutput {
     );
     if (!rv) return false;
 
+    // Start streaming.
     rv = obslib.streamOutputStart();
     if (rv) {
       syncState(repeating: true);
@@ -81,6 +76,7 @@ class DiveOutput {
     return rv;
   }
 
+  // Always call this method `stop` to ensure the resources are cleaned up.
   bool stop() {
     obslib.streamOutputStop();
     obslib.streamOutputRelease();

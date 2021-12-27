@@ -10,6 +10,8 @@ extension DivePluginObslib on DiveBaseObslib {
   static const String _methodDisposeTexture = 'disposeTexture';
   static const String _methodInitializeTexture = 'initializeTexture';
   static const String _methodAddSourceFrameCallback = 'addSourceFrameCallback';
+  static const String _methodRemoveSourceFrameCallback =
+      'removeSourceFrameCallback';
   static const String _methodCreateVideoMix = 'createVideoMix';
   static const String _methodRemoveVideoMix = 'removeVideoMix';
   static const String _methodChangeFrameRate = 'changeFrameRate';
@@ -68,6 +70,12 @@ extension DivePluginObslib on DiveBaseObslib {
         {'source_uuid': sourceUUID, 'source_ptr': sourcePtr});
   }
 
+  Future<bool> removeSourceFrameCallback(
+      String sourceUUID, dynamic sourcePtr) async {
+    return await _channel.invokeMethod(_methodRemoveSourceFrameCallback,
+        {'source_uuid': sourceUUID, 'source_ptr': sourcePtr});
+  }
+
   Future<bool> createVideoMix(String trackingUUID) async {
     final rv = await _channel
         .invokeMethod(_methodCreateVideoMix, {'tracking_uuid': trackingUUID});
@@ -97,7 +105,7 @@ extension DivePluginObslib on DiveBaseObslib {
     return rv;
   }
 
-  Future<String> disposeTexture(int textureId) async {
+  Future<bool> disposeTexture(int textureId) async {
     return await _channel
         .invokeMethod(_methodDisposeTexture, {"texture_id": textureId});
   }

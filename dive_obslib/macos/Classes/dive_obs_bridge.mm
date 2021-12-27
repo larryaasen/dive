@@ -512,6 +512,13 @@ bool bridge_source_add_frame_callback(const char *source_uuid, int64_t source_pt
     return true;
 }
 
+bool bridge_source_remove_frame_callback(const char *source_uuid, int64_t source_ptr) {
+    obs_source_t *source = (obs_source_t *)source_ptr;
+    obs_source_remove_frame_callback(source, source_frame_callback, nullptr);
+    remove_source(source_uuid);
+    return true;
+}
+
 bool bridge_add_videomix(const char *tracking_uuid) {
     add_videomix_callback(tracking_uuid);
     return true;
@@ -523,11 +530,6 @@ bool bridge_remove_videomix(const char *tracking_uuid) {
 }
 
 #pragma mark - Bridge functions
-
-bool bridge_create_source(const char *source_uuid, const char *source_id, const char *name, bool frame_source) {
-    obs_data_t *settings = NULL;
-    return _create_source(source_uuid, source_id, name, settings, frame_source);
-}
 
 bool bridge_release_source(NSString *source_uuid) {
     const char *uuid_str = source_uuid.UTF8String;

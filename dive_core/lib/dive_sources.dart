@@ -1,10 +1,7 @@
 import 'dart:async';
 
 import 'package:dive_core/dive_core.dart';
-import 'package:dive_core/dive_input_type.dart';
-import 'package:dive_core/dive_input.dart';
 import 'package:dive_core/dive_plugin.dart';
-import 'package:dive_core/texture_controller.dart';
 import 'package:dive_obslib/dive_obslib.dart';
 import 'package:uuid/uuid.dart';
 
@@ -14,9 +11,6 @@ final _uuid = Uuid();
 abstract class DiveUuid {
   static String newId() => _uuid.v1();
 }
-
-/// Count of scenes created
-int _sceneCount = 0;
 
 class DiveInputTypes {
   DiveInputTypes();
@@ -56,6 +50,7 @@ class DiveTextureController {
   /// Release the texture controller.
   void releaseController() {
     _controller.dispose();
+    _controller = null;
   }
 }
 
@@ -99,11 +94,23 @@ class DiveSource extends DiveTracking {
   String toString() {
     return "${this.runtimeType}(${this.hashCode}, $name)";
   }
+
+  bool dispose() {
+    pointer = null;
+    return true;
+  }
 }
 
 class DiveTextureSource extends DiveSource with DiveTextureController {
   DiveTextureSource({DiveInputType inputType, String name})
       : super(inputType: inputType, name: name);
+
+  /// Release the resources associated with this source.
+  @override
+  bool dispose() {
+    super.dispose();
+    return true;
+  }
 }
 
 class DiveAudioSource extends DiveSource {
@@ -132,6 +139,17 @@ class DiveAudioSource extends DiveSource {
     data.dispose();
     return source.pointer == null ? null : source;
   }
+
+  /// Release the resources associated with this source.
+  @override
+  bool dispose() {
+    super.dispose();
+    if (volumeMeter != null) {
+      volumeMeter.dispose();
+      volumeMeter = null;
+    }
+    return true;
+  }
 }
 
 class DiveVideoSource extends DiveSource with DiveTextureController {
@@ -148,6 +166,20 @@ class DiveVideoSource extends DiveSource with DiveTextureController {
     obslib.addSourceFrameCallback(source.trackingUUID, source.pointer.address);
     return source.pointer == null ? null : source;
   }
+
+  /// Release the resources associated with this source.
+  @override
+  bool dispose() {
+    obslib.removeSourceFrameCallback(trackingUUID, pointer.address);
+    obslib.releaseSource(pointer);
+    releaseController();
+    if (volumeMeter != null) {
+      volumeMeter.dispose();
+      volumeMeter = null;
+    }
+    super.dispose();
+    return true;
+  }
 }
 
 class DiveImageSource extends DiveTextureSource {
@@ -162,6 +194,13 @@ class DiveImageSource extends DiveTextureSource {
     //   return null;
     // }
     return source.pointer == null ? null : source;
+  }
+
+  /// Release the resources associated with this source.
+  @override
+  bool dispose() {
+    super.dispose();
+    return true;
   }
 }
 
@@ -219,63 +258,3 @@ class DiveSceneItem {
     return "source=${source.name} | scene=$scene";
   }
 }
-
-class DiveScene extends DiveTracking {
-  static const MAX_CHANNELS = 64;
-
-  // TODO: needs to be immutable state
-  final List<DiveSceneItem> _sceneItems = [];
-  List<DiveSceneItem> get sceneItems => _sceneItems;
-
-  DivePointer pointer;
-
-  static Future<DiveScene> create(String name) async {
-    if (_sceneCount > 0) {
-      throw UnsupportedError('multiple scenes are not supported.');
-    }
-    _sceneCount++;
-
-    final scene = DiveScene();
-    scene.pointer = await obslib.createScene(scene.trackingUUID, name);
-
-    return scene;
-  }
-
-  /// Add a source to a scene.
-  /// Returns a new scene item.
-  Future<DiveSceneItem> addSource(DiveSource source) async {
-    final item = obslib.sceneAddSource(pointer, source.pointer);
-    final sceneItem = DiveSceneItem(item: item, source: source, scene: this);
-    _sceneItems.add(sceneItem);
-    return sceneItem;
-  }
-
-  /// Finds the scene item for source in this scene.
-  DiveSceneItem findSceneItem(DiveSource source) {
-    return _sceneItems.firstWhere((sceneItem) => sceneItem.source == source,
-        orElse: () => null);
-  }
-
-  /// Remove the item from the scene.
-  void removeSceneItem(DiveSceneItem sceneItem) {
-    if (_sceneItems.remove(sceneItem)) {
-      sceneItem.remove();
-    }
-  }
-
-  /// Remove all items from the scene.
-  void removeAllSceneItems() {
-    _sceneItems.forEach((sceneItem) {
-      sceneItem.remove();
-    });
-    _sceneItems.clear();
-  }
-}
-
-// class DiveStateNotifier<T> extends StateNotifier<T> {
-//   DiveStateNotifier(T initialState) : super(initialState);
-
-//   void change(T newState) {
-//     state = newState;
-//   }
-// }

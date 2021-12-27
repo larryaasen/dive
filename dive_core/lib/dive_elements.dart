@@ -1,9 +1,5 @@
 import 'package:dive_core/dive_core.dart';
-import 'package:dive_core/dive_media_source.dart';
-import 'package:dive_core/dive_sources.dart';
-import 'package:dive_core/dive_output.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:state_notifier/state_notifier.dart';
 
 class DiveVideoSettingsState {}
 
