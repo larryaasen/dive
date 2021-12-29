@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:dive_core/dive_core.dart';
+import 'package:equatable/equatable.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,6 +20,7 @@ export 'dive_audio_meter.dart';
 export 'dive_position_dialog.dart';
 export 'dive_side_sheet.dart';
 export 'dive_stream_settings_dialog.dart';
+export 'dive_topic_card.dart';
 export 'dive_video_settings_dialog.dart';
 
 /// Signature for a callback with a boolean value.
@@ -51,6 +53,19 @@ class DiveIconSet {
 /// Setup the default icon set.
 DiveIconSet _iconSet = DiveIconSet();
 
+/// Run a Dive UI app.
+void runDiveUIApp(Widget app) {
+  // We need the binding to be initialized before calling runApp
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Configure globally for all Equatable instances via EquatableConfig
+  EquatableConfig.stringify = true;
+
+  // Use [ProviderScope] so DiveCore and other modules use
+  // the same [ProviderContainer]
+  runApp(ProviderScope(child: DiveUIApp(child: app)));
+}
+
 class DiveUI {
   /// DiveCore and DiveUI must use the same [ProviderContainer], so it needs
   /// to be passed to DiveCore at the start.
@@ -65,7 +80,7 @@ class DiveUI {
 
 /// Use [DiveUIApp] to setup DiveUI before the first [build] is called.
 class DiveUIApp extends StatefulWidget {
-  DiveUIApp({Key key, this.child}) : super(key: key);
+  const DiveUIApp({Key key, this.child}) : super(key: key);
 
   /// The [child] contained by the widget.
   final Widget child;
@@ -298,22 +313,23 @@ class DiveMediaPlayButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    if (mediaSource == null) {
-      return Container();
+    var mediaState;
+    if (mediaSource != null) {
+      final stateModel = watch(mediaSource.stateProvider.state);
+      mediaState = stateModel.mediaState;
+    } else {
+      mediaState = DiveMediaState.STOPPED;
     }
-
-    final stateModel = watch(mediaSource.stateProvider.state);
 
     return IconButton(
       icon: Icon(
-        stateModel.mediaState == DiveMediaState.PLAYING
+        mediaState == DiveMediaState.PLAYING
             ? DiveUI.iconSet.mediaPauseButton
             : DiveUI.iconSet.mediaPlayButton,
         color: iconColor,
       ),
-      tooltip: stateModel.mediaState == DiveMediaState.PLAYING
-          ? 'Pause video'
-          : 'Play video',
+      tooltip:
+          mediaState == DiveMediaState.PLAYING ? 'Pause video' : 'Play video',
       onPressed: () {
         mediaSource.getState().then((newStateModel) async {
           print("onPressed: state $newStateModel");

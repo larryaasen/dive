@@ -15,6 +15,9 @@ dependencies:
   dive_obslib:
     path: ../dive_obslib
 
+  # From fluttetcommunity.dev: Simplify Dart Equality Comparisons
+  equatable: ^2.0.0
+
   # From Dart Team: provides internationalization and localization facilities, including message translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
   intl: ^0.16.1
 

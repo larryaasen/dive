@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dive_obslib/dive_obslib.dart';
+import 'package:flutter/foundation.dart';
 
 import 'dive_core.dart';
 import 'dive_plugin.dart';
@@ -70,6 +71,7 @@ class DiveSource extends DiveTracking {
     return "${this.runtimeType}(${this.hashCode}, $name)";
   }
 
+  @mustCallSuper
   bool dispose() {
     pointer = null;
     return true;

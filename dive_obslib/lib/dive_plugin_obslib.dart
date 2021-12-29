@@ -7,6 +7,7 @@ typedef DiveVolumeMeterCallback = void Function(int volumeMeterPointer,
 
 /// Invokes methods on a channel to the plugin.
 extension DivePluginObslib on DiveBaseObslib {
+  static const String _methodObsStartup = 'obsStartup';
   static const String _methodDisposeTexture = 'disposeTexture';
   static const String _methodInitializeTexture = 'initializeTexture';
   static const String _methodAddSourceFrameCallback = 'addSourceFrameCallback';
@@ -62,6 +63,10 @@ extension DivePluginObslib on DiveBaseObslib {
       default:
         throw MissingPluginException('not implemented');
     }
+  }
+
+  Future<bool> obsStartup() async {
+    return await _channel.invokeMethod(_methodObsStartup);
   }
 
   Future<bool> addSourceFrameCallback(

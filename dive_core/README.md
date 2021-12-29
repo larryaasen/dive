@@ -72,6 +72,3 @@ Reasons not to use dart:ffi to wrap obslib:
 * Would FFI callbacks work?
 * Some unknowns - What parts of obslib would not work via FFI?
 * FFI still seems too new to invest in it right now.
-
-Completed FFI tasks:
-* experimented calling obs_startup and a few other functions which worked well.

@@ -24,6 +24,9 @@ dependencies:
   # From dart.dev: immutable collections using the builder pattern
   built_collection: ^5.0.0
 
+  # From fluttetcommunity.dev: Simplify Dart Equality Comparisons
+  equatable: ^2.0.0
+
   # From flutter.dev: A Flutter plugin that manages files and interactions with file dialogs.
   file_selector: ^0.8.2
 
@@ -35,9 +38,6 @@ dependencies:
   
   #From: flutter.dev: A Flutter plugin for iOS and Android allowing access to the device cameras.
   # camera: ^0.5.8+10
-
-  # From fluttetcommunity.dev: Simplify Dart Equality Comparisons
-  equatable: ^2.0.0
 
   # From darky12s@gmail.com: a state-manangement library
   flutter_riverpod: ^0.13.1

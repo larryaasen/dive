@@ -1,22 +1,13 @@
-import 'package:flutter/widgets.dart';
 import 'package:dive_core/dive_core.dart';
-import 'package:equatable/equatable.dart';
-import 'package:riverpod/riverpod.dart';
 
 /// Dive Example 4 - Streaming
-void main() {
-  // We need the binding to be initialized before calling runApp.
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // Configure globally for all Equatable instances via EquatableConfig
-  EquatableConfig.stringify = true;
-
-  // Setup [ProviderContainer] so DiveCore and other modules use the same one
-  DiveCore.providerContainer = ProviderContainer();
+void main() async {
+  runDiveApp();
 
   print('Dive Example 4');
 
-  DiveExample()..run();
+  await DiveExample()
+    ..run();
 }
 
 class DiveExample {
@@ -24,14 +15,16 @@ class DiveExample {
   DiveCore _diveCore;
   bool _initialized = false;
 
-  void run() {
-    _initialize();
+  void run() async {
+    await _initialize();
   }
 
-  void _initialize() {
+  void _initialize() async {
     if (_initialized) return;
+    _initialized = true;
+
     _diveCore = DiveCore();
-    _diveCore.setupOBS(DiveCoreResolution.HD);
+    await _diveCore.setupOBS(DiveCoreResolution.HD);
 
     // Create the main scene
     DiveScene.create('Scene 1').then((scene) {
@@ -93,7 +86,5 @@ class DiveExample {
         });
       });
     });
-
-    _initialized = true;
   }
 }

@@ -6,7 +6,8 @@ import FlutterMacOS
 
 public class DiveObsLibPlugin: NSObject, FlutterPlugin {
     struct Method {
-        static let GetPlatformVersion = "getPlatformVersion"
+        static let ObsStartup = "obsStartup"
+
         static let DisposeTexture = "disposeTexture"
         static let InitializeTexture = "initializeTexture"
         static let AddSourceFrameCallback = "addSourceFrameCallback"
@@ -61,23 +62,18 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
 //           let rv1 = obs_startup("en", nil, nil)
         // Maybe someday in the future, this could be made to work. In the meantime,
         // all functions in obslib are called from Objective-C files.
-        
-        // This function must be called on the main thread because of some
-        // functions used by OBS that need to be called on the main thread.
-        // The other functions can be called on FFI worker threads.
-        bridge_obs_startup()
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         let arguments = call.arguments != nil ? call.arguments as? [String: Any] : nil
         
         switch call.method {
+        case Method.ObsStartup:
+            result(obsStartup())
         case Method.InitializeTexture:
             result(initializeTexture(arguments))
         case Method.DisposeTexture:
             result(disposeTexture(arguments))
-        case Method.GetPlatformVersion:
-            result(getPlatformVersion())
         case Method.AddSourceFrameCallback:
             result(addSourceFrameCallback(arguments))
         case Method.RemoveSourceFrameCallback:
@@ -136,6 +132,13 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
         }
     }
 
+    private func obsStartup() -> Bool {
+        // This function must be called on the main thread because of some
+        // functions used by OBS that need to be called on the main thread.
+        // The other functions can be called on FFI worker threads.
+        return bridge_obs_startup()
+    }
+
     private func disposeTexture(_ arguments: [String: Any]?) -> Bool {
         var rv = false
         if let args = arguments {
@@ -160,11 +163,6 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
             }
         }
         return 0
-    }
-
-    private func getPlatformVersion() -> String {
-        let msg = "macOS " + ProcessInfo.processInfo.operatingSystemVersionString
-        return msg
     }
 
     private func addSourceFrameCallback(_ arguments: [String: Any]?) -> Bool {

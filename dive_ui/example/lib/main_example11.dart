@@ -1,5 +1,4 @@
 import 'package:dive_ui/dive_ui.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dive_core/dive_core.dart';
@@ -8,15 +7,7 @@ bool multiCamera = false;
 
 /// Dive Example 11 - Configure Stream
 void main() {
-  // We need the binding to be initialized before calling runApp.
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // Configure globally for all Equatable instances via EquatableConfig
-  EquatableConfig.stringify = true;
-
-  // Use [ProviderScope] so DiveCore and other modules use
-  // the same [ProviderContainer].
-  runApp(ProviderScope(child: DiveUIApp(child: AppWidget())));
+  runDiveUIApp(AppWidget());
 }
 
 class AppWidget extends StatelessWidget {
@@ -58,12 +49,19 @@ class _BodyWidgetState extends State<BodyWidget> {
   DiveCoreElements _elements;
   bool _initialized = false;
 
-  void _initialize() {
+  @override
+  void initState() {
+    super.initState();
+    _initialize();
+  }
+
+  void _initialize() async {
     if (_initialized) return;
+    _initialized = true;
 
     _elements = widget.elements;
     _diveCore = DiveCore();
-    _diveCore.setupOBS(DiveCoreResolution.HD);
+    await _diveCore.setupOBS(DiveCoreResolution.HD);
 
     DiveScene.create('Scene 1').then((scene) {
       _elements.updateState((state) => state.currentScene = scene);
@@ -100,13 +98,10 @@ class _BodyWidgetState extends State<BodyWidget> {
       final output = DiveOutput();
       _elements.updateState((state) => state.streamingOutput = output);
     });
-
-    _initialized = true;
   }
 
   @override
   Widget build(BuildContext context) {
-    _initialize();
     return MediaPlayer(context: context, elements: _elements);
   }
 }

@@ -3,6 +3,8 @@ library dive_core;
 import 'dart:math';
 
 import 'package:dive_obslib/dive_obslib.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
 import 'package:riverpod/riverpod.dart';
 
 export 'dive_format.dart';
@@ -34,6 +36,18 @@ export 'texture_controller.dart';
     Dart Data Class Generator ad-on;
     dart-import ad-on;
 */
+
+/// Run a Dive app.
+void runDiveApp() {
+  // We need the binding to be initialized before calling runApp
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Configure globally for all Equatable instances via EquatableConfig
+  EquatableConfig.stringify = true;
+
+  // Setup [ProviderContainer] so DiveCore and other modules use the same one
+  DiveCore.providerContainer = ProviderContainer();
+}
 
 /// The various different frame rates (FPS).
 class DiveCoreFPS {
@@ -216,20 +230,24 @@ class DiveCore {
         : null;
   }
 
-  void setupOBS(
+  Future<bool> setupOBS(
     DiveCoreResolution baseResolution, {
     DiveCoreResolution outResolution,
     DiveCoreFPS fps = DiveCoreFPS.fps29_97,
-  }) {
-    outResolution = outResolution ?? baseResolution;
-    obslib.startObs(
-      baseResolution.width,
-      baseResolution.height,
-      outResolution.width,
-      outResolution.height,
-      fps.numerator,
-      fps.denominator,
-    );
+  }) async {
+    bool rv = await obslib.obsStartup();
+    if (rv) {
+      outResolution = outResolution ?? baseResolution;
+      rv = obslib.startObs(
+        baseResolution.width,
+        baseResolution.height,
+        outResolution.width,
+        outResolution.height,
+        fps.numerator,
+        fps.denominator,
+      );
+    }
+    return rv;
   }
 }
 

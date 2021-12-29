@@ -26,7 +26,7 @@ class DiveAudioMeter extends ConsumerWidget {
   }
 }
 
-DateTime lastUpdateTime;
+// DateTime lastUpdateTime;
 
 class DiveAudioMeterPainter extends CustomPainter {
   final DiveAudioMeterState state;

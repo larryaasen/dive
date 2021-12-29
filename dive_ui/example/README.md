@@ -140,6 +140,10 @@ configure the RTMP stream.
 
 ![image](example11-stream-settings.png)
 
+## Example 12 - All Widgets
+
+This example shows all of the Dive UI widgets.
+
 ## Writing an app with Dive UI
 
 1. Add dive_ui to your pubspec.yaml file.
