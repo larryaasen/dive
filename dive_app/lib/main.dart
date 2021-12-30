@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:dive_ui/dive_ui.dart';
 
 import 'src/app.dart';
 import 'src/settings/settings_controller.dart';
@@ -16,5 +17,5 @@ void main() async {
   // Run the app and pass in the SettingsController. The app listens to the
   // SettingsController for changes, then passes it further down to the
   // SettingsView.
-  runApp(MyApp(settingsController: settingsController));
+  runDiveUIApp(MyApp(settingsController: settingsController));
 }

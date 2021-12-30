@@ -79,7 +79,7 @@ packages:
     source: hosted
     version: "2.1.5"
   dive_core:
-    dependency: transitive
+    dependency: "direct main"
     description:
       path: "../dive_core"
       relative: true

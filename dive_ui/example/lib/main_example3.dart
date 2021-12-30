@@ -51,7 +51,7 @@ class _BodyWidgetState extends State<BodyWidget> {
   DiveCoreElements _elements;
   bool _initialized = false;
 
-  void _initialize(BuildContext context) {
+  void _initialize(BuildContext context) async {
     if (_initialized) return;
 
     /// DiveCore and other modules must use the same [ProviderContainer], so
@@ -60,7 +60,7 @@ class _BodyWidgetState extends State<BodyWidget> {
 
     _elements = widget.elements;
     _diveCore = DiveCore();
-    _diveCore.setupOBS(DiveCoreResolution.HD);
+    await _diveCore.setupOBS(DiveCoreResolution.HD);
 
     DiveScene.create('Scene 1').then((scene) {
       _elements.updateState((state) => state.currentScene = scene);

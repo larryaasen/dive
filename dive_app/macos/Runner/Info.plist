@@ -28,6 +28,8 @@
 	<string>Used for video recording and streaming.</string>
 	<key>NSDocumentsFolderUsageDescription</key>
 	<string>Used for video recording and streaming.</string>
+	<key>NSDownloadsFolderUsageDescription</key>
+	<string>Used for video recording and streaming.</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>$(PRODUCT_COPYRIGHT)</string>
 	<key>NSMainNibFile</key>
