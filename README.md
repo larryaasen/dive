@@ -3,14 +3,12 @@
 Introducing Dive! A new Flutter toolkit for video recording and streaming.
 A complete set of packages to build the next generation of Flutter media apps.
 
+## Introduction
+
 Dive is a video recording and streaming toolkit built on top of Dart and
 Flutter with native extensions on macOS. It is a group of Flutter packages for
 building media apps. In the future, support for multiple
 platforms will be added.
-
-## Introduction
-
-Dive is a collection of packages each providing a different level of support.
 
 # (Rename dive_obslib to dive_av or dive_mixer)
 

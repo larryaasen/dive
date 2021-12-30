@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:dive_app/app_widget.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
-  // We need the binding to be initialized before calling runApp.
-  WidgetsFlutterBinding.ensureInitialized();
+import 'src/app.dart';
+import 'src/settings/settings_controller.dart';
+import 'src/settings/settings_service.dart';
 
-  // Configure globally for all Equatable instances via EquatableConfig
-  EquatableConfig.stringify = true;
+void main() async {
+  // Set up the SettingsController, which will glue user settings to multiple
+  // Flutter Widgets.
+  final settingsController = SettingsController(SettingsService());
 
-  runApp(ProviderScope(child: AppWidget()));
+  // Load the user's preferred theme while the splash screen is displayed.
+  // This prevents a sudden theme change when the app is first displayed.
+  await settingsController.loadSettings();
+
+  // Run the app and pass in the SettingsController. The app listens to the
+  // SettingsController for changes, then passes it further down to the
+  // SettingsView.
+  runApp(MyApp(settingsController: settingsController));
 }

@@ -43,7 +43,7 @@ dependencies:
   flutter_riverpod: ^0.13.1
 
   # From Dart Team: provides internationalization and localization facilities, including message translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
-  intl: ^0.16.0
+  intl: '>=0.16.0'
 
   # From Dart team:
   path_provider: ^1.6.28
