@@ -1,5 +1,5 @@
 name: dive_app
-description: A new Flutter project.
+description: Dive Camera and Audio
 
 # Prevent accidental publishing to pub.dev.
 publish_to: 'none'

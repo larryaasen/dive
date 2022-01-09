@@ -1,3 +1,4 @@
+1. Migrate to null safety.
 1. Search for memory leaks using Instruments.
 1. Resolve some of the TODOs.
 1. Prepare for release.

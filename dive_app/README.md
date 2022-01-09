@@ -1,5 +1,10 @@
 # dive_app
 
+A fully featured Dive application running on macOS.
+
+App Title: `Dive Camera and Audio`
+Bunlde identifier: `com.moonwink.divecamera`
+
 ## TODO
 1. Publish the pod obslib in a public repository.
 1. This needs to be replaced: `pod 'obslib', :path => '/Users/larry/Projects/obslib-framework'`,

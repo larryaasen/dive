@@ -8,7 +8,7 @@
 PRODUCT_NAME = dive_app
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.diveApp
+PRODUCT_BUNDLE_IDENTIFIER = com.moonwink.divecamera
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2021 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright (c) 2022 Moonwink Software, LLC. All rights reserved.

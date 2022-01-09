@@ -1,6 +1,6 @@
 {
-  "appTitle": "dive_app",
+  "appTitle": "Dive Camera",
   "@appTitle": {
-    "description": "The title of the application"
+    "description": "Dive Camera and Audio"
   }
 }
