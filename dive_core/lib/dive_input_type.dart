@@ -34,5 +34,5 @@ class DiveInputTypes {
 
   // TODO: Implement this all() method.
   static Future<List<DiveInputType>> all() async => [];
-  // obslib.inputTypes().map(DiveInputType.fromJson).toList();
+  // oldlib.inputTypes().map(DiveInputType.fromJson).toList();
 }

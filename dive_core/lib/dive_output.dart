@@ -54,12 +54,12 @@ class DiveOutput {
   /// Sync the media state from the media source to the state provider.
   Future<void> _syncState() async {
     // DiveCore.notifierFor(stateProvider).updateOutputState(
-    //     DiveOutputStreamingState.values[obslib.outputGetState()]);
+    //     DiveOutputStreamingState.values[oldlib.outputGetState()]);
   }
 
   bool start() {
     // // Create streaming service
-    // bool rv = obslib.streamOutputCreate(
+    // bool rv = oldlib.streamOutputCreate(
     //   serviceUrl: serviceUrl,
     //   serviceKey: serviceKey,
     //   serviceId: serviceId,
@@ -68,7 +68,7 @@ class DiveOutput {
     // if (!rv) return false;
 
     // // Start streaming.
-    // rv = obslib.streamOutputStart();
+    // rv = oldlib.streamOutputStart();
     // if (rv) {
     //   syncState(repeating: true);
     // }
@@ -78,8 +78,8 @@ class DiveOutput {
 
   // Always call this method `stop` to ensure the resources are cleaned up.
   bool stop() {
-    // obslib.streamOutputStop();
-    // obslib.streamOutputRelease();
+    // oldlib.streamOutputStop();
+    // oldlib.streamOutputRelease();
     // syncState(repeating: true);
     // return true;
     return false;

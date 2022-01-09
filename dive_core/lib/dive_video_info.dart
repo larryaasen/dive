@@ -46,7 +46,6 @@ enum DiveVideoFormat {
 }
 
 class DiveVideoInfo {
-  /// Graphics module to use (usually "libobs-opengl" or "libobs-d3d11")
   final String graphicsModule;
 
   /// < Output FPS

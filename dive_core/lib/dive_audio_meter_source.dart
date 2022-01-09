@@ -19,20 +19,20 @@ class DiveCoreAudioMeters {
 
   /// Create a volume meter.
   static DiveCoreVolumeMeter volumeMeterCreate() {
-    // final volmeter = _lib.obs_volmeter_create(faderType);
+    // final volmeter = _lib.old_volmeter_create(faderType);
     return DiveCoreVolumeMeter();
   }
 
   /// Destroy a volume meter.
   static void volumeMeterDestroy(DiveCoreVolumeMeter volumeMeter) {
-    // _lib.obs_volmeter_destroy(volumeMeter.pointer);
+    // _lib.old_volmeter_destroy(volumeMeter.pointer);
   }
 
   /// Attache a source to a volume meter.
   static bool volumeMeterAttachSource(
       DiveCoreVolumeMeter volumeMeter, dynamic source) {
     // final rv =
-    //     _lib.obs_volmeter_attach_source(volumeMeter.pointer, source.pointer);
+    //     _lib.old_volmeter_attach_source(volumeMeter.pointer, source.pointer);
     // return rv == 1;
     return false;
   }

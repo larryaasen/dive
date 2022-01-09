@@ -67,7 +67,7 @@ class DiveMediaSource extends DiveTextureSource {
   static Future<DiveMediaSource> create(String localFile) async {
     final source = DiveMediaSource(name: 'my media', localFile: localFile);
     await source.setupController(source.trackingUUID);
-    // source.pointer = obslib.createMediaSource(source.trackingUUID, localFile);
+    // source.pointer = oldlib.createMediaSource(source.trackingUUID, localFile);
     await source.syncState();
     return source.pointer == null ? null : source;
   }
@@ -108,9 +108,9 @@ class DiveMediaSource extends DiveTextureSource {
 
   /// Get the media source state for this media source.
   Future<DiveMediaSourceState> getState() async {
-    // final mediaState = obslib.mediaSourceGetState(pointer);
-    // final duration = obslib.mediaSourceGetDuration(pointer);
-    // final ms = obslib.mediaSourceGetTime(pointer);
+    // final mediaState = oldlib.mediaSourceGetState(pointer);
+    // final duration = oldlib.mediaSourceGetDuration(pointer);
+    // final ms = oldlib.mediaSourceGetTime(pointer);
     return DiveMediaSourceState();
     // currentTime: ms,
     // duration: duration,
@@ -118,39 +118,39 @@ class DiveMediaSource extends DiveTextureSource {
   }
 
   Future<bool> play() async {
-    // obslib.mediaSourcePlayPause(pointer, false);
+    // oldlib.mediaSourcePlayPause(pointer, false);
     await syncState();
     return true;
   }
 
   Future<bool> pause() async {
-    // obslib.mediaSourcePlayPause(pointer, true);
+    // oldlib.mediaSourcePlayPause(pointer, true);
     await syncState();
     return true;
   }
 
   Future<bool> restart() async {
-    // obslib.mediaSourceRestart(pointer);
+    // oldlib.mediaSourceRestart(pointer);
     await syncState();
     return true;
   }
 
   Future<bool> stop() async {
-    // obslib.mediaSourceStop(pointer);
+    // oldlib.mediaSourceStop(pointer);
     await syncState();
     return true;
   }
 
   Future<int> getDuration() async {
-    return 0; // obslib.mediaSourceGetDuration(pointer);
+    return 0; // oldlib.mediaSourceGetDuration(pointer);
   }
 
   Future<int> getTime() async {
-    return 0; // obslib.mediaSourceGetTime(pointer);
+    return 0; // oldlib.mediaSourceGetTime(pointer);
   }
 
   Future<bool> setTime(int ms) async {
-    // obslib.mediaSourceSetTime(pointer, ms);
+    // oldlib.mediaSourceSetTime(pointer, ms);
     return true;
   }
 }

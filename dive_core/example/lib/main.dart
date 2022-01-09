@@ -47,8 +47,8 @@ class _BodyWidgetState extends State<BodyWidget> {
   DiveCoreElements _elements;
   bool _initialized = false;
 
-  static const bool _enableOBS = true;
-  static const bool _enableCameras = _enableOBS && true;
+  static const bool _enableCore = true;
+  static const bool _enableCameras = _enableCore && true;
 
   @override
   void didChangeDependencies() {
@@ -62,7 +62,7 @@ class _BodyWidgetState extends State<BodyWidget> {
 
     _elements = widget.elements;
     _diveCore = DiveCore();
-    if (_enableOBS) {
+    if (_enableCore) {
       _diveCore.setupCore(DiveCoreResolution.HD);
       DiveScene.create('Scene 1').then((scene) => setup(scene));
     }

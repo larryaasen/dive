@@ -30,7 +30,7 @@ class AppWidget extends StatelessWidget {
         ),
         home: Scaffold(
           appBar: AppBar(
-            title: const Text('Dive Image Viewer Example'),
+            title: const Text('Dive Image Viewer Example 2'),
             actions: <Widget>[
               DiveImagePickerButton(elements: _elements),
             ],

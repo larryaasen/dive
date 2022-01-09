@@ -4,7 +4,7 @@ Demonstrates how to use the dive_ui plugin to build a media app.
 
 ## Example 1 - Media Player
 
-This example shows how to use dive_ui, dive_core, and dive_obslib to build a
+This example shows how to use dive_ui and dive_core to build a
 media player. This media player demonstrates these features using 129 lines of code:
 * Display a file selector button `DiveVideoPickerButton` that opens the file selector dialog.
 * Display a file selector dialog to select a media/video file.
@@ -19,7 +19,7 @@ time.
 
 ## Example 2 - Image Viewer
 
-This example shows how to use dive_ui, dive_core, and dive_obslib to display
+This example shows how to use dive_ui and dive_core to display
 an image in the video mix.
 * Display a file selector button `DiveImagePickerButton` that opens the file selector dialog.
 * Display a file selector dialog to select an image (bmp/tga/png/jpeg/jpg/gif/psd/webp) file.
@@ -34,7 +34,7 @@ time.
 
 ## Example 3 - Video Cameras
 
-This example shows how to use dive_ui, dive_core, and dive_obslib to display
+This example shows how to use dive_ui and dive_core to display
 multiple video cameras in a list, and select one for the video mix.
 * Use `DiveCoreElements` to track the scene, video mix (`DiveVideoMix`), audio source, and video source.
 * Create a scene (`DiveScene`) and display the video mix using the `DiveMeterPreview` widget showing the video mix.
@@ -48,7 +48,7 @@ multiple video cameras in a list, and select one for the video mix.
 
 ## Example 4 - Streaming
 
-This example shows how to use dive_core and dive_obslib to create a non-UI
+This example shows how to use dive_core to create a non-UI
 app that will stream to Twitch.
 * Use `DiveCoreElements` to track the scene, audio source, and video source.
 * Create a scene (`DiveScene`).
@@ -60,7 +60,7 @@ app that will stream to Twitch.
 
 ## Example 5 - Multi Camera Mix
 
-This example shows how to use dive_ui, dive_core, and dive_obslib to display
+This example shows how to use dive_ui and dive_core to display
 multiple video cameras in a list with preview, select one for the video mix,
 animate to show all three cameras in mix, and stream to Twitch.
 * Use `DiveCoreElements` to track the scene, video mix (`DiveVideoMix`), audio source, and video sources.
@@ -77,12 +77,12 @@ animate to show all three cameras in mix, and stream to Twitch.
 ## Example 6 - Counter
 
 This example shows how to run the counter sample without any dive_ui code, linking
-in the obslib into the macos app. Also shows the use of a popup menu.
+in the dive_core package into the macos app. Also shows the use of a popup menu.
 * Usage: flutter run lib/main_example6.dart -d macos
 
 ## Example 7 - Audio Inputs
 
-This example shows how to use dive_ui, dive_core, and dive_obslib to display
+This example shows how to use dive_ui and dive_core to display
 multiple audio inputs in a list.
 * Use `DiveCoreElements` to track the scene, video mix (`DiveVideoMix`), audio sources, and video source.
 * Create a scene (`DiveScene`) and display the video mix using the `DiveMeterPreview` widget showing the video mix.
@@ -94,7 +94,7 @@ multiple audio inputs in a list.
 
 ## Example 8 - Positioning
 
-This example shows how to use dive_ui, dive_core, and dive_obslib to
+This example shows how to use dive_ui and dive_core to
 position a video camera in the video mix.
 * Use `DiveCoreElements` to track the scene, video mix (`DiveVideoMix`), and video source.
 * Create a scene (`DiveScene`) and display the video mix using the `DiveMeterPreview` widget showing the video mix.
@@ -107,7 +107,7 @@ position a video camera in the video mix.
 
 ## Example 9 - Resolutions
 
-This example shows how to use dive_ui, dive_core, and dive_obslib to
+This example shows how to use dive_ui and dive_core to
 change the output resolution of the video mix.
 * Use `DiveCoreElements` to track the scene, video mix (`DiveVideoMix`), and video source.
 * Create a scene (`DiveScene`) and display the video mix using the `DiveMeterPreview` widget showing the video mix.
@@ -117,7 +117,7 @@ change the output resolution of the video mix.
 
 ## Example 10 - Icon Set
 
-This example shows how to use dive_ui, dive_core, and dive_obslib to
+This example shows how to use dive_ui and dive_core to
 change the output resolution of the video mix.
 * Use `DiveCoreElements` to track the scene, video mix (`DiveVideoMix`), and video source.
 * Create a scene (`DiveScene`) and display the video mix using the `DiveMeterPreview` widget showing the video mix.
@@ -126,7 +126,7 @@ change the output resolution of the video mix.
 
 ## Example 11 - Configure Stream
 
-This example shows how to use dive_ui, dive_core, and dive_obslib to
+This example shows how to use dive_ui and dive_core to
 configure the RTMP stream.
 * Use `DiveCoreElements` to track the scene, video mix (`DiveVideoMix`), audio source, and video sources.
 * Create a scene (`DiveScene`) and display the video mix using the `DiveMeterPreview` widget showing the video mix.
@@ -147,19 +147,12 @@ This example shows all of the Dive UI widgets.
 ## Writing an app with Dive UI
 
 1. Add dive_ui to your pubspec.yaml file.
-2. In the macos/Podfile, in the target 'Runner' section, add: ```pod 'obslib', :path => '/Users/larry/Projects/obslib-framework'```
 3. Open Xcode and load the Runner.xcworkspace file.
 4. Select the Runner target, under the General tab. Change the Deployment Target to 10.13.
 5. In section Signing & Capabilities, in the App Sandbox, check both Network boxes, 
 Camera, Audio Input, USB, and in File Access set all to Read/Write.
 6. In the Info section, add the Privacy keys for Desktop Folder, Camera, Microphone, Documents Folder,
 and Downloads Folder.
-7. In the Build Phases section, add a New Run Script Phase. Add this to the Shell:
-```
-# Copy the framework resources to a specific folder in the app Resources
-cp -R ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework/Resources/data ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}
-rsync ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework/PlugIns/* ${TARGET_BUILD_DIR}/${PLUGINS_FOLDER_PATH}
-```
 8. From command line: flutter run -d macos
 
 ## TODO - Examples to be created
