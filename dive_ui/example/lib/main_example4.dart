@@ -24,7 +24,7 @@ class DiveExample {
     _initialized = true;
 
     _diveCore = DiveCore();
-    await _diveCore.setupOBS(DiveCoreResolution.HD);
+    await _diveCore.setupCore(DiveCoreResolution.HD);
 
     // Create the main scene
     DiveScene.create('Scene 1').then((scene) {

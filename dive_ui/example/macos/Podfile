@@ -30,8 +30,6 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  pod 'obslib', :path => '/Users/larry/Projects/obslib-framework'
-
   flutter_install_all_macos_pods File.dirname(File.realpath(__FILE__))
 end
 

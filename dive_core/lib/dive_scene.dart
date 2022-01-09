@@ -1,5 +1,4 @@
 import 'package:dive_core/dive_core.dart';
-import 'package:dive_obslib/dive_obslib.dart';
 
 /// Count of scenes created
 int _sceneCount = 0;
@@ -11,7 +10,7 @@ class DiveScene extends DiveTracking {
   final List<DiveSceneItem> _sceneItems = [];
   List<DiveSceneItem> get sceneItems => _sceneItems;
 
-  DivePointer pointer;
+  dynamic pointer;
 
   static Future<DiveScene> create(String name) async {
     if (_sceneCount > 0) {
@@ -20,7 +19,6 @@ class DiveScene extends DiveTracking {
     _sceneCount++;
 
     final scene = DiveScene();
-    scene.pointer = obslib.createScene(scene.trackingUUID, name);
 
     return scene;
   }
@@ -28,7 +26,7 @@ class DiveScene extends DiveTracking {
   /// Add a source to a scene.
   /// Returns a new scene item.
   Future<DiveSceneItem> addSource(DiveSource source) async {
-    final item = obslib.sceneAddSource(pointer, source.pointer);
+    final item = DivePointerSceneItem(null);
     final sceneItem = DiveSceneItem(item: item, source: source, scene: this);
     _sceneItems.add(sceneItem);
     return sceneItem;
@@ -57,7 +55,6 @@ class DiveScene extends DiveTracking {
 
   /// Release the resources associated with this source.
   bool dispose() {
-    obslib.deleteScene(pointer);
     removeAllSceneItems();
     pointer = null;
     return true;

@@ -66,7 +66,7 @@ class _BodyWidgetState extends State<BodyWidget> {
     _elements = widget.elements;
     _diveCore = DiveCore();
     if (_enableOBS) {
-      _diveCore.setupOBS(DiveCoreResolution.HD);
+      _diveCore.setupCore(DiveCoreResolution.HD);
       DiveScene.create('Scene 1').then((scene) => setup(scene));
     }
 

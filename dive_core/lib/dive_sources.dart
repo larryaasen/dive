@@ -1,10 +1,24 @@
 import 'dart:async';
 
-import 'package:dive_obslib/dive_obslib.dart';
 import 'package:flutter/foundation.dart';
 
 import 'dive_core.dart';
-import 'dive_plugin.dart';
+
+class DiveCoreSettings {
+  DiveCoreSettings() {}
+
+  void dispose() {}
+
+  void setBool(String name, bool value) {}
+
+  void setString(String name, String value) {}
+}
+
+void exampleUseData() {
+  final data = DiveCoreSettings();
+  data.setBool("is_local_file", true);
+  data.dispose();
+}
 
 // TODO: DiveSettings needs to be implemented
 class DiveSettings {}
@@ -46,18 +60,64 @@ class DiveVideoMix extends DiveTracking with DiveTextureController {
   static Future<DiveVideoMix> create() async {
     final video = DiveVideoMix();
     await video.setupController(video.trackingUUID);
-    if (!await obslib.createVideoMix(video.trackingUUID)) {
-      return null;
-    }
     return video;
   }
+}
+
+enum DiveSourceOutputType {
+  AUDIO,
+  DRAWING,
+  FRAME,
+  TEXT,
+}
+
+class DiveSourceOutputConfiguration {}
+
+class DiveSourceFrameConfiguration extends DiveSourceOutputConfiguration {
+  int width;
+  int height;
+}
+
+/// This object is sent to every downstream process of the source. It is sent
+/// as one item in the stream.
+class DiveDataStreamItem {
+  dynamic data;
+  DiveSourceOutputType type;
+  DiveSourceOutputConfiguration configuration;
+}
+
+class DiveSourceController {
+  // actions
+}
+
+class DiveMicrophoneController extends DiveSourceController {}
+
+class DiveSourceOutput {
+  Stream dataStream;
+  DiveSourceOutputType type;
+}
+
+class DiveAudioSourceOutput extends DiveSourceOutput {}
+
+class DiveFrameSourceOutput extends DiveSourceOutput {
+  DiveSourceFrameConfiguration configuration;
+}
+
+class DiveDrawingSourceOutput extends DiveSourceOutput {}
+
+class DiveTextSourceOutput extends DiveSourceOutput {}
+
+class DiveSourceInternal extends DiveTracking {
+  List<DiveSourceOutput> outputs;
+  List<DiveSourceController> controllers;
 }
 
 class DiveSource extends DiveTracking {
   final DiveInputType inputType;
   final String name;
   final DiveSettings settings;
-  DivePointer pointer;
+  dynamic pointer;
+  DiveSourceInternal _internalSource;
 
   DiveSource({this.inputType, this.name, this.settings});
 
@@ -73,7 +133,6 @@ class DiveSource extends DiveTracking {
 
   @mustCallSuper
   bool dispose() {
-    pointer = null;
     return true;
   }
 }
@@ -101,17 +160,11 @@ class DiveAudioSource extends DiveSource {
     final source = DiveAudioSource(
         name: name, input: input, inputType: DiveInputType.audioSource);
 
-    final data = obslib.createData();
+    final data = DiveCoreSettings();
     final deviceId = source.input == null ? "default" : source.input.id;
     data.setString("device_id", deviceId);
 
     print("DiveAudioSource.create: device_id=$deviceId");
-    source.pointer = obslib.createSource(
-      sourceUuid: source.trackingUUID,
-      inputTypeId: source.inputType.id,
-      name: source.name,
-      settings: data,
-    );
 
     data.dispose();
     return source.pointer == null ? null : source;
@@ -138,18 +191,12 @@ class DiveVideoSource extends DiveSource with DiveTextureController {
   static Future<DiveVideoSource> create(DiveInput videoInput) async {
     final source = DiveVideoSource(name: videoInput.name);
     await source.setupController(source.trackingUUID);
-    source.pointer = obslib.createVideoSource(
-        source.trackingUUID, videoInput.name, videoInput.id);
-    await obslib.addSourceFrameCallback(
-        source.trackingUUID, source.pointer.address);
     return source.pointer == null ? null : source;
   }
 
   /// Release the resources associated with this source.
   @override
   bool dispose() {
-    obslib.removeSourceFrameCallback(trackingUUID, pointer.address);
-    obslib.releaseSource(pointer);
     releaseController();
     if (volumeMeter != null) {
       volumeMeter.dispose();
@@ -167,10 +214,6 @@ class DiveImageSource extends DiveTextureSource {
   static Future<DiveImageSource> create(String file) async {
     final source = DiveImageSource(name: 'my image');
     await source.setupController(source.trackingUUID);
-    source.pointer = obslib.createImageSource(source.trackingUUID, file);
-    // if (!await DivePlugin.createImageSource(source.trackingUUID, file)) {
-    //   return null;
-    // }
     return source.pointer == null ? null : source;
   }
 
@@ -189,6 +232,38 @@ enum DiveSceneItemMovement {
   MOVE_DOWN,
   MOVE_TOP,
   MOVE_BOTTOM,
+}
+
+class DivePointerSceneItem {
+  DivePointerSceneItem(dynamic pointer);
+}
+
+class DivePluginExt {
+  static Future<DiveTransformInfo> getSceneItemInfo(
+      DivePointerSceneItem item) async {
+    return DiveTransformInfo(); //.fromMap(info);
+  }
+
+  static bool setSceneItemInfo(
+      DivePointerSceneItem item, DiveTransformInfo info) {
+    return false;
+  }
+
+  static List<DiveInputType> inputTypes() {
+    return []; // devices.map(DiveInputType.fromJson).toList();
+  }
+
+  static List<DiveInput> inputsFromType(String typeId) {
+    return []; // devices.map(DiveInput.fromMap).toList();
+  }
+
+  static List<DiveInput> audioInputs() {
+    return []; // devices.map(DiveInput.fromMap).toList();
+  }
+
+  static List<DiveInput> videoInputs() {
+    return []; // devices.map(DiveInput.fromMap).toList();
+  }
 }
 
 class DiveSceneItem {
@@ -213,22 +288,16 @@ class DiveSceneItem {
   }
 
   /// Set the Z order of a scene item within the scene.
-  void setOrder(DiveSceneItemMovement movement) {
-    obslib.sceneItemSetOrder(item, movement.index);
-  }
+  void setOrder(DiveSceneItemMovement movement) {}
 
   /// Remove the item from the scene.
-  void remove() {
-    obslib.sceneItemRemove(item);
-  }
+  void remove() {}
 
   /// Make the item visible.
-  set visible(bool visible) {
-    obslib.sceneItemSetVisible(item, visible);
-  }
+  set visible(bool visible) {}
 
   bool get visible {
-    return obslib.sceneItemIsVisible(item);
+    return false;
   }
 
   @override

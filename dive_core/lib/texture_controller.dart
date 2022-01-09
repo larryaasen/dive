@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:dive_obslib/dive_obslib.dart';
 
 /// The state of a [TextureController].
 class DivePreviewValue {
@@ -109,8 +108,7 @@ class TextureController extends ValueNotifier<DivePreviewValue> {
     try {
       _creatingCompleter = Completer<void>();
 
-      final int textureId =
-          await obslib.initializeTexture(trackingUUID: trackingUUID);
+      final int textureId = null;
       _textureId = textureId;
       value = value.copyWith(
         isInitialized: true,
@@ -118,10 +116,6 @@ class TextureController extends ValueNotifier<DivePreviewValue> {
     } on PlatformException catch (e) {
       throw DivePreviewException(e.code, e.message);
     }
-    // _eventSubscription =
-    //     EventChannel('dive.io/texture_preview/previewEvents$_textureId')
-    //         .receiveBroadcastStream()
-    //         .listen(_listener);
     _creatingCompleter.complete();
     return _creatingCompleter.future;
   }
@@ -136,7 +130,6 @@ class TextureController extends ValueNotifier<DivePreviewValue> {
     super.dispose();
     if (_creatingCompleter != null) {
       await _creatingCompleter.future;
-      await obslib.disposeTexture(_textureId);
       await _eventSubscription?.cancel();
     }
   }

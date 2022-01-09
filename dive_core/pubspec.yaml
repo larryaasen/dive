@@ -1,5 +1,5 @@
 name: dive_core
-description: A new flutter plugin project.
+description: The Dive Core plugin.
 version: 0.0.1
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 homepage:
@@ -11,9 +11,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-  dive_obslib:
-    path: ../dive_obslib
 
   # From fluttetcommunity.dev: Simplify Dart Equality Comparisons
   equatable: ^2.0.0

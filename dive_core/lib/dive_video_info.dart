@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:dive_core/dive_core.dart';
-import 'package:dive_obslib/dive_obslib.dart';
 
 enum DiveVideoFormat {
   VIDEO_FORMAT_NONE,
@@ -187,9 +186,14 @@ class DiveVideoInfo {
         scaleType.hashCode;
   }
 
+  /// Gets the current video settings, returns null if no video.
+  static Map<String, dynamic> videoGetInfo() {
+    return null;
+  }
+
   /// Get the video info.
   factory DiveVideoInfo.get() {
-    final videoInfo = obslib.videoGetInfo();
+    final videoInfo = videoGetInfo();
     if (videoInfo == null) return null;
 
     final fps = DiveCoreFPS.values(videoInfo['fps_num'], videoInfo['fps_den']);
@@ -221,16 +225,12 @@ class DiveVideoInfo {
 
   /// Change the frame rate of the output video.
   static Future<bool> changeFrameRate(DiveCoreFPS frameRate) async {
-    final rv = await obslib.changeFrameRate(
-        frameRate.numerator, frameRate.denominator);
-    return rv;
+    return false;
   }
 
   /// Change the base and output resolution of the output video.
   static Future<bool> changeResolution(
       DiveCoreResolution base, DiveCoreResolution output) async {
-    final rv = await obslib.changeResolution(
-        base.width, base.height, output.width, output.height);
-    return rv;
+    return false;
   }
 }

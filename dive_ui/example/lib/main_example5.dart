@@ -112,7 +112,7 @@ class _BodyWidgetState extends State<BodyWidget> {
 
     _elements = widget.elements;
     _diveCore = DiveCore();
-    await _diveCore.setupOBS(DiveCoreResolution.HD);
+    await _diveCore.setupCore(DiveCoreResolution.HD);
 
     DiveScene.create('Scene 1').then((scene) {
       _elements.updateState((state) => state.currentScene = scene);

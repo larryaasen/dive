@@ -1,6 +1,5 @@
 import 'dart:async';
-import 'package:dive_core/dive_core.dart';
-import 'package:dive_obslib/dive_obslib.dart';
+// import 'package:dive_core/dive_core.dart';
 import 'package:riverpod/riverpod.dart';
 
 enum DiveOutputStreamingState { stopped, active, paused, reconnecting }
@@ -54,33 +53,35 @@ class DiveOutput {
 
   /// Sync the media state from the media source to the state provider.
   Future<void> _syncState() async {
-    DiveCore.notifierFor(stateProvider).updateOutputState(
-        DiveOutputStreamingState.values[obslib.outputGetState()]);
+    // DiveCore.notifierFor(stateProvider).updateOutputState(
+    //     DiveOutputStreamingState.values[obslib.outputGetState()]);
   }
 
   bool start() {
-    // Create streaming service
-    bool rv = obslib.streamOutputCreate(
-      serviceUrl: serviceUrl,
-      serviceKey: serviceKey,
-      serviceId: serviceId,
-      outputType: outputType,
-    );
-    if (!rv) return false;
+    // // Create streaming service
+    // bool rv = obslib.streamOutputCreate(
+    //   serviceUrl: serviceUrl,
+    //   serviceKey: serviceKey,
+    //   serviceId: serviceId,
+    //   outputType: outputType,
+    // );
+    // if (!rv) return false;
 
-    // Start streaming.
-    rv = obslib.streamOutputStart();
-    if (rv) {
-      syncState(repeating: true);
-    }
-    return rv;
+    // // Start streaming.
+    // rv = obslib.streamOutputStart();
+    // if (rv) {
+    //   syncState(repeating: true);
+    // }
+    // return rv;
+    return false;
   }
 
   // Always call this method `stop` to ensure the resources are cleaned up.
   bool stop() {
-    obslib.streamOutputStop();
-    obslib.streamOutputRelease();
-    syncState(repeating: true);
-    return true;
+    // obslib.streamOutputStop();
+    // obslib.streamOutputRelease();
+    // syncState(repeating: true);
+    // return true;
+    return false;
   }
 }

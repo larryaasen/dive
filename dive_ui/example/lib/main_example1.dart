@@ -30,7 +30,7 @@ class AppWidget extends StatelessWidget {
         ),
         home: Scaffold(
           appBar: AppBar(
-            title: const Text('Dive Media Player Example'),
+            title: const Text('Dive Media Player Example 1'),
             actions: <Widget>[
               DiveVideoPickerButton(elements: _elements),
             ],
@@ -63,7 +63,7 @@ class _BodyWidgetState extends State<BodyWidget> {
 
     _elements = widget.elements;
     _diveCore = DiveCore();
-    _diveCore.setupOBS(DiveCoreResolution.HD);
+    _diveCore.setupCore(DiveCoreResolution.HD);
 
     DiveScene.create('Scene 1').then((scene) {
       _elements.updateState((state) => state.currentScene = scene);

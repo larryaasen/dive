@@ -1,5 +1,3 @@
-import 'package:dive_obslib/dive_obslib.dart';
-
 class DiveInputType {
   final String id;
   final String name;
@@ -33,6 +31,8 @@ class DiveInputType {
 
 class DiveInputTypes {
   DiveInputTypes();
-  static Future<List<DiveInputType>> all() async =>
-      obslib.inputTypes().map(DiveInputType.fromJson).toList();
+
+  // TODO: Implement this all() method.
+  static Future<List<DiveInputType>> all() async => [];
+  // obslib.inputTypes().map(DiveInputType.fromJson).toList();
 }

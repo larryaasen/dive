@@ -1,6 +1,4 @@
-import 'package:dive_obslib/dive_obslib.dart';
-
-import 'dive_plugin.dart';
+import 'dive_sources.dart';
 
 class DiveInput {
   /// The input name, such as `FaceTime HD Camera (Built-in)`.
@@ -32,8 +30,10 @@ class DiveInput {
 class DiveInputs {
   static List<DiveInput> fromType(String typeId) =>
       DivePluginExt.inputsFromType(typeId);
-  static List<DiveInput> audio() =>
-      obslib.audioInputs().map(DiveInput.fromMap).toList();
-  static List<DiveInput> video() =>
-      obslib.videoInputs().map(DiveInput.fromMap).toList();
+
+  // TODO: Implement this audio() method.
+  static List<DiveInput> audio() => [];
+
+  // TODO: Implement this video() method.
+  static List<DiveInput> video() => [];
 }

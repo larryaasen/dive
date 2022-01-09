@@ -1,8 +1,47 @@
 import 'dart:async';
 import 'dart:core';
 import 'package:dive_core/dive_core.dart';
-import 'package:dive_obslib/dive_obslib.dart';
 import 'package:riverpod/riverpod.dart';
+
+/// Signature of VolumeMeter callback.
+typedef DiveVolumeMeterCallback = void Function(int volumeMeterPointer,
+    List<double> magnitude, List<double> peak, List<double> inputPeak);
+
+// TODO: figure out proper names for audio and volume meters.
+
+// TODO: Implement this volume meter.
+class DiveCoreVolumeMeter {}
+
+// TODO: Implement this audio meter.
+class DiveCoreAudioMeters {
+  /// Audio meter minumum level (dB)
+  static const double audioMinLevel = -60.0;
+
+  /// Create a volume meter.
+  static DiveCoreVolumeMeter volumeMeterCreate() {
+    // final volmeter = _lib.obs_volmeter_create(faderType);
+    return DiveCoreVolumeMeter();
+  }
+
+  /// Destroy a volume meter.
+  static void volumeMeterDestroy(DiveCoreVolumeMeter volumeMeter) {
+    // _lib.obs_volmeter_destroy(volumeMeter.pointer);
+  }
+
+  /// Attache a source to a volume meter.
+  static bool volumeMeterAttachSource(
+      DiveCoreVolumeMeter volumeMeter, dynamic source) {
+    // final rv =
+    //     _lib.obs_volmeter_attach_source(volumeMeter.pointer, source.pointer);
+    // return rv == 1;
+    return false;
+  }
+
+  static int addVolumeMeterCallback(
+      DiveCoreVolumeMeter volumeMeter, DiveVolumeMeterCallback callback) {
+    return 0;
+  }
+}
 
 /// The state model for an audio meter.
 class DiveAudioMeterState {
@@ -109,14 +148,14 @@ class DiveAudioMeterStateNotifier extends StateNotifier<DiveAudioMeterState> {
 /// A class for the audio meter data and processing.
 class DiveAudioMeterSource {
   /// Audio meter minumum level (dB)
-  static const double audioMinLevel = DiveBaseObslib.audioMinLevel;
+  static const double audioMinLevel = DiveCoreAudioMeters.audioMinLevel;
 
   static const initialLevel = -10000.0; // dB
   static const peakHoldDuration = 20.0; //  seconds
   static const inputPeakHoldDuration = 1.0; // seconds
 
-  DivePointer _pointer;
-  DivePointer get pointer => _pointer;
+  DiveCoreVolumeMeter _pointer;
+  DiveCoreVolumeMeter get pointer => _pointer;
   Timer _noSignalTimer;
   Stopwatch _stopwatch;
 
@@ -124,7 +163,7 @@ class DiveAudioMeterSource {
       (ref) => DiveAudioMeterStateNotifier(null));
 
   void dispose() {
-    obslib.volumeMeterDestroy(_pointer);
+    DiveCoreAudioMeters.volumeMeterDestroy(_pointer);
     _pointer = null;
     if (_noSignalTimer != null) {
       _noSignalTimer.cancel();
@@ -132,8 +171,9 @@ class DiveAudioMeterSource {
   }
 
   Future<DiveAudioMeterSource> create({DiveSource source}) async {
-    _pointer = obslib.volumeMeterCreate();
-    final rv = obslib.volumeMeterAttachSource(_pointer, source.pointer);
+    _pointer = DiveCoreAudioMeters.volumeMeterCreate();
+    final rv =
+        DiveCoreAudioMeters.volumeMeterAttachSource(_pointer, source.pointer);
     if (!rv) {
       print("DiveAudioMeterSource.create: volumeMeterAttachSource failed");
       dispose();
@@ -141,7 +181,7 @@ class DiveAudioMeterSource {
     }
 
     int channelCount =
-        await obslib.addVolumeMeterCallback(_pointer.address, _onMeterUpdated);
+        DiveCoreAudioMeters.addVolumeMeterCallback(_pointer, _onMeterUpdated);
 
     DiveCore.notifierFor(stateProvider).updateState(
         _clearDerived(DiveAudioMeterState(channelCount: channelCount)));
@@ -152,7 +192,7 @@ class DiveAudioMeterSource {
   void _onMeterUpdated(int volumeMeterPointer, List<double> magnitude,
       List<double> peak, List<double> inputPeak) {
     assert(magnitude.length == peak.length && peak.length == inputPeak.length);
-    if (_pointer.toInt() != volumeMeterPointer) return;
+    // if (_pointer.toInt() != volumeMeterPointer) return;
 
     // Determine the elapsed time since the last update (seconds)
     double elapsedTime;
@@ -196,10 +236,10 @@ class DiveAudioMeterSource {
             (magnitude[channel] - magnitudeAttacked[channel]) * attack;
         try {
           magnitudeAttacked[channel] = clamp(magnitudeAttacked[channel] + value,
-              DiveBaseObslib.audioMinLevel, 0.0);
+              DiveCoreAudioMeters.audioMinLevel, 0.0);
         } catch (e) {
           print("DiveAudioMeterSource._onMeterUpdated: exception 1: $e\n"
-              "range ${DiveBaseObslib.audioMinLevel}, 0.0\n"
+              "range ${DiveCoreAudioMeters.audioMinLevel}, 0.0\n"
               "values ${magnitudeAttacked[channel]} + value");
         }
       }
@@ -306,6 +346,6 @@ class DiveAudioMeterSource {
 
   @override
   String toString() {
-    return "DiveAudioMeterSource: pointer: ${pointer.address}";
+    return "DiveAudioMeterSource: pointer: ${pointer}";
   }
 }

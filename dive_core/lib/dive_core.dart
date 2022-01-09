@@ -2,7 +2,6 @@ library dive_core;
 
 import 'dart:math';
 
-import 'package:dive_obslib/dive_obslib.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:riverpod/riverpod.dart';
@@ -213,7 +212,7 @@ class DiveCoreAspectRatio {
 
 /// Usage:
 ///   final core = DiveCore();
-///   core.setupOBS(DiveCoreResolution.HD);
+///   core.setupCore(DiveCoreResolution.HD);
 ///
 class DiveCore {
   /// For use with Riverpod
@@ -230,24 +229,13 @@ class DiveCore {
         : null;
   }
 
-  Future<bool> setupOBS(
+  // TODO: Implement this setup core method.
+  Future<bool> setupCore(
     DiveCoreResolution baseResolution, {
     DiveCoreResolution outResolution,
     DiveCoreFPS fps = DiveCoreFPS.fps29_97,
   }) async {
-    bool rv = await obslib.obsStartup();
-    if (rv) {
-      outResolution = outResolution ?? baseResolution;
-      rv = obslib.startObs(
-        baseResolution.width,
-        baseResolution.height,
-        outResolution.width,
-        outResolution.height,
-        fps.numerator,
-        fps.denominator,
-      );
-    }
-    return rv;
+    return false;
   }
 }
 
