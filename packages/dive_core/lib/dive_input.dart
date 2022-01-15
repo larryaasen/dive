@@ -1,0 +1,40 @@
+import 'dive_input_type.dart';
+import 'dive_sources.dart';
+
+/// Represents one specific input, such as FaceTime camera or main microphone.
+class DiveInput {
+  /// The input name, such as `FaceTime HD Camera (Built-in)`.
+  final String name;
+
+  /// The input id, such as `0x8020000005ac8514`.
+  final String id;
+
+  /// The input type, such as `image_source` or `av_capture_input`.
+  final DiveInputType type;
+
+  DiveInput({this.name, this.id, this.type});
+
+  static DiveInput fromMap(dynamic map) {
+    return DiveInput(
+      id: map['id'],
+      name: map['name'],
+      type: map['type'],
+    );
+  }
+
+  @override
+  String toString() {
+    return "DiveInput name: $name, id: $id, type: $type";
+  }
+}
+
+class DiveInputs {
+  static List<DiveInput> fromType(String typeId) =>
+      DivePluginExt.inputsFromType(typeId);
+
+  // TODO: Implement this audio() method.
+  static List<DiveInput> audio() => [];
+
+  // TODO: Implement this video() method.
+  static List<DiveInput> video() => [];
+}

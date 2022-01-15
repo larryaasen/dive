@@ -18,16 +18,14 @@
             "type": "dart"
         },
         {
-            "name": "dive_ui",
-            "cwd": "dive_ui",
+            "name": "DiveCore (main_example_image)",
+            "type": "dart",
             "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "example",
             "cwd": "dive_core/example",
-            "request": "launch",
-            "type": "dart"
+            "program": "lib/main_example_image.dart",
+            "args": [
+                "--no-sound-null-safety"
+            ]
         }
     ]
 }

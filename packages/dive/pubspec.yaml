@@ -1,0 +1,26 @@
+name: dive
+description: The Dive core plugin. A toolkit for video recording and streaming.
+version: 0.1.0-alpha.1
+homepage: https://divesdk.dev
+
+environment:
+  sdk: '>=2.15.0 <3.0.0'
+
+dependencies:
+  # From fluttetcommunity.dev: Simplify Dart Equality Comparisons
+  equatable: ^2.0.3
+
+  http: ^0.13.4
+
+  # From dart.dev: provides internationalization and localization facilities.
+  intl: ^0.17.0
+
+  # From dash-overflow.net: a state-manangement library
+  riverpod: ^0.13.1
+
+  # From: yuli.dev. Simple, fast generation of RFC4122 UUIDs
+  uuid: ^3.0.5
+
+dev_dependencies:
+  lints: ^1.0.0
+  test: ^1.16.0
