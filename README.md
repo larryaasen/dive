@@ -10,16 +10,16 @@ Flutter with native extensions on macOS. It is a group of Flutter packages for
 building media apps. In the future, support for multiple
 platforms will be added.
 
-**dive_core** - a Flutter package that provides video capabilities.
+**dive** - a Dart package that provides video recording and streaming capabilities.
 
 **dive_ui** - A Flutter package containing Widgets for building Flutter apps for
 video recording and streaming.
 
 (REMOVE) **dive_app** - a Flutter app for video recording and streaming.
 
-## dive_core
+## dive
 
-The dive_core package is a Flutter package that provides basic services for
+The dive package is a Dart package that provides basic services for
 video playback, camera devices, audio, and streaming. This package relies on
 other packages for low level platform and device support, but this package
 remains platform indepenent.
@@ -37,9 +37,10 @@ classes. The examples only used a macOS platform folder.
 
 ```
 dive
- |-- dive_app
- |-- dive_core
- |-- dive_ui
+ |-- packages
+     |-- dive_app
+     |-- dive
+     |-- dive_ui
  |-- LICENSE
  |-- README.md
  |-- TODO.md

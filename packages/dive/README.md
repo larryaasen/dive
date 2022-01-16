@@ -1,6 +1,6 @@
 # Dive
 
-# Warning: This is the initial release of alpha code. Not ready for production use.
+# Warning: This is the initial release of alpha code. Not ready for production use. More features to be added soon.
 
 Introducing Dive! A new Flutter toolkit for video recording and streaming.
 A complete set of packages to build the next generation of Flutter media apps.

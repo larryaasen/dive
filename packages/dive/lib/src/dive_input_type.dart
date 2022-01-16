@@ -28,8 +28,12 @@ class DiveInputType {
   static DiveInputType get video =>
       DiveInputType('b11c0e88-0726-4889-8853-d801dc6c2c22', 'Video');
 
-  static DiveInputType fromJson(dynamic json) =>
-      DiveInputType(json['uuid'], json['name']);
+  static DiveInputType? fromMap(Map<String, dynamic> map) {
+    if (map['uuid'] == null || map['name'] == null) {
+      return null;
+    }
+    DiveInputType(map['uuid'], map['name']);
+  }
 
   @override
   String toString() {

@@ -6,25 +6,6 @@ void main() {
 
   tearDown(() {});
 
-  test('DiveInput', () {
-    final input =
-        DiveInput(name: 'test1', id: 'id1', type: DiveInputType.audio);
-    expect(input.name, 'test1');
-    expect(input.id, 'id1');
-    expect(input.type.name, 'Audio');
-    expect(input.type.uuid, 'b3e12428-9406-4d00-995d-a2c09e627d17');
-
-    expect(DiveInput.fromMap({}), null);
-    expect(DiveInput.fromMap({'id': 'id1'}), null);
-    expect(DiveInput.fromMap({'id': 'id1', 'name': 'name1'}), null);
-    final in2 = DiveInput.fromMap(
-        {'id': 'id1', 'name': 'name1', 'type': DiveInputType.audio});
-    expect(in2?.id, 'id1');
-    expect(in2?.name, 'name1');
-    expect(in2?.type.name, 'Audio');
-    expect(in2?.type.uuid, 'b3e12428-9406-4d00-995d-a2c09e627d17');
-  });
-
   test('formatDuration', () {
     final fmt = DiveFormat.formatDuration;
     expect(fmt(Duration(milliseconds: 21)), '0.021');

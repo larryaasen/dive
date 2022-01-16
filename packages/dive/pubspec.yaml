@@ -1,7 +1,7 @@
 name: dive
 description: The Dive core plugin. A toolkit for video recording and streaming.
 version: 0.1.0-alpha.1
-homepage: https://divesdk.dev
+homepage: https://divekit.dev
 
 environment:
   sdk: '>=2.15.0 <3.0.0'
