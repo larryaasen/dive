@@ -4,7 +4,7 @@ import 'dive_core.dart';
 import 'dive_media_source.dart';
 import 'dive_output.dart';
 import 'dive_scene.dart';
-import 'dive_sources.dart';
+import 'dive_source.dart';
 
 class DiveVideoSettingsState {}
 

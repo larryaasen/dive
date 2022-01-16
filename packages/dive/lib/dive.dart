@@ -11,7 +11,7 @@ export 'src/dive_media_source.dart';
 export 'src/dive_output.dart';
 export 'src/dive_properties.dart';
 export 'src/dive_scene.dart';
-export 'src/dive_sources.dart';
+export 'src/dive_source.dart';
 export 'src/dive_system_log.dart';
 export 'src/dive_system_log.dart';
 export 'src/dive_transform_info.dart';

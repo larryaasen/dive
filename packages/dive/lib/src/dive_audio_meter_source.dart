@@ -4,7 +4,7 @@ import 'dart:core';
 import 'package:riverpod/riverpod.dart';
 
 import 'dive_core.dart';
-import 'dive_sources.dart';
+import 'dive_source.dart';
 
 /// Signature of VolumeMeter callback.
 typedef DiveVolumeMeterCallback = void Function(int volumeMeterPointer,

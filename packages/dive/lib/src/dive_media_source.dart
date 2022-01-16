@@ -5,7 +5,8 @@ import 'package:riverpod/riverpod.dart';
 
 import 'dive_input_type.dart';
 import 'dive_properties.dart';
-import 'dive_sources.dart';
+import 'dive_source.dart';
+import 'dive_stream.dart';
 
 /// The media playback states.
 enum DiveMediaState {
@@ -68,7 +69,7 @@ class DiveMediaSource extends DiveSource {
 
   @override
   // TODO: implement frameOutput
-  Stream<DiveDataStreamItem> get frameOutput => throw UnimplementedError();
+  DiveStream get frameOutput => throw UnimplementedError();
 
   /// Create an media source.
   factory DiveMediaSource.create(

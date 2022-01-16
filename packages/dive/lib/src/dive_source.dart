@@ -9,6 +9,7 @@ import 'dive_input_provider.dart';
 import 'dive_input_type.dart';
 import 'dive_properties.dart';
 import 'dive_scene.dart';
+import 'dive_stream.dart';
 import 'dive_system_log.dart';
 import 'dive_tracking.dart';
 import 'dive_transform_info.dart';
@@ -42,17 +43,19 @@ class DiveVideoMix extends DiveTracking {
   }
 }
 
-abstract class DiveSource extends DiveTracking {
+/// A [DiveSource] produces an output stream of frames from a specific input,
+/// such as a FaceTime camera, the main system microphone, or a screen capture.
+abstract class DiveSource extends DiveNamedTracking {
   final DiveInputType inputType;
-  final String? name;
   final DiveCoreProperties? properties;
   dynamic pointer;
   List<DiveSourceOutput> outputs = [];
   List<DiveSourceController> controllers = [];
 
-  Stream<DiveDataStreamItem> get frameOutput;
+  DiveStream get frameOutput;
 
-  DiveSource({required this.inputType, this.name, this.properties});
+  DiveSource({String? name, required this.inputType, this.properties})
+      : super(name: name);
 
   @override
   String toString() {
@@ -98,7 +101,7 @@ class DiveAudioSource extends DiveSource {
 
   @override
   // TODO: implement frameStream
-  Stream<DiveDataStreamItem> get frameOutput => throw UnimplementedError();
+  DiveStream get frameOutput => throw UnimplementedError();
 }
 
 /// A video source supports video cameras and other similar devices.
@@ -127,15 +130,15 @@ class DiveVideoSource extends DiveSource {
 
   @override
   // TODO: implement frameStream
-  Stream<DiveDataStreamItem> get frameOutput => throw UnimplementedError();
+  DiveStream get frameOutput => throw UnimplementedError();
 }
 
 class DiveImageSource extends DiveSource {
+  @override
+  DiveStream get frameOutput => _outputStream();
+
   DiveDataStreamItem? _lastStreamItem;
   bool _loadingLastStreamItem = false;
-
-  @override
-  Stream<DiveDataStreamItem> get frameOutput => _outputStream();
 
   DiveImageSource._({String? name, DiveCoreProperties? properties})
       : super(
@@ -159,7 +162,7 @@ class DiveImageSource extends DiveSource {
           try {
             Uri.parse(url);
           } on Exception catch (e) {
-            DiveLog.message("DiveImageSource: url not valid: $url, ${e}");
+            DiveLog.message("DiveImageSource: url not valid: $url, $e");
           }
         }
       }
@@ -178,7 +181,7 @@ class DiveImageSource extends DiveSource {
     return source;
   }
 
-  Stream<DiveDataStreamItem> _outputStream() {
+  DiveStream _outputStream() {
     StreamController<DiveDataStreamItem>? controller;
 
     Future<void> onListen() async {
@@ -340,30 +343,10 @@ class DiveSceneItem {
   }
 }
 
-enum DiveSourceOutputType {
-  AUDIO,
-  DRAWING,
-  FRAME,
-  TEXT,
-}
-
-class DiveSourceOutputConfiguration {}
-
 class DiveSourceFrameConfiguration extends DiveSourceOutputConfiguration {
   final int width;
   final int height;
   DiveSourceFrameConfiguration(this.width, this.height);
-}
-
-/// This object is sent to every downstream process of the source. It is sent
-/// as one item in the stream.
-class DiveDataStreamItem {
-  final dynamic data;
-  final DiveSourceOutputType? type; // TODO: make this non-optional
-  final DiveSourceOutputConfiguration?
-      configuration; // TODO: make this non-optional
-
-  DiveDataStreamItem({this.data, this.type, this.configuration});
 }
 
 /// A source controller that handles actions sent to a source.

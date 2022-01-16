@@ -17,12 +17,13 @@ class DiveFormat {
     final date = DateTime(0).add(duration);
 
     DateFormat formatter;
-    if (duration.compareTo(Duration(minutes: 1)) < 0)
+    if (duration.compareTo(Duration(minutes: 1)) < 0) {
       formatter = formatterShort;
-    else if (duration.compareTo(Duration(hours: 1)) < 0)
+    } else if (duration.compareTo(Duration(hours: 1)) < 0) {
       formatter = formatterMedium;
-    else
+    } else {
       formatter = formatterLong;
+    }
 
     String formatted = formatter.format(date);
     return formatted;

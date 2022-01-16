@@ -3,8 +3,9 @@ import 'dart:typed_data';
 
 import 'package:riverpod/riverpod.dart';
 
-import 'dive_sources.dart';
+import 'dive_stream.dart';
 import 'dive_system_log.dart';
+import 'dive_tracking.dart';
 
 enum DiveOutputStreamingState { stopped, active, paused, reconnecting }
 
@@ -19,11 +20,51 @@ class DiveOutputStateNotifier extends StateNotifier<DiveOutputStreamingState> {
   }
 }
 
-class DiveOutput {
-  final String? name;
-  final Stream<DiveDataStreamItem>? frameInput;
+/// DiveOutput: A [DiveOutput] producues an output, such as a recording or
+/// livestream, from an input stream of frames.
+abstract class DiveOutput extends DiveNamedTracking {
+  final DiveStream frameInput;
 
-  DiveOutput({this.name, required this.frameInput});
+  DiveOutput({String? name, required this.frameInput}) : super(name: name);
+
+  /// Start the output.
+  bool start();
+}
+
+class DiveOutputLogger extends DiveOutput {
+  DiveOutputLogger({String? name, required DiveStream frameInput})
+      : super(name: name, frameInput: frameInput);
+
+  /// Start the output.
+  @override
+  bool start() {
+    void onData(DiveDataStreamItem item) {
+      Uint8List fileBytes = item.data;
+      DiveLog.message(
+          "DiveOutputLogger.onData: ($name) output bytes count: ${fileBytes.length}");
+    }
+
+    frameInput.listen(onData);
+    DiveLog.message('DiveOutputLogger.start: ($name) started');
+    return false;
+  }
+}
+
+class DiveOutputRecorder extends DiveOutput {
+  DiveOutputRecorder({String? name, required DiveStream frameInput})
+      : super(name: name, frameInput: frameInput);
+
+  /// Start the output.
+  @override
+  bool start() {
+    // TODO: implement start
+    throw UnimplementedError();
+  }
+}
+
+class DiveOutputStreamer extends DiveOutput {
+  DiveOutputStreamer({String? name, required DiveStream frameInput})
+      : super(name: name, frameInput: frameInput);
 
   String serviceUrl = 'rtmp://live-iad05.twitch.tv/app/<your_stream_key>';
   String serviceKey = '<your_stream_key>';
@@ -66,17 +107,17 @@ class DiveOutput {
     //     DiveOutputStreamingState.values[oldlib.outputGetState()]);
   }
 
+  /// Start the output.
+  @override
   bool start() {
-    if (frameInput != null) {
-      void onData(DiveDataStreamItem item) {
-        Uint8List fileBytes = item.data;
-        DiveLog.message(
-            "DiveOutput.onData: ($name) output bytes count: ${fileBytes.length}");
-      }
-
-      frameInput!.listen(onData);
-      DiveLog.message('DiveOutput.start: ($name) started');
+    void onData(DiveDataStreamItem item) {
+      Uint8List fileBytes = item.data;
+      DiveLog.message(
+          "DiveOutputStreamer.onData: ($name) output bytes count: ${fileBytes.length}");
     }
+
+    frameInput.listen(onData);
+    DiveLog.message('DiveOutputStreamer.start: ($name) started');
     // // Create streaming service
     // bool rv = oldlib.streamOutputCreate(
     //   serviceUrl: serviceUrl,

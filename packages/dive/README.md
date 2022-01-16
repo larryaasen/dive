@@ -12,9 +12,24 @@ Flutter with native extensions on macOS. It is a group of Flutter packages for
 building media apps. In the future, support for multiple
 platforms will be added.
 
-## More Details
+## Concepts
 
-This package was created using these commands on 1/14/2022:
+A `DiveSource` produces an output stream of frames from a specific input, such as
+a FaceTime camera, the main system microphone, or a screen capture.
+
+A `DiveEngine` produces an output stream of frames from an input
+stream of frames. There are various types of engines such as a compositing,
+filtering, and audio mixing.
+
+A `DiveOutput` producues an output, such as a recording or livestream,
+from an input stream of frames.
+
+### Typical Routing
+`DiveSource` -> `DiveEngine` -> `DiveOutput`
+
+## Creation Details
+
+This package was created by Larry Aasen on 1/14/2022 using these commands:
 ```
 $ dart --version
 Dart SDK version: 2.16.0-80.1.beta (beta) (Mon Dec 13 11:59:02 2021 +0100) on "macos_x64"

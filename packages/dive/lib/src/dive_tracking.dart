@@ -9,3 +9,9 @@ abstract class DiveTracking {
 
   DiveTracking() : _trackingUUID = DiveUuid.newId();
 }
+
+abstract class DiveNamedTracking {
+  final String? name;
+
+  DiveNamedTracking({this.name});
+}

@@ -29,24 +29,27 @@ void main() {
         "image1",
         DiveCoreProperties.fromMap(
             {DiveImageInputProvider.PROPERTY_FILENAME: filename}));
-    final output1 =
-        DiveOutput(name: 'output1', frameInput: imageSource?.frameOutput);
-    output1.start();
-    Future.delayed(Duration(seconds: 2), () {
-      final output2 =
-          DiveOutput(name: 'output2', frameInput: imageSource?.frameOutput);
-      output2.start();
-
+    expect(imageSource, isNotNull);
+    if (imageSource != null) {
+      final output1 = DiveOutputLogger(
+          name: 'output1', frameInput: imageSource.frameOutput);
+      output1.start();
       Future.delayed(Duration(seconds: 2), () {
-        final output3 =
-            DiveOutput(name: 'output3', frameInput: imageSource?.frameOutput);
-        final output4 =
-            DiveOutput(name: 'output4', frameInput: imageSource?.frameOutput);
-        output3.start();
-        output4.start();
+        final output2 = DiveOutputLogger(
+            name: 'output2', frameInput: imageSource.frameOutput);
+        output2.start();
 
-        Future.delayed(Duration(seconds: 2));
+        Future.delayed(Duration(seconds: 2), () {
+          final output3 = DiveOutputLogger(
+              name: 'output3', frameInput: imageSource.frameOutput);
+          final output4 = DiveOutputLogger(
+              name: 'output4', frameInput: imageSource.frameOutput);
+          output3.start();
+          output4.start();
+
+          Future.delayed(Duration(seconds: 2));
+        });
       });
-    });
+    }
   });
 }

@@ -2,7 +2,7 @@ import 'dive_input.dart';
 import 'dive_input_type.dart';
 import 'dive_media_source.dart';
 import 'dive_properties.dart';
-import 'dive_sources.dart';
+import 'dive_source.dart';
 
 /// Provides a list of sources.
 abstract class DiveInputProvider {
@@ -18,7 +18,7 @@ abstract class DiveInputProvider {
 
 /// The standard image input provider that creates [DiveImageSource].
 class DiveImageInputProvider extends DiveInputProvider {
-  DiveImageInputProvider() {}
+  DiveImageInputProvider();
 
   /// The local filename to be loaded.
   static const String PROPERTY_FILENAME = 'filename';
@@ -35,6 +35,8 @@ class DiveImageInputProvider extends DiveInputProvider {
   List<DiveInputType> inputTypes() => [DiveInputType.image];
 
   /// Create a [DiveSource] for the [input].
+  /// TODO: maybe this should be a static method because this class has
+  /// no instance variables?
   @override
   DiveSource? create(String? name, DiveCoreProperties? properties) {
     return DiveImageSource.create(name: name, properties: properties);
@@ -43,7 +45,7 @@ class DiveImageInputProvider extends DiveInputProvider {
 
 /// The standard media input provider that creates [DiveMediaSource].
 class DiveMediaInputProvider extends DiveInputProvider {
-  DiveMediaInputProvider() {}
+  DiveMediaInputProvider();
 
   /// The local filename to be loaded.
   static const String PROPERTY_FILENAME = 'filename';

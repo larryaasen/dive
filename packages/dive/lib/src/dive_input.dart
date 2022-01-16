@@ -1,7 +1,6 @@
 import 'dive_input_type.dart';
-import 'dive_sources.dart';
+import 'dive_source.dart';
 
-/// Represents one specific input, such as FaceTime camera or main microphone.
 class DiveInput {
   /// The input name, such as `FaceTime HD Camera (Built-in)`.
   final String name;
