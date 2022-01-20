@@ -16,6 +16,9 @@ dependencies:
 
   http: ^0.13.4
 
+  # From Brendan Duncan (https://github.com/brendan-duncan) Decoding/encoding image formats, and image processing.
+  image: ^3.1.1
+
   # From dart.dev: provides internationalization and localization facilities.
   intl: ^0.17.0
 

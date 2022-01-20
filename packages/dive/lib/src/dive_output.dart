@@ -39,12 +39,18 @@ class DiveOutputLogger extends DiveOutput {
   @override
   bool start() {
     void onData(DiveDataStreamItem item) {
-      Uint8List fileBytes = item.data;
-      DiveLog.message(
-          "DiveOutputLogger.onData: ($name) output bytes count: ${fileBytes.length}");
+      if (item.frame is DiveFrame) {
+        final fileBytes = item.frame!.bytes;
+        DiveLog.message(
+            "DiveOutputLogger.onData: ($name) output bytes count: ${fileBytes.length}");
+      }
     }
 
-    frameInput.listen(onData);
+    void onError(error) {
+      DiveLog.message('DiveOutputLogger.onError: ($name) $error');
+    }
+
+    frameInput.listen(onData, onError: onError);
     DiveLog.message('DiveOutputLogger.start: ($name) started');
     return false;
   }
@@ -111,9 +117,11 @@ class DiveOutputStreamer extends DiveOutput {
   @override
   bool start() {
     void onData(DiveDataStreamItem item) {
-      Uint8List fileBytes = item.data;
-      DiveLog.message(
-          "DiveOutputStreamer.onData: ($name) output bytes count: ${fileBytes.length}");
+      if (item.frame is DiveFrame) {
+        final fileBytes = item.frame!.bytes;
+        DiveLog.message(
+            "DiveOutputStreamer.onData: ($name) output bytes count: ${fileBytes.length}");
+      }
     }
 
     frameInput.listen(onData);

@@ -1,41 +1,46 @@
 import 'package:dive/dive.dart';
-import 'package:dive/src/dive_engine.dart';
 
 void main() {
   runDiveApp();
-
   DiveLog.message('Dive Example - Image');
-
   DiveExample().run();
 }
 
 class DiveExample {
   void run() {
-    const filename = '/Users/larry/Downloads/IMG_8384.jpg';
-    final properties = DiveCoreProperties.fromMap(
-        {DiveImageInputProvider.PROPERTY_FILENAME: filename});
-
     final imageProvider = DiveImageInputProvider();
-    final imageSource = imageProvider.create("image1", properties);
+    final imageSource1 = imageProvider.create(
+        "image1",
+        DiveCoreProperties.fromMap({
+          DiveImageInputProvider.PROPERTY_RESOURCE_NAME: 'assets/image1.jpg'
+        }));
 
-    if (imageSource != null) {
+    final imageSource2 = imageProvider.create(
+        "image2",
+        DiveCoreProperties.fromMap({
+          DiveImageInputProvider.PROPERTY_RESOURCE_NAME: 'assets/image1.jpg'
+        }));
+
+    if (imageSource1 != null && imageSource2 != null) {
       final compositing = DiveCompositingEngine(
-          name: 'composite1', frameInput: imageSource.frameOutput);
+          name: 'composite1',
+          frameInput1: imageSource1.frameOutput,
+          frameInput2: imageSource2.frameOutput);
       compositing.start();
 
       final output1 = DiveOutputLogger(
           name: 'output1', frameInput: compositing.frameOutput);
       output1.start();
-      Future.delayed(Duration(seconds: 2), () {
+      Future.delayed(const Duration(seconds: 2), () {
         final output2 = DiveOutputLogger(
-            name: 'output2', frameInput: imageSource.frameOutput);
+            name: 'output2', frameInput: imageSource1.frameOutput);
         output2.start();
 
-        Future.delayed(Duration(seconds: 2), () {
+        Future.delayed(const Duration(seconds: 2), () {
           final output3 = DiveOutputLogger(
-              name: 'output3', frameInput: imageSource.frameOutput);
+              name: 'output3', frameInput: imageSource1.frameOutput);
           final output4 = DiveOutputLogger(
-              name: 'output4', frameInput: imageSource.frameOutput);
+              name: 'output4', frameInput: imageSource1.frameOutput);
           output3.start();
           output4.start();
 

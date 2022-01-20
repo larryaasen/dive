@@ -1,3 +1,4 @@
+import 'dive_image_source.dart';
 import 'dive_input.dart';
 import 'dive_input_type.dart';
 import 'dive_media_source.dart';
@@ -22,6 +23,9 @@ class DiveImageInputProvider extends DiveInputProvider {
 
   /// The local filename to be loaded.
   static const String PROPERTY_FILENAME = 'filename';
+
+  /// The resource name to be loaded.
+  static const String PROPERTY_RESOURCE_NAME = 'resource_name';
 
   /// The remote URL to be loaded.
   static const String PROPERTY_URL = 'url';

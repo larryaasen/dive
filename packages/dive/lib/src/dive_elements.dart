@@ -1,6 +1,7 @@
 import 'package:riverpod/riverpod.dart';
 
 import 'dive_core.dart';
+import 'dive_image_source.dart';
 import 'dive_media_source.dart';
 import 'dive_output.dart';
 import 'dive_scene.dart';

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
 import 'package:riverpod/riverpod.dart';
 
 /*
@@ -20,6 +21,9 @@ import 'package:riverpod/riverpod.dart';
 
 /// Run a Dive app.
 void runDiveApp() {
+  // We need the binding to be initialized before calling runApp
+  WidgetsFlutterBinding.ensureInitialized();
+
   // Configure globally for all Equatable instances via EquatableConfig
   EquatableConfig.stringify = true;
 

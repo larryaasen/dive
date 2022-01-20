@@ -1,11 +1,7 @@
 import 'dart:async';
-import 'dart:io';
-
-import 'package:http/http.dart' as http;
 
 import 'dive_audio_meter_source.dart';
 import 'dive_input.dart';
-import 'dive_input_provider.dart';
 import 'dive_input_type.dart';
 import 'dive_properties.dart';
 import 'dive_scene.dart';
@@ -13,26 +9,6 @@ import 'dive_stream.dart';
 import 'dive_system_log.dart';
 import 'dive_tracking.dart';
 import 'dive_transform_info.dart';
-
-// TODO: move this or remove this annotation
-class _MustCallSuper {
-  const _MustCallSuper();
-}
-
-/// Used to annotate an instance method `m`. Indicates that every invocation of
-/// a method that overrides `m` must also invoke `m`. In addition, every method
-/// that overrides `m` is implicitly annotated with this same annotation.
-///
-/// Note that private methods with this annotation cannot be validly overridden
-/// outside of the library that defines the annotated method.
-///
-/// Tools, such as the analyzer, can provide feedback if
-///
-/// * the annotation is associated with anything other than an instance method,
-///   or
-/// * a method that overrides a method that has this annotation can return
-///   without invoking the overridden method.
-const _MustCallSuper mustCallSuper = _MustCallSuper();
 
 class DiveVideoMix extends DiveTracking {
   DiveVideoMix();
@@ -62,7 +38,6 @@ abstract class DiveSource extends DiveNamedTracking {
     return "$runtimeType($hashCode, $name)";
   }
 
-  @mustCallSuper
   bool dispose() {
     return true;
   }
@@ -83,7 +58,7 @@ class DiveAudioSource extends DiveSource {
     final deviceId = source.input == null ? "default" : source.input?.id;
     properties.setString("device_id", deviceId!);
 
-    DiveLog.message("DiveAudioSource.create: device_id=$deviceId");
+    DiveLog.message("DiveAudioSource.create: ($name) device_id=$deviceId");
 
     return source;
   }
@@ -131,134 +106,6 @@ class DiveVideoSource extends DiveSource {
   @override
   // TODO: implement frameStream
   DiveStream get frameOutput => throw UnimplementedError();
-}
-
-class DiveImageSource extends DiveSource {
-  @override
-  DiveStream get frameOutput => _outputStream();
-
-  DiveDataStreamItem? _lastStreamItem;
-  bool _loadingLastStreamItem = false;
-
-  DiveImageSource._({String? name, DiveCoreProperties? properties})
-      : super(
-            inputType: DiveInputType.image,
-            name: name,
-            properties: properties) {
-    if (properties != null) {
-      final filename =
-          properties.getString(DiveImageInputProvider.PROPERTY_FILENAME);
-      if (filename != null && filename.isNotEmpty) {
-        final file = File(filename);
-        file.exists().then((exists) {
-          if (!exists) {
-            DiveLog.message(
-                "DiveImageSource: filename does not exist: $filename");
-          }
-        });
-      } else {
-        final url = properties.getString(DiveImageInputProvider.PROPERTY_URL);
-        if (url != null && url.isNotEmpty) {
-          try {
-            Uri.parse(url);
-          } on Exception catch (e) {
-            DiveLog.message("DiveImageSource: url not valid: $url, $e");
-          }
-        }
-      }
-    }
-
-    // // Setup output stream
-    // final output = DiveSourceOutput();
-    // output.dataStream = outputStream();
-    // outputs.add(output);
-  }
-
-  /// Create an image source.
-  factory DiveImageSource.create(
-      {String? name, DiveCoreProperties? properties}) {
-    final source = DiveImageSource._(name: name, properties: properties);
-    return source;
-  }
-
-  DiveStream _outputStream() {
-    StreamController<DiveDataStreamItem>? controller;
-
-    Future<void> onListen() async {
-      DiveLog.message("DiveImageSource: outputStream: onListen");
-      if (_lastStreamItem != null) {
-        controller?.add(_lastStreamItem!);
-        return;
-      }
-      if (properties != null && !_loadingLastStreamItem) {
-        final filename =
-            properties!.getString(DiveImageInputProvider.PROPERTY_FILENAME);
-        if (filename != null && filename.isNotEmpty) {
-          final file = File(filename);
-          _loadingLastStreamItem = true;
-          file.exists().then((exists) {
-            if (exists && controller != null) {
-              _readFile(file, controller);
-            } else {
-              _loadingLastStreamItem = false;
-              DiveLog.message(
-                  "DiveImageSource: filename does not exist: $filename");
-            }
-          });
-        } else {
-          final url =
-              properties!.getString(DiveImageInputProvider.PROPERTY_URL);
-          if (url != null && url.isNotEmpty && controller != null) {
-            _readNetworkFile(url, controller);
-          }
-        }
-      }
-    }
-
-    controller = StreamController<DiveDataStreamItem>(onListen: onListen);
-
-    return controller.stream;
-  }
-
-  void _readFile(File file, StreamController<DiveDataStreamItem> controller) {
-    _loadingLastStreamItem = true;
-    file.readAsBytes().then((fileBytes) {
-      _loadingLastStreamItem = false;
-      if (fileBytes.isNotEmpty) {
-        DiveLog.message("DiveImageSource: file loaded: $file");
-        _lastStreamItem = DiveDataStreamItem(data: fileBytes);
-        controller.add(_lastStreamItem!);
-      }
-    });
-  }
-
-  void _readNetworkFile(
-      String url, StreamController<DiveDataStreamItem> controller) {
-    Uri uri;
-    try {
-      uri = Uri.parse(url);
-    } on Exception {
-      _loadingLastStreamItem = false;
-      DiveLog.message("DiveImageSource: file does not exist: $url");
-      return;
-    }
-    _loadingLastStreamItem = true;
-    http.readBytes(uri).then((fileBytes) {
-      _loadingLastStreamItem = false;
-      if (fileBytes.isNotEmpty) {
-        DiveLog.message("DiveImageSource: file loaded: $url");
-        _lastStreamItem = DiveDataStreamItem(data: fileBytes);
-        controller.add(_lastStreamItem!);
-      }
-    });
-  }
-
-  /// Release the resources associated with this source.
-  @override
-  bool dispose() {
-    super.dispose();
-    return true;
-  }
 }
 
 /// Used for changing the order of items (for example, filters in a source,
