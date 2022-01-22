@@ -16,5 +16,6 @@ export 'src/dive_source.dart';
 export 'src/dive_stream.dart';
 export 'src/dive_system_log.dart';
 export 'src/dive_system_log.dart';
+export 'src/dive_text_clock_source.dart';
 export 'src/dive_transform_info.dart';
 export 'src/dive_uuid.dart';

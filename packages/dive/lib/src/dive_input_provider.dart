@@ -4,6 +4,7 @@ import 'dive_input_type.dart';
 import 'dive_media_source.dart';
 import 'dive_properties.dart';
 import 'dive_source.dart';
+import 'dive_text_clock_source.dart';
 
 /// Provides a list of sources.
 abstract class DiveInputProvider {
@@ -15,6 +16,23 @@ abstract class DiveInputProvider {
 
   /// Provides a list of input types.
   List<DiveInputType> inputTypes();
+}
+
+/// The standard image input provider that creates [DiveImageSource].
+class DiveTextInputProvider extends DiveInputProvider {
+  @override
+  List<DiveInputType> inputTypes() => [DiveInputType.text];
+
+  @override
+  List<DiveInput> inputs() => [];
+
+  /// Create a [DiveSource] for the [input].
+  /// TODO: maybe this should be a static method because this class has
+  /// no instance variables?
+  @override
+  DiveSource? create(String? name, DiveCoreProperties? properties) {
+    return DiveTextClockSource.create(name: name, properties: properties);
+  }
 }
 
 /// The standard image input provider that creates [DiveImageSource].

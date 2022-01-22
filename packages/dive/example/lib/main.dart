@@ -38,6 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    super.initState();
     initialize();
   }
 
@@ -52,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final imageSource2 = imageProvider.create(
         "image2",
         DiveCoreProperties.fromMap({
-          DiveImageInputProvider.PROPERTY_RESOURCE_NAME: 'assets/image1.jpg'
+          DiveImageInputProvider.PROPERTY_RESOURCE_NAME: 'assets/image2.jpg'
         }));
 
     if (imageSource1 != null && imageSource2 != null) {
@@ -66,10 +67,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
       imageSource1.frameOutput.listen(onDataImage);
 
+      final textSource = DiveTextClockSource.create(
+          name: 'clock1',
+          properties: DiveCoreProperties.fromMap(
+              {DiveTextClockSource.propertyTimerResolution: 1000}));
+
       _compositingEngine = DiveCompositingEngine(
           name: 'composite1',
           frameInput1: imageSource1.frameOutput,
-          frameInput2: imageSource2.frameOutput);
+          frameInput2: imageSource2.frameOutput,
+          textInput1: textSource.frameOutput);
 
       onData(DiveDataStreamItem item) {
         if (item.frame is DiveFrame) {
@@ -86,6 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // DiveLog.message("$_mixFrame");
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -94,11 +102,13 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Expanded(child: Image.asset('assets/image1.jpg')),
+            // Expanded(child: Image.asset('assets/image1.jpg')),
             if (_imageFrame != null)
               Expanded(child: Image(image: _imageFrame!.memoryImage)),
             if (_mixFrame != null)
-              Expanded(child: Image(image: _mixFrame!.memoryImage)),
+              // When creating the Image widget, use gaplessPlayback to avoid the
+              // flickering.
+              Image(image: _mixFrame!.memoryImage, gaplessPlayback: true),
           ],
         ),
       ),

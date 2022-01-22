@@ -13,6 +13,17 @@ class DiveLog {
     _output(message, group);
   }
 
+  /// Determine the time it takes for an action to execute.
+  static T timeIt<T>(String title, T Function() action,
+      {bool enableTiming = true}) {
+    if (!enableTiming) return action();
+    final stopwatch = Stopwatch()..start();
+    final result = action();
+    final elapsed = stopwatch.elapsed;
+    message('$title elapsed: ${elapsed.inMilliseconds}ms');
+    return result;
+  }
+
   static void _output(String message, String group) {
     final groupMsg = group.isEmpty ? '' : " [$group]";
     final timeMsg = DiveFormat.formatSystemLog;

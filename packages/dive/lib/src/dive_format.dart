@@ -5,7 +5,7 @@ class DiveFormat {
   static final formatterMedium = DateFormat('mm:ss.S');
   static final formatterShort = DateFormat('s.S');
   static final formatterLog = DateFormat('y/M/d H:mm:ss');
-  static final formatterLogMilli = DateFormat('y/M/d H:mm:ss.S');
+  static final formatterLogMilli = DateFormat('y/M/d H:mm:ss.SSS');
 
   /// For example, for 42 milliseconds
   ///

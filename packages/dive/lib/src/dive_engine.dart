@@ -24,10 +24,13 @@ abstract class DiveEngine extends DiveNamedTracking {
 class DiveCompositingEngine extends DiveEngine {
   final DiveStream frameInput1;
   final DiveStream frameInput2;
+  final DiveStream? textInput1;
+
   DiveCompositingEngine(
       {String? name,
       required this.frameInput1,
       required this.frameInput2,
+      this.textInput1,
       DiveCoreProperties? properties})
       : super(name: name, properties: properties);
 
@@ -38,77 +41,114 @@ class DiveCompositingEngine extends DiveEngine {
 
   DiveDataStreamItem? _lastStreamItem1;
   DiveDataStreamItem? _lastStreamItem2;
+  DiveDataStreamItem? _lastTextItem;
 
   /// Start the engine.
   @override
   bool start() {
-    void onData(DiveDataStreamItem item) {
+    onData1(DiveDataStreamItem item) {
       if (item.frame is DiveFrame) {
         Uint8List fileBytes = item.frame!.bytes;
         DiveLog.message(
-            "DiveCompositingEngine.onData: ($name) input bytes count: ${fileBytes.length}");
+            "DiveCompositingEngine.onData1: ($name) input bytes count: ${fileBytes.length}");
 
         _lastStreamItem1 ??= item;
-        _lastStreamItem2 ??= item;
+      }
+      _mixAndOutput();
+    }
 
-        final newItem = _mixItems();
-        if (newItem != null) {
-          _outputController.add(newItem);
-          DiveLog.message("DiveCompositingEngine.onData: ($name) added frame");
+    onData2(DiveDataStreamItem item) {
+      if (item.frame is DiveFrame) {
+        Uint8List fileBytes = item.frame!.bytes;
+        DiveLog.message(
+            "DiveCompositingEngine.onData2: ($name) input bytes count: ${fileBytes.length}");
+
+        _lastStreamItem2 ??= item;
+      }
+      _mixAndOutput();
+    }
+
+    int frameCount = 0;
+    Stopwatch? stopwatch;
+    onData3(DiveDataStreamItem item) {
+      if (item.type == DiveSourceOutputType.text && item.text != null) {
+        _lastTextItem = item;
+        frameCount++;
+        if (stopwatch == null) {
+          stopwatch = Stopwatch()..start();
+        } else {
+          if (stopwatch!.elapsedMilliseconds > 1000) {
+            DiveLog.message("text fps: $frameCount");
+            stopwatch = Stopwatch()..start();
+            frameCount = 0;
+          }
         }
       }
+      _mixAndOutput();
     }
 
     void onError(error) {
       DiveLog.message('DiveCompositingEngine.onError: $error');
     }
 
-    frameInput1.listen(onData, onError: onError);
-    frameInput2.listen(onData, onError: onError);
+    frameInput1.listen(onData1, onError: onError);
+    frameInput2.listen(onData2, onError: onError);
+    textInput1?.listen(onData3, onError: onError);
 
     DiveLog.message('DiveCompositingEngine.start: ($name) started');
     return true;
   }
 
-  DiveDataStreamItem? _mixItems() {
-    int width = 1280;
-    int height = 720;
-    if (_lastStreamItem1 == null && _lastStreamItem2 == null) {
-      return null;
-    }
-    if (_lastStreamItem1 != null && _lastStreamItem2 != null) {
-      if (_lastStreamItem1?.frame is DiveFrame &&
-          _lastStreamItem2?.frame is DiveFrame) {
-        final newImage = _mixData(_lastStreamItem1!.frame!.image,
-            _lastStreamItem2!.frame!.image, width, height);
-        return DiveDataStreamItem(
-            frame: DiveFrame(
-          bytes: Uint8List.fromList(imglib.encodePng(newImage)),
-          width: newImage.width,
-          height: newImage.height,
-        ));
-      }
-    } else {
-      if (_lastStreamItem1 != null) return _lastStreamItem1;
-      if (_lastStreamItem2 != null) return _lastStreamItem2;
+  void _mixAndOutput() {
+    final newItem = _mixItems();
+    if (newItem != null) {
+      _outputController.add(newItem);
+      // DiveLog.message("DiveCompositingEngine.onData: ($name) added frame");
     }
   }
 
-  imglib.Image _mixData(
-      imglib.Image frame1, imglib.Image frame2, int width, int height) {
-    imglib.Image baseImage = _createBaseImage(width, height);
+  DiveDataStreamItem? _mixItems() {
+    int width = 1280;
+    int height = 720;
+    imglib.Image baseImage = DiveLog.timeIt('createBaseImage', () {
+      return _createBaseImage(width, height);
+    });
 
-    try {
-      frame1 = imglib.copyResize(frame1, width: 500);
-      frame2 = imglib.copyResize(frame2, width: 600);
-
-      baseImage = imglib.copyInto(baseImage, frame1, dstX: 10, dstY: 10);
-      baseImage = imglib.copyInto(baseImage, frame2, dstX: 520, dstY: 10);
-    } catch (e) {
-      DiveLog.error('DiveEngine error: $e');
-      return frame1;
+    if (_lastStreamItem1 != null && _lastStreamItem1?.frame is DiveFrame) {
+      final frame = DiveLog.timeIt('copyResize1', () {
+        return imglib.copyResize(_lastStreamItem1!.frame!.image, width: 500);
+      });
+      baseImage = DiveLog.timeIt('copyInto1', () {
+        return imglib.copyInto(baseImage, frame, dstX: 10, dstY: 10);
+      });
     }
-    return baseImage;
+    if (_lastStreamItem2 != null && _lastStreamItem2?.frame is DiveFrame) {
+      final frame = DiveLog.timeIt('copyResize2', () {
+        return imglib.copyResize(_lastStreamItem2!.frame!.image, width: 600);
+      });
+      baseImage = DiveLog.timeIt('copyInto2', () {
+        return imglib.copyInto(baseImage, frame, dstX: 520, dstY: 10);
+      });
+    }
+
+    if (_lastTextItem != null) {
+      final text = _lastTextItem!.text;
+      baseImage = DiveLog.timeIt('drawString', () {
+        return imglib.drawString(
+            baseImage, imglib.arial_48, 100, 600, text ?? '',
+            color: colorBlue);
+      });
+    }
+
+    final bytes = DiveLog.timeIt('encodePng', () {
+      return Uint8List.fromList(imglib.encodePng(baseImage));
+    });
+    return DiveDataStreamItem(
+        frame: DiveFrame(
+      bytes: bytes,
+      width: baseImage.width,
+      height: baseImage.height,
+    ));
   }
 
   imglib.Image _createBaseImage(int width, int height) {
@@ -118,4 +158,6 @@ class DiveCompositingEngine extends DiveEngine {
   }
 
   static int get colorRed => imglib.getColor(255, 0, 0);
+  static int get colorGreen => imglib.getColor(0, 255, 0);
+  static int get colorBlue => imglib.getColor(0, 0, 255);
 }

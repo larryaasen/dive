@@ -27,6 +27,17 @@ from an input stream of frames.
 ### Typical Routing
 `DiveSource` -> `DiveEngine` -> `DiveOutput`
 
+### Example Routings
+`DiveSource` -> `DiveEngine` -> UI widget
+
+`DiveSource`-1:
+`DiveSource`-2:
+`DiveSource`-3:
+`DiveSource`-4:
+ -> `DiveScene` -> `DiveEngine`
+
+
+
 ## Creation Details
 
 This package was created by Larry Aasen on 1/14/2022 using these commands:

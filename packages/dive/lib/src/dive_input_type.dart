@@ -1,7 +1,3 @@
-// abstract class DiveInputTypeKey {
-//   static const IMAGE = "image";
-// }
-
 /// The Dive input type definition. There are a few default types inluding
 /// [DiveInputType.audio], [DiveInputType.image], [DiveInputType.media], and
 /// [DiveInputType.video]. You can also create new custom types to add types
@@ -24,7 +20,11 @@ class DiveInputType {
   static DiveInputType get media =>
       DiveInputType('c8732afd-557a-4dde-80e0-797734cb5644', 'Media');
 
-  /// The default media input type.
+  /// The default text input type.
+  static DiveInputType get text =>
+      DiveInputType('e2621522-67a9-4747-becb-01e62b2920c6', 'Text');
+
+  /// The default video input type.
   static DiveInputType get video =>
       DiveInputType('b11c0e88-0726-4889-8853-d801dc6c2c22', 'Video');
 
@@ -32,7 +32,7 @@ class DiveInputType {
     if (map['uuid'] == null || map['name'] == null) {
       return null;
     }
-    DiveInputType(map['uuid'], map['name']);
+    return DiveInputType(map['uuid'], map['name']);
   }
 
   @override

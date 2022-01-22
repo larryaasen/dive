@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/painting.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image/image.dart' as imglib;
 
 /// A frame of video.
@@ -14,11 +15,14 @@ class DiveFrame {
   /// The frame height.
   final int height;
 
+  final MemoryImage _cacheImage;
+
   /// Creates a [MemoryImage] from the [frame] bytes.
-  MemoryImage get memoryImage => MemoryImage(bytes);
+  MemoryImage get memoryImage => _cacheImage;
 
   /// Creates a [DiveFrame].
-  DiveFrame({required this.bytes, required this.width, required this.height});
+  DiveFrame({required this.bytes, required this.width, required this.height})
+      : _cacheImage = MemoryImage(bytes);
 
   /// Creates a [DiveFrame] from image bytes.
   factory DiveFrame.fromBytes(Uint8List bytes) {
@@ -62,6 +66,8 @@ class DiveDataStreamItem {
   /// A frame of video. Used only when [type] is [DiveSourceOutputType.frame].
   final DiveFrame? frame;
 
+  final String? text;
+
   // TODO: make this non-optional
   final DiveSourceOutputType type;
 
@@ -69,5 +75,8 @@ class DiveDataStreamItem {
   final DiveSourceOutputConfiguration? configuration;
 
   DiveDataStreamItem(
-      {this.frame, this.type = DiveSourceOutputType.frame, this.configuration});
+      {this.frame,
+      this.text,
+      this.type = DiveSourceOutputType.frame,
+      this.configuration});
 }

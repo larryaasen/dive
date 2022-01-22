@@ -24,6 +24,7 @@ class DiveImageSource extends DiveSource {
             inputType: DiveInputType.image,
             name: name,
             properties: properties) {
+    // Verify the properties
     if (properties != null) {
       final resourceName =
           properties.getString(DiveImageInputProvider.PROPERTY_RESOURCE_NAME);
@@ -52,11 +53,7 @@ class DiveImageSource extends DiveSource {
         }
       }
     }
-
-    // // Setup output stream
-    // final output = DiveSourceOutput();
-    // output.dataStream = outputStream();
-    // outputs.add(output);
+    _loadData();
   }
 
   /// Create an image source.
@@ -65,6 +62,8 @@ class DiveImageSource extends DiveSource {
     final source = DiveImageSource._(name: name, properties: properties);
     return source;
   }
+
+  final _loadingController = StreamController<DiveDataStreamItem>.broadcast();
 
   DiveStream _outputStream() {
     StreamController<DiveDataStreamItem>? controller;
@@ -75,42 +74,47 @@ class DiveImageSource extends DiveSource {
         controller?.add(_lastStreamItem!);
         return;
       }
-      if (properties != null && !_loadingLastStreamItem) {
-        final resourceName = properties!
-            .getString(DiveImageInputProvider.PROPERTY_RESOURCE_NAME);
-        if (resourceName != null &&
-            resourceName.isNotEmpty &&
-            controller != null) {
-          _loadResourceFile(resourceName, controller);
-        } else {
-          final filename =
-              properties!.getString(DiveImageInputProvider.PROPERTY_FILENAME);
-          if (filename != null && filename.isNotEmpty) {
-            final file = File(filename);
-            _loadingLastStreamItem = true;
-            file.exists().then((exists) {
-              if (exists && controller != null) {
-                _readFile(file, controller);
-              } else {
-                _loadingLastStreamItem = false;
-                DiveLog.message(
-                    "DiveImageSource: ($name) filename does not exist: $filename");
-              }
-            });
-          } else {
-            final url =
-                properties!.getString(DiveImageInputProvider.PROPERTY_URL);
-            if (url != null && url.isNotEmpty && controller != null) {
-              _readNetworkFile(url, controller);
+
+      // Since we have to wait for the data to load, wait on this stream.
+      _loadingController.stream.listen((DiveDataStreamItem item) {
+        controller?.add(item);
+      });
+    }
+
+    controller = StreamController<DiveDataStreamItem>(onListen: onListen);
+    return controller.stream;
+  }
+
+  void _loadData() {
+    if (properties != null && !_loadingLastStreamItem) {
+      final resourceName =
+          properties!.getString(DiveImageInputProvider.PROPERTY_RESOURCE_NAME);
+      if (resourceName != null && resourceName.isNotEmpty) {
+        _loadResourceFile(resourceName, _loadingController);
+      } else {
+        final filename =
+            properties!.getString(DiveImageInputProvider.PROPERTY_FILENAME);
+        if (filename != null && filename.isNotEmpty) {
+          final file = File(filename);
+          _loadingLastStreamItem = true;
+          file.exists().then((exists) {
+            if (exists) {
+              _readFile(file, _loadingController);
+            } else {
+              _loadingLastStreamItem = false;
+              DiveLog.message(
+                  "DiveImageSource: ($name) filename does not exist: $filename");
             }
+          });
+        } else {
+          final url =
+              properties!.getString(DiveImageInputProvider.PROPERTY_URL);
+          if (url != null && url.isNotEmpty) {
+            _readNetworkFile(url, _loadingController);
           }
         }
       }
     }
-
-    controller = StreamController<DiveDataStreamItem>(onListen: onListen);
-
-    return controller.stream;
   }
 
   void _loadResourceFile(

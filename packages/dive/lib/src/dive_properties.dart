@@ -22,6 +22,14 @@ class DiveCoreProperties {
     _properties[name] = value;
   }
 
+  /// Sets a [int] property with the [name] to the [value].
+  void setInt(String name, int value) {
+    if (name.isEmpty) {
+      throw ArgumentError('name must not be empty', 'name');
+    }
+    _properties[name] = value;
+  }
+
   /// Sets a [String] property with the [name] to the [value].
   /// The [value] can be null or empty.
   void setString(String name, String value) {
@@ -33,6 +41,9 @@ class DiveCoreProperties {
 
   /// Gets a [bool] property value for the [name].
   bool? getBool(String name) => _properties[name];
+
+  /// Gets a [int] property value for the [name].
+  int? getInt(String name) => _properties[name];
 
   /// Gets a [String] property value for the [name].
   String? getString(String name) => _properties[name];
@@ -51,6 +62,8 @@ class DiveCoreProperties {
       final value = map[key];
       if (value is bool) {
         properties.setBool(key, value);
+      } else if (value is int) {
+        properties.setInt(key, value);
       } else if (value is String) {
         properties.setString(key, value);
       }
