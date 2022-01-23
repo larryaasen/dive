@@ -67,10 +67,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
       imageSource1.frameOutput.listen(onDataImage);
 
+      const int timerResolution = 1000;
       final textSource = DiveTextClockSource.create(
           name: 'clock1',
           properties: DiveCoreProperties.fromMap(
-              {DiveTextClockSource.propertyTimerResolution: 1000}));
+              {DiveTextClockSource.propertyTimerResolution: timerResolution}));
 
       _compositingEngine = DiveCompositingEngine(
           name: 'composite1',
@@ -105,10 +106,12 @@ class _MyHomePageState extends State<MyHomePage> {
             // Expanded(child: Image.asset('assets/image1.jpg')),
             if (_imageFrame != null)
               Expanded(child: Image(image: _imageFrame!.memoryImage)),
-            if (_mixFrame != null)
-              // When creating the Image widget, use gaplessPlayback to avoid the
-              // flickering.
-              Image(image: _mixFrame!.memoryImage, gaplessPlayback: true),
+            if (_mixFrame != null && _mixFrame!.uiImage != null)
+              RawImage(image: _mixFrame!.uiImage!),
+            // When creating the Image widget, use gaplessPlayback to avoid the
+            // flickering.
+            // if (_mixFrame != null)
+            //   Image(image: _mixFrame!.memoryImage, gaplessPlayback: true),
           ],
         ),
       ),

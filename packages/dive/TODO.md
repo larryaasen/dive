@@ -34,6 +34,14 @@ flutter: 2022/1/21 18:24:27.553 encodePng elapsed: 93ms
 
 The best FPS with just text streams and no images: 920-960 FPS
 
+Do I need to use a Texture widget for increased performance, or can
+the Image widget handle 30 FPS?
+* Based on an experiment it seems like it can handle 1280/720 frames at 31 FPS.
+
+### FPS Using Flutter's dart:ui Image and Canvas
+I can make a frame with two images and a timer text in about 54ms in Run, and 60 in debug.
+Could get that lower with some easy optimization.
+- it takes about 11ms to call: picture.toImage()
 
 ## Layers
 
@@ -44,9 +52,15 @@ FFI layer for an engine:
 sources in the scene. It needs a scene, sources, and properties.
 -the problem with large sized FFI or plugin frameworks is the duplication of all
 code. The Dart layer and FFI layer each needs their own Scene class.
+
 -A compositing engine processes items in the stream like this:
 -source 0: resize source and draw source.
 -source 1: resize source and draw source.
 -source 2: resize source and draw source.
 -maybe the FFI layer only knows basic operations and the Dart layer coordinates
 the drawing sequence.
+
+## Next steps
+I need to do one of these two steps:
+* Build a native FFI plugin to process all of the frames.
+* Get the original obslib plugin to work.

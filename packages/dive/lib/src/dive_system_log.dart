@@ -24,6 +24,17 @@ class DiveLog {
     return result;
   }
 
+  /// Determine the time it takes for an action to execute.
+  static Future<T> timeItAsync<T>(String title, Future<T> Function() action,
+      {bool enableTiming = true}) async {
+    if (!enableTiming) return action();
+    final stopwatch = Stopwatch()..start();
+    final result = await action();
+    final elapsed = stopwatch.elapsed;
+    message('$title elapsed: ${elapsed.inMilliseconds}ms');
+    return result;
+  }
+
   static void _output(String message, String group) {
     final groupMsg = group.isEmpty ? '' : " [$group]";
     final timeMsg = DiveFormat.formatSystemLog;

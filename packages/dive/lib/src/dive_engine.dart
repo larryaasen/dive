@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
+import 'dart:ui' as ui;
+import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
 
 import 'dive_properties.dart';
@@ -46,6 +48,9 @@ class DiveCompositingEngine extends DiveEngine {
   /// Start the engine.
   @override
   bool start() {
+    int width = 1280;
+    int height = 720;
+
     onData1(DiveDataStreamItem item) {
       if (item.frame is DiveFrame) {
         Uint8List fileBytes = item.frame!.bytes;
@@ -54,7 +59,7 @@ class DiveCompositingEngine extends DiveEngine {
 
         _lastStreamItem1 ??= item;
       }
-      _mixAndOutput();
+      _mixAndOutput(width, height);
     }
 
     onData2(DiveDataStreamItem item) {
@@ -65,7 +70,7 @@ class DiveCompositingEngine extends DiveEngine {
 
         _lastStreamItem2 ??= item;
       }
-      _mixAndOutput();
+      _mixAndOutput(width, height);
     }
 
     int frameCount = 0;
@@ -84,7 +89,8 @@ class DiveCompositingEngine extends DiveEngine {
           }
         }
       }
-      _mixAndOutput();
+
+      _mixAndOutput(width, height);
     }
 
     void onError(error) {
@@ -99,17 +105,118 @@ class DiveCompositingEngine extends DiveEngine {
     return true;
   }
 
-  void _mixAndOutput() {
-    final newItem = _mixItems();
-    if (newItem != null) {
-      _outputController.add(newItem);
-      // DiveLog.message("DiveCompositingEngine.onData: ($name) added frame");
-    }
+  void _mixAndOutput(int width, int height) async {
+    final image = await _makeImage(width, height);
+    final newItem = DiveDataStreamItem(
+        frame: DiveFrame(
+      bytes: Uint8List(0),
+      width: width,
+      height: height,
+      uiImage: image,
+    ));
+    _outputController.add(newItem);
   }
 
-  DiveDataStreamItem? _mixItems() {
-    int width = 1280;
-    int height = 720;
+  Future<ui.Image> _makeImage6(int width, int height) async {
+    final pictureRecorder = ui.PictureRecorder();
+    final canvas = ui.Canvas(pictureRecorder,
+        Rect.fromLTWH(0, 0, width.toDouble(), height.toDouble()));
+
+    canvas.drawColor(Colors.red, ui.BlendMode.src);
+
+    final paint = ui.Paint()..color = Colors.green;
+    canvas.drawRect(
+        Rect.fromLTWH(width / 4, height / 4, width / 2, height / 2), paint);
+
+    final picture = pictureRecorder.endRecording();
+    final image = await picture.toImage(width, height);
+    return image;
+  }
+
+  Future<ui.Image> _makeImage(int width, int height) async {
+    final image = await DiveLog.timeItAsync('_makeImage', () async {
+      final pictureRecorder = ui.PictureRecorder();
+      final canvas = ui.Canvas(pictureRecorder,
+          Rect.fromLTWH(0, 0, width.toDouble(), height.toDouble()));
+      final paint = ui.Paint()..color = Colors.green;
+      canvas.drawColor(Colors.red, ui.BlendMode.src);
+      _drawText(canvas);
+
+      // canvas.clipRect(Rect.fromLTWH(0, 0, width.toDouble(), height.toDouble()));
+
+      if (_lastStreamItem1 != null && _lastStreamItem1!.frame != null) {
+        final uiImage = await _lastStreamItem1!.frame!.uiImageLive;
+        if (uiImage != null) {
+          canvas.save();
+          double scale = 4.0 / 10.0;
+          double reScale = 10.0 / 4.0;
+          canvas.scale(scale);
+          canvas.drawImage(uiImage, Offset(10 * reScale, 10 * reScale), paint);
+          canvas.restore();
+        }
+      }
+
+      if (_lastStreamItem2 != null && _lastStreamItem2!.frame != null) {
+        final uiImage = await _lastStreamItem2!.frame!.uiImageLive;
+        if (uiImage != null) {
+          canvas.save();
+          double scale = (width.toDouble() / 2.0) / uiImage.width.toDouble();
+          double reScale = uiImage.width.toDouble() / (width.toDouble() / 2.0);
+          canvas.scale(scale);
+          canvas.drawImage(
+              uiImage, Offset((width / 2) * reScale, 100 * reScale), paint);
+          canvas.restore();
+        }
+      }
+
+      final picture = pictureRecorder.endRecording();
+
+      // final stopwatch = Stopwatch()..start();
+      final image = await picture.toImage(width, height);
+      // final elapsed = stopwatch.elapsed;
+      // DiveLog.message('toImage elapsed: ${elapsed.inMilliseconds}ms');
+
+      return image;
+    });
+    return image;
+  }
+
+  void _drawText(Canvas canvas) {
+    if (_lastTextItem == null || _lastTextItem!.text == null) {
+      return;
+    }
+    final text = _lastTextItem!.text!;
+    final textStyle = ui.TextStyle(
+      color: Colors.black,
+      fontSize: 48,
+    );
+    final paragraphStyle = ui.ParagraphStyle(
+      textDirection: TextDirection.ltr,
+    );
+    final paragraphBuilder = ui.ParagraphBuilder(paragraphStyle)
+      ..pushStyle(textStyle)
+      ..addText(text);
+    final constraints = ui.ParagraphConstraints(width: 800);
+    final paragraph = paragraphBuilder.build();
+    paragraph.layout(constraints);
+    final offset = Offset(100, 600);
+    canvas.drawParagraph(paragraph, offset);
+  }
+
+  void _mixAndOutput2(int width, int height) {
+    final bytes = _mixItems(width, height);
+    final newItem = DiveDataStreamItem(
+        frame: DiveFrame(
+      bytes: bytes,
+      width: width,
+      height: height,
+    ));
+
+    _outputController.add(newItem);
+    // DiveLog.message("DiveCompositingEngine.onData: ($name) added frame");
+  }
+
+  Uint8List _mixItems(int width, int height) {
     imglib.Image baseImage = DiveLog.timeIt('createBaseImage', () {
       return _createBaseImage(width, height);
     });
@@ -143,12 +250,7 @@ class DiveCompositingEngine extends DiveEngine {
     final bytes = DiveLog.timeIt('encodePng', () {
       return Uint8List.fromList(imglib.encodePng(baseImage));
     });
-    return DiveDataStreamItem(
-        frame: DiveFrame(
-      bytes: bytes,
-      width: baseImage.width,
-      height: baseImage.height,
-    ));
+    return bytes;
   }
 
   imglib.Image _createBaseImage(int width, int height) {
