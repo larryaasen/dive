@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import 'dive_image_source.dart';
 import 'dive_input.dart';
 import 'dive_input_type.dart';
@@ -11,20 +13,20 @@ abstract class DiveInputProvider {
   /// Create a [DiveSource] for the [input].
   DiveSource? create(String? name, DiveCoreProperties? properties);
 
-  /// Discovers and provides a list of inputs.
-  List<DiveInput> inputs();
+  /// Discovers and provides a list of inputs by this input provider.
+  Future<List<DiveInput>?> inputs();
 
-  /// Provides a list of input types.
+  /// Provides a list of input types supported by this input provider.
   List<DiveInputType> inputTypes();
 }
 
 /// The standard image input provider that creates [DiveImageSource].
-class DiveTextInputProvider extends DiveInputProvider {
+class DiveTextClockInputProvider extends DiveInputProvider {
   @override
   List<DiveInputType> inputTypes() => [DiveInputType.text];
 
   @override
-  List<DiveInput> inputs() => [];
+  Future<List<DiveInput>> inputs() => Future.value([]);
 
   /// Create a [DiveSource] for the [input].
   /// TODO: maybe this should be a static method because this class has
@@ -50,7 +52,7 @@ class DiveImageInputProvider extends DiveInputProvider {
 
   /// Discovers and provides a list of inputs.
   @override
-  List<DiveInput> inputs() => [];
+  Future<List<DiveInput>> inputs() => Future.value([]);
 
   /// Provides a list of input types.
   @override
@@ -77,7 +79,7 @@ class DiveMediaInputProvider extends DiveInputProvider {
 
   /// Discovers and provides a list of inputs.
   @override
-  List<DiveInput> inputs() => [];
+  Future<List<DiveInput>> inputs() => Future.value([]);
 
   /// Provides a list of input types.
   @override
@@ -90,38 +92,26 @@ class DiveMediaInputProvider extends DiveInputProvider {
   }
 }
 
-/// The standard video input provider.
-/// TODO: this class needs to be moved to a plugin package.
-class DiveVideoInputProvider extends DiveInputProvider {
-  /// Discovers and provides a list of inputs.
-  @override
-  List<DiveInput> inputs() =>
-      [DiveInput(id: 'camera1', name: 'camera1', type: DiveInputType.video)];
-
-  /// Provides a list of input types.
-  @override
-  List<DiveInputType> inputTypes() => [DiveInputType.video];
-
-  /// Create a [DiveSource] for the [input].
-  @override
-  DiveSource? create(String? name, DiveCoreProperties? properties) {
-    return null;
-  }
-}
-
 class DiveInputProviders {
   /// These are the standard input providers.
-  static final _standardInputProviders = [
+  static final standardInputProviders = [
     DiveImageInputProvider(),
-    DiveVideoInputProvider()
+    DiveTextClockInputProvider(),
   ];
 
+  /// The list of providers.
+  static List<DiveInputProvider> get all => _all;
+
   /// The internal list of providers.
-  final List<DiveInputProvider> _providers = _standardInputProviders;
+  static final List<DiveInputProvider> _all = standardInputProviders;
 
-  /// Returns the list of providers.
-  List<DiveInputProvider> get providers => _providers;
-
-  /// Add a new custom provider to the list of providers.
-  void addProvider(DiveInputProvider provider) => _providers.add(provider);
+  /// Registers a new provider to the list of providers.
+  static bool registerProvider(DiveInputProvider newProvider) {
+    final any = _all.any((provider) => newProvider == provider);
+    if (any) {
+      return false;
+    }
+    _all.add(newProvider);
+    return true;
+  }
 }

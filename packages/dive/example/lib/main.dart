@@ -1,4 +1,5 @@
 import 'package:dive/dive.dart';
+import 'package:dive_video_source/dive_video_source.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -34,6 +35,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   DiveFrame? _imageFrame;
   DiveFrame? _mixFrame;
+  DiveFrame? _videoFrame;
   DiveCompositingEngine? _compositingEngine;
 
   @override
@@ -43,6 +45,48 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void initialize() {
+    // Log the Dive input types: audio, text, video, etc.
+    for (final type in DiveInputTypes.all) {
+      DiveLog.message('$type');
+    }
+
+    /// Register the Dive video input provider for use in this app.
+    DiveInputProviders.registerProvider(DiveVideoInputProvider());
+
+    // Log the Dive input providers.
+    for (final provider in DiveInputProviders.all) {
+      DiveLog.message('$provider');
+    }
+
+    // Log the Dive inputs: Facetime Camera, Main Microphone, etc.
+    for (final provider in DiveInputProviders.all) {
+      provider.inputs().then((inputs) {
+        inputs?.forEach((input) => DiveLog.message(input.name));
+      });
+    }
+
+    final videoProvider = DiveVideoInputProvider();
+    final videoSource = videoProvider.create(
+        'video1',
+        DiveCoreProperties.fromMap(
+            {DiveVideoInputProvider.PROPERTY_INPUT_ID: '0x8020000005ac8514'}));
+
+    onFrame(DiveDataStreamItem item) {
+      if (item.frame is DiveFrame) {
+        setState(() {
+          _videoFrame = item.frame;
+        });
+      }
+    }
+
+    if (videoSource != null) {
+      videoSource.setup().then((bool? result) {
+        if (result != null && result) {
+          videoSource.frameOutput.listen(onFrame);
+        }
+      });
+    }
+
     final imageProvider = DiveImageInputProvider();
     final imageSource1 = imageProvider.create(
         "image1",
@@ -108,6 +152,8 @@ class _MyHomePageState extends State<MyHomePage> {
               Expanded(child: Image(image: _imageFrame!.memoryImage)),
             if (_mixFrame != null && _mixFrame!.uiImage != null)
               RawImage(image: _mixFrame!.uiImage!),
+            if (_videoFrame != null)
+              Expanded(child: RawImage(image: _videoFrame!.uiImage)),
             // When creating the Image widget, use gaplessPlayback to avoid the
             // flickering.
             // if (_mixFrame != null)

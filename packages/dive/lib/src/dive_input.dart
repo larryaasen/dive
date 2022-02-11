@@ -8,13 +8,16 @@ class DiveInput {
   /// The input id, such as `0x8020000005ac8514`.
   final String id;
 
-  /// The input type, such as `image_source` or `av_capture_input`.
+  /// The input type, such as audio, video, etc.
   final DiveInputType type;
 
   const DiveInput({required this.name, required this.id, required this.type});
 
-  static DiveInput? fromMap(Map<String, dynamic> map) {
-    if (map['id'] == null || map['name'] == null || map['type'] == null) {
+  static DiveInput? fromMap(dynamic map) {
+    if (map is! Map<dynamic, dynamic> ||
+        map['id'] == null ||
+        map['name'] == null ||
+        map['type'] == null) {
       return null;
     }
     return DiveInput(

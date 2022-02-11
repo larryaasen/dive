@@ -1,7 +1,7 @@
 /// The Dive input type definition. There are a few default types inluding
 /// [DiveInputType.audio], [DiveInputType.image], [DiveInputType.media], and
 /// [DiveInputType.video]. You can also create new custom types to add types
-/// to the framework, by return one here [DiveInputProvider.inputTypes].
+/// to the framework, by returning one here [DiveInputProvider.inputTypes].
 class DiveInputType {
   final String uuid;
   final String name;
@@ -41,10 +41,30 @@ class DiveInputType {
   }
 }
 
+/// The list of registered Dive input types, which include the default types.
 class DiveInputTypes {
-  DiveInputTypes();
+  static List<DiveInputType> defaultInputTypes() => [
+        DiveInputType.audio,
+        DiveInputType.image,
+        DiveInputType.media,
+        DiveInputType.text,
+        DiveInputType.video
+      ];
 
-  // TODO: Implement this all() method.
-  static Future<List<DiveInputType>> all() async => [];
-  // oldlib.inputTypes().map(DiveInputType.fromJson).toList();
+  /// The list of registered Dive input types.
+  static List<DiveInputType> get all => _all;
+
+  /// The internal list of registered Dive input types
+  static final List<DiveInputType> _all = defaultInputTypes();
+
+  /// Registers a new Dive input type.
+  static bool registerNewInputType(DiveInputType newType) {
+    final any = _all
+        .any((type) => newType.name == type.name || newType.uuid == type.uuid);
+    if (any) {
+      return false;
+    }
+    _all.add(newType);
+    return true;
+  }
 }

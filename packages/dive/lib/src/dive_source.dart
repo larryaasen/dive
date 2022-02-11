@@ -79,35 +79,6 @@ class DiveAudioSource extends DiveSource {
   DiveStream get frameOutput => throw UnimplementedError();
 }
 
-/// A video source supports video cameras and other similar devices.
-/// This is not a source for playing video files.
-class DiveVideoSource extends DiveSource {
-  DiveAudioMeterSource? volumeMeter;
-
-  DiveVideoSource({String? name})
-      : super(inputType: DiveInputType.video, name: name);
-
-  static Future<DiveVideoSource> create(DiveInput videoInput) async {
-    final source = DiveVideoSource(name: videoInput.name);
-    return source;
-  }
-
-  /// Release the resources associated with this source.
-  @override
-  bool dispose() {
-    if (volumeMeter != null) {
-      volumeMeter?.dispose();
-      volumeMeter = null;
-    }
-    super.dispose();
-    return true;
-  }
-
-  @override
-  // TODO: implement frameStream
-  DiveStream get frameOutput => throw UnimplementedError();
-}
-
 /// Used for changing the order of items (for example, filters in a source,
 /// or items in a scene)
 enum DiveSceneItemMovement {
