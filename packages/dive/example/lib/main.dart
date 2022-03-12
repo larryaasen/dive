@@ -1,8 +1,14 @@
+// ignore_for_file: avoid_print
+
 import 'package:dive/dive.dart';
 import 'package:dive_video_source/dive_video_source.dart';
 import 'package:flutter/material.dart';
 
 void main() {
+  final engine = ProcessEngine();
+  engine.run();
+  return;
+
   runDiveApp();
   DiveLog.message('Dive Example - Images');
   runApp(const MyApp());
