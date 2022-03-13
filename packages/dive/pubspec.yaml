@@ -1,18 +1,17 @@
 name: dive
 description: The Dive core plugin. A toolkit for video recording and streaming.
 version: 0.1.0-alpha.2
-homepage: https://divekit.dev
+homepage: https://github.com/larryaasen/dive/tree/main/packages/dive_obslib
 
 environment:
   sdk: '>=2.7.0 <3.0.0'
-  flutter: '>=1.20.0 <2.0.0'
+  flutter: '>=1.20.0'
 
 dependencies:
   flutter:
     sdk: flutter
 
-  dive_obslib:
-    path: ../dive_obslib
+  dive_obslib: ^0.0.1
 
   # From fluttetcommunity.dev: Simplify Dart Equality Comparisons
   equatable: ^2.0.0

@@ -67,9 +67,9 @@ packages:
   dive_obslib:
     dependency: transitive
     description:
-      path: "../../dive_obslib"
-      relative: true
-    source: path
+      name: dive_obslib
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.0.1"
   equatable:
     dependency: transitive
