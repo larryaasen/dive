@@ -10,17 +10,29 @@ Flutter with native extensions on macOS. It is a group of Flutter packages for
 building media apps. In the future, support for multiple
 platforms will be added.
 
-# (Rename dive_obslib to dive_av or dive_mixer)
-
-**dive_obslib** - a Flutter plugin package that provides low level access
-to obslib using FFI.
-
-**dive_core** - a Flutter package that provides video capabilities.
+**dive** - A Flutter package that provides video capabilities.
 
 **dive_ui** - A Flutter package containing Widgets for building Flutter apps for
 video recording and streaming.
 
-(REMOVE) **dive_app** - a Flutter app for video recording and streaming.
+**dive_obslib** - A Flutter plugin package that provides low level access
+to obslib using FFI.
+
+## dive
+
+The dive package is a Flutter package that provides basic services for
+video playback, camera devices, audio, and streaming. This package relies
+heavily on the dive_obslib package but remains platform indepenent.
+
+## dive_ui
+
+The dive_ui package is a Flutter package containing Widgets to build video based
+Flutter apps. This package relies heavily on the dive package but remains
+platform indepenent.
+
+This package contains many examples on using dive_ui widgets and dive
+classes. The examples use the macOS platform folder that contains a Podfile
+that references the obslib CocoaPods library.
 
 ## dive_obslib
 
@@ -35,22 +47,6 @@ It includes inputs, sources, outputs, encoders, services, and more.
 
 dive_obslib contains the DiveObsLibPlugin and the dive_obslib CocoaPods library. The
 dive_obslib pod has a dependency on the obslib CocoaPods library.
-
-## dive_core
-
-The dive_core package is a Flutter package that provides basic services for
-video playback, camera devices, audio, and streaming. This package relies
-heavily on the dive_obslib package but remains platform indepenent.
-
-## dive_ui
-
-The dive_ui package is a Flutter package containing Widgets to build video based
-Flutter apps. This package relies heavily on the dive_core package but remains
-platform indepenent.
-
-This package contains many examples on using dive_ui widgets and dive_core
-classes. The examples use the macOS platform folder that contains a Podfile
-that references the obslib CocoaPods library.
 
 ## obslib CocoaPods library
 
@@ -121,10 +117,12 @@ Plugins:
 
 ```
 dive
- |-- dive_app
- |-- dive_core
- |-- dive_obslib
- |-- dive_ui
+ |-- apps
+   |-- dive_app
+ |-- packages
+   |-- dive
+   |-- dive_obslib
+   |-- dive_ui
 ```
 
 ## Concepts
