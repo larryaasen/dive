@@ -1,0 +1,58 @@
+name: dive_ui
+description: A new Flutter package project.
+version: 0.0.1
+homepage:
+
+  # This package cannot be published until dive_core is published and this 
+# package no longer uses a path to dive_core.
+publish_to: none
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.17.0 <2.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  dive:
+    path: ../dive
+
+  # From bloclibrary.dev: easy to implement the BLoC Design Pattern
+  bloc: ^6.1.3
+
+  # From dart.dev: immutable collections using the builder pattern
+  built_collection: ^5.0.0
+
+  # From fluttetcommunity.dev: Simplify Dart Equality Comparisons
+  equatable: ^2.0.0
+
+  # From flutter.dev: A Flutter plugin that manages files and interactions with file dialogs.
+  file_selector: ^0.8.2
+
+  # From flutter.dev: The macOS implementation of file_selector.
+  file_selector_macos: ^0.0.4
+
+  # From bloclibrary.dev: Widgets that make it easy to use blocs and cubits
+  flutter_bloc: ^6.1.3
+  
+  #From: flutter.dev: A Flutter plugin for iOS and Android allowing access to the device cameras.
+  # camera: ^0.5.8+10
+
+  # From darky12s@gmail.com: a state-manangement library
+  flutter_riverpod: ^0.13.1
+
+  # From Dart Team: provides internationalization and localization facilities, including message translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
+  intl: '>=0.16.0'
+
+  # From Dart team:
+  path_provider: ^1.6.28
+
+  # From flutter.dev: Flutter plugin for playing back video on a Widget surface.
+  # video_player: '>=0.10.12+3 <2.0.0'
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:

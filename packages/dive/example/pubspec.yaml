@@ -1,0 +1,23 @@
+name: dive_core_example
+description: Demonstrates how to use the dive_core plugin.
+publish_to: 'none'
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  dive:
+    path: ../
+
+  # From darky12s@gmail.com: a state-manangement library
+  flutter_riverpod: ^0.13.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true

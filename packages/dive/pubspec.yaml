@@ -1,0 +1,31 @@
+name: dive
+description: The Dive core plugin. A toolkit for video recording and streaming.
+version: 0.1.0-alpha.2
+homepage: https://divekit.dev
+
+environment:
+  sdk: '>=2.7.0 <3.0.0'
+  flutter: '>=1.20.0 <2.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  dive_obslib:
+    path: ../dive_obslib
+
+  # From fluttetcommunity.dev: Simplify Dart Equality Comparisons
+  equatable: ^2.0.0
+
+  # From Dart Team: provides internationalization and localization facilities, including message translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
+  intl: '>=0.16.0'
+
+  # From darky12s@gmail.com: a state-manangement library
+  riverpod: ^0.13.1
+
+  # From: yuli.dev. Simple, fast generation of RFC4122 UUIDs
+  uuid: ^2.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
