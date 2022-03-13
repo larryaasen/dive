@@ -1,179 +1,89 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dive/dive.dart';
 
-void main() {
-  // We need the binding to be initialized before calling runApp.
-  WidgetsFlutterBinding.ensureInitialized();
+/// Dive Example 1 - Streaming
+void main() async {
+  configDiveApp();
 
-  // // Configure globally for all Equatable instances via EquatableConfig
-  // EquatableConfig.stringify = true;
-
-  runApp(ProviderScope(child: AppWidget()));
+  await DiveExample().run();
 }
 
-class AppWidget extends StatelessWidget {
+class DiveExample {
   final _elements = DiveCoreElements();
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Dive Core App',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text('Dive Core App'),
-          ),
-          body: BodyWidget(elements: _elements),
-        ));
-  }
-}
-
-class BodyWidget extends StatefulWidget {
-  BodyWidget({Key key, this.elements}) : super(key: key);
-
-  final DiveCoreElements elements;
-
-  @override
-  _BodyWidgetState createState() => _BodyWidgetState();
-}
-
-class _BodyWidgetState extends State<BodyWidget> {
   DiveCore _diveCore;
-  DiveCoreElements _elements;
   bool _initialized = false;
 
-  static const bool _enableOBS = true;
-  static const bool _enableCameras = _enableOBS && true;
+  void run() async {
+    await _initialize();
+  }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
+  void _initialize() async {
     if (_initialized) return;
-
-    /// DiveCore and other modules must use the same [ProviderContainer], so
-    /// it needs to be passed to DiveCore at the start.
-    DiveCore.providerContainer = ProviderScope.containerOf(context);
-
-    _elements = widget.elements;
-    _diveCore = DiveCore();
-    if (_enableOBS) {
-      _diveCore.setupOBS(DiveCoreResolution.HD);
-      DiveScene.create('Scene 1').then((scene) => setup(scene));
-    }
-
     _initialized = true;
-  }
 
-  void setup(DiveScene scene) {
-    _elements.updateState((state) => state.currentScene = scene);
+    _diveCore = DiveCore();
+    await _diveCore.setupOBS(DiveCoreResolution.HD);
 
-    DiveInputTypes.all().then((inputTypes) {
-      inputTypes.forEach((type) {
-        print(type);
-      });
-    });
+    // Create the main scene
+    DiveScene.create('Scene 1').then((scene) {
+      _elements.updateState((state) => state.currentScene = scene);
 
-    DiveVideoMix.create().then((mix) {
-      setState(() {
-        _elements.updateState((state) => state.videoMixes.add(mix));
-      });
-    });
-
-    DiveInputs.audio().forEach((audioInput) {
-      print(audioInput);
-    });
-
-    DiveAudioSource.create('my audio').then((source) {
-      setState(() {
+      // Create the main audio source
+      DiveAudioSource.create('main audio').then((source) {
         _elements.updateState((state) => state.audioSources.add(source));
+        _elements.updateState((state) => state.currentScene.addSource(source));
       });
-      _elements.updateState((state) => state.currentScene.addSource(source));
-    });
 
-    if (_enableCameras) {
-      var xLoc = 50.0;
-      DiveInputs.video().forEach((videoInput) {
-        print(videoInput);
-        DiveVideoSource.create(videoInput).then((source) {
-          setState(() {
-            _elements.updateState((state) => state.videoSources.add(source));
-          });
-          _elements.updateState((state) => state.currentScene.addSource(source).then((item) {
-                final info = DiveTransformInfo(
-                    pos: DiveVec2(xLoc, 50),
-                    bounds: DiveVec2(500, 280),
-                    boundsType: DiveBoundsType.SCALE_INNER);
-                item.updateTransformInfo(info);
-                xLoc += 680.0;
-              }));
+      // Get the first video input
+      final videoInput = DiveInputs.video().last;
+      print(videoInput);
+
+      // Create the last video source from the video input
+      DiveVideoSource.create(videoInput).then((source) {
+        _elements.updateState((state) => state.videoSources.add(source));
+        // Add the video source to the scene
+        _elements.updateState((state) => state.currentScene.addSource(source));
+      });
+
+      // Create the streaming output
+      var output = DiveOutput();
+
+      // Replace this Twitch key with your own. This one is no longer valid.
+      output.serviceKey = 'live_276488556_uIKncv1zAGQ3kz5aVzCvfshg8W4ENC';
+      output.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/${output.serviceKey}';
+      _elements.updateState((state) => state.streamingOutput = output);
+
+      // Start streaming
+      print("Dive Example 1: Starting stream.");
+      output.start();
+
+      const streamDuration = 30;
+      print('Dive Example 1: Waiting $streamDuration seconds.');
+
+      Future.delayed(Duration(seconds: streamDuration), () {
+        print('Dive Example 1: Stopping stream.');
+        output.stop();
+        output = null;
+
+        _elements.updateState((state) {
+          // Remove the video and audio sources from the scene
+          state.currentScene.removeAllSceneItems();
+
+          // Remove the video source from the state
+          final videoSource = state.videoSources.removeLast();
+          // Delete the source resources
+          videoSource.dispose();
+
+          // Remove the video source from the state
+          final audioSource = state.audioSources.removeLast();
+          // Delete the source resources
+          audioSource.dispose();
+
+          // Delete the scene resources
+          scene.dispose();
+
+          _diveCore = null;
         });
       });
-    }
-
-    final localFile = '/Users/larry/Downloads/SampleVideo_1280x720_5mb.mp4';
-    DiveMediaSource.create(localFile).then((source) {
-      if (source != null) {
-        DiveAudioMeterSource()
-          ..create(source: source).then((volumeMeter) {
-            setState(() {
-              source.volumeMeter = volumeMeter;
-            });
-          });
-
-        setState(() {
-          _elements.updateState((state) => state.mediaSources.add(source));
-        });
-        _elements.updateState((state) => state.currentScene.addSource(source).then((item) {
-              final info = DiveTransformInfo(
-                  pos: DiveVec2(50, 330), bounds: DiveVec2(500, 280), boundsType: DiveBoundsType.SCALE_INNER);
-              item.updateTransformInfo(info);
-            }));
-      }
     });
-
-    final file1 = '/Users/larry/Downloads/MacBookPro13.jpg';
-    DiveImageSource.create(file1).then((source) {
-      if (source != null) {
-        setState(() {
-          _elements.updateState((state) => state.imageSources.add(source));
-        });
-        _elements.updateState((state) => state.currentScene.addSource(source).then((item) {
-              final info = DiveTransformInfo(
-                  pos: DiveVec2(730, 330),
-                  bounds: DiveVec2(500, 280),
-                  boundsType: DiveBoundsType.SCALE_INNER);
-              item.updateTransformInfo(info);
-            }));
-      }
-    });
-
-    final file2 = '/Users/larry/Downloads/logo_flutter_1080px_clr.png';
-    DiveImageSource.create(file2).then((source) {
-      if (source != null) {
-        setState(() {
-          _elements.updateState((state) => state.imageSources.add(source));
-        });
-        _elements.updateState((state) => state.currentScene.addSource(source).then((item) {
-              final info = DiveTransformInfo(
-                  pos: DiveVec2(590, 298),
-                  bounds: DiveVec2(100, 124),
-                  boundsType: DiveBoundsType.SCALE_INNER);
-              item.updateTransformInfo(info);
-            }));
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('dive_core'),
-    );
   }
 }

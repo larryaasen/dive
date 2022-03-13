@@ -1,7 +1,7 @@
 name: dive
 description: The Dive core plugin. A toolkit for video recording and streaming.
 version: 0.1.0-alpha.2
-homepage: https://github.com/larryaasen/dive/tree/main/packages/dive_obslib
+homepage: https://github.com/larryaasen/dive/tree/main/packages/dive
 
 environment:
   sdk: '>=2.7.0 <3.0.0'
@@ -17,7 +17,7 @@ dependencies:
   equatable: ^2.0.0
 
   # From Dart Team: provides internationalization and localization facilities, including message translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
-  intl: '>=0.16.0'
+  intl: '^0.16.0'
 
   # From darky12s@gmail.com: a state-manangement library
   riverpod: ^0.13.1

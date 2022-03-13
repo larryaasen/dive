@@ -1,74 +1,80 @@
-# dive_core
+# Dive
 
-## Building the obslib Framework
+Introducing Dive! A new Flutter toolkit for video recording and streaming.
+A complete set of packages to build the next generation of Flutter media apps.
 
-1: Starting by building OBS from source code. Here are the recommended build instructions: https://obsproject.com/wiki/Install-Instructions#macos-build-directions
+## Introduction
 
-    
-    cd ~/obs-studio
-    ./CI/full-build-macos.sh
+Dive is a video recording and streaming toolkit built on top of Dart and
+Flutter with native extensions on macOS. It is a group of Flutter packages for
+building media apps. In the future, support for multiple
+platforms will be added.
 
-Sometimes, the build will fail. Usually, it succeeds on the second attempt.
+**dive** - A Flutter package that provides video capabilities.
 
+**dive_ui** - A Flutter package for Dive containing Widgets for building Flutter
+apps for video recording and streaming. (COMING SOON)
 
-2: Next, build the macOS Framework.
-- open obslib-framework.xcodeproj
-- build
+**dive_obslib** - A Flutter plugin package for Dive that provides low level access
+to obslib using FFI.
 
+## dive
 
-## OBS
+The [dive](https://pub.dev/packages/dive) package is a Flutter package that provides basic services for
+video playback, camera devices, audio, and streaming. This package relies
+heavily on the dive_obslib package but remains platform indepenent.
 
-input (camera) -> source -> scene -> channel -> final texture -> rtmp service -> -> encoder -> rtmp output
-input (camera) -> source -> scene -> channel -> final texture -> rtmp service -> -> encoder -> rtmp output
+## dive_ui
 
-source:
-<- input (camera)
-<- input (video file)
+The [dive_ui](https://pub.dev/packages/dive_ui) package is a Flutter package containing Widgets to build video based
+Flutter apps. This package relies heavily on the dive package but remains
+platform indepenent.
 
-scene:
-- [channels]
+This package contains many examples on using dive_ui widgets and dive
+classes. The examples use the macos platform folder that contains a Podfile
+that references the obslib CocoaPods library.
 
-channel:
-- source
+## dive_obslib
 
-source:
-- input
-- output stream
+The [dive_obslib](https://pub.dev/packages/dive_obslib) package is a Flutter plugin that provides low level access
+to obslib. This package 
+contains platform-specific implementations with native extensions for macOS, and
+other platforms in the future.
 
-input:
-- camera
-- video file
-- static image
-- scene
+dive_obslib is powered by obslib, a CocoaPods library built from the core of OBS Studio.
+It utilizes all of the underlying features of OBS Studio excluding the UI code.
+It includes inputs, sources, outputs, encoders, services, and more.
 
-YAML Config File:
-- max_channels: 64
+dive_obslib contains the DiveObsLibPlugin and the dive_obslib CocoaPods library. The
+dive_obslib pod has a dependency on the obslib CocoaPods library.
 
-## OBS Video Format
-MacBook Pro Camera: OBS video_format VIDEO_FORMAT_UYVY
+## obslib CocoaPods library
 
-## Using Dart dart:ffi
-Using the Dart dart:ffi library to call the native C APIs in obslib.
-https://dart.dev/guides/libraries/c-interop
+The obslib CocoaPods library is a wrapper around the obslib Framework that can
+be consumed by the DiveApp macOS platform Podfile.
 
-This should be explored more.
+## obslib Framework
 
-Reasons to use dart:ffi to wrap obslib:
-* Would make DiveCore more portable and have less platform code.
-* Avoids the bridge duplication code.
-* Avoids the asynchronous jump from the plugin to native using the platform channels.
-* All code will be written in Dart instead of Objective-C and Swift.
-* Avoids the difficulty of mapping C pointers to Dart objects.
-* Might be easier to port DiveCore to Windows.
-* Will not need three levels: bridge (C), plugin (Swift), channel wrapper (Dart).
-* The Dive objects can call FFI methods instead of the channel wrapper.
-* Generating Dart bindings from C header files: https://gist.github.com/mannprerak2/e4530e6566b35cb94f8f1b340970973a
-* This article may be helpful. https://medium.com/flutter-community/integrating-c-library-in-a-flutter-app-using-dart-ffi-38a15e16bc14
+The obslib framework (obslib-framework) is the core of OBS Studio,
+and is the non-UI code and resources compiled into a reusable framework. The framework
+is built by an Xcode project.
 
-Reasons not to use dart:ffi to wrap obslib:
-* The dart:ffi feature is still in beta and may change considerably over time.
-* Difficult to use which will slow down development.
-* Cannot step through the obslib code, which can be done via bridge wrapper.
-* Would FFI callbacks work?
-* Some unknowns - What parts of obslib would not work via FFI?
-* FFI still seems too new to invest in it right now.
+The framework folder contains an example macOS application that consumes the
+obslib framework without using CocoaPods and is used to test the framework.
+
+## Concepts
+
+### Input Source
+
+An input source is a camera, microphone, virtual camera, screen capture,
+or NDI source.
+
+### Sources
+
+### channel
+
+### output
+
+### Encoders
+
+### Services
