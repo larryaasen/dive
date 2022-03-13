@@ -1,7 +1,9 @@
 import 'dart:ffi' as ffi;
 import 'dart:io';
-import 'package:dive_obslib/dive_obs_ffi.dart';
+
 import 'package:ffi/ffi.dart';
+
+import 'dive_obs_ffi.dart';
 
 List<ffi.Pointer<ffi.Int8>> _int8s = [];
 
@@ -42,9 +44,8 @@ extension PointerExtensions<T extends ffi.NativeType> on ffi.Pointer<T> {
 class DiveObslibFFILoad {
   /// Load the libobs library using FFI.
   static DiveObslibFFI loadLib() {
-    final _lib = Platform.isAndroid
-        ? ffi.DynamicLibrary.open("libobs.0.dylib")
-        : ffi.DynamicLibrary.process();
+    final _lib =
+        Platform.isAndroid ? ffi.DynamicLibrary.open("libobs.0.dylib") : ffi.DynamicLibrary.process();
     print("libobs library loaded: ${_lib.toString()}");
     return DiveObslibFFI(_lib);
   }

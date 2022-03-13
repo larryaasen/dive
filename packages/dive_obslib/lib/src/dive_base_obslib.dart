@@ -63,9 +63,7 @@ abstract class DiveObsAudioSourceTypeOther {
 abstract class DiveObsAudioSourceType {
   // TODO: return based on OS
   // ignore: non_constant_identifier_names
-  static String get INPUT_AUDIO_SOURCE =>
-      DiveObsAudioSourceTypeApple.INPUT_AUDIO_SOURCE;
+  static String get INPUT_AUDIO_SOURCE => DiveObsAudioSourceTypeApple.INPUT_AUDIO_SOURCE;
   // ignore: non_constant_identifier_names
-  static String get OUTPUT_AUDIO_SOURCE =>
-      DiveObsAudioSourceTypeApple.OUTPUT_AUDIO_SOURCE;
+  static String get OUTPUT_AUDIO_SOURCE => DiveObsAudioSourceTypeApple.OUTPUT_AUDIO_SOURCE;
 }

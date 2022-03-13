@@ -1,11 +1,12 @@
-import 'package:dive_obslib/dive_obslib.dart';
+import 'dart:ffi' as ffi;
+
+import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 
-import 'dive_obs_ffi.dart';
+import 'dive_base_obslib.dart';
 import 'dive_ffi_load.dart';
-
-import 'dart:ffi' as ffi;
-import 'package:ffi/ffi.dart';
+import 'dive_obs_ffi.dart';
+import 'dive_pointer.dart';
 
 /// The FFI loaded libobs library.
 DiveObslibFFI _lib;
@@ -96,9 +97,7 @@ extension DiveFFIObslib on DiveBaseObslib {
   }
 
   void logVideoActive() {
-    final msg = _lib.obs_video_active() == 1
-        ? 'OBS video(active)'
-        : 'OBS video(not active)';
+    final msg = _lib.obs_video_active() == 1 ? 'OBS video(active)' : 'OBS video(not active)';
     debugPrintStack(label: msg, maxFrames: 3);
   }
 
@@ -185,21 +184,18 @@ extension DiveFFIObslib on DiveBaseObslib {
     _lib.obs_data_set_bool(settings, "restart_on_activate".int8(), 0);
     _lib.obs_data_set_string(settings, "local_file".int8(), localFile.int8());
 
-    return _createSourceInternal(
-        sourceUuid, "ffmpeg_source", "video file", settings);
+    return _createSourceInternal(sourceUuid, "ffmpeg_source", "video file", settings);
   }
 
   DiveObslibData createData() => DiveObslibData();
 
-  DivePointer createVideoSource(
-      String sourceUuid, String deviceName, String deviceUid) {
+  DivePointer createVideoSource(String sourceUuid, String deviceName, String deviceUid) {
     final data = DiveObslibData();
     data.setString("device_name", deviceName);
     data.setString("device", deviceUid);
 
     // TODO: creating a video source breaks the Flutter connection to the device.
-    final pointer = _createSourceInternal(
-        sourceUuid, "av_capture_input", "camera", data.pointer);
+    final pointer = _createSourceInternal(sourceUuid, "av_capture_input", "camera", data.pointer);
     data.dispose();
     return pointer;
   }
@@ -225,8 +221,7 @@ extension DiveFFIObslib on DiveBaseObslib {
     String name,
     ffi.Pointer<obs_data> settings,
   ) {
-    final source = _lib.obs_source_create(
-        sourceId.int8(), name.int8(), settings, ffi.nullptr);
+    final source = _lib.obs_source_create(sourceId.int8(), name.int8(), settings, ffi.nullptr);
     StringExtensions.freeInt8s();
     if (source.address == 0) {
       debugPrint("_createSourceInternal: Could not create source");
@@ -307,21 +302,20 @@ extension DiveFFIObslib on DiveBaseObslib {
     serviceSettings.setString("server", serviceUrl);
     serviceSettings.setString("key", serviceKey);
 
-    final serviceObj = _lib.obs_service_create(serviceId.int8(),
-        "default_service".int8(), serviceSettings.pointer, ffi.nullptr);
+    final serviceObj = _lib.obs_service_create(
+        serviceId.int8(), "default_service".int8(), serviceSettings.pointer, ffi.nullptr);
     serviceSettings.dispose();
 
-    _streamOutput = _lib.obs_output_create(
-        outputType.int8(), "adv_stream".int8(), ffi.nullptr, ffi.nullptr);
+    _streamOutput = _lib.obs_output_create(outputType.int8(), "adv_stream".int8(), ffi.nullptr, ffi.nullptr);
     if (_streamOutput == null) {
       print("creation of stream output type $outputType failed");
       return false;
     }
 
-    final vencoder = _lib.obs_video_encoder_create(
-        "obs_x264".int8(), "test_x264".int8(), ffi.nullptr, ffi.nullptr);
-    final aencoder = _lib.obs_audio_encoder_create(
-        "ffmpeg_aac".int8(), "test_aac".int8(), ffi.nullptr, 0, ffi.nullptr);
+    final vencoder =
+        _lib.obs_video_encoder_create("obs_x264".int8(), "test_x264".int8(), ffi.nullptr, ffi.nullptr);
+    final aencoder =
+        _lib.obs_audio_encoder_create("ffmpeg_aac".int8(), "test_aac".int8(), ffi.nullptr, 0, ffi.nullptr);
     _lib.obs_encoder_set_video(vencoder, _lib.obs_get_video());
     _lib.obs_encoder_set_audio(aencoder, _lib.obs_get_audio());
     _lib.obs_output_set_video_encoder(_streamOutput, vencoder);
@@ -430,8 +424,7 @@ extension DiveFFIObslib on DiveBaseObslib {
 
   /// Attache a source to a volume meter.
   bool volumeMeterAttachSource(DivePointer volumeMeter, DivePointer source) {
-    final rv =
-        _lib.obs_volmeter_attach_source(volumeMeter.pointer, source.pointer);
+    final rv = _lib.obs_volmeter_attach_source(volumeMeter.pointer, source.pointer);
     return rv == 1;
   }
 
@@ -496,8 +489,7 @@ extension DiveFFIObslib on DiveBaseObslib {
         if (type == obs_property_type.OBS_PROPERTY_LIST) {
           final count = _lib.obs_property_list_item_count(property);
           for (int index = 0; index < count; index++) {
-            final disabled =
-                _lib.obs_property_list_item_disabled(property, index);
+            final disabled = _lib.obs_property_list_item_disabled(property, index);
             final name = _lib.obs_property_list_item_name(property, index);
             final uid = _lib.obs_property_list_item_string(property, index);
             if (disabled == 0 &&
@@ -552,11 +544,9 @@ class DiveObslibData {
     StringExtensions.freeInt8s();
   }
 
-  void setBool(String name, bool value) =>
-      _lib.obs_data_set_bool(_data, name.int8(), value ? 1 : 0);
+  void setBool(String name, bool value) => _lib.obs_data_set_bool(_data, name.int8(), value ? 1 : 0);
 
-  void setString(String name, String value) =>
-      _lib.obs_data_set_string(_data, name.int8(), value.int8());
+  void setString(String name, String value) => _lib.obs_data_set_string(_data, name.int8(), value.int8());
 }
 
 void exampleUseData() {

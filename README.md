@@ -12,10 +12,10 @@ platforms will be added.
 
 **dive** - A Flutter package that provides video capabilities.
 
-**dive_ui** - A Flutter package containing Widgets for building Flutter apps for
-video recording and streaming.
+**dive_ui** - A Flutter package for Dive containing Widgets for building Flutter
+apps for video recording and streaming.
 
-**dive_obslib** - A Flutter plugin package that provides low level access
+**dive_obslib** - A Flutter plugin package for Dive that provides low level access
 to obslib using FFI.
 
 ## dive
