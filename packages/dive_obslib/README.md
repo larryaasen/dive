@@ -1,10 +1,10 @@
 # dive_obslib
 
-[![Codemagic](https://api.codemagic.io/apps/5ffb7888eb8402dcd1928753/flutter-package/status_badge.svg)](https://codemagic.io/app/5ffb7888eb8402dcd1928753)
+A Flutter plugin package that provides low level access to obslib using FFI.
 
 # Introduction
 
-The dive_oblib package is part of the Dive video recording and streaming platform.
+The dive_obslib package is part of the Dive video recording and streaming platform.
 It provides the Dart wrapper
 around [libobs](https://github.com/obsproject/obs-studio/tree/master/libobs)
 from [OBS Studio](https://obsproject.com/) and
