@@ -158,8 +158,13 @@ and Downloads Folder.
 ```
 # Copy the framework resources to a specific folder in the app Resources
 cp -R ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework/Resources/data ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}
+rm -fr ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/data/obs-mac-virtualcam.plugin
 rsync ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework/PlugIns/* ${TARGET_BUILD_DIR}/${PLUGINS_FOLDER_PATH}
 ```
+
+Note: The folder obs-mac-virtualcam.plugin is in the wrong folder, data, and will
+fail validation by Apple, so it has been removed for now.
+
 8. From command line: flutter run -d macos
 
 ## TODO - Examples to be created

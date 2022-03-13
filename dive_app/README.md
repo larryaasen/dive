@@ -5,7 +5,31 @@ A fully featured Dive application running on macOS.
 App Title: `Dive Camera and Audio`
 Bunlde identifier: `com.moonwink.divecamera`
 
+## Running the app
+Run this from the command line:
+```
+flutter run lib/main.dart --no-sound-null-safety
+```
+Then, run the app from Xcode.
+
+## Uploading the macOS app to App Store Connect and TestFlight
+When archiving the app in Xcode 13.2.1, it works fine. However, it fails the
+Validation stage after a long time and after the PKG file has been created:
+```
+Distribution failed with errors:
+
+App Store Connect Operation Error
+
+Unable to process application at this time due to the following error: This
+bundle is invalid. The Info.plist file is missing or could not be parsed.
+Please check it for embedded control characters..
+```
+
 ## TODO
+1. Created an app icon, instead of using the Flutter icon.
+1. Setup the new app icon.
+1. Change the app install name from DiveCamera.app to Dive Camera.app.
+1. Add copyright to bundle.
 1. Publish the pod obslib in a public repository.
 1. This needs to be replaced: `pod 'obslib', :path => '/Users/larry/Projects/obslib-framework'`,
 with the publish pod version.
@@ -30,8 +54,13 @@ and Downloads Folder, using the Value: `Used for video recording and streaming.`
 ```
 # Copy the framework resources to a specific folder in the app Resources
 cp -R ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework/Resources/data ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}
+rm -fr ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/data/obs-mac-virtualcam.plugin
 rsync ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/obslib.framework/PlugIns/* ${TARGET_BUILD_DIR}/${PLUGINS_FOLDER_PATH}
 ```
+
+Note: The folder obs-mac-virtualcam.plugin is in the wrong folder, data, and will
+fail validation by Apple, so it has been removed for now.
+
 1. $ flutter run --no-sound-null-safety
 1. You will likely see this error:
 ```

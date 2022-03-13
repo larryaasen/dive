@@ -36,8 +36,13 @@ class DiveScene extends DiveTracking {
 
   /// Finds the scene item for source in this scene.
   DiveSceneItem findSceneItem(DiveSource source) {
-    return _sceneItems.firstWhere((sceneItem) => sceneItem.source == source,
-        orElse: () => null);
+    return _sceneItems.firstWhere((sceneItem) => sceneItem.source == source, orElse: () => null);
+  }
+
+  void makeSourceVisible(DiveSource source, bool visible) {
+    // Make the old source not visible
+    final sceneItem = findSceneItem(source);
+    if (sceneItem != null) sceneItem.visible = visible;
   }
 
   /// Remove the item from the scene.

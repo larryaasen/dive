@@ -4,31 +4,42 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
-	<key>CFBundleDisplayName</key>
-	<string>Dive Camera</string>
 	<key>CFBundleExecutable</key>
-	<string>DiveCamera</string>
+	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.moonwink.divecamera</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>DiveCamera</string>
+	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.0.1</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.utilities</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Streaming</string>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>Streaming</string>
+	<key>NSDownloadsFolderUsageDescription</key>
+	<string>Streaming</string>
 	<key>NSHumanReadableCopyright</key>
-	<string></string>
+	<string>$(PRODUCT_COPYRIGHT)</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Streaming</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>microphone</string>
+		<string>video-camera</string>
+	</array>
 </dict>
 </plist>

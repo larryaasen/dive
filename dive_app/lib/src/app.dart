@@ -9,10 +9,7 @@ import 'settings/settings_view.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
-  const MyApp({
-    Key? key,
-    required this.settingsController,
-  }) : super(key: key);
+  const MyApp({Key? key, required this.settingsController}) : super(key: key);
 
   final SettingsController settingsController;
 
@@ -52,8 +49,7 @@ class MyApp extends StatelessWidget {
           //
           // The appTitle is defined in .arb files found in the localization
           // directory.
-          onGenerateTitle: (BuildContext context) =>
-              AppLocalizations.of(context)!.appTitle,
+          onGenerateTitle: (BuildContext context) => AppLocalizations.of(context)!.appTitle,
 
           // Define a light and dark color theme. Then, read the user's
           // preferred ThemeMode (light, dark, or system default) from the

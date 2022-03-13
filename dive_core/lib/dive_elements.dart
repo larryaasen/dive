@@ -3,8 +3,7 @@ import 'package:riverpod/riverpod.dart';
 
 class DiveVideoSettingsState {}
 
-class _DiveVideoSettingsStateNotifier
-    extends StateNotifier<DiveVideoSettingsState> {
+class _DiveVideoSettingsStateNotifier extends StateNotifier<DiveVideoSettingsState> {
   DiveVideoSettingsState get stateModel => state;
 
   _DiveVideoSettingsStateNotifier(DiveCoreElementsState stateModel)
@@ -14,8 +13,8 @@ class _DiveVideoSettingsStateNotifier
 }
 
 class DiveVideoSettings {
-  final stateProvider = StateNotifierProvider<_DiveVideoSettingsStateNotifier>(
-      (ref) => _DiveVideoSettingsStateNotifier(null));
+  final stateProvider =
+      StateNotifierProvider<_DiveVideoSettingsStateNotifier>((ref) => _DiveVideoSettingsStateNotifier(null));
 }
 
 /// The state model for core elements.
@@ -30,8 +29,7 @@ class DiveCoreElementsState {
   DiveScene currentScene;
 }
 
-class _DiveCoreElementsStateNotifier
-    extends StateNotifier<DiveCoreElementsState> {
+class _DiveCoreElementsStateNotifier extends StateNotifier<DiveCoreElementsState> {
   DiveCoreElementsState get stateModel => state;
 
   _DiveCoreElementsStateNotifier(DiveCoreElementsState stateModel)
@@ -42,8 +40,8 @@ class _DiveCoreElementsStateNotifier
 
 /// The core elements used in a Dive app.
 class DiveCoreElements {
-  final stateProvider = StateNotifierProvider<_DiveCoreElementsStateNotifier>(
-      (ref) => _DiveCoreElementsStateNotifier(null));
+  final stateProvider =
+      StateNotifierProvider<_DiveCoreElementsStateNotifier>((ref) => _DiveCoreElementsStateNotifier(null));
 
   /// Add an image source.
   void addImageSource(final localFile) {
@@ -77,11 +75,11 @@ class DiveCoreElements {
 
   /// The current state. Changes to this state do not get saved and are not
   /// sent to notifiers. To change the state, use [updateState].
-  DiveCoreElementsState get state =>
-      DiveCore.notifierFor(stateProvider).stateModel;
+  DiveCoreElementsState get state => DiveCore.notifierFor(stateProvider).stateModel;
 
   /// Update the current state. Changes to this state are saved and are
-  /// sent to notifiers.
+  /// sent to notifiers. This method is good for makeing many state
+  /// changes, and then having only one change sent the notifiers.
   void updateState(void changeState(DiveCoreElementsState state)) {
     final state = DiveCore.notifierFor(stateProvider).stateModel;
     changeState(state);
