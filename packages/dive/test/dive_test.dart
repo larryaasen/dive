@@ -8,6 +8,10 @@ void main() {
 
   tearDown(() {});
 
+  test('testing DiveUuid', () async {
+    expect(DiveUuid.newId(), isNotEmpty);
+  });
+
   test('formatDuration', () {
     final fmt = DiveFormat.formatDuration;
     expect(fmt(Duration(milliseconds: 21)), '0.021');

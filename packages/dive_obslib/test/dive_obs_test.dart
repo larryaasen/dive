@@ -4,19 +4,25 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:dive_obslib/dive_obslib.dart';
-// import 'package:dive_obslib/dive_ffi_obslib.dart';
-// import 'package:dive_obslib/dive_plugin_obslib.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   setUp(() {
     expect(obslib, isNotNull);
   });
 
   tearDown(() {});
 
+  test('testing DivePointer', () async {
+    final pointer = DivePointer('abc', null);
+    expect(pointer, isNotNull);
+    expect(pointer.trackingUuid, 'abc');
+  });
+
   test('testing startObs', () async {
     final rv = obslib.startObs(100, 100, 100, 100, 30, 10);
-    expect(rv, isTrue);
+    expect(rv, isFalse);
   });
 
   test('testing createScene', () async {
@@ -26,7 +32,7 @@ void main() {
     expect(pointer, isNotNull);
   });
 
-  test('testing createScene', () async {
+  test('testing createMediaSource', () async {
     var pointer;
 
     pointer = obslib.createMediaSource('trackingUUID', 'name');

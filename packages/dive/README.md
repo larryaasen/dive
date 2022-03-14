@@ -3,6 +3,11 @@
 Introducing Dive! A new Flutter toolkit for video recording and streaming.
 A complete set of packages to build the next generation of Flutter media apps.
 
+[![pub package](https://img.shields.io/pub/v/dive.svg)](https://pub.dev/packages/dive)
+<a href="https://www.buymeacoffee.com/larryaasen">
+  <img alt="Gift me a coffee" src="https://img.shields.io/badge/Donate-Gift%20Me%20A%20Coffee-yellow.svg">
+</a>
+
 ## Introduction
 
 Dive is a video recording and streaming toolkit built on top of Dart and
