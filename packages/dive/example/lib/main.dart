@@ -47,9 +47,17 @@ class DiveExample {
       // Create the streaming output
       var output = DiveOutput();
 
+      // YouTube settings
+      // Replace this YouTube key with your own. This one is no longer valid.
+      // output.serviceKey = '26qe-9gxw-9veb-kf2m-dhv3';
+      // output.serviceUrl = 'rtmp://a.rtmp.youtube.com/live2';
+
+      // Twitch Settings
       // Replace this Twitch key with your own. This one is no longer valid.
       output.serviceKey = 'live_276488556_uIKncv1zAGQ3kz5aVzCvfshg8W4ENC';
       output.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/${output.serviceKey}';
+
+      // Update the streaming state object
       _elements.updateState((state) => state.streamingOutput = output);
 
       // Start streaming
