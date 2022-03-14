@@ -44,23 +44,23 @@ class DiveObslibFFI {
     _base_set_allocator ??=
         _dylib.lookupFunction<_c_base_set_allocator, _dart_base_set_allocator>(
             'base_set_allocator');
-    return _base_set_allocator(
+    return _base_set_allocator!(
       defs,
     );
   }
 
-  _dart_base_set_allocator _base_set_allocator;
+  _dart_base_set_allocator? _base_set_allocator;
 
   ffi.Pointer<ffi.Void> bmalloc(
     int size,
   ) {
     _bmalloc ??= _dylib.lookupFunction<_c_bmalloc, _dart_bmalloc>('bmalloc');
-    return _bmalloc(
+    return _bmalloc!(
       size,
     );
   }
 
-  _dart_bmalloc _bmalloc;
+  _dart_bmalloc? _bmalloc;
 
   ffi.Pointer<ffi.Void> brealloc(
     ffi.Pointer<ffi.Void> ptr,
@@ -68,65 +68,65 @@ class DiveObslibFFI {
   ) {
     _brealloc ??=
         _dylib.lookupFunction<_c_brealloc, _dart_brealloc>('brealloc');
-    return _brealloc(
+    return _brealloc!(
       ptr,
       size,
     );
   }
 
-  _dart_brealloc _brealloc;
+  _dart_brealloc? _brealloc;
 
   void bfree(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     _bfree ??= _dylib.lookupFunction<_c_bfree, _dart_bfree>('bfree');
-    return _bfree(
+    return _bfree!(
       ptr,
     );
   }
 
-  _dart_bfree _bfree;
+  _dart_bfree? _bfree;
 
   int base_get_alignment() {
     _base_get_alignment ??=
         _dylib.lookupFunction<_c_base_get_alignment, _dart_base_get_alignment>(
             'base_get_alignment');
-    return _base_get_alignment();
+    return _base_get_alignment!();
   }
 
-  _dart_base_get_alignment _base_get_alignment;
+  _dart_base_get_alignment? _base_get_alignment;
 
   int bnum_allocs() {
     _bnum_allocs ??=
         _dylib.lookupFunction<_c_bnum_allocs, _dart_bnum_allocs>('bnum_allocs');
-    return _bnum_allocs();
+    return _bnum_allocs!();
   }
 
-  _dart_bnum_allocs _bnum_allocs;
+  _dart_bnum_allocs? _bnum_allocs;
 
   ffi.Pointer<ffi.Void> bmemdup(
     ffi.Pointer<ffi.Void> ptr,
     int size,
   ) {
     _bmemdup ??= _dylib.lookupFunction<_c_bmemdup, _dart_bmemdup>('bmemdup');
-    return _bmemdup(
+    return _bmemdup!(
       ptr,
       size,
     );
   }
 
-  _dart_bmemdup _bmemdup;
+  _dart_bmemdup? _bmemdup;
 
   ffi.Pointer<ffi.Void> bzalloc(
     int size,
   ) {
     _bzalloc ??= _dylib.lookupFunction<_c_bzalloc, _dart_bzalloc>('bzalloc');
-    return _bzalloc(
+    return _bzalloc!(
       size,
     );
   }
 
-  _dart_bzalloc _bzalloc;
+  _dart_bzalloc? _bzalloc;
 
   ffi.Pointer<ffi.Int8> bstrdup_n(
     ffi.Pointer<ffi.Int8> str,
@@ -134,13 +134,13 @@ class DiveObslibFFI {
   ) {
     _bstrdup_n ??=
         _dylib.lookupFunction<_c_bstrdup_n, _dart_bstrdup_n>('bstrdup_n');
-    return _bstrdup_n(
+    return _bstrdup_n!(
       str,
       n,
     );
   }
 
-  _dart_bstrdup_n _bstrdup_n;
+  _dart_bstrdup_n? _bstrdup_n;
 
   ffi.Pointer<ffi.Int32> bwstrdup_n(
     ffi.Pointer<ffi.Int32> str,
@@ -148,36 +148,36 @@ class DiveObslibFFI {
   ) {
     _bwstrdup_n ??=
         _dylib.lookupFunction<_c_bwstrdup_n, _dart_bwstrdup_n>('bwstrdup_n');
-    return _bwstrdup_n(
+    return _bwstrdup_n!(
       str,
       n,
     );
   }
 
-  _dart_bwstrdup_n _bwstrdup_n;
+  _dart_bwstrdup_n? _bwstrdup_n;
 
   ffi.Pointer<ffi.Int8> bstrdup(
     ffi.Pointer<ffi.Int8> str,
   ) {
     _bstrdup ??= _dylib.lookupFunction<_c_bstrdup, _dart_bstrdup>('bstrdup');
-    return _bstrdup(
+    return _bstrdup!(
       str,
     );
   }
 
-  _dart_bstrdup _bstrdup;
+  _dart_bstrdup? _bstrdup;
 
   ffi.Pointer<ffi.Int32> bwstrdup(
     ffi.Pointer<ffi.Int32> str,
   ) {
     _bwstrdup ??=
         _dylib.lookupFunction<_c_bwstrdup, _dart_bwstrdup>('bwstrdup');
-    return _bwstrdup(
+    return _bwstrdup!(
       str,
     );
   }
 
-  _dart_bwstrdup _bwstrdup;
+  _dart_bwstrdup? _bwstrdup;
 
   void profile_register_root(
     ffi.Pointer<ffi.Int8> name,
@@ -185,63 +185,63 @@ class DiveObslibFFI {
   ) {
     _profile_register_root ??= _dylib.lookupFunction<_c_profile_register_root,
         _dart_profile_register_root>('profile_register_root');
-    return _profile_register_root(
+    return _profile_register_root!(
       name,
       expected_time_between_calls,
     );
   }
 
-  _dart_profile_register_root _profile_register_root;
+  _dart_profile_register_root? _profile_register_root;
 
   void profile_start(
     ffi.Pointer<ffi.Int8> name,
   ) {
     _profile_start ??= _dylib
         .lookupFunction<_c_profile_start, _dart_profile_start>('profile_start');
-    return _profile_start(
+    return _profile_start!(
       name,
     );
   }
 
-  _dart_profile_start _profile_start;
+  _dart_profile_start? _profile_start;
 
   void profile_end(
     ffi.Pointer<ffi.Int8> name,
   ) {
     _profile_end ??=
         _dylib.lookupFunction<_c_profile_end, _dart_profile_end>('profile_end');
-    return _profile_end(
+    return _profile_end!(
       name,
     );
   }
 
-  _dart_profile_end _profile_end;
+  _dart_profile_end? _profile_end;
 
   void profile_reenable_thread() {
     _profile_reenable_thread ??= _dylib.lookupFunction<
         _c_profile_reenable_thread,
         _dart_profile_reenable_thread>('profile_reenable_thread');
-    return _profile_reenable_thread();
+    return _profile_reenable_thread!();
   }
 
-  _dart_profile_reenable_thread _profile_reenable_thread;
+  _dart_profile_reenable_thread? _profile_reenable_thread;
 
   void profiler_start() {
     _profiler_start ??=
         _dylib.lookupFunction<_c_profiler_start, _dart_profiler_start>(
             'profiler_start');
-    return _profiler_start();
+    return _profiler_start!();
   }
 
-  _dart_profiler_start _profiler_start;
+  _dart_profiler_start? _profiler_start;
 
   void profiler_stop() {
     _profiler_stop ??= _dylib
         .lookupFunction<_c_profiler_stop, _dart_profiler_stop>('profiler_stop');
-    return _profiler_stop();
+    return _profiler_stop!();
   }
 
-  _dart_profiler_stop _profiler_stop;
+  _dart_profiler_stop? _profiler_stop;
 
   void profiler_print(
     ffi.Pointer<profiler_snapshot> snap,
@@ -249,12 +249,12 @@ class DiveObslibFFI {
     _profiler_print ??=
         _dylib.lookupFunction<_c_profiler_print, _dart_profiler_print>(
             'profiler_print');
-    return _profiler_print(
+    return _profiler_print!(
       snap,
     );
   }
 
-  _dart_profiler_print _profiler_print;
+  _dart_profiler_print? _profiler_print;
 
   void profiler_print_time_between_calls(
     ffi.Pointer<profiler_snapshot> snap,
@@ -263,29 +263,29 @@ class DiveObslibFFI {
             _c_profiler_print_time_between_calls,
             _dart_profiler_print_time_between_calls>(
         'profiler_print_time_between_calls');
-    return _profiler_print_time_between_calls(
+    return _profiler_print_time_between_calls!(
       snap,
     );
   }
 
-  _dart_profiler_print_time_between_calls _profiler_print_time_between_calls;
+  _dart_profiler_print_time_between_calls? _profiler_print_time_between_calls;
 
   void profiler_free() {
     _profiler_free ??= _dylib
         .lookupFunction<_c_profiler_free, _dart_profiler_free>('profiler_free');
-    return _profiler_free();
+    return _profiler_free!();
   }
 
-  _dart_profiler_free _profiler_free;
+  _dart_profiler_free? _profiler_free;
 
   ffi.Pointer<profiler_name_store> profiler_name_store_create() {
     _profiler_name_store_create ??= _dylib.lookupFunction<
         _c_profiler_name_store_create,
         _dart_profiler_name_store_create>('profiler_name_store_create');
-    return _profiler_name_store_create();
+    return _profiler_name_store_create!();
   }
 
-  _dart_profiler_name_store_create _profiler_name_store_create;
+  _dart_profiler_name_store_create? _profiler_name_store_create;
 
   void profiler_name_store_free(
     ffi.Pointer<profiler_name_store> store,
@@ -293,12 +293,12 @@ class DiveObslibFFI {
     _profiler_name_store_free ??= _dylib.lookupFunction<
         _c_profiler_name_store_free,
         _dart_profiler_name_store_free>('profiler_name_store_free');
-    return _profiler_name_store_free(
+    return _profiler_name_store_free!(
       store,
     );
   }
 
-  _dart_profiler_name_store_free _profiler_name_store_free;
+  _dart_profiler_name_store_free? _profiler_name_store_free;
 
   ffi.Pointer<ffi.Int8> profile_store_name(
     ffi.Pointer<profiler_name_store> store,
@@ -307,34 +307,34 @@ class DiveObslibFFI {
     _profile_store_name ??=
         _dylib.lookupFunction<_c_profile_store_name, _dart_profile_store_name>(
             'profile_store_name');
-    return _profile_store_name(
+    return _profile_store_name!(
       store,
       format,
     );
   }
 
-  _dart_profile_store_name _profile_store_name;
+  _dart_profile_store_name? _profile_store_name;
 
   ffi.Pointer<profiler_snapshot> profile_snapshot_create() {
     _profile_snapshot_create ??= _dylib.lookupFunction<
         _c_profile_snapshot_create,
         _dart_profile_snapshot_create>('profile_snapshot_create');
-    return _profile_snapshot_create();
+    return _profile_snapshot_create!();
   }
 
-  _dart_profile_snapshot_create _profile_snapshot_create;
+  _dart_profile_snapshot_create? _profile_snapshot_create;
 
   void profile_snapshot_free(
     ffi.Pointer<profiler_snapshot> snap,
   ) {
     _profile_snapshot_free ??= _dylib.lookupFunction<_c_profile_snapshot_free,
         _dart_profile_snapshot_free>('profile_snapshot_free');
-    return _profile_snapshot_free(
+    return _profile_snapshot_free!(
       snap,
     );
   }
 
-  _dart_profile_snapshot_free _profile_snapshot_free;
+  _dart_profile_snapshot_free? _profile_snapshot_free;
 
   int profiler_snapshot_dump_csv(
     ffi.Pointer<profiler_snapshot> snap,
@@ -343,13 +343,13 @@ class DiveObslibFFI {
     _profiler_snapshot_dump_csv ??= _dylib.lookupFunction<
         _c_profiler_snapshot_dump_csv,
         _dart_profiler_snapshot_dump_csv>('profiler_snapshot_dump_csv');
-    return _profiler_snapshot_dump_csv(
+    return _profiler_snapshot_dump_csv!(
       snap,
       filename,
     );
   }
 
-  _dart_profiler_snapshot_dump_csv _profiler_snapshot_dump_csv;
+  _dart_profiler_snapshot_dump_csv? _profiler_snapshot_dump_csv;
 
   int profiler_snapshot_dump_csv_gz(
     ffi.Pointer<profiler_snapshot> snap,
@@ -358,13 +358,13 @@ class DiveObslibFFI {
     _profiler_snapshot_dump_csv_gz ??= _dylib.lookupFunction<
         _c_profiler_snapshot_dump_csv_gz,
         _dart_profiler_snapshot_dump_csv_gz>('profiler_snapshot_dump_csv_gz');
-    return _profiler_snapshot_dump_csv_gz(
+    return _profiler_snapshot_dump_csv_gz!(
       snap,
       filename,
     );
   }
 
-  _dart_profiler_snapshot_dump_csv_gz _profiler_snapshot_dump_csv_gz;
+  _dart_profiler_snapshot_dump_csv_gz? _profiler_snapshot_dump_csv_gz;
 
   int profiler_snapshot_num_roots(
     ffi.Pointer<profiler_snapshot> snap,
@@ -372,12 +372,12 @@ class DiveObslibFFI {
     _profiler_snapshot_num_roots ??= _dylib.lookupFunction<
         _c_profiler_snapshot_num_roots,
         _dart_profiler_snapshot_num_roots>('profiler_snapshot_num_roots');
-    return _profiler_snapshot_num_roots(
+    return _profiler_snapshot_num_roots!(
       snap,
     );
   }
 
-  _dart_profiler_snapshot_num_roots _profiler_snapshot_num_roots;
+  _dart_profiler_snapshot_num_roots? _profiler_snapshot_num_roots;
 
   void profiler_snapshot_enumerate_roots(
     ffi.Pointer<profiler_snapshot> snap,
@@ -388,14 +388,14 @@ class DiveObslibFFI {
             _c_profiler_snapshot_enumerate_roots,
             _dart_profiler_snapshot_enumerate_roots>(
         'profiler_snapshot_enumerate_roots');
-    return _profiler_snapshot_enumerate_roots(
+    return _profiler_snapshot_enumerate_roots!(
       snap,
       func,
       context,
     );
   }
 
-  _dart_profiler_snapshot_enumerate_roots _profiler_snapshot_enumerate_roots;
+  _dart_profiler_snapshot_enumerate_roots? _profiler_snapshot_enumerate_roots;
 
   void profiler_snapshot_filter_roots(
     ffi.Pointer<profiler_snapshot> snap,
@@ -405,14 +405,14 @@ class DiveObslibFFI {
     _profiler_snapshot_filter_roots ??= _dylib.lookupFunction<
         _c_profiler_snapshot_filter_roots,
         _dart_profiler_snapshot_filter_roots>('profiler_snapshot_filter_roots');
-    return _profiler_snapshot_filter_roots(
+    return _profiler_snapshot_filter_roots!(
       snap,
       func,
       data,
     );
   }
 
-  _dart_profiler_snapshot_filter_roots _profiler_snapshot_filter_roots;
+  _dart_profiler_snapshot_filter_roots? _profiler_snapshot_filter_roots;
 
   int profiler_snapshot_num_children(
     ffi.Pointer<profiler_snapshot_entry> entry,
@@ -420,12 +420,12 @@ class DiveObslibFFI {
     _profiler_snapshot_num_children ??= _dylib.lookupFunction<
         _c_profiler_snapshot_num_children,
         _dart_profiler_snapshot_num_children>('profiler_snapshot_num_children');
-    return _profiler_snapshot_num_children(
+    return _profiler_snapshot_num_children!(
       entry,
     );
   }
 
-  _dart_profiler_snapshot_num_children _profiler_snapshot_num_children;
+  _dart_profiler_snapshot_num_children? _profiler_snapshot_num_children;
 
   void profiler_snapshot_enumerate_children(
     ffi.Pointer<profiler_snapshot_entry> entry,
@@ -436,14 +436,14 @@ class DiveObslibFFI {
             _c_profiler_snapshot_enumerate_children,
             _dart_profiler_snapshot_enumerate_children>(
         'profiler_snapshot_enumerate_children');
-    return _profiler_snapshot_enumerate_children(
+    return _profiler_snapshot_enumerate_children!(
       entry,
       func,
       context,
     );
   }
 
-  _dart_profiler_snapshot_enumerate_children
+  _dart_profiler_snapshot_enumerate_children?
       _profiler_snapshot_enumerate_children;
 
   ffi.Pointer<ffi.Int8> profiler_snapshot_entry_name(
@@ -452,12 +452,12 @@ class DiveObslibFFI {
     _profiler_snapshot_entry_name ??= _dylib.lookupFunction<
         _c_profiler_snapshot_entry_name,
         _dart_profiler_snapshot_entry_name>('profiler_snapshot_entry_name');
-    return _profiler_snapshot_entry_name(
+    return _profiler_snapshot_entry_name!(
       entry,
     );
   }
 
-  _dart_profiler_snapshot_entry_name _profiler_snapshot_entry_name;
+  _dart_profiler_snapshot_entry_name? _profiler_snapshot_entry_name;
 
   int profiler_snapshot_entry_min_time(
     ffi.Pointer<profiler_snapshot_entry> entry,
@@ -466,12 +466,12 @@ class DiveObslibFFI {
             _c_profiler_snapshot_entry_min_time,
             _dart_profiler_snapshot_entry_min_time>(
         'profiler_snapshot_entry_min_time');
-    return _profiler_snapshot_entry_min_time(
+    return _profiler_snapshot_entry_min_time!(
       entry,
     );
   }
 
-  _dart_profiler_snapshot_entry_min_time _profiler_snapshot_entry_min_time;
+  _dart_profiler_snapshot_entry_min_time? _profiler_snapshot_entry_min_time;
 
   int profiler_snapshot_entry_max_time(
     ffi.Pointer<profiler_snapshot_entry> entry,
@@ -480,12 +480,12 @@ class DiveObslibFFI {
             _c_profiler_snapshot_entry_max_time,
             _dart_profiler_snapshot_entry_max_time>(
         'profiler_snapshot_entry_max_time');
-    return _profiler_snapshot_entry_max_time(
+    return _profiler_snapshot_entry_max_time!(
       entry,
     );
   }
 
-  _dart_profiler_snapshot_entry_max_time _profiler_snapshot_entry_max_time;
+  _dart_profiler_snapshot_entry_max_time? _profiler_snapshot_entry_max_time;
 
   int profiler_snapshot_entry_overall_count(
     ffi.Pointer<profiler_snapshot_entry> entry,
@@ -494,12 +494,12 @@ class DiveObslibFFI {
             _c_profiler_snapshot_entry_overall_count,
             _dart_profiler_snapshot_entry_overall_count>(
         'profiler_snapshot_entry_overall_count');
-    return _profiler_snapshot_entry_overall_count(
+    return _profiler_snapshot_entry_overall_count!(
       entry,
     );
   }
 
-  _dart_profiler_snapshot_entry_overall_count
+  _dart_profiler_snapshot_entry_overall_count?
       _profiler_snapshot_entry_overall_count;
 
   int profiler_snapshot_entry_expected_time_between_calls(
@@ -510,12 +510,12 @@ class DiveObslibFFI {
                 _c_profiler_snapshot_entry_expected_time_between_calls,
                 _dart_profiler_snapshot_entry_expected_time_between_calls>(
             'profiler_snapshot_entry_expected_time_between_calls');
-    return _profiler_snapshot_entry_expected_time_between_calls(
+    return _profiler_snapshot_entry_expected_time_between_calls!(
       entry,
     );
   }
 
-  _dart_profiler_snapshot_entry_expected_time_between_calls
+  _dart_profiler_snapshot_entry_expected_time_between_calls?
       _profiler_snapshot_entry_expected_time_between_calls;
 
   int profiler_snapshot_entry_min_time_between_calls(
@@ -525,12 +525,12 @@ class DiveObslibFFI {
             _c_profiler_snapshot_entry_min_time_between_calls,
             _dart_profiler_snapshot_entry_min_time_between_calls>(
         'profiler_snapshot_entry_min_time_between_calls');
-    return _profiler_snapshot_entry_min_time_between_calls(
+    return _profiler_snapshot_entry_min_time_between_calls!(
       entry,
     );
   }
 
-  _dart_profiler_snapshot_entry_min_time_between_calls
+  _dart_profiler_snapshot_entry_min_time_between_calls?
       _profiler_snapshot_entry_min_time_between_calls;
 
   int profiler_snapshot_entry_max_time_between_calls(
@@ -540,12 +540,12 @@ class DiveObslibFFI {
             _c_profiler_snapshot_entry_max_time_between_calls,
             _dart_profiler_snapshot_entry_max_time_between_calls>(
         'profiler_snapshot_entry_max_time_between_calls');
-    return _profiler_snapshot_entry_max_time_between_calls(
+    return _profiler_snapshot_entry_max_time_between_calls!(
       entry,
     );
   }
 
-  _dart_profiler_snapshot_entry_max_time_between_calls
+  _dart_profiler_snapshot_entry_max_time_between_calls?
       _profiler_snapshot_entry_max_time_between_calls;
 
   int profiler_snapshot_entry_overall_between_calls_count(
@@ -556,12 +556,12 @@ class DiveObslibFFI {
                 _c_profiler_snapshot_entry_overall_between_calls_count,
                 _dart_profiler_snapshot_entry_overall_between_calls_count>(
             'profiler_snapshot_entry_overall_between_calls_count');
-    return _profiler_snapshot_entry_overall_between_calls_count(
+    return _profiler_snapshot_entry_overall_between_calls_count!(
       entry,
     );
   }
 
-  _dart_profiler_snapshot_entry_overall_between_calls_count
+  _dart_profiler_snapshot_entry_overall_between_calls_count?
       _profiler_snapshot_entry_overall_between_calls_count;
 
   ffi.Pointer<text_lookup> text_lookup_create(
@@ -570,12 +570,12 @@ class DiveObslibFFI {
     _text_lookup_create ??=
         _dylib.lookupFunction<_c_text_lookup_create, _dart_text_lookup_create>(
             'text_lookup_create');
-    return _text_lookup_create(
+    return _text_lookup_create!(
       path,
     );
   }
 
-  _dart_text_lookup_create _text_lookup_create;
+  _dart_text_lookup_create? _text_lookup_create;
 
   int text_lookup_add(
     ffi.Pointer<text_lookup> lookup,
@@ -584,25 +584,25 @@ class DiveObslibFFI {
     _text_lookup_add ??=
         _dylib.lookupFunction<_c_text_lookup_add, _dart_text_lookup_add>(
             'text_lookup_add');
-    return _text_lookup_add(
+    return _text_lookup_add!(
       lookup,
       path,
     );
   }
 
-  _dart_text_lookup_add _text_lookup_add;
+  _dart_text_lookup_add? _text_lookup_add;
 
   void text_lookup_destroy(
     ffi.Pointer<text_lookup> lookup,
   ) {
     _text_lookup_destroy ??= _dylib.lookupFunction<_c_text_lookup_destroy,
         _dart_text_lookup_destroy>('text_lookup_destroy');
-    return _text_lookup_destroy(
+    return _text_lookup_destroy!(
       lookup,
     );
   }
 
-  _dart_text_lookup_destroy _text_lookup_destroy;
+  _dart_text_lookup_destroy? _text_lookup_destroy;
 
   int text_lookup_getstr(
     ffi.Pointer<text_lookup> lookup,
@@ -612,23 +612,23 @@ class DiveObslibFFI {
     _text_lookup_getstr ??=
         _dylib.lookupFunction<_c_text_lookup_getstr, _dart_text_lookup_getstr>(
             'text_lookup_getstr');
-    return _text_lookup_getstr(
+    return _text_lookup_getstr!(
       lookup,
       lookup_val,
       out,
     );
   }
 
-  _dart_text_lookup_getstr _text_lookup_getstr;
+  _dart_text_lookup_getstr? _text_lookup_getstr;
 
   ffi.Pointer<gs_vb_data> gs_vbdata_create() {
     _gs_vbdata_create ??=
         _dylib.lookupFunction<_c_gs_vbdata_create, _dart_gs_vbdata_create>(
             'gs_vbdata_create');
-    return _gs_vbdata_create();
+    return _gs_vbdata_create!();
   }
 
-  _dart_gs_vbdata_create _gs_vbdata_create;
+  _dart_gs_vbdata_create? _gs_vbdata_create;
 
   void gs_vbdata_destroy(
     ffi.Pointer<gs_vb_data> data,
@@ -636,12 +636,12 @@ class DiveObslibFFI {
     _gs_vbdata_destroy ??=
         _dylib.lookupFunction<_c_gs_vbdata_destroy, _dart_gs_vbdata_destroy>(
             'gs_vbdata_destroy');
-    return _gs_vbdata_destroy(
+    return _gs_vbdata_destroy!(
       data,
     );
   }
 
-  _dart_gs_vbdata_destroy _gs_vbdata_destroy;
+  _dart_gs_vbdata_destroy? _gs_vbdata_destroy;
 
   void gs_shader_destroy(
     ffi.Pointer<gs_shader> shader,
@@ -649,12 +649,12 @@ class DiveObslibFFI {
     _gs_shader_destroy ??=
         _dylib.lookupFunction<_c_gs_shader_destroy, _dart_gs_shader_destroy>(
             'gs_shader_destroy');
-    return _gs_shader_destroy(
+    return _gs_shader_destroy!(
       shader,
     );
   }
 
-  _dart_gs_shader_destroy _gs_shader_destroy;
+  _dart_gs_shader_destroy? _gs_shader_destroy;
 
   int gs_shader_get_num_params(
     ffi.Pointer<gs_shader> shader,
@@ -662,12 +662,12 @@ class DiveObslibFFI {
     _gs_shader_get_num_params ??= _dylib.lookupFunction<
         _c_gs_shader_get_num_params,
         _dart_gs_shader_get_num_params>('gs_shader_get_num_params');
-    return _gs_shader_get_num_params(
+    return _gs_shader_get_num_params!(
       shader,
     );
   }
 
-  _dart_gs_shader_get_num_params _gs_shader_get_num_params;
+  _dart_gs_shader_get_num_params? _gs_shader_get_num_params;
 
   ffi.Pointer<gs_shader_param> gs_shader_get_param_by_idx(
     ffi.Pointer<gs_shader> shader,
@@ -676,13 +676,13 @@ class DiveObslibFFI {
     _gs_shader_get_param_by_idx ??= _dylib.lookupFunction<
         _c_gs_shader_get_param_by_idx,
         _dart_gs_shader_get_param_by_idx>('gs_shader_get_param_by_idx');
-    return _gs_shader_get_param_by_idx(
+    return _gs_shader_get_param_by_idx!(
       shader,
       param,
     );
   }
 
-  _dart_gs_shader_get_param_by_idx _gs_shader_get_param_by_idx;
+  _dart_gs_shader_get_param_by_idx? _gs_shader_get_param_by_idx;
 
   ffi.Pointer<gs_shader_param> gs_shader_get_param_by_name(
     ffi.Pointer<gs_shader> shader,
@@ -691,13 +691,13 @@ class DiveObslibFFI {
     _gs_shader_get_param_by_name ??= _dylib.lookupFunction<
         _c_gs_shader_get_param_by_name,
         _dart_gs_shader_get_param_by_name>('gs_shader_get_param_by_name');
-    return _gs_shader_get_param_by_name(
+    return _gs_shader_get_param_by_name!(
       shader,
       name,
     );
   }
 
-  _dart_gs_shader_get_param_by_name _gs_shader_get_param_by_name;
+  _dart_gs_shader_get_param_by_name? _gs_shader_get_param_by_name;
 
   ffi.Pointer<gs_shader_param> gs_shader_get_viewproj_matrix(
     ffi.Pointer<gs_shader> shader,
@@ -705,12 +705,12 @@ class DiveObslibFFI {
     _gs_shader_get_viewproj_matrix ??= _dylib.lookupFunction<
         _c_gs_shader_get_viewproj_matrix,
         _dart_gs_shader_get_viewproj_matrix>('gs_shader_get_viewproj_matrix');
-    return _gs_shader_get_viewproj_matrix(
+    return _gs_shader_get_viewproj_matrix!(
       shader,
     );
   }
 
-  _dart_gs_shader_get_viewproj_matrix _gs_shader_get_viewproj_matrix;
+  _dart_gs_shader_get_viewproj_matrix? _gs_shader_get_viewproj_matrix;
 
   ffi.Pointer<gs_shader_param> gs_shader_get_world_matrix(
     ffi.Pointer<gs_shader> shader,
@@ -718,12 +718,12 @@ class DiveObslibFFI {
     _gs_shader_get_world_matrix ??= _dylib.lookupFunction<
         _c_gs_shader_get_world_matrix,
         _dart_gs_shader_get_world_matrix>('gs_shader_get_world_matrix');
-    return _gs_shader_get_world_matrix(
+    return _gs_shader_get_world_matrix!(
       shader,
     );
   }
 
-  _dart_gs_shader_get_world_matrix _gs_shader_get_world_matrix;
+  _dart_gs_shader_get_world_matrix? _gs_shader_get_world_matrix;
 
   void gs_shader_get_param_info(
     ffi.Pointer<gs_shader_param> param,
@@ -732,13 +732,13 @@ class DiveObslibFFI {
     _gs_shader_get_param_info ??= _dylib.lookupFunction<
         _c_gs_shader_get_param_info,
         _dart_gs_shader_get_param_info>('gs_shader_get_param_info');
-    return _gs_shader_get_param_info(
+    return _gs_shader_get_param_info!(
       param,
       info,
     );
   }
 
-  _dart_gs_shader_get_param_info _gs_shader_get_param_info;
+  _dart_gs_shader_get_param_info? _gs_shader_get_param_info;
 
   void gs_shader_set_bool(
     ffi.Pointer<gs_shader_param> param,
@@ -747,13 +747,13 @@ class DiveObslibFFI {
     _gs_shader_set_bool ??=
         _dylib.lookupFunction<_c_gs_shader_set_bool, _dart_gs_shader_set_bool>(
             'gs_shader_set_bool');
-    return _gs_shader_set_bool(
+    return _gs_shader_set_bool!(
       param,
       val,
     );
   }
 
-  _dart_gs_shader_set_bool _gs_shader_set_bool;
+  _dart_gs_shader_set_bool? _gs_shader_set_bool;
 
   void gs_shader_set_float(
     ffi.Pointer<gs_shader_param> param,
@@ -761,13 +761,13 @@ class DiveObslibFFI {
   ) {
     _gs_shader_set_float ??= _dylib.lookupFunction<_c_gs_shader_set_float,
         _dart_gs_shader_set_float>('gs_shader_set_float');
-    return _gs_shader_set_float(
+    return _gs_shader_set_float!(
       param,
       val,
     );
   }
 
-  _dart_gs_shader_set_float _gs_shader_set_float;
+  _dart_gs_shader_set_float? _gs_shader_set_float;
 
   void gs_shader_set_int(
     ffi.Pointer<gs_shader_param> param,
@@ -776,13 +776,13 @@ class DiveObslibFFI {
     _gs_shader_set_int ??=
         _dylib.lookupFunction<_c_gs_shader_set_int, _dart_gs_shader_set_int>(
             'gs_shader_set_int');
-    return _gs_shader_set_int(
+    return _gs_shader_set_int!(
       param,
       val,
     );
   }
 
-  _dart_gs_shader_set_int _gs_shader_set_int;
+  _dart_gs_shader_set_int? _gs_shader_set_int;
 
   void gs_shader_set_matrix3(
     ffi.Pointer<gs_shader_param> param,
@@ -790,13 +790,13 @@ class DiveObslibFFI {
   ) {
     _gs_shader_set_matrix3 ??= _dylib.lookupFunction<_c_gs_shader_set_matrix3,
         _dart_gs_shader_set_matrix3>('gs_shader_set_matrix3');
-    return _gs_shader_set_matrix3(
+    return _gs_shader_set_matrix3!(
       param,
       val,
     );
   }
 
-  _dart_gs_shader_set_matrix3 _gs_shader_set_matrix3;
+  _dart_gs_shader_set_matrix3? _gs_shader_set_matrix3;
 
   void gs_shader_set_matrix4(
     ffi.Pointer<gs_shader_param> param,
@@ -804,13 +804,13 @@ class DiveObslibFFI {
   ) {
     _gs_shader_set_matrix4 ??= _dylib.lookupFunction<_c_gs_shader_set_matrix4,
         _dart_gs_shader_set_matrix4>('gs_shader_set_matrix4');
-    return _gs_shader_set_matrix4(
+    return _gs_shader_set_matrix4!(
       param,
       val,
     );
   }
 
-  _dart_gs_shader_set_matrix4 _gs_shader_set_matrix4;
+  _dart_gs_shader_set_matrix4? _gs_shader_set_matrix4;
 
   void gs_shader_set_vec2(
     ffi.Pointer<gs_shader_param> param,
@@ -819,13 +819,13 @@ class DiveObslibFFI {
     _gs_shader_set_vec2 ??=
         _dylib.lookupFunction<_c_gs_shader_set_vec2, _dart_gs_shader_set_vec2>(
             'gs_shader_set_vec2');
-    return _gs_shader_set_vec2(
+    return _gs_shader_set_vec2!(
       param,
       val,
     );
   }
 
-  _dart_gs_shader_set_vec2 _gs_shader_set_vec2;
+  _dart_gs_shader_set_vec2? _gs_shader_set_vec2;
 
   void gs_shader_set_vec3(
     ffi.Pointer<gs_shader_param> param,
@@ -834,13 +834,13 @@ class DiveObslibFFI {
     _gs_shader_set_vec3 ??=
         _dylib.lookupFunction<_c_gs_shader_set_vec3, _dart_gs_shader_set_vec3>(
             'gs_shader_set_vec3');
-    return _gs_shader_set_vec3(
+    return _gs_shader_set_vec3!(
       param,
       val,
     );
   }
 
-  _dart_gs_shader_set_vec3 _gs_shader_set_vec3;
+  _dart_gs_shader_set_vec3? _gs_shader_set_vec3;
 
   void gs_shader_set_vec4(
     ffi.Pointer<gs_shader_param> param,
@@ -849,13 +849,13 @@ class DiveObslibFFI {
     _gs_shader_set_vec4 ??=
         _dylib.lookupFunction<_c_gs_shader_set_vec4, _dart_gs_shader_set_vec4>(
             'gs_shader_set_vec4');
-    return _gs_shader_set_vec4(
+    return _gs_shader_set_vec4!(
       param,
       val,
     );
   }
 
-  _dart_gs_shader_set_vec4 _gs_shader_set_vec4;
+  _dart_gs_shader_set_vec4? _gs_shader_set_vec4;
 
   void gs_shader_set_texture(
     ffi.Pointer<gs_shader_param> param,
@@ -863,13 +863,13 @@ class DiveObslibFFI {
   ) {
     _gs_shader_set_texture ??= _dylib.lookupFunction<_c_gs_shader_set_texture,
         _dart_gs_shader_set_texture>('gs_shader_set_texture');
-    return _gs_shader_set_texture(
+    return _gs_shader_set_texture!(
       param,
       val,
     );
   }
 
-  _dart_gs_shader_set_texture _gs_shader_set_texture;
+  _dart_gs_shader_set_texture? _gs_shader_set_texture;
 
   void gs_shader_set_val(
     ffi.Pointer<gs_shader_param> param,
@@ -879,26 +879,26 @@ class DiveObslibFFI {
     _gs_shader_set_val ??=
         _dylib.lookupFunction<_c_gs_shader_set_val, _dart_gs_shader_set_val>(
             'gs_shader_set_val');
-    return _gs_shader_set_val(
+    return _gs_shader_set_val!(
       param,
       val,
       size,
     );
   }
 
-  _dart_gs_shader_set_val _gs_shader_set_val;
+  _dart_gs_shader_set_val? _gs_shader_set_val;
 
   void gs_shader_set_default(
     ffi.Pointer<gs_shader_param> param,
   ) {
     _gs_shader_set_default ??= _dylib.lookupFunction<_c_gs_shader_set_default,
         _dart_gs_shader_set_default>('gs_shader_set_default');
-    return _gs_shader_set_default(
+    return _gs_shader_set_default!(
       param,
     );
   }
 
-  _dart_gs_shader_set_default _gs_shader_set_default;
+  _dart_gs_shader_set_default? _gs_shader_set_default;
 
   void gs_shader_set_next_sampler(
     ffi.Pointer<gs_shader_param> param,
@@ -907,13 +907,13 @@ class DiveObslibFFI {
     _gs_shader_set_next_sampler ??= _dylib.lookupFunction<
         _c_gs_shader_set_next_sampler,
         _dart_gs_shader_set_next_sampler>('gs_shader_set_next_sampler');
-    return _gs_shader_set_next_sampler(
+    return _gs_shader_set_next_sampler!(
       param,
       sampler,
     );
   }
 
-  _dart_gs_shader_set_next_sampler _gs_shader_set_next_sampler;
+  _dart_gs_shader_set_next_sampler? _gs_shader_set_next_sampler;
 
   void gs_effect_destroy(
     ffi.Pointer<gs_effect> effect,
@@ -921,12 +921,12 @@ class DiveObslibFFI {
     _gs_effect_destroy ??=
         _dylib.lookupFunction<_c_gs_effect_destroy, _dart_gs_effect_destroy>(
             'gs_effect_destroy');
-    return _gs_effect_destroy(
+    return _gs_effect_destroy!(
       effect,
     );
   }
 
-  _dart_gs_effect_destroy _gs_effect_destroy;
+  _dart_gs_effect_destroy? _gs_effect_destroy;
 
   ffi.Pointer<gs_effect_technique> gs_effect_get_technique(
     ffi.Pointer<gs_effect> effect,
@@ -935,13 +935,13 @@ class DiveObslibFFI {
     _gs_effect_get_technique ??= _dylib.lookupFunction<
         _c_gs_effect_get_technique,
         _dart_gs_effect_get_technique>('gs_effect_get_technique');
-    return _gs_effect_get_technique(
+    return _gs_effect_get_technique!(
       effect,
       name,
     );
   }
 
-  _dart_gs_effect_get_technique _gs_effect_get_technique;
+  _dart_gs_effect_get_technique? _gs_effect_get_technique;
 
   ffi.Pointer<gs_effect_technique> gs_effect_get_current_technique(
     ffi.Pointer<gs_effect> effect,
@@ -950,12 +950,12 @@ class DiveObslibFFI {
             _c_gs_effect_get_current_technique,
             _dart_gs_effect_get_current_technique>(
         'gs_effect_get_current_technique');
-    return _gs_effect_get_current_technique(
+    return _gs_effect_get_current_technique!(
       effect,
     );
   }
 
-  _dart_gs_effect_get_current_technique _gs_effect_get_current_technique;
+  _dart_gs_effect_get_current_technique? _gs_effect_get_current_technique;
 
   int gs_technique_begin(
     ffi.Pointer<gs_effect_technique> technique,
@@ -963,12 +963,12 @@ class DiveObslibFFI {
     _gs_technique_begin ??=
         _dylib.lookupFunction<_c_gs_technique_begin, _dart_gs_technique_begin>(
             'gs_technique_begin');
-    return _gs_technique_begin(
+    return _gs_technique_begin!(
       technique,
     );
   }
 
-  _dart_gs_technique_begin _gs_technique_begin;
+  _dart_gs_technique_begin? _gs_technique_begin;
 
   void gs_technique_end(
     ffi.Pointer<gs_effect_technique> technique,
@@ -976,12 +976,12 @@ class DiveObslibFFI {
     _gs_technique_end ??=
         _dylib.lookupFunction<_c_gs_technique_end, _dart_gs_technique_end>(
             'gs_technique_end');
-    return _gs_technique_end(
+    return _gs_technique_end!(
       technique,
     );
   }
 
-  _dart_gs_technique_end _gs_technique_end;
+  _dart_gs_technique_end? _gs_technique_end;
 
   int gs_technique_begin_pass(
     ffi.Pointer<gs_effect_technique> technique,
@@ -990,13 +990,13 @@ class DiveObslibFFI {
     _gs_technique_begin_pass ??= _dylib.lookupFunction<
         _c_gs_technique_begin_pass,
         _dart_gs_technique_begin_pass>('gs_technique_begin_pass');
-    return _gs_technique_begin_pass(
+    return _gs_technique_begin_pass!(
       technique,
       pass,
     );
   }
 
-  _dart_gs_technique_begin_pass _gs_technique_begin_pass;
+  _dart_gs_technique_begin_pass? _gs_technique_begin_pass;
 
   int gs_technique_begin_pass_by_name(
     ffi.Pointer<gs_effect_technique> technique,
@@ -1006,25 +1006,25 @@ class DiveObslibFFI {
             _c_gs_technique_begin_pass_by_name,
             _dart_gs_technique_begin_pass_by_name>(
         'gs_technique_begin_pass_by_name');
-    return _gs_technique_begin_pass_by_name(
+    return _gs_technique_begin_pass_by_name!(
       technique,
       name,
     );
   }
 
-  _dart_gs_technique_begin_pass_by_name _gs_technique_begin_pass_by_name;
+  _dart_gs_technique_begin_pass_by_name? _gs_technique_begin_pass_by_name;
 
   void gs_technique_end_pass(
     ffi.Pointer<gs_effect_technique> technique,
   ) {
     _gs_technique_end_pass ??= _dylib.lookupFunction<_c_gs_technique_end_pass,
         _dart_gs_technique_end_pass>('gs_technique_end_pass');
-    return _gs_technique_end_pass(
+    return _gs_technique_end_pass!(
       technique,
     );
   }
 
-  _dart_gs_technique_end_pass _gs_technique_end_pass;
+  _dart_gs_technique_end_pass? _gs_technique_end_pass;
 
   ffi.Pointer<gs_effect_pass> gs_technique_get_pass_by_idx(
     ffi.Pointer<gs_effect_technique> technique,
@@ -1033,13 +1033,13 @@ class DiveObslibFFI {
     _gs_technique_get_pass_by_idx ??= _dylib.lookupFunction<
         _c_gs_technique_get_pass_by_idx,
         _dart_gs_technique_get_pass_by_idx>('gs_technique_get_pass_by_idx');
-    return _gs_technique_get_pass_by_idx(
+    return _gs_technique_get_pass_by_idx!(
       technique,
       pass,
     );
   }
 
-  _dart_gs_technique_get_pass_by_idx _gs_technique_get_pass_by_idx;
+  _dart_gs_technique_get_pass_by_idx? _gs_technique_get_pass_by_idx;
 
   ffi.Pointer<gs_effect_pass> gs_technique_get_pass_by_name(
     ffi.Pointer<gs_effect_technique> technique,
@@ -1048,13 +1048,13 @@ class DiveObslibFFI {
     _gs_technique_get_pass_by_name ??= _dylib.lookupFunction<
         _c_gs_technique_get_pass_by_name,
         _dart_gs_technique_get_pass_by_name>('gs_technique_get_pass_by_name');
-    return _gs_technique_get_pass_by_name(
+    return _gs_technique_get_pass_by_name!(
       technique,
       name,
     );
   }
 
-  _dart_gs_technique_get_pass_by_name _gs_technique_get_pass_by_name;
+  _dart_gs_technique_get_pass_by_name? _gs_technique_get_pass_by_name;
 
   int gs_effect_get_num_params(
     ffi.Pointer<gs_effect> effect,
@@ -1062,12 +1062,12 @@ class DiveObslibFFI {
     _gs_effect_get_num_params ??= _dylib.lookupFunction<
         _c_gs_effect_get_num_params,
         _dart_gs_effect_get_num_params>('gs_effect_get_num_params');
-    return _gs_effect_get_num_params(
+    return _gs_effect_get_num_params!(
       effect,
     );
   }
 
-  _dart_gs_effect_get_num_params _gs_effect_get_num_params;
+  _dart_gs_effect_get_num_params? _gs_effect_get_num_params;
 
   ffi.Pointer<gs_effect_param> gs_effect_get_param_by_idx(
     ffi.Pointer<gs_effect> effect,
@@ -1076,13 +1076,13 @@ class DiveObslibFFI {
     _gs_effect_get_param_by_idx ??= _dylib.lookupFunction<
         _c_gs_effect_get_param_by_idx,
         _dart_gs_effect_get_param_by_idx>('gs_effect_get_param_by_idx');
-    return _gs_effect_get_param_by_idx(
+    return _gs_effect_get_param_by_idx!(
       effect,
       param,
     );
   }
 
-  _dart_gs_effect_get_param_by_idx _gs_effect_get_param_by_idx;
+  _dart_gs_effect_get_param_by_idx? _gs_effect_get_param_by_idx;
 
   ffi.Pointer<gs_effect_param> gs_effect_get_param_by_name(
     ffi.Pointer<gs_effect> effect,
@@ -1091,13 +1091,13 @@ class DiveObslibFFI {
     _gs_effect_get_param_by_name ??= _dylib.lookupFunction<
         _c_gs_effect_get_param_by_name,
         _dart_gs_effect_get_param_by_name>('gs_effect_get_param_by_name');
-    return _gs_effect_get_param_by_name(
+    return _gs_effect_get_param_by_name!(
       effect,
       name,
     );
   }
 
-  _dart_gs_effect_get_param_by_name _gs_effect_get_param_by_name;
+  _dart_gs_effect_get_param_by_name? _gs_effect_get_param_by_name;
 
   int gs_param_get_num_annotations(
     ffi.Pointer<gs_effect_param> param,
@@ -1105,12 +1105,12 @@ class DiveObslibFFI {
     _gs_param_get_num_annotations ??= _dylib.lookupFunction<
         _c_gs_param_get_num_annotations,
         _dart_gs_param_get_num_annotations>('gs_param_get_num_annotations');
-    return _gs_param_get_num_annotations(
+    return _gs_param_get_num_annotations!(
       param,
     );
   }
 
-  _dart_gs_param_get_num_annotations _gs_param_get_num_annotations;
+  _dart_gs_param_get_num_annotations? _gs_param_get_num_annotations;
 
   ffi.Pointer<gs_effect_param> gs_param_get_annotation_by_idx(
     ffi.Pointer<gs_effect_param> param,
@@ -1119,13 +1119,13 @@ class DiveObslibFFI {
     _gs_param_get_annotation_by_idx ??= _dylib.lookupFunction<
         _c_gs_param_get_annotation_by_idx,
         _dart_gs_param_get_annotation_by_idx>('gs_param_get_annotation_by_idx');
-    return _gs_param_get_annotation_by_idx(
+    return _gs_param_get_annotation_by_idx!(
       param,
       annotation,
     );
   }
 
-  _dart_gs_param_get_annotation_by_idx _gs_param_get_annotation_by_idx;
+  _dart_gs_param_get_annotation_by_idx? _gs_param_get_annotation_by_idx;
 
   ffi.Pointer<gs_effect_param> gs_param_get_annotation_by_name(
     ffi.Pointer<gs_effect_param> param,
@@ -1135,13 +1135,13 @@ class DiveObslibFFI {
             _c_gs_param_get_annotation_by_name,
             _dart_gs_param_get_annotation_by_name>(
         'gs_param_get_annotation_by_name');
-    return _gs_param_get_annotation_by_name(
+    return _gs_param_get_annotation_by_name!(
       param,
       name,
     );
   }
 
-  _dart_gs_param_get_annotation_by_name _gs_param_get_annotation_by_name;
+  _dart_gs_param_get_annotation_by_name? _gs_param_get_annotation_by_name;
 
   /// Helper function to simplify effect usage.  Use with a while loop that
   /// contains drawing functions.  Automatically handles techniques, passes, and
@@ -1153,13 +1153,13 @@ class DiveObslibFFI {
     _gs_effect_loop ??=
         _dylib.lookupFunction<_c_gs_effect_loop, _dart_gs_effect_loop>(
             'gs_effect_loop');
-    return _gs_effect_loop(
+    return _gs_effect_loop!(
       effect,
       name,
     );
   }
 
-  _dart_gs_effect_loop _gs_effect_loop;
+  _dart_gs_effect_loop? _gs_effect_loop;
 
   /// used internally
   void gs_effect_update_params(
@@ -1168,12 +1168,12 @@ class DiveObslibFFI {
     _gs_effect_update_params ??= _dylib.lookupFunction<
         _c_gs_effect_update_params,
         _dart_gs_effect_update_params>('gs_effect_update_params');
-    return _gs_effect_update_params(
+    return _gs_effect_update_params!(
       effect,
     );
   }
 
-  _dart_gs_effect_update_params _gs_effect_update_params;
+  _dart_gs_effect_update_params? _gs_effect_update_params;
 
   ffi.Pointer<gs_effect_param> gs_effect_get_viewproj_matrix(
     ffi.Pointer<gs_effect> effect,
@@ -1181,12 +1181,12 @@ class DiveObslibFFI {
     _gs_effect_get_viewproj_matrix ??= _dylib.lookupFunction<
         _c_gs_effect_get_viewproj_matrix,
         _dart_gs_effect_get_viewproj_matrix>('gs_effect_get_viewproj_matrix');
-    return _gs_effect_get_viewproj_matrix(
+    return _gs_effect_get_viewproj_matrix!(
       effect,
     );
   }
 
-  _dart_gs_effect_get_viewproj_matrix _gs_effect_get_viewproj_matrix;
+  _dart_gs_effect_get_viewproj_matrix? _gs_effect_get_viewproj_matrix;
 
   ffi.Pointer<gs_effect_param> gs_effect_get_world_matrix(
     ffi.Pointer<gs_effect> effect,
@@ -1194,12 +1194,12 @@ class DiveObslibFFI {
     _gs_effect_get_world_matrix ??= _dylib.lookupFunction<
         _c_gs_effect_get_world_matrix,
         _dart_gs_effect_get_world_matrix>('gs_effect_get_world_matrix');
-    return _gs_effect_get_world_matrix(
+    return _gs_effect_get_world_matrix!(
       effect,
     );
   }
 
-  _dart_gs_effect_get_world_matrix _gs_effect_get_world_matrix;
+  _dart_gs_effect_get_world_matrix? _gs_effect_get_world_matrix;
 
   void gs_effect_get_param_info(
     ffi.Pointer<gs_effect_param> param,
@@ -1208,13 +1208,13 @@ class DiveObslibFFI {
     _gs_effect_get_param_info ??= _dylib.lookupFunction<
         _c_gs_effect_get_param_info,
         _dart_gs_effect_get_param_info>('gs_effect_get_param_info');
-    return _gs_effect_get_param_info(
+    return _gs_effect_get_param_info!(
       param,
       info,
     );
   }
 
-  _dart_gs_effect_get_param_info _gs_effect_get_param_info;
+  _dart_gs_effect_get_param_info? _gs_effect_get_param_info;
 
   void gs_effect_set_bool(
     ffi.Pointer<gs_effect_param> param,
@@ -1223,13 +1223,13 @@ class DiveObslibFFI {
     _gs_effect_set_bool ??=
         _dylib.lookupFunction<_c_gs_effect_set_bool, _dart_gs_effect_set_bool>(
             'gs_effect_set_bool');
-    return _gs_effect_set_bool(
+    return _gs_effect_set_bool!(
       param,
       val,
     );
   }
 
-  _dart_gs_effect_set_bool _gs_effect_set_bool;
+  _dart_gs_effect_set_bool? _gs_effect_set_bool;
 
   void gs_effect_set_float(
     ffi.Pointer<gs_effect_param> param,
@@ -1237,13 +1237,13 @@ class DiveObslibFFI {
   ) {
     _gs_effect_set_float ??= _dylib.lookupFunction<_c_gs_effect_set_float,
         _dart_gs_effect_set_float>('gs_effect_set_float');
-    return _gs_effect_set_float(
+    return _gs_effect_set_float!(
       param,
       val,
     );
   }
 
-  _dart_gs_effect_set_float _gs_effect_set_float;
+  _dart_gs_effect_set_float? _gs_effect_set_float;
 
   void gs_effect_set_int(
     ffi.Pointer<gs_effect_param> param,
@@ -1252,13 +1252,13 @@ class DiveObslibFFI {
     _gs_effect_set_int ??=
         _dylib.lookupFunction<_c_gs_effect_set_int, _dart_gs_effect_set_int>(
             'gs_effect_set_int');
-    return _gs_effect_set_int(
+    return _gs_effect_set_int!(
       param,
       val,
     );
   }
 
-  _dart_gs_effect_set_int _gs_effect_set_int;
+  _dart_gs_effect_set_int? _gs_effect_set_int;
 
   void gs_effect_set_matrix4(
     ffi.Pointer<gs_effect_param> param,
@@ -1266,13 +1266,13 @@ class DiveObslibFFI {
   ) {
     _gs_effect_set_matrix4 ??= _dylib.lookupFunction<_c_gs_effect_set_matrix4,
         _dart_gs_effect_set_matrix4>('gs_effect_set_matrix4');
-    return _gs_effect_set_matrix4(
+    return _gs_effect_set_matrix4!(
       param,
       val,
     );
   }
 
-  _dart_gs_effect_set_matrix4 _gs_effect_set_matrix4;
+  _dart_gs_effect_set_matrix4? _gs_effect_set_matrix4;
 
   void gs_effect_set_vec2(
     ffi.Pointer<gs_effect_param> param,
@@ -1281,13 +1281,13 @@ class DiveObslibFFI {
     _gs_effect_set_vec2 ??=
         _dylib.lookupFunction<_c_gs_effect_set_vec2, _dart_gs_effect_set_vec2>(
             'gs_effect_set_vec2');
-    return _gs_effect_set_vec2(
+    return _gs_effect_set_vec2!(
       param,
       val,
     );
   }
 
-  _dart_gs_effect_set_vec2 _gs_effect_set_vec2;
+  _dart_gs_effect_set_vec2? _gs_effect_set_vec2;
 
   void gs_effect_set_vec3(
     ffi.Pointer<gs_effect_param> param,
@@ -1296,13 +1296,13 @@ class DiveObslibFFI {
     _gs_effect_set_vec3 ??=
         _dylib.lookupFunction<_c_gs_effect_set_vec3, _dart_gs_effect_set_vec3>(
             'gs_effect_set_vec3');
-    return _gs_effect_set_vec3(
+    return _gs_effect_set_vec3!(
       param,
       val,
     );
   }
 
-  _dart_gs_effect_set_vec3 _gs_effect_set_vec3;
+  _dart_gs_effect_set_vec3? _gs_effect_set_vec3;
 
   void gs_effect_set_vec4(
     ffi.Pointer<gs_effect_param> param,
@@ -1311,13 +1311,13 @@ class DiveObslibFFI {
     _gs_effect_set_vec4 ??=
         _dylib.lookupFunction<_c_gs_effect_set_vec4, _dart_gs_effect_set_vec4>(
             'gs_effect_set_vec4');
-    return _gs_effect_set_vec4(
+    return _gs_effect_set_vec4!(
       param,
       val,
     );
   }
 
-  _dart_gs_effect_set_vec4 _gs_effect_set_vec4;
+  _dart_gs_effect_set_vec4? _gs_effect_set_vec4;
 
   void gs_effect_set_texture(
     ffi.Pointer<gs_effect_param> param,
@@ -1325,13 +1325,13 @@ class DiveObslibFFI {
   ) {
     _gs_effect_set_texture ??= _dylib.lookupFunction<_c_gs_effect_set_texture,
         _dart_gs_effect_set_texture>('gs_effect_set_texture');
-    return _gs_effect_set_texture(
+    return _gs_effect_set_texture!(
       param,
       val,
     );
   }
 
-  _dart_gs_effect_set_texture _gs_effect_set_texture;
+  _dart_gs_effect_set_texture? _gs_effect_set_texture;
 
   void gs_effect_set_val(
     ffi.Pointer<gs_effect_param> param,
@@ -1341,38 +1341,38 @@ class DiveObslibFFI {
     _gs_effect_set_val ??=
         _dylib.lookupFunction<_c_gs_effect_set_val, _dart_gs_effect_set_val>(
             'gs_effect_set_val');
-    return _gs_effect_set_val(
+    return _gs_effect_set_val!(
       param,
       val,
       size,
     );
   }
 
-  _dart_gs_effect_set_val _gs_effect_set_val;
+  _dart_gs_effect_set_val? _gs_effect_set_val;
 
   void gs_effect_set_default(
     ffi.Pointer<gs_effect_param> param,
   ) {
     _gs_effect_set_default ??= _dylib.lookupFunction<_c_gs_effect_set_default,
         _dart_gs_effect_set_default>('gs_effect_set_default');
-    return _gs_effect_set_default(
+    return _gs_effect_set_default!(
       param,
     );
   }
 
-  _dart_gs_effect_set_default _gs_effect_set_default;
+  _dart_gs_effect_set_default? _gs_effect_set_default;
 
   int gs_effect_get_val_size(
     ffi.Pointer<gs_effect_param> param,
   ) {
     _gs_effect_get_val_size ??= _dylib.lookupFunction<_c_gs_effect_get_val_size,
         _dart_gs_effect_get_val_size>('gs_effect_get_val_size');
-    return _gs_effect_get_val_size(
+    return _gs_effect_get_val_size!(
       param,
     );
   }
 
-  _dart_gs_effect_get_val_size _gs_effect_get_val_size;
+  _dart_gs_effect_get_val_size? _gs_effect_get_val_size;
 
   ffi.Pointer<ffi.Void> gs_effect_get_val(
     ffi.Pointer<gs_effect_param> param,
@@ -1380,12 +1380,12 @@ class DiveObslibFFI {
     _gs_effect_get_val ??=
         _dylib.lookupFunction<_c_gs_effect_get_val, _dart_gs_effect_get_val>(
             'gs_effect_get_val');
-    return _gs_effect_get_val(
+    return _gs_effect_get_val!(
       param,
     );
   }
 
-  _dart_gs_effect_get_val _gs_effect_get_val;
+  _dart_gs_effect_get_val? _gs_effect_get_val;
 
   int gs_effect_get_default_val_size(
     ffi.Pointer<gs_effect_param> param,
@@ -1393,12 +1393,12 @@ class DiveObslibFFI {
     _gs_effect_get_default_val_size ??= _dylib.lookupFunction<
         _c_gs_effect_get_default_val_size,
         _dart_gs_effect_get_default_val_size>('gs_effect_get_default_val_size');
-    return _gs_effect_get_default_val_size(
+    return _gs_effect_get_default_val_size!(
       param,
     );
   }
 
-  _dart_gs_effect_get_default_val_size _gs_effect_get_default_val_size;
+  _dart_gs_effect_get_default_val_size? _gs_effect_get_default_val_size;
 
   ffi.Pointer<ffi.Void> gs_effect_get_default_val(
     ffi.Pointer<gs_effect_param> param,
@@ -1406,12 +1406,12 @@ class DiveObslibFFI {
     _gs_effect_get_default_val ??= _dylib.lookupFunction<
         _c_gs_effect_get_default_val,
         _dart_gs_effect_get_default_val>('gs_effect_get_default_val');
-    return _gs_effect_get_default_val(
+    return _gs_effect_get_default_val!(
       param,
     );
   }
 
-  _dart_gs_effect_get_default_val _gs_effect_get_default_val;
+  _dart_gs_effect_get_default_val? _gs_effect_get_default_val;
 
   void gs_effect_set_next_sampler(
     ffi.Pointer<gs_effect_param> param,
@@ -1420,13 +1420,13 @@ class DiveObslibFFI {
     _gs_effect_set_next_sampler ??= _dylib.lookupFunction<
         _c_gs_effect_set_next_sampler,
         _dart_gs_effect_set_next_sampler>('gs_effect_set_next_sampler');
-    return _gs_effect_set_next_sampler(
+    return _gs_effect_set_next_sampler!(
       param,
       sampler,
     );
   }
 
-  _dart_gs_effect_set_next_sampler _gs_effect_set_next_sampler;
+  _dart_gs_effect_set_next_sampler? _gs_effect_set_next_sampler;
 
   void gs_effect_set_color(
     ffi.Pointer<gs_effect_param> param,
@@ -1434,13 +1434,13 @@ class DiveObslibFFI {
   ) {
     _gs_effect_set_color ??= _dylib.lookupFunction<_c_gs_effect_set_color,
         _dart_gs_effect_set_color>('gs_effect_set_color');
-    return _gs_effect_set_color(
+    return _gs_effect_set_color!(
       param,
       argb,
     );
   }
 
-  _dart_gs_effect_set_color _gs_effect_set_color;
+  _dart_gs_effect_set_color? _gs_effect_set_color;
 
   ffi.Pointer<gs_texture_render> gs_texrender_create(
     int format,
@@ -1448,25 +1448,25 @@ class DiveObslibFFI {
   ) {
     _gs_texrender_create ??= _dylib.lookupFunction<_c_gs_texrender_create,
         _dart_gs_texrender_create>('gs_texrender_create');
-    return _gs_texrender_create(
+    return _gs_texrender_create!(
       format,
       zsformat,
     );
   }
 
-  _dart_gs_texrender_create _gs_texrender_create;
+  _dart_gs_texrender_create? _gs_texrender_create;
 
   void gs_texrender_destroy(
     ffi.Pointer<gs_texture_render> texrender,
   ) {
     _gs_texrender_destroy ??= _dylib.lookupFunction<_c_gs_texrender_destroy,
         _dart_gs_texrender_destroy>('gs_texrender_destroy');
-    return _gs_texrender_destroy(
+    return _gs_texrender_destroy!(
       texrender,
     );
   }
 
-  _dart_gs_texrender_destroy _gs_texrender_destroy;
+  _dart_gs_texrender_destroy? _gs_texrender_destroy;
 
   int gs_texrender_begin(
     ffi.Pointer<gs_texture_render> texrender,
@@ -1476,14 +1476,14 @@ class DiveObslibFFI {
     _gs_texrender_begin ??=
         _dylib.lookupFunction<_c_gs_texrender_begin, _dart_gs_texrender_begin>(
             'gs_texrender_begin');
-    return _gs_texrender_begin(
+    return _gs_texrender_begin!(
       texrender,
       cx,
       cy,
     );
   }
 
-  _dart_gs_texrender_begin _gs_texrender_begin;
+  _dart_gs_texrender_begin? _gs_texrender_begin;
 
   void gs_texrender_end(
     ffi.Pointer<gs_texture_render> texrender,
@@ -1491,12 +1491,12 @@ class DiveObslibFFI {
     _gs_texrender_end ??=
         _dylib.lookupFunction<_c_gs_texrender_end, _dart_gs_texrender_end>(
             'gs_texrender_end');
-    return _gs_texrender_end(
+    return _gs_texrender_end!(
       texrender,
     );
   }
 
-  _dart_gs_texrender_end _gs_texrender_end;
+  _dart_gs_texrender_end? _gs_texrender_end;
 
   void gs_texrender_reset(
     ffi.Pointer<gs_texture_render> texrender,
@@ -1504,12 +1504,12 @@ class DiveObslibFFI {
     _gs_texrender_reset ??=
         _dylib.lookupFunction<_c_gs_texrender_reset, _dart_gs_texrender_reset>(
             'gs_texrender_reset');
-    return _gs_texrender_reset(
+    return _gs_texrender_reset!(
       texrender,
     );
   }
 
-  _dart_gs_texrender_reset _gs_texrender_reset;
+  _dart_gs_texrender_reset? _gs_texrender_reset;
 
   ffi.Pointer<gs_texture> gs_texrender_get_texture(
     ffi.Pointer<gs_texture_render> texrender,
@@ -1517,30 +1517,30 @@ class DiveObslibFFI {
     _gs_texrender_get_texture ??= _dylib.lookupFunction<
         _c_gs_texrender_get_texture,
         _dart_gs_texrender_get_texture>('gs_texrender_get_texture');
-    return _gs_texrender_get_texture(
+    return _gs_texrender_get_texture!(
       texrender,
     );
   }
 
-  _dart_gs_texrender_get_texture _gs_texrender_get_texture;
+  _dart_gs_texrender_get_texture? _gs_texrender_get_texture;
 
   ffi.Pointer<ffi.Int8> gs_get_device_name() {
     _gs_get_device_name ??=
         _dylib.lookupFunction<_c_gs_get_device_name, _dart_gs_get_device_name>(
             'gs_get_device_name');
-    return _gs_get_device_name();
+    return _gs_get_device_name!();
   }
 
-  _dart_gs_get_device_name _gs_get_device_name;
+  _dart_gs_get_device_name? _gs_get_device_name;
 
   int gs_get_device_type() {
     _gs_get_device_type ??=
         _dylib.lookupFunction<_c_gs_get_device_type, _dart_gs_get_device_type>(
             'gs_get_device_type');
-    return _gs_get_device_type();
+    return _gs_get_device_type!();
   }
 
-  _dart_gs_get_device_type _gs_get_device_type;
+  _dart_gs_get_device_type? _gs_get_device_type;
 
   void gs_enum_adapters(
     ffi.Pointer<ffi.NativeFunction<_typedefC_6>> callback,
@@ -1549,13 +1549,13 @@ class DiveObslibFFI {
     _gs_enum_adapters ??=
         _dylib.lookupFunction<_c_gs_enum_adapters, _dart_gs_enum_adapters>(
             'gs_enum_adapters');
-    return _gs_enum_adapters(
+    return _gs_enum_adapters!(
       callback,
       param,
     );
   }
 
-  _dart_gs_enum_adapters _gs_enum_adapters;
+  _dart_gs_enum_adapters? _gs_enum_adapters;
 
   int gs_create(
     ffi.Pointer<ffi.Pointer<graphics_subsystem>> graphics,
@@ -1564,26 +1564,26 @@ class DiveObslibFFI {
   ) {
     _gs_create ??=
         _dylib.lookupFunction<_c_gs_create, _dart_gs_create>('gs_create');
-    return _gs_create(
+    return _gs_create!(
       graphics,
       module,
       adapter,
     );
   }
 
-  _dart_gs_create _gs_create;
+  _dart_gs_create? _gs_create;
 
   void gs_destroy(
     ffi.Pointer<graphics_subsystem> graphics,
   ) {
     _gs_destroy ??=
         _dylib.lookupFunction<_c_gs_destroy, _dart_gs_destroy>('gs_destroy');
-    return _gs_destroy(
+    return _gs_destroy!(
       graphics,
     );
   }
 
-  _dart_gs_destroy _gs_destroy;
+  _dart_gs_destroy? _gs_destroy;
 
   void gs_enter_context(
     ffi.Pointer<graphics_subsystem> graphics,
@@ -1591,109 +1591,109 @@ class DiveObslibFFI {
     _gs_enter_context ??=
         _dylib.lookupFunction<_c_gs_enter_context, _dart_gs_enter_context>(
             'gs_enter_context');
-    return _gs_enter_context(
+    return _gs_enter_context!(
       graphics,
     );
   }
 
-  _dart_gs_enter_context _gs_enter_context;
+  _dart_gs_enter_context? _gs_enter_context;
 
   void gs_leave_context() {
     _gs_leave_context ??=
         _dylib.lookupFunction<_c_gs_leave_context, _dart_gs_leave_context>(
             'gs_leave_context');
-    return _gs_leave_context();
+    return _gs_leave_context!();
   }
 
-  _dart_gs_leave_context _gs_leave_context;
+  _dart_gs_leave_context? _gs_leave_context;
 
   ffi.Pointer<graphics_subsystem> gs_get_context() {
     _gs_get_context ??=
         _dylib.lookupFunction<_c_gs_get_context, _dart_gs_get_context>(
             'gs_get_context');
-    return _gs_get_context();
+    return _gs_get_context!();
   }
 
-  _dart_gs_get_context _gs_get_context;
+  _dart_gs_get_context? _gs_get_context;
 
   ffi.Pointer<ffi.Void> gs_get_device_obj() {
     _gs_get_device_obj ??=
         _dylib.lookupFunction<_c_gs_get_device_obj, _dart_gs_get_device_obj>(
             'gs_get_device_obj');
-    return _gs_get_device_obj();
+    return _gs_get_device_obj!();
   }
 
-  _dart_gs_get_device_obj _gs_get_device_obj;
+  _dart_gs_get_device_obj? _gs_get_device_obj;
 
   void gs_matrix_push() {
     _gs_matrix_push ??=
         _dylib.lookupFunction<_c_gs_matrix_push, _dart_gs_matrix_push>(
             'gs_matrix_push');
-    return _gs_matrix_push();
+    return _gs_matrix_push!();
   }
 
-  _dart_gs_matrix_push _gs_matrix_push;
+  _dart_gs_matrix_push? _gs_matrix_push;
 
   void gs_matrix_pop() {
     _gs_matrix_pop ??= _dylib
         .lookupFunction<_c_gs_matrix_pop, _dart_gs_matrix_pop>('gs_matrix_pop');
-    return _gs_matrix_pop();
+    return _gs_matrix_pop!();
   }
 
-  _dart_gs_matrix_pop _gs_matrix_pop;
+  _dart_gs_matrix_pop? _gs_matrix_pop;
 
   void gs_matrix_identity() {
     _gs_matrix_identity ??=
         _dylib.lookupFunction<_c_gs_matrix_identity, _dart_gs_matrix_identity>(
             'gs_matrix_identity');
-    return _gs_matrix_identity();
+    return _gs_matrix_identity!();
   }
 
-  _dart_gs_matrix_identity _gs_matrix_identity;
+  _dart_gs_matrix_identity? _gs_matrix_identity;
 
   void gs_matrix_transpose() {
     _gs_matrix_transpose ??= _dylib.lookupFunction<_c_gs_matrix_transpose,
         _dart_gs_matrix_transpose>('gs_matrix_transpose');
-    return _gs_matrix_transpose();
+    return _gs_matrix_transpose!();
   }
 
-  _dart_gs_matrix_transpose _gs_matrix_transpose;
+  _dart_gs_matrix_transpose? _gs_matrix_transpose;
 
   void gs_matrix_set(
     ffi.Pointer<matrix4> matrix,
   ) {
     _gs_matrix_set ??= _dylib
         .lookupFunction<_c_gs_matrix_set, _dart_gs_matrix_set>('gs_matrix_set');
-    return _gs_matrix_set(
+    return _gs_matrix_set!(
       matrix,
     );
   }
 
-  _dart_gs_matrix_set _gs_matrix_set;
+  _dart_gs_matrix_set? _gs_matrix_set;
 
   void gs_matrix_get(
     ffi.Pointer<matrix4> dst,
   ) {
     _gs_matrix_get ??= _dylib
         .lookupFunction<_c_gs_matrix_get, _dart_gs_matrix_get>('gs_matrix_get');
-    return _gs_matrix_get(
+    return _gs_matrix_get!(
       dst,
     );
   }
 
-  _dart_gs_matrix_get _gs_matrix_get;
+  _dart_gs_matrix_get? _gs_matrix_get;
 
   void gs_matrix_mul(
     ffi.Pointer<matrix4> matrix,
   ) {
     _gs_matrix_mul ??= _dylib
         .lookupFunction<_c_gs_matrix_mul, _dart_gs_matrix_mul>('gs_matrix_mul');
-    return _gs_matrix_mul(
+    return _gs_matrix_mul!(
       matrix,
     );
   }
 
-  _dart_gs_matrix_mul _gs_matrix_mul;
+  _dart_gs_matrix_mul? _gs_matrix_mul;
 
   void gs_matrix_rotquat(
     ffi.Pointer<quat> rot,
@@ -1701,12 +1701,12 @@ class DiveObslibFFI {
     _gs_matrix_rotquat ??=
         _dylib.lookupFunction<_c_gs_matrix_rotquat, _dart_gs_matrix_rotquat>(
             'gs_matrix_rotquat');
-    return _gs_matrix_rotquat(
+    return _gs_matrix_rotquat!(
       rot,
     );
   }
 
-  _dart_gs_matrix_rotquat _gs_matrix_rotquat;
+  _dart_gs_matrix_rotquat? _gs_matrix_rotquat;
 
   void gs_matrix_rotaa(
     ffi.Pointer<axisang> rot,
@@ -1714,24 +1714,24 @@ class DiveObslibFFI {
     _gs_matrix_rotaa ??=
         _dylib.lookupFunction<_c_gs_matrix_rotaa, _dart_gs_matrix_rotaa>(
             'gs_matrix_rotaa');
-    return _gs_matrix_rotaa(
+    return _gs_matrix_rotaa!(
       rot,
     );
   }
 
-  _dart_gs_matrix_rotaa _gs_matrix_rotaa;
+  _dart_gs_matrix_rotaa? _gs_matrix_rotaa;
 
   void gs_matrix_translate(
     ffi.Pointer<vec3> pos,
   ) {
     _gs_matrix_translate ??= _dylib.lookupFunction<_c_gs_matrix_translate,
         _dart_gs_matrix_translate>('gs_matrix_translate');
-    return _gs_matrix_translate(
+    return _gs_matrix_translate!(
       pos,
     );
   }
 
-  _dart_gs_matrix_translate _gs_matrix_translate;
+  _dart_gs_matrix_translate? _gs_matrix_translate;
 
   void gs_matrix_scale(
     ffi.Pointer<vec3> scale,
@@ -1739,12 +1739,12 @@ class DiveObslibFFI {
     _gs_matrix_scale ??=
         _dylib.lookupFunction<_c_gs_matrix_scale, _dart_gs_matrix_scale>(
             'gs_matrix_scale');
-    return _gs_matrix_scale(
+    return _gs_matrix_scale!(
       scale,
     );
   }
 
-  _dart_gs_matrix_scale _gs_matrix_scale;
+  _dart_gs_matrix_scale? _gs_matrix_scale;
 
   void gs_matrix_rotaa4f(
     double x,
@@ -1755,7 +1755,7 @@ class DiveObslibFFI {
     _gs_matrix_rotaa4f ??=
         _dylib.lookupFunction<_c_gs_matrix_rotaa4f, _dart_gs_matrix_rotaa4f>(
             'gs_matrix_rotaa4f');
-    return _gs_matrix_rotaa4f(
+    return _gs_matrix_rotaa4f!(
       x,
       y,
       z,
@@ -1763,7 +1763,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_gs_matrix_rotaa4f _gs_matrix_rotaa4f;
+  _dart_gs_matrix_rotaa4f? _gs_matrix_rotaa4f;
 
   void gs_matrix_translate3f(
     double x,
@@ -1772,14 +1772,14 @@ class DiveObslibFFI {
   ) {
     _gs_matrix_translate3f ??= _dylib.lookupFunction<_c_gs_matrix_translate3f,
         _dart_gs_matrix_translate3f>('gs_matrix_translate3f');
-    return _gs_matrix_translate3f(
+    return _gs_matrix_translate3f!(
       x,
       y,
       z,
     );
   }
 
-  _dart_gs_matrix_translate3f _gs_matrix_translate3f;
+  _dart_gs_matrix_translate3f? _gs_matrix_translate3f;
 
   void gs_matrix_scale3f(
     double x,
@@ -1789,14 +1789,14 @@ class DiveObslibFFI {
     _gs_matrix_scale3f ??=
         _dylib.lookupFunction<_c_gs_matrix_scale3f, _dart_gs_matrix_scale3f>(
             'gs_matrix_scale3f');
-    return _gs_matrix_scale3f(
+    return _gs_matrix_scale3f!(
       x,
       y,
       z,
     );
   }
 
-  _dart_gs_matrix_scale3f _gs_matrix_scale3f;
+  _dart_gs_matrix_scale3f? _gs_matrix_scale3f;
 
   void gs_render_start(
     int b_new,
@@ -1804,12 +1804,12 @@ class DiveObslibFFI {
     _gs_render_start ??=
         _dylib.lookupFunction<_c_gs_render_start, _dart_gs_render_start>(
             'gs_render_start');
-    return _gs_render_start(
+    return _gs_render_start!(
       b_new,
     );
   }
 
-  _dart_gs_render_start _gs_render_start;
+  _dart_gs_render_start? _gs_render_start;
 
   void gs_render_stop(
     int mode,
@@ -1817,21 +1817,21 @@ class DiveObslibFFI {
     _gs_render_stop ??=
         _dylib.lookupFunction<_c_gs_render_stop, _dart_gs_render_stop>(
             'gs_render_stop');
-    return _gs_render_stop(
+    return _gs_render_stop!(
       mode,
     );
   }
 
-  _dart_gs_render_stop _gs_render_stop;
+  _dart_gs_render_stop? _gs_render_stop;
 
   ffi.Pointer<gs_vertex_buffer> gs_render_save() {
     _gs_render_save ??=
         _dylib.lookupFunction<_c_gs_render_save, _dart_gs_render_save>(
             'gs_render_save');
-    return _gs_render_save();
+    return _gs_render_save!();
   }
 
-  _dart_gs_render_save _gs_render_save;
+  _dart_gs_render_save? _gs_render_save;
 
   void gs_vertex2f(
     double x,
@@ -1839,13 +1839,13 @@ class DiveObslibFFI {
   ) {
     _gs_vertex2f ??=
         _dylib.lookupFunction<_c_gs_vertex2f, _dart_gs_vertex2f>('gs_vertex2f');
-    return _gs_vertex2f(
+    return _gs_vertex2f!(
       x,
       y,
     );
   }
 
-  _dart_gs_vertex2f _gs_vertex2f;
+  _dart_gs_vertex2f? _gs_vertex2f;
 
   void gs_vertex3f(
     double x,
@@ -1854,14 +1854,14 @@ class DiveObslibFFI {
   ) {
     _gs_vertex3f ??=
         _dylib.lookupFunction<_c_gs_vertex3f, _dart_gs_vertex3f>('gs_vertex3f');
-    return _gs_vertex3f(
+    return _gs_vertex3f!(
       x,
       y,
       z,
     );
   }
 
-  _dart_gs_vertex3f _gs_vertex3f;
+  _dart_gs_vertex3f? _gs_vertex3f;
 
   void gs_normal3f(
     double x,
@@ -1870,26 +1870,26 @@ class DiveObslibFFI {
   ) {
     _gs_normal3f ??=
         _dylib.lookupFunction<_c_gs_normal3f, _dart_gs_normal3f>('gs_normal3f');
-    return _gs_normal3f(
+    return _gs_normal3f!(
       x,
       y,
       z,
     );
   }
 
-  _dart_gs_normal3f _gs_normal3f;
+  _dart_gs_normal3f? _gs_normal3f;
 
   void gs_color(
     int color,
   ) {
     _gs_color ??=
         _dylib.lookupFunction<_c_gs_color, _dart_gs_color>('gs_color');
-    return _gs_color(
+    return _gs_color!(
       color,
     );
   }
 
-  _dart_gs_color _gs_color;
+  _dart_gs_color? _gs_color;
 
   void gs_texcoord(
     double x,
@@ -1898,62 +1898,62 @@ class DiveObslibFFI {
   ) {
     _gs_texcoord ??=
         _dylib.lookupFunction<_c_gs_texcoord, _dart_gs_texcoord>('gs_texcoord');
-    return _gs_texcoord(
+    return _gs_texcoord!(
       x,
       y,
       unit,
     );
   }
 
-  _dart_gs_texcoord _gs_texcoord;
+  _dart_gs_texcoord? _gs_texcoord;
 
   void gs_vertex2v(
     ffi.Pointer<vec2> v,
   ) {
     _gs_vertex2v ??=
         _dylib.lookupFunction<_c_gs_vertex2v, _dart_gs_vertex2v>('gs_vertex2v');
-    return _gs_vertex2v(
+    return _gs_vertex2v!(
       v,
     );
   }
 
-  _dart_gs_vertex2v _gs_vertex2v;
+  _dart_gs_vertex2v? _gs_vertex2v;
 
   void gs_vertex3v(
     ffi.Pointer<vec3> v,
   ) {
     _gs_vertex3v ??=
         _dylib.lookupFunction<_c_gs_vertex3v, _dart_gs_vertex3v>('gs_vertex3v');
-    return _gs_vertex3v(
+    return _gs_vertex3v!(
       v,
     );
   }
 
-  _dart_gs_vertex3v _gs_vertex3v;
+  _dart_gs_vertex3v? _gs_vertex3v;
 
   void gs_normal3v(
     ffi.Pointer<vec3> v,
   ) {
     _gs_normal3v ??=
         _dylib.lookupFunction<_c_gs_normal3v, _dart_gs_normal3v>('gs_normal3v');
-    return _gs_normal3v(
+    return _gs_normal3v!(
       v,
     );
   }
 
-  _dart_gs_normal3v _gs_normal3v;
+  _dart_gs_normal3v? _gs_normal3v;
 
   void gs_color4v(
     ffi.Pointer<vec4> v,
   ) {
     _gs_color4v ??=
         _dylib.lookupFunction<_c_gs_color4v, _dart_gs_color4v>('gs_color4v');
-    return _gs_color4v(
+    return _gs_color4v!(
       v,
     );
   }
 
-  _dart_gs_color4v _gs_color4v;
+  _dart_gs_color4v? _gs_color4v;
 
   void gs_texcoord2v(
     ffi.Pointer<vec2> v,
@@ -1961,29 +1961,29 @@ class DiveObslibFFI {
   ) {
     _gs_texcoord2v ??= _dylib
         .lookupFunction<_c_gs_texcoord2v, _dart_gs_texcoord2v>('gs_texcoord2v');
-    return _gs_texcoord2v(
+    return _gs_texcoord2v!(
       v,
       unit,
     );
   }
 
-  _dart_gs_texcoord2v _gs_texcoord2v;
+  _dart_gs_texcoord2v? _gs_texcoord2v;
 
   ffi.Pointer<input_t> gs_get_input() {
     _gs_get_input ??= _dylib
         .lookupFunction<_c_gs_get_input, _dart_gs_get_input>('gs_get_input');
-    return _gs_get_input();
+    return _gs_get_input!();
   }
 
-  _dart_gs_get_input _gs_get_input;
+  _dart_gs_get_input? _gs_get_input;
 
   ffi.Pointer<gs_effect> gs_get_effect() {
     _gs_get_effect ??= _dylib
         .lookupFunction<_c_gs_get_effect, _dart_gs_get_effect>('gs_get_effect');
-    return _gs_get_effect();
+    return _gs_get_effect!();
   }
 
-  _dart_gs_get_effect _gs_get_effect;
+  _dart_gs_get_effect? _gs_get_effect;
 
   ffi.Pointer<gs_effect> gs_effect_create_from_file(
     ffi.Pointer<ffi.Int8> file,
@@ -1992,13 +1992,13 @@ class DiveObslibFFI {
     _gs_effect_create_from_file ??= _dylib.lookupFunction<
         _c_gs_effect_create_from_file,
         _dart_gs_effect_create_from_file>('gs_effect_create_from_file');
-    return _gs_effect_create_from_file(
+    return _gs_effect_create_from_file!(
       file,
       error_string,
     );
   }
 
-  _dart_gs_effect_create_from_file _gs_effect_create_from_file;
+  _dart_gs_effect_create_from_file? _gs_effect_create_from_file;
 
   ffi.Pointer<gs_effect> gs_effect_create(
     ffi.Pointer<ffi.Int8> effect_string,
@@ -2008,14 +2008,14 @@ class DiveObslibFFI {
     _gs_effect_create ??=
         _dylib.lookupFunction<_c_gs_effect_create, _dart_gs_effect_create>(
             'gs_effect_create');
-    return _gs_effect_create(
+    return _gs_effect_create!(
       effect_string,
       filename,
       error_string,
     );
   }
 
-  _dart_gs_effect_create _gs_effect_create;
+  _dart_gs_effect_create? _gs_effect_create;
 
   ffi.Pointer<gs_shader> gs_vertexshader_create_from_file(
     ffi.Pointer<ffi.Int8> file,
@@ -2025,13 +2025,13 @@ class DiveObslibFFI {
             _c_gs_vertexshader_create_from_file,
             _dart_gs_vertexshader_create_from_file>(
         'gs_vertexshader_create_from_file');
-    return _gs_vertexshader_create_from_file(
+    return _gs_vertexshader_create_from_file!(
       file,
       error_string,
     );
   }
 
-  _dart_gs_vertexshader_create_from_file _gs_vertexshader_create_from_file;
+  _dart_gs_vertexshader_create_from_file? _gs_vertexshader_create_from_file;
 
   ffi.Pointer<gs_shader> gs_pixelshader_create_from_file(
     ffi.Pointer<ffi.Int8> file,
@@ -2041,13 +2041,13 @@ class DiveObslibFFI {
             _c_gs_pixelshader_create_from_file,
             _dart_gs_pixelshader_create_from_file>(
         'gs_pixelshader_create_from_file');
-    return _gs_pixelshader_create_from_file(
+    return _gs_pixelshader_create_from_file!(
       file,
       error_string,
     );
   }
 
-  _dart_gs_pixelshader_create_from_file _gs_pixelshader_create_from_file;
+  _dart_gs_pixelshader_create_from_file? _gs_pixelshader_create_from_file;
 
   ffi.Pointer<gs_texture> gs_texture_create_from_file(
     ffi.Pointer<ffi.Int8> file,
@@ -2055,12 +2055,12 @@ class DiveObslibFFI {
     _gs_texture_create_from_file ??= _dylib.lookupFunction<
         _c_gs_texture_create_from_file,
         _dart_gs_texture_create_from_file>('gs_texture_create_from_file');
-    return _gs_texture_create_from_file(
+    return _gs_texture_create_from_file!(
       file,
     );
   }
 
-  _dart_gs_texture_create_from_file _gs_texture_create_from_file;
+  _dart_gs_texture_create_from_file? _gs_texture_create_from_file;
 
   ffi.Pointer<ffi.Uint8> gs_create_texture_file_data(
     ffi.Pointer<ffi.Int8> file,
@@ -2071,7 +2071,7 @@ class DiveObslibFFI {
     _gs_create_texture_file_data ??= _dylib.lookupFunction<
         _c_gs_create_texture_file_data,
         _dart_gs_create_texture_file_data>('gs_create_texture_file_data');
-    return _gs_create_texture_file_data(
+    return _gs_create_texture_file_data!(
       file,
       format,
       cx,
@@ -2079,7 +2079,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_gs_create_texture_file_data _gs_create_texture_file_data;
+  _dart_gs_create_texture_file_data? _gs_create_texture_file_data;
 
   /// Draws a 2D sprite
   ///
@@ -2095,7 +2095,7 @@ class DiveObslibFFI {
     _gs_draw_sprite ??=
         _dylib.lookupFunction<_c_gs_draw_sprite, _dart_gs_draw_sprite>(
             'gs_draw_sprite');
-    return _gs_draw_sprite(
+    return _gs_draw_sprite!(
       tex,
       flip,
       width,
@@ -2103,7 +2103,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_gs_draw_sprite _gs_draw_sprite;
+  _dart_gs_draw_sprite? _gs_draw_sprite;
 
   void gs_draw_sprite_subregion(
     ffi.Pointer<gs_texture> tex,
@@ -2116,7 +2116,7 @@ class DiveObslibFFI {
     _gs_draw_sprite_subregion ??= _dylib.lookupFunction<
         _c_gs_draw_sprite_subregion,
         _dart_gs_draw_sprite_subregion>('gs_draw_sprite_subregion');
-    return _gs_draw_sprite_subregion(
+    return _gs_draw_sprite_subregion!(
       tex,
       flip,
       x,
@@ -2126,7 +2126,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_gs_draw_sprite_subregion _gs_draw_sprite_subregion;
+  _dart_gs_draw_sprite_subregion? _gs_draw_sprite_subregion;
 
   void gs_draw_cube_backdrop(
     ffi.Pointer<gs_texture> cubetex,
@@ -2139,7 +2139,7 @@ class DiveObslibFFI {
   ) {
     _gs_draw_cube_backdrop ??= _dylib.lookupFunction<_c_gs_draw_cube_backdrop,
         _dart_gs_draw_cube_backdrop>('gs_draw_cube_backdrop');
-    return _gs_draw_cube_backdrop(
+    return _gs_draw_cube_backdrop!(
       cubetex,
       rot,
       left,
@@ -2150,27 +2150,27 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_gs_draw_cube_backdrop _gs_draw_cube_backdrop;
+  _dart_gs_draw_cube_backdrop? _gs_draw_cube_backdrop;
 
   /// sets the viewport to current swap chain size
   void gs_reset_viewport() {
     _gs_reset_viewport ??=
         _dylib.lookupFunction<_c_gs_reset_viewport, _dart_gs_reset_viewport>(
             'gs_reset_viewport');
-    return _gs_reset_viewport();
+    return _gs_reset_viewport!();
   }
 
-  _dart_gs_reset_viewport _gs_reset_viewport;
+  _dart_gs_reset_viewport? _gs_reset_viewport;
 
   /// sets default screen-sized orthographic mode
   void gs_set_2d_mode() {
     _gs_set_2d_mode ??=
         _dylib.lookupFunction<_c_gs_set_2d_mode, _dart_gs_set_2d_mode>(
             'gs_set_2d_mode');
-    return _gs_set_2d_mode();
+    return _gs_set_2d_mode!();
   }
 
-  _dart_gs_set_2d_mode _gs_set_2d_mode;
+  _dart_gs_set_2d_mode? _gs_set_2d_mode;
 
   /// sets default screen-sized perspective mode
   void gs_set_3d_mode(
@@ -2181,32 +2181,32 @@ class DiveObslibFFI {
     _gs_set_3d_mode ??=
         _dylib.lookupFunction<_c_gs_set_3d_mode, _dart_gs_set_3d_mode>(
             'gs_set_3d_mode');
-    return _gs_set_3d_mode(
+    return _gs_set_3d_mode!(
       fovy,
       znear,
       zvar,
     );
   }
 
-  _dart_gs_set_3d_mode _gs_set_3d_mode;
+  _dart_gs_set_3d_mode? _gs_set_3d_mode;
 
   void gs_viewport_push() {
     _gs_viewport_push ??=
         _dylib.lookupFunction<_c_gs_viewport_push, _dart_gs_viewport_push>(
             'gs_viewport_push');
-    return _gs_viewport_push();
+    return _gs_viewport_push!();
   }
 
-  _dart_gs_viewport_push _gs_viewport_push;
+  _dart_gs_viewport_push? _gs_viewport_push;
 
   void gs_viewport_pop() {
     _gs_viewport_pop ??=
         _dylib.lookupFunction<_c_gs_viewport_pop, _dart_gs_viewport_pop>(
             'gs_viewport_pop');
-    return _gs_viewport_pop();
+    return _gs_viewport_pop!();
   }
 
-  _dart_gs_viewport_pop _gs_viewport_pop;
+  _dart_gs_viewport_pop? _gs_viewport_pop;
 
   void gs_texture_set_image(
     ffi.Pointer<gs_texture> tex,
@@ -2216,7 +2216,7 @@ class DiveObslibFFI {
   ) {
     _gs_texture_set_image ??= _dylib.lookupFunction<_c_gs_texture_set_image,
         _dart_gs_texture_set_image>('gs_texture_set_image');
-    return _gs_texture_set_image(
+    return _gs_texture_set_image!(
       tex,
       data,
       linesize,
@@ -2224,7 +2224,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_gs_texture_set_image _gs_texture_set_image;
+  _dart_gs_texture_set_image? _gs_texture_set_image;
 
   void gs_cubetexture_set_image(
     ffi.Pointer<gs_texture> cubetex,
@@ -2236,7 +2236,7 @@ class DiveObslibFFI {
     _gs_cubetexture_set_image ??= _dylib.lookupFunction<
         _c_gs_cubetexture_set_image,
         _dart_gs_cubetexture_set_image>('gs_cubetexture_set_image');
-    return _gs_cubetexture_set_image(
+    return _gs_cubetexture_set_image!(
       cubetex,
       side,
       data,
@@ -2245,7 +2245,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_gs_cubetexture_set_image _gs_cubetexture_set_image;
+  _dart_gs_cubetexture_set_image? _gs_cubetexture_set_image;
 
   void gs_perspective(
     double fovy,
@@ -2256,7 +2256,7 @@ class DiveObslibFFI {
     _gs_perspective ??=
         _dylib.lookupFunction<_c_gs_perspective, _dart_gs_perspective>(
             'gs_perspective');
-    return _gs_perspective(
+    return _gs_perspective!(
       fovy,
       aspect,
       znear,
@@ -2264,44 +2264,44 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_gs_perspective _gs_perspective;
+  _dart_gs_perspective? _gs_perspective;
 
   void gs_blend_state_push() {
     _gs_blend_state_push ??= _dylib.lookupFunction<_c_gs_blend_state_push,
         _dart_gs_blend_state_push>('gs_blend_state_push');
-    return _gs_blend_state_push();
+    return _gs_blend_state_push!();
   }
 
-  _dart_gs_blend_state_push _gs_blend_state_push;
+  _dart_gs_blend_state_push? _gs_blend_state_push;
 
   void gs_blend_state_pop() {
     _gs_blend_state_pop ??=
         _dylib.lookupFunction<_c_gs_blend_state_pop, _dart_gs_blend_state_pop>(
             'gs_blend_state_pop');
-    return _gs_blend_state_pop();
+    return _gs_blend_state_pop!();
   }
 
-  _dart_gs_blend_state_pop _gs_blend_state_pop;
+  _dart_gs_blend_state_pop? _gs_blend_state_pop;
 
   void gs_reset_blend_state() {
     _gs_reset_blend_state ??= _dylib.lookupFunction<_c_gs_reset_blend_state,
         _dart_gs_reset_blend_state>('gs_reset_blend_state');
-    return _gs_reset_blend_state();
+    return _gs_reset_blend_state!();
   }
 
-  _dart_gs_reset_blend_state _gs_reset_blend_state;
+  _dart_gs_reset_blend_state? _gs_reset_blend_state;
 
   ffi.Pointer<gs_swap_chain> gs_swapchain_create(
     ffi.Pointer<gs_init_data> data,
   ) {
     _gs_swapchain_create ??= _dylib.lookupFunction<_c_gs_swapchain_create,
         _dart_gs_swapchain_create>('gs_swapchain_create');
-    return _gs_swapchain_create(
+    return _gs_swapchain_create!(
       data,
     );
   }
 
-  _dart_gs_swapchain_create _gs_swapchain_create;
+  _dart_gs_swapchain_create? _gs_swapchain_create;
 
   void gs_resize(
     int x,
@@ -2309,13 +2309,13 @@ class DiveObslibFFI {
   ) {
     _gs_resize ??=
         _dylib.lookupFunction<_c_gs_resize, _dart_gs_resize>('gs_resize');
-    return _gs_resize(
+    return _gs_resize!(
       x,
       y,
     );
   }
 
-  _dart_gs_resize _gs_resize;
+  _dart_gs_resize? _gs_resize;
 
   void gs_get_size(
     ffi.Pointer<ffi.Uint32> x,
@@ -2323,29 +2323,29 @@ class DiveObslibFFI {
   ) {
     _gs_get_size ??=
         _dylib.lookupFunction<_c_gs_get_size, _dart_gs_get_size>('gs_get_size');
-    return _gs_get_size(
+    return _gs_get_size!(
       x,
       y,
     );
   }
 
-  _dart_gs_get_size _gs_get_size;
+  _dart_gs_get_size? _gs_get_size;
 
   int gs_get_width() {
     _gs_get_width ??= _dylib
         .lookupFunction<_c_gs_get_width, _dart_gs_get_width>('gs_get_width');
-    return _gs_get_width();
+    return _gs_get_width!();
   }
 
-  _dart_gs_get_width _gs_get_width;
+  _dart_gs_get_width? _gs_get_width;
 
   int gs_get_height() {
     _gs_get_height ??= _dylib
         .lookupFunction<_c_gs_get_height, _dart_gs_get_height>('gs_get_height');
-    return _gs_get_height();
+    return _gs_get_height!();
   }
 
-  _dart_gs_get_height _gs_get_height;
+  _dart_gs_get_height? _gs_get_height;
 
   ffi.Pointer<gs_texture> gs_texture_create(
     int width,
@@ -2358,7 +2358,7 @@ class DiveObslibFFI {
     _gs_texture_create ??=
         _dylib.lookupFunction<_c_gs_texture_create, _dart_gs_texture_create>(
             'gs_texture_create');
-    return _gs_texture_create(
+    return _gs_texture_create!(
       width,
       height,
       color_format,
@@ -2368,7 +2368,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_gs_texture_create _gs_texture_create;
+  _dart_gs_texture_create? _gs_texture_create;
 
   ffi.Pointer<gs_texture> gs_cubetexture_create(
     int size,
@@ -2379,7 +2379,7 @@ class DiveObslibFFI {
   ) {
     _gs_cubetexture_create ??= _dylib.lookupFunction<_c_gs_cubetexture_create,
         _dart_gs_cubetexture_create>('gs_cubetexture_create');
-    return _gs_cubetexture_create(
+    return _gs_cubetexture_create!(
       size,
       color_format,
       levels,
@@ -2388,7 +2388,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_gs_cubetexture_create _gs_cubetexture_create;
+  _dart_gs_cubetexture_create? _gs_cubetexture_create;
 
   ffi.Pointer<gs_texture> gs_voltexture_create(
     int width,
@@ -2401,7 +2401,7 @@ class DiveObslibFFI {
   ) {
     _gs_voltexture_create ??= _dylib.lookupFunction<_c_gs_voltexture_create,
         _dart_gs_voltexture_create>('gs_voltexture_create');
-    return _gs_voltexture_create(
+    return _gs_voltexture_create!(
       width,
       height,
       depth,
@@ -2412,7 +2412,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_gs_voltexture_create _gs_voltexture_create;
+  _dart_gs_voltexture_create? _gs_voltexture_create;
 
   ffi.Pointer<gs_zstencil_buffer> gs_zstencil_create(
     int width,
@@ -2422,14 +2422,14 @@ class DiveObslibFFI {
     _gs_zstencil_create ??=
         _dylib.lookupFunction<_c_gs_zstencil_create, _dart_gs_zstencil_create>(
             'gs_zstencil_create');
-    return _gs_zstencil_create(
+    return _gs_zstencil_create!(
       width,
       height,
       format,
     );
   }
 
-  _dart_gs_zstencil_create _gs_zstencil_create;
+  _dart_gs_zstencil_create? _gs_zstencil_create;
 
   ffi.Pointer<gs_stage_surface> gs_stagesurface_create(
     int width,
@@ -2438,26 +2438,26 @@ class DiveObslibFFI {
   ) {
     _gs_stagesurface_create ??= _dylib.lookupFunction<_c_gs_stagesurface_create,
         _dart_gs_stagesurface_create>('gs_stagesurface_create');
-    return _gs_stagesurface_create(
+    return _gs_stagesurface_create!(
       width,
       height,
       color_format,
     );
   }
 
-  _dart_gs_stagesurface_create _gs_stagesurface_create;
+  _dart_gs_stagesurface_create? _gs_stagesurface_create;
 
   ffi.Pointer<gs_sampler_state> gs_samplerstate_create(
     ffi.Pointer<gs_sampler_info> info,
   ) {
     _gs_samplerstate_create ??= _dylib.lookupFunction<_c_gs_samplerstate_create,
         _dart_gs_samplerstate_create>('gs_samplerstate_create');
-    return _gs_samplerstate_create(
+    return _gs_samplerstate_create!(
       info,
     );
   }
 
-  _dart_gs_samplerstate_create _gs_samplerstate_create;
+  _dart_gs_samplerstate_create? _gs_samplerstate_create;
 
   ffi.Pointer<gs_shader> gs_vertexshader_create(
     ffi.Pointer<ffi.Int8> shader,
@@ -2466,14 +2466,14 @@ class DiveObslibFFI {
   ) {
     _gs_vertexshader_create ??= _dylib.lookupFunction<_c_gs_vertexshader_create,
         _dart_gs_vertexshader_create>('gs_vertexshader_create');
-    return _gs_vertexshader_create(
+    return _gs_vertexshader_create!(
       shader,
       file,
       error_string,
     );
   }
 
-  _dart_gs_vertexshader_create _gs_vertexshader_create;
+  _dart_gs_vertexshader_create? _gs_vertexshader_create;
 
   ffi.Pointer<gs_shader> gs_pixelshader_create(
     ffi.Pointer<ffi.Int8> shader,
@@ -2482,14 +2482,14 @@ class DiveObslibFFI {
   ) {
     _gs_pixelshader_create ??= _dylib.lookupFunction<_c_gs_pixelshader_create,
         _dart_gs_pixelshader_create>('gs_pixelshader_create');
-    return _gs_pixelshader_create(
+    return _gs_pixelshader_create!(
       shader,
       file,
       error_string,
     );
   }
 
-  _dart_gs_pixelshader_create _gs_pixelshader_create;
+  _dart_gs_pixelshader_create? _gs_pixelshader_create;
 
   ffi.Pointer<gs_vertex_buffer> gs_vertexbuffer_create(
     ffi.Pointer<gs_vb_data> data,
@@ -2497,13 +2497,13 @@ class DiveObslibFFI {
   ) {
     _gs_vertexbuffer_create ??= _dylib.lookupFunction<_c_gs_vertexbuffer_create,
         _dart_gs_vertexbuffer_create>('gs_vertexbuffer_create');
-    return _gs_vertexbuffer_create(
+    return _gs_vertexbuffer_create!(
       data,
       flags,
     );
   }
 
-  _dart_gs_vertexbuffer_create _gs_vertexbuffer_create;
+  _dart_gs_vertexbuffer_create? _gs_vertexbuffer_create;
 
   ffi.Pointer<gs_index_buffer> gs_indexbuffer_create(
     int type,
@@ -2513,7 +2513,7 @@ class DiveObslibFFI {
   ) {
     _gs_indexbuffer_create ??= _dylib.lookupFunction<_c_gs_indexbuffer_create,
         _dart_gs_indexbuffer_create>('gs_indexbuffer_create');
-    return _gs_indexbuffer_create(
+    return _gs_indexbuffer_create!(
       type,
       indices,
       num,
@@ -2521,60 +2521,60 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_gs_indexbuffer_create _gs_indexbuffer_create;
+  _dart_gs_indexbuffer_create? _gs_indexbuffer_create;
 
   ffi.Pointer<gs_timer> gs_timer_create() {
     _gs_timer_create ??=
         _dylib.lookupFunction<_c_gs_timer_create, _dart_gs_timer_create>(
             'gs_timer_create');
-    return _gs_timer_create();
+    return _gs_timer_create!();
   }
 
-  _dart_gs_timer_create _gs_timer_create;
+  _dart_gs_timer_create? _gs_timer_create;
 
   ffi.Pointer<gs_timer_range> gs_timer_range_create() {
     _gs_timer_range_create ??= _dylib.lookupFunction<_c_gs_timer_range_create,
         _dart_gs_timer_range_create>('gs_timer_range_create');
-    return _gs_timer_range_create();
+    return _gs_timer_range_create!();
   }
 
-  _dart_gs_timer_range_create _gs_timer_range_create;
+  _dart_gs_timer_range_create? _gs_timer_range_create;
 
   int gs_get_texture_type(
     ffi.Pointer<gs_texture> texture,
   ) {
     _gs_get_texture_type ??= _dylib.lookupFunction<_c_gs_get_texture_type,
         _dart_gs_get_texture_type>('gs_get_texture_type');
-    return _gs_get_texture_type(
+    return _gs_get_texture_type!(
       texture,
     );
   }
 
-  _dart_gs_get_texture_type _gs_get_texture_type;
+  _dart_gs_get_texture_type? _gs_get_texture_type;
 
   void gs_load_vertexbuffer(
     ffi.Pointer<gs_vertex_buffer> vertbuffer,
   ) {
     _gs_load_vertexbuffer ??= _dylib.lookupFunction<_c_gs_load_vertexbuffer,
         _dart_gs_load_vertexbuffer>('gs_load_vertexbuffer');
-    return _gs_load_vertexbuffer(
+    return _gs_load_vertexbuffer!(
       vertbuffer,
     );
   }
 
-  _dart_gs_load_vertexbuffer _gs_load_vertexbuffer;
+  _dart_gs_load_vertexbuffer? _gs_load_vertexbuffer;
 
   void gs_load_indexbuffer(
     ffi.Pointer<gs_index_buffer> indexbuffer,
   ) {
     _gs_load_indexbuffer ??= _dylib.lookupFunction<_c_gs_load_indexbuffer,
         _dart_gs_load_indexbuffer>('gs_load_indexbuffer');
-    return _gs_load_indexbuffer(
+    return _gs_load_indexbuffer!(
       indexbuffer,
     );
   }
 
-  _dart_gs_load_indexbuffer _gs_load_indexbuffer;
+  _dart_gs_load_indexbuffer? _gs_load_indexbuffer;
 
   void gs_load_texture(
     ffi.Pointer<gs_texture> tex,
@@ -2583,13 +2583,13 @@ class DiveObslibFFI {
     _gs_load_texture ??=
         _dylib.lookupFunction<_c_gs_load_texture, _dart_gs_load_texture>(
             'gs_load_texture');
-    return _gs_load_texture(
+    return _gs_load_texture!(
       tex,
       unit,
     );
   }
 
-  _dart_gs_load_texture _gs_load_texture;
+  _dart_gs_load_texture? _gs_load_texture;
 
   void gs_load_samplerstate(
     ffi.Pointer<gs_sampler_state> samplerstate,
@@ -2597,37 +2597,37 @@ class DiveObslibFFI {
   ) {
     _gs_load_samplerstate ??= _dylib.lookupFunction<_c_gs_load_samplerstate,
         _dart_gs_load_samplerstate>('gs_load_samplerstate');
-    return _gs_load_samplerstate(
+    return _gs_load_samplerstate!(
       samplerstate,
       unit,
     );
   }
 
-  _dart_gs_load_samplerstate _gs_load_samplerstate;
+  _dart_gs_load_samplerstate? _gs_load_samplerstate;
 
   void gs_load_vertexshader(
     ffi.Pointer<gs_shader> vertshader,
   ) {
     _gs_load_vertexshader ??= _dylib.lookupFunction<_c_gs_load_vertexshader,
         _dart_gs_load_vertexshader>('gs_load_vertexshader');
-    return _gs_load_vertexshader(
+    return _gs_load_vertexshader!(
       vertshader,
     );
   }
 
-  _dart_gs_load_vertexshader _gs_load_vertexshader;
+  _dart_gs_load_vertexshader? _gs_load_vertexshader;
 
   void gs_load_pixelshader(
     ffi.Pointer<gs_shader> pixelshader,
   ) {
     _gs_load_pixelshader ??= _dylib.lookupFunction<_c_gs_load_pixelshader,
         _dart_gs_load_pixelshader>('gs_load_pixelshader');
-    return _gs_load_pixelshader(
+    return _gs_load_pixelshader!(
       pixelshader,
     );
   }
 
-  _dart_gs_load_pixelshader _gs_load_pixelshader;
+  _dart_gs_load_pixelshader? _gs_load_pixelshader;
 
   void gs_load_default_samplerstate(
     int b_3d,
@@ -2636,45 +2636,45 @@ class DiveObslibFFI {
     _gs_load_default_samplerstate ??= _dylib.lookupFunction<
         _c_gs_load_default_samplerstate,
         _dart_gs_load_default_samplerstate>('gs_load_default_samplerstate');
-    return _gs_load_default_samplerstate(
+    return _gs_load_default_samplerstate!(
       b_3d,
       unit,
     );
   }
 
-  _dart_gs_load_default_samplerstate _gs_load_default_samplerstate;
+  _dart_gs_load_default_samplerstate? _gs_load_default_samplerstate;
 
   ffi.Pointer<gs_shader> gs_get_vertex_shader() {
     _gs_get_vertex_shader ??= _dylib.lookupFunction<_c_gs_get_vertex_shader,
         _dart_gs_get_vertex_shader>('gs_get_vertex_shader');
-    return _gs_get_vertex_shader();
+    return _gs_get_vertex_shader!();
   }
 
-  _dart_gs_get_vertex_shader _gs_get_vertex_shader;
+  _dart_gs_get_vertex_shader? _gs_get_vertex_shader;
 
   ffi.Pointer<gs_shader> gs_get_pixel_shader() {
     _gs_get_pixel_shader ??= _dylib.lookupFunction<_c_gs_get_pixel_shader,
         _dart_gs_get_pixel_shader>('gs_get_pixel_shader');
-    return _gs_get_pixel_shader();
+    return _gs_get_pixel_shader!();
   }
 
-  _dart_gs_get_pixel_shader _gs_get_pixel_shader;
+  _dart_gs_get_pixel_shader? _gs_get_pixel_shader;
 
   ffi.Pointer<gs_texture> gs_get_render_target() {
     _gs_get_render_target ??= _dylib.lookupFunction<_c_gs_get_render_target,
         _dart_gs_get_render_target>('gs_get_render_target');
-    return _gs_get_render_target();
+    return _gs_get_render_target!();
   }
 
-  _dart_gs_get_render_target _gs_get_render_target;
+  _dart_gs_get_render_target? _gs_get_render_target;
 
   ffi.Pointer<gs_zstencil_buffer> gs_get_zstencil_target() {
     _gs_get_zstencil_target ??= _dylib.lookupFunction<_c_gs_get_zstencil_target,
         _dart_gs_get_zstencil_target>('gs_get_zstencil_target');
-    return _gs_get_zstencil_target();
+    return _gs_get_zstencil_target!();
   }
 
-  _dart_gs_get_zstencil_target _gs_get_zstencil_target;
+  _dart_gs_get_zstencil_target? _gs_get_zstencil_target;
 
   void gs_set_render_target(
     ffi.Pointer<gs_texture> tex,
@@ -2682,13 +2682,13 @@ class DiveObslibFFI {
   ) {
     _gs_set_render_target ??= _dylib.lookupFunction<_c_gs_set_render_target,
         _dart_gs_set_render_target>('gs_set_render_target');
-    return _gs_set_render_target(
+    return _gs_set_render_target!(
       tex,
       zstencil,
     );
   }
 
-  _dart_gs_set_render_target _gs_set_render_target;
+  _dart_gs_set_render_target? _gs_set_render_target;
 
   void gs_set_cube_render_target(
     ffi.Pointer<gs_texture> cubetex,
@@ -2698,14 +2698,14 @@ class DiveObslibFFI {
     _gs_set_cube_render_target ??= _dylib.lookupFunction<
         _c_gs_set_cube_render_target,
         _dart_gs_set_cube_render_target>('gs_set_cube_render_target');
-    return _gs_set_cube_render_target(
+    return _gs_set_cube_render_target!(
       cubetex,
       side,
       zstencil,
     );
   }
 
-  _dart_gs_set_cube_render_target _gs_set_cube_render_target;
+  _dart_gs_set_cube_render_target? _gs_set_cube_render_target;
 
   void gs_copy_texture(
     ffi.Pointer<gs_texture> dst,
@@ -2714,13 +2714,13 @@ class DiveObslibFFI {
     _gs_copy_texture ??=
         _dylib.lookupFunction<_c_gs_copy_texture, _dart_gs_copy_texture>(
             'gs_copy_texture');
-    return _gs_copy_texture(
+    return _gs_copy_texture!(
       dst,
       src,
     );
   }
 
-  _dart_gs_copy_texture _gs_copy_texture;
+  _dart_gs_copy_texture? _gs_copy_texture;
 
   void gs_copy_texture_region(
     ffi.Pointer<gs_texture> dst,
@@ -2734,7 +2734,7 @@ class DiveObslibFFI {
   ) {
     _gs_copy_texture_region ??= _dylib.lookupFunction<_c_gs_copy_texture_region,
         _dart_gs_copy_texture_region>('gs_copy_texture_region');
-    return _gs_copy_texture_region(
+    return _gs_copy_texture_region!(
       dst,
       dst_x,
       dst_y,
@@ -2746,7 +2746,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_gs_copy_texture_region _gs_copy_texture_region;
+  _dart_gs_copy_texture_region? _gs_copy_texture_region;
 
   void gs_stage_texture(
     ffi.Pointer<gs_stage_surface> dst,
@@ -2755,31 +2755,31 @@ class DiveObslibFFI {
     _gs_stage_texture ??=
         _dylib.lookupFunction<_c_gs_stage_texture, _dart_gs_stage_texture>(
             'gs_stage_texture');
-    return _gs_stage_texture(
+    return _gs_stage_texture!(
       dst,
       src,
     );
   }
 
-  _dart_gs_stage_texture _gs_stage_texture;
+  _dart_gs_stage_texture? _gs_stage_texture;
 
   void gs_begin_frame() {
     _gs_begin_frame ??=
         _dylib.lookupFunction<_c_gs_begin_frame, _dart_gs_begin_frame>(
             'gs_begin_frame');
-    return _gs_begin_frame();
+    return _gs_begin_frame!();
   }
 
-  _dart_gs_begin_frame _gs_begin_frame;
+  _dart_gs_begin_frame? _gs_begin_frame;
 
   void gs_begin_scene() {
     _gs_begin_scene ??=
         _dylib.lookupFunction<_c_gs_begin_scene, _dart_gs_begin_scene>(
             'gs_begin_scene');
-    return _gs_begin_scene();
+    return _gs_begin_scene!();
   }
 
-  _dart_gs_begin_scene _gs_begin_scene;
+  _dart_gs_begin_scene? _gs_begin_scene;
 
   void gs_draw(
     int draw_mode,
@@ -2787,22 +2787,22 @@ class DiveObslibFFI {
     int num_verts,
   ) {
     _gs_draw ??= _dylib.lookupFunction<_c_gs_draw, _dart_gs_draw>('gs_draw');
-    return _gs_draw(
+    return _gs_draw!(
       draw_mode,
       start_vert,
       num_verts,
     );
   }
 
-  _dart_gs_draw _gs_draw;
+  _dart_gs_draw? _gs_draw;
 
   void gs_end_scene() {
     _gs_end_scene ??= _dylib
         .lookupFunction<_c_gs_end_scene, _dart_gs_end_scene>('gs_end_scene');
-    return _gs_end_scene();
+    return _gs_end_scene!();
   }
 
-  _dart_gs_end_scene _gs_end_scene;
+  _dart_gs_end_scene? _gs_end_scene;
 
   void gs_load_swapchain(
     ffi.Pointer<gs_swap_chain> swapchain,
@@ -2810,12 +2810,12 @@ class DiveObslibFFI {
     _gs_load_swapchain ??=
         _dylib.lookupFunction<_c_gs_load_swapchain, _dart_gs_load_swapchain>(
             'gs_load_swapchain');
-    return _gs_load_swapchain(
+    return _gs_load_swapchain!(
       swapchain,
     );
   }
 
-  _dart_gs_load_swapchain _gs_load_swapchain;
+  _dart_gs_load_swapchain? _gs_load_swapchain;
 
   void gs_clear(
     int clear_flags,
@@ -2825,7 +2825,7 @@ class DiveObslibFFI {
   ) {
     _gs_clear ??=
         _dylib.lookupFunction<_c_gs_clear, _dart_gs_clear>('gs_clear');
-    return _gs_clear(
+    return _gs_clear!(
       clear_flags,
       color,
       depth,
@@ -2833,23 +2833,23 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_gs_clear _gs_clear;
+  _dart_gs_clear? _gs_clear;
 
   void gs_present() {
     _gs_present ??=
         _dylib.lookupFunction<_c_gs_present, _dart_gs_present>('gs_present');
-    return _gs_present();
+    return _gs_present!();
   }
 
-  _dart_gs_present _gs_present;
+  _dart_gs_present? _gs_present;
 
   void gs_flush() {
     _gs_flush ??=
         _dylib.lookupFunction<_c_gs_flush, _dart_gs_flush>('gs_flush');
-    return _gs_flush();
+    return _gs_flush!();
   }
 
-  _dart_gs_flush _gs_flush;
+  _dart_gs_flush? _gs_flush;
 
   void gs_set_cull_mode(
     int mode,
@@ -2857,21 +2857,21 @@ class DiveObslibFFI {
     _gs_set_cull_mode ??=
         _dylib.lookupFunction<_c_gs_set_cull_mode, _dart_gs_set_cull_mode>(
             'gs_set_cull_mode');
-    return _gs_set_cull_mode(
+    return _gs_set_cull_mode!(
       mode,
     );
   }
 
-  _dart_gs_set_cull_mode _gs_set_cull_mode;
+  _dart_gs_set_cull_mode? _gs_set_cull_mode;
 
   int gs_get_cull_mode() {
     _gs_get_cull_mode ??=
         _dylib.lookupFunction<_c_gs_get_cull_mode, _dart_gs_get_cull_mode>(
             'gs_get_cull_mode');
-    return _gs_get_cull_mode();
+    return _gs_get_cull_mode!();
   }
 
-  _dart_gs_get_cull_mode _gs_get_cull_mode;
+  _dart_gs_get_cull_mode? _gs_get_cull_mode;
 
   void gs_enable_blending(
     int enable,
@@ -2879,36 +2879,36 @@ class DiveObslibFFI {
     _gs_enable_blending ??=
         _dylib.lookupFunction<_c_gs_enable_blending, _dart_gs_enable_blending>(
             'gs_enable_blending');
-    return _gs_enable_blending(
+    return _gs_enable_blending!(
       enable,
     );
   }
 
-  _dart_gs_enable_blending _gs_enable_blending;
+  _dart_gs_enable_blending? _gs_enable_blending;
 
   void gs_enable_depth_test(
     int enable,
   ) {
     _gs_enable_depth_test ??= _dylib.lookupFunction<_c_gs_enable_depth_test,
         _dart_gs_enable_depth_test>('gs_enable_depth_test');
-    return _gs_enable_depth_test(
+    return _gs_enable_depth_test!(
       enable,
     );
   }
 
-  _dart_gs_enable_depth_test _gs_enable_depth_test;
+  _dart_gs_enable_depth_test? _gs_enable_depth_test;
 
   void gs_enable_stencil_test(
     int enable,
   ) {
     _gs_enable_stencil_test ??= _dylib.lookupFunction<_c_gs_enable_stencil_test,
         _dart_gs_enable_stencil_test>('gs_enable_stencil_test');
-    return _gs_enable_stencil_test(
+    return _gs_enable_stencil_test!(
       enable,
     );
   }
 
-  _dart_gs_enable_stencil_test _gs_enable_stencil_test;
+  _dart_gs_enable_stencil_test? _gs_enable_stencil_test;
 
   void gs_enable_stencil_write(
     int enable,
@@ -2916,12 +2916,12 @@ class DiveObslibFFI {
     _gs_enable_stencil_write ??= _dylib.lookupFunction<
         _c_gs_enable_stencil_write,
         _dart_gs_enable_stencil_write>('gs_enable_stencil_write');
-    return _gs_enable_stencil_write(
+    return _gs_enable_stencil_write!(
       enable,
     );
   }
 
-  _dart_gs_enable_stencil_write _gs_enable_stencil_write;
+  _dart_gs_enable_stencil_write? _gs_enable_stencil_write;
 
   void gs_enable_color(
     int red,
@@ -2932,7 +2932,7 @@ class DiveObslibFFI {
     _gs_enable_color ??=
         _dylib.lookupFunction<_c_gs_enable_color, _dart_gs_enable_color>(
             'gs_enable_color');
-    return _gs_enable_color(
+    return _gs_enable_color!(
       red,
       green,
       blue,
@@ -2940,7 +2940,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_gs_enable_color _gs_enable_color;
+  _dart_gs_enable_color? _gs_enable_color;
 
   void gs_blend_function(
     int src,
@@ -2949,13 +2949,13 @@ class DiveObslibFFI {
     _gs_blend_function ??=
         _dylib.lookupFunction<_c_gs_blend_function, _dart_gs_blend_function>(
             'gs_blend_function');
-    return _gs_blend_function(
+    return _gs_blend_function!(
       src,
       dest,
     );
   }
 
-  _dart_gs_blend_function _gs_blend_function;
+  _dart_gs_blend_function? _gs_blend_function;
 
   void gs_blend_function_separate(
     int src_c,
@@ -2966,7 +2966,7 @@ class DiveObslibFFI {
     _gs_blend_function_separate ??= _dylib.lookupFunction<
         _c_gs_blend_function_separate,
         _dart_gs_blend_function_separate>('gs_blend_function_separate');
-    return _gs_blend_function_separate(
+    return _gs_blend_function_separate!(
       src_c,
       dest_c,
       src_a,
@@ -2974,7 +2974,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_gs_blend_function_separate _gs_blend_function_separate;
+  _dart_gs_blend_function_separate? _gs_blend_function_separate;
 
   void gs_depth_function(
     int test,
@@ -2982,12 +2982,12 @@ class DiveObslibFFI {
     _gs_depth_function ??=
         _dylib.lookupFunction<_c_gs_depth_function, _dart_gs_depth_function>(
             'gs_depth_function');
-    return _gs_depth_function(
+    return _gs_depth_function!(
       test,
     );
   }
 
-  _dart_gs_depth_function _gs_depth_function;
+  _dart_gs_depth_function? _gs_depth_function;
 
   void gs_stencil_function(
     int side,
@@ -2995,13 +2995,13 @@ class DiveObslibFFI {
   ) {
     _gs_stencil_function ??= _dylib.lookupFunction<_c_gs_stencil_function,
         _dart_gs_stencil_function>('gs_stencil_function');
-    return _gs_stencil_function(
+    return _gs_stencil_function!(
       side,
       test,
     );
   }
 
-  _dart_gs_stencil_function _gs_stencil_function;
+  _dart_gs_stencil_function? _gs_stencil_function;
 
   void gs_stencil_op(
     int side,
@@ -3011,7 +3011,7 @@ class DiveObslibFFI {
   ) {
     _gs_stencil_op ??= _dylib
         .lookupFunction<_c_gs_stencil_op, _dart_gs_stencil_op>('gs_stencil_op');
-    return _gs_stencil_op(
+    return _gs_stencil_op!(
       side,
       fail,
       zfail,
@@ -3019,7 +3019,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_gs_stencil_op _gs_stencil_op;
+  _dart_gs_stencil_op? _gs_stencil_op;
 
   void gs_set_viewport(
     int x,
@@ -3030,7 +3030,7 @@ class DiveObslibFFI {
     _gs_set_viewport ??=
         _dylib.lookupFunction<_c_gs_set_viewport, _dart_gs_set_viewport>(
             'gs_set_viewport');
-    return _gs_set_viewport(
+    return _gs_set_viewport!(
       x,
       y,
       width,
@@ -3038,7 +3038,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_gs_set_viewport _gs_set_viewport;
+  _dart_gs_set_viewport? _gs_set_viewport;
 
   void gs_get_viewport(
     ffi.Pointer<gs_rect> rect,
@@ -3046,24 +3046,24 @@ class DiveObslibFFI {
     _gs_get_viewport ??=
         _dylib.lookupFunction<_c_gs_get_viewport, _dart_gs_get_viewport>(
             'gs_get_viewport');
-    return _gs_get_viewport(
+    return _gs_get_viewport!(
       rect,
     );
   }
 
-  _dart_gs_get_viewport _gs_get_viewport;
+  _dart_gs_get_viewport? _gs_get_viewport;
 
   void gs_set_scissor_rect(
     ffi.Pointer<gs_rect> rect,
   ) {
     _gs_set_scissor_rect ??= _dylib.lookupFunction<_c_gs_set_scissor_rect,
         _dart_gs_set_scissor_rect>('gs_set_scissor_rect');
-    return _gs_set_scissor_rect(
+    return _gs_set_scissor_rect!(
       rect,
     );
   }
 
-  _dart_gs_set_scissor_rect _gs_set_scissor_rect;
+  _dart_gs_set_scissor_rect? _gs_set_scissor_rect;
 
   void gs_ortho(
     double left,
@@ -3075,7 +3075,7 @@ class DiveObslibFFI {
   ) {
     _gs_ortho ??=
         _dylib.lookupFunction<_c_gs_ortho, _dart_gs_ortho>('gs_ortho');
-    return _gs_ortho(
+    return _gs_ortho!(
       left,
       right,
       top,
@@ -3085,7 +3085,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_gs_ortho _gs_ortho;
+  _dart_gs_ortho? _gs_ortho;
 
   void gs_frustum(
     double left,
@@ -3097,7 +3097,7 @@ class DiveObslibFFI {
   ) {
     _gs_frustum ??=
         _dylib.lookupFunction<_c_gs_frustum, _dart_gs_frustum>('gs_frustum');
-    return _gs_frustum(
+    return _gs_frustum!(
       left,
       right,
       top,
@@ -3107,37 +3107,37 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_gs_frustum _gs_frustum;
+  _dart_gs_frustum? _gs_frustum;
 
   void gs_projection_push() {
     _gs_projection_push ??=
         _dylib.lookupFunction<_c_gs_projection_push, _dart_gs_projection_push>(
             'gs_projection_push');
-    return _gs_projection_push();
+    return _gs_projection_push!();
   }
 
-  _dart_gs_projection_push _gs_projection_push;
+  _dart_gs_projection_push? _gs_projection_push;
 
   void gs_projection_pop() {
     _gs_projection_pop ??=
         _dylib.lookupFunction<_c_gs_projection_pop, _dart_gs_projection_pop>(
             'gs_projection_pop');
-    return _gs_projection_pop();
+    return _gs_projection_pop!();
   }
 
-  _dart_gs_projection_pop _gs_projection_pop;
+  _dart_gs_projection_pop? _gs_projection_pop;
 
   void gs_swapchain_destroy(
     ffi.Pointer<gs_swap_chain> swapchain,
   ) {
     _gs_swapchain_destroy ??= _dylib.lookupFunction<_c_gs_swapchain_destroy,
         _dart_gs_swapchain_destroy>('gs_swapchain_destroy');
-    return _gs_swapchain_destroy(
+    return _gs_swapchain_destroy!(
       swapchain,
     );
   }
 
-  _dart_gs_swapchain_destroy _gs_swapchain_destroy;
+  _dart_gs_swapchain_destroy? _gs_swapchain_destroy;
 
   void gs_texture_destroy(
     ffi.Pointer<gs_texture> tex,
@@ -3145,36 +3145,36 @@ class DiveObslibFFI {
     _gs_texture_destroy ??=
         _dylib.lookupFunction<_c_gs_texture_destroy, _dart_gs_texture_destroy>(
             'gs_texture_destroy');
-    return _gs_texture_destroy(
+    return _gs_texture_destroy!(
       tex,
     );
   }
 
-  _dart_gs_texture_destroy _gs_texture_destroy;
+  _dart_gs_texture_destroy? _gs_texture_destroy;
 
   int gs_texture_get_width(
     ffi.Pointer<gs_texture> tex,
   ) {
     _gs_texture_get_width ??= _dylib.lookupFunction<_c_gs_texture_get_width,
         _dart_gs_texture_get_width>('gs_texture_get_width');
-    return _gs_texture_get_width(
+    return _gs_texture_get_width!(
       tex,
     );
   }
 
-  _dart_gs_texture_get_width _gs_texture_get_width;
+  _dart_gs_texture_get_width? _gs_texture_get_width;
 
   int gs_texture_get_height(
     ffi.Pointer<gs_texture> tex,
   ) {
     _gs_texture_get_height ??= _dylib.lookupFunction<_c_gs_texture_get_height,
         _dart_gs_texture_get_height>('gs_texture_get_height');
-    return _gs_texture_get_height(
+    return _gs_texture_get_height!(
       tex,
     );
   }
 
-  _dart_gs_texture_get_height _gs_texture_get_height;
+  _dart_gs_texture_get_height? _gs_texture_get_height;
 
   int gs_texture_get_color_format(
     ffi.Pointer<gs_texture> tex,
@@ -3182,12 +3182,12 @@ class DiveObslibFFI {
     _gs_texture_get_color_format ??= _dylib.lookupFunction<
         _c_gs_texture_get_color_format,
         _dart_gs_texture_get_color_format>('gs_texture_get_color_format');
-    return _gs_texture_get_color_format(
+    return _gs_texture_get_color_format!(
       tex,
     );
   }
 
-  _dart_gs_texture_get_color_format _gs_texture_get_color_format;
+  _dart_gs_texture_get_color_format? _gs_texture_get_color_format;
 
   int gs_texture_map(
     ffi.Pointer<gs_texture> tex,
@@ -3197,14 +3197,14 @@ class DiveObslibFFI {
     _gs_texture_map ??=
         _dylib.lookupFunction<_c_gs_texture_map, _dart_gs_texture_map>(
             'gs_texture_map');
-    return _gs_texture_map(
+    return _gs_texture_map!(
       tex,
       ptr,
       linesize,
     );
   }
 
-  _dart_gs_texture_map _gs_texture_map;
+  _dart_gs_texture_map? _gs_texture_map;
 
   void gs_texture_unmap(
     ffi.Pointer<gs_texture> tex,
@@ -3212,12 +3212,12 @@ class DiveObslibFFI {
     _gs_texture_unmap ??=
         _dylib.lookupFunction<_c_gs_texture_unmap, _dart_gs_texture_unmap>(
             'gs_texture_unmap');
-    return _gs_texture_unmap(
+    return _gs_texture_unmap!(
       tex,
     );
   }
 
-  _dart_gs_texture_unmap _gs_texture_unmap;
+  _dart_gs_texture_unmap? _gs_texture_unmap;
 
   /// special-case function (GL only) - specifies whether the texture is a
   /// GL_TEXTURE_RECTANGLE type, which doesn't use normalized texture
@@ -3228,12 +3228,12 @@ class DiveObslibFFI {
     _gs_texture_is_rect ??=
         _dylib.lookupFunction<_c_gs_texture_is_rect, _dart_gs_texture_is_rect>(
             'gs_texture_is_rect');
-    return _gs_texture_is_rect(
+    return _gs_texture_is_rect!(
       tex,
     );
   }
 
-  _dart_gs_texture_is_rect _gs_texture_is_rect;
+  _dart_gs_texture_is_rect? _gs_texture_is_rect;
 
   /// Gets a pointer to the context-specific object associated with the texture.
   /// For example, for GL, this is a GLuint*.  For D3D11, ID3D11Texture2D*.
@@ -3243,24 +3243,24 @@ class DiveObslibFFI {
     _gs_texture_get_obj ??=
         _dylib.lookupFunction<_c_gs_texture_get_obj, _dart_gs_texture_get_obj>(
             'gs_texture_get_obj');
-    return _gs_texture_get_obj(
+    return _gs_texture_get_obj!(
       tex,
     );
   }
 
-  _dart_gs_texture_get_obj _gs_texture_get_obj;
+  _dart_gs_texture_get_obj? _gs_texture_get_obj;
 
   void gs_cubetexture_destroy(
     ffi.Pointer<gs_texture> cubetex,
   ) {
     _gs_cubetexture_destroy ??= _dylib.lookupFunction<_c_gs_cubetexture_destroy,
         _dart_gs_cubetexture_destroy>('gs_cubetexture_destroy');
-    return _gs_cubetexture_destroy(
+    return _gs_cubetexture_destroy!(
       cubetex,
     );
   }
 
-  _dart_gs_cubetexture_destroy _gs_cubetexture_destroy;
+  _dart_gs_cubetexture_destroy? _gs_cubetexture_destroy;
 
   int gs_cubetexture_get_size(
     ffi.Pointer<gs_texture> cubetex,
@@ -3268,12 +3268,12 @@ class DiveObslibFFI {
     _gs_cubetexture_get_size ??= _dylib.lookupFunction<
         _c_gs_cubetexture_get_size,
         _dart_gs_cubetexture_get_size>('gs_cubetexture_get_size');
-    return _gs_cubetexture_get_size(
+    return _gs_cubetexture_get_size!(
       cubetex,
     );
   }
 
-  _dart_gs_cubetexture_get_size _gs_cubetexture_get_size;
+  _dart_gs_cubetexture_get_size? _gs_cubetexture_get_size;
 
   int gs_cubetexture_get_color_format(
     ffi.Pointer<gs_texture> cubetex,
@@ -3282,24 +3282,24 @@ class DiveObslibFFI {
             _c_gs_cubetexture_get_color_format,
             _dart_gs_cubetexture_get_color_format>(
         'gs_cubetexture_get_color_format');
-    return _gs_cubetexture_get_color_format(
+    return _gs_cubetexture_get_color_format!(
       cubetex,
     );
   }
 
-  _dart_gs_cubetexture_get_color_format _gs_cubetexture_get_color_format;
+  _dart_gs_cubetexture_get_color_format? _gs_cubetexture_get_color_format;
 
   void gs_voltexture_destroy(
     ffi.Pointer<gs_texture> voltex,
   ) {
     _gs_voltexture_destroy ??= _dylib.lookupFunction<_c_gs_voltexture_destroy,
         _dart_gs_voltexture_destroy>('gs_voltexture_destroy');
-    return _gs_voltexture_destroy(
+    return _gs_voltexture_destroy!(
       voltex,
     );
   }
 
-  _dart_gs_voltexture_destroy _gs_voltexture_destroy;
+  _dart_gs_voltexture_destroy? _gs_voltexture_destroy;
 
   int gs_voltexture_get_width(
     ffi.Pointer<gs_texture> voltex,
@@ -3307,12 +3307,12 @@ class DiveObslibFFI {
     _gs_voltexture_get_width ??= _dylib.lookupFunction<
         _c_gs_voltexture_get_width,
         _dart_gs_voltexture_get_width>('gs_voltexture_get_width');
-    return _gs_voltexture_get_width(
+    return _gs_voltexture_get_width!(
       voltex,
     );
   }
 
-  _dart_gs_voltexture_get_width _gs_voltexture_get_width;
+  _dart_gs_voltexture_get_width? _gs_voltexture_get_width;
 
   int gs_voltexture_get_height(
     ffi.Pointer<gs_texture> voltex,
@@ -3320,12 +3320,12 @@ class DiveObslibFFI {
     _gs_voltexture_get_height ??= _dylib.lookupFunction<
         _c_gs_voltexture_get_height,
         _dart_gs_voltexture_get_height>('gs_voltexture_get_height');
-    return _gs_voltexture_get_height(
+    return _gs_voltexture_get_height!(
       voltex,
     );
   }
 
-  _dart_gs_voltexture_get_height _gs_voltexture_get_height;
+  _dart_gs_voltexture_get_height? _gs_voltexture_get_height;
 
   int gs_voltexture_get_depth(
     ffi.Pointer<gs_texture> voltex,
@@ -3333,12 +3333,12 @@ class DiveObslibFFI {
     _gs_voltexture_get_depth ??= _dylib.lookupFunction<
         _c_gs_voltexture_get_depth,
         _dart_gs_voltexture_get_depth>('gs_voltexture_get_depth');
-    return _gs_voltexture_get_depth(
+    return _gs_voltexture_get_depth!(
       voltex,
     );
   }
 
-  _dart_gs_voltexture_get_depth _gs_voltexture_get_depth;
+  _dart_gs_voltexture_get_depth? _gs_voltexture_get_depth;
 
   int gs_voltexture_get_color_format(
     ffi.Pointer<gs_texture> voltex,
@@ -3346,12 +3346,12 @@ class DiveObslibFFI {
     _gs_voltexture_get_color_format ??= _dylib.lookupFunction<
         _c_gs_voltexture_get_color_format,
         _dart_gs_voltexture_get_color_format>('gs_voltexture_get_color_format');
-    return _gs_voltexture_get_color_format(
+    return _gs_voltexture_get_color_format!(
       voltex,
     );
   }
 
-  _dart_gs_voltexture_get_color_format _gs_voltexture_get_color_format;
+  _dart_gs_voltexture_get_color_format? _gs_voltexture_get_color_format;
 
   void gs_stagesurface_destroy(
     ffi.Pointer<gs_stage_surface> stagesurf,
@@ -3359,12 +3359,12 @@ class DiveObslibFFI {
     _gs_stagesurface_destroy ??= _dylib.lookupFunction<
         _c_gs_stagesurface_destroy,
         _dart_gs_stagesurface_destroy>('gs_stagesurface_destroy');
-    return _gs_stagesurface_destroy(
+    return _gs_stagesurface_destroy!(
       stagesurf,
     );
   }
 
-  _dart_gs_stagesurface_destroy _gs_stagesurface_destroy;
+  _dart_gs_stagesurface_destroy? _gs_stagesurface_destroy;
 
   int gs_stagesurface_get_width(
     ffi.Pointer<gs_stage_surface> stagesurf,
@@ -3372,12 +3372,12 @@ class DiveObslibFFI {
     _gs_stagesurface_get_width ??= _dylib.lookupFunction<
         _c_gs_stagesurface_get_width,
         _dart_gs_stagesurface_get_width>('gs_stagesurface_get_width');
-    return _gs_stagesurface_get_width(
+    return _gs_stagesurface_get_width!(
       stagesurf,
     );
   }
 
-  _dart_gs_stagesurface_get_width _gs_stagesurface_get_width;
+  _dart_gs_stagesurface_get_width? _gs_stagesurface_get_width;
 
   int gs_stagesurface_get_height(
     ffi.Pointer<gs_stage_surface> stagesurf,
@@ -3385,12 +3385,12 @@ class DiveObslibFFI {
     _gs_stagesurface_get_height ??= _dylib.lookupFunction<
         _c_gs_stagesurface_get_height,
         _dart_gs_stagesurface_get_height>('gs_stagesurface_get_height');
-    return _gs_stagesurface_get_height(
+    return _gs_stagesurface_get_height!(
       stagesurf,
     );
   }
 
-  _dart_gs_stagesurface_get_height _gs_stagesurface_get_height;
+  _dart_gs_stagesurface_get_height? _gs_stagesurface_get_height;
 
   int gs_stagesurface_get_color_format(
     ffi.Pointer<gs_stage_surface> stagesurf,
@@ -3399,12 +3399,12 @@ class DiveObslibFFI {
             _c_gs_stagesurface_get_color_format,
             _dart_gs_stagesurface_get_color_format>(
         'gs_stagesurface_get_color_format');
-    return _gs_stagesurface_get_color_format(
+    return _gs_stagesurface_get_color_format!(
       stagesurf,
     );
   }
 
-  _dart_gs_stagesurface_get_color_format _gs_stagesurface_get_color_format;
+  _dart_gs_stagesurface_get_color_format? _gs_stagesurface_get_color_format;
 
   int gs_stagesurface_map(
     ffi.Pointer<gs_stage_surface> stagesurf,
@@ -3413,38 +3413,38 @@ class DiveObslibFFI {
   ) {
     _gs_stagesurface_map ??= _dylib.lookupFunction<_c_gs_stagesurface_map,
         _dart_gs_stagesurface_map>('gs_stagesurface_map');
-    return _gs_stagesurface_map(
+    return _gs_stagesurface_map!(
       stagesurf,
       data,
       linesize,
     );
   }
 
-  _dart_gs_stagesurface_map _gs_stagesurface_map;
+  _dart_gs_stagesurface_map? _gs_stagesurface_map;
 
   void gs_stagesurface_unmap(
     ffi.Pointer<gs_stage_surface> stagesurf,
   ) {
     _gs_stagesurface_unmap ??= _dylib.lookupFunction<_c_gs_stagesurface_unmap,
         _dart_gs_stagesurface_unmap>('gs_stagesurface_unmap');
-    return _gs_stagesurface_unmap(
+    return _gs_stagesurface_unmap!(
       stagesurf,
     );
   }
 
-  _dart_gs_stagesurface_unmap _gs_stagesurface_unmap;
+  _dart_gs_stagesurface_unmap? _gs_stagesurface_unmap;
 
   void gs_zstencil_destroy(
     ffi.Pointer<gs_zstencil_buffer> zstencil,
   ) {
     _gs_zstencil_destroy ??= _dylib.lookupFunction<_c_gs_zstencil_destroy,
         _dart_gs_zstencil_destroy>('gs_zstencil_destroy');
-    return _gs_zstencil_destroy(
+    return _gs_zstencil_destroy!(
       zstencil,
     );
   }
 
-  _dart_gs_zstencil_destroy _gs_zstencil_destroy;
+  _dart_gs_zstencil_destroy? _gs_zstencil_destroy;
 
   void gs_samplerstate_destroy(
     ffi.Pointer<gs_sampler_state> samplerstate,
@@ -3452,12 +3452,12 @@ class DiveObslibFFI {
     _gs_samplerstate_destroy ??= _dylib.lookupFunction<
         _c_gs_samplerstate_destroy,
         _dart_gs_samplerstate_destroy>('gs_samplerstate_destroy');
-    return _gs_samplerstate_destroy(
+    return _gs_samplerstate_destroy!(
       samplerstate,
     );
   }
 
-  _dart_gs_samplerstate_destroy _gs_samplerstate_destroy;
+  _dart_gs_samplerstate_destroy? _gs_samplerstate_destroy;
 
   void gs_vertexbuffer_destroy(
     ffi.Pointer<gs_vertex_buffer> vertbuffer,
@@ -3465,24 +3465,24 @@ class DiveObslibFFI {
     _gs_vertexbuffer_destroy ??= _dylib.lookupFunction<
         _c_gs_vertexbuffer_destroy,
         _dart_gs_vertexbuffer_destroy>('gs_vertexbuffer_destroy');
-    return _gs_vertexbuffer_destroy(
+    return _gs_vertexbuffer_destroy!(
       vertbuffer,
     );
   }
 
-  _dart_gs_vertexbuffer_destroy _gs_vertexbuffer_destroy;
+  _dart_gs_vertexbuffer_destroy? _gs_vertexbuffer_destroy;
 
   void gs_vertexbuffer_flush(
     ffi.Pointer<gs_vertex_buffer> vertbuffer,
   ) {
     _gs_vertexbuffer_flush ??= _dylib.lookupFunction<_c_gs_vertexbuffer_flush,
         _dart_gs_vertexbuffer_flush>('gs_vertexbuffer_flush');
-    return _gs_vertexbuffer_flush(
+    return _gs_vertexbuffer_flush!(
       vertbuffer,
     );
   }
 
-  _dart_gs_vertexbuffer_flush _gs_vertexbuffer_flush;
+  _dart_gs_vertexbuffer_flush? _gs_vertexbuffer_flush;
 
   void gs_vertexbuffer_flush_direct(
     ffi.Pointer<gs_vertex_buffer> vertbuffer,
@@ -3491,13 +3491,13 @@ class DiveObslibFFI {
     _gs_vertexbuffer_flush_direct ??= _dylib.lookupFunction<
         _c_gs_vertexbuffer_flush_direct,
         _dart_gs_vertexbuffer_flush_direct>('gs_vertexbuffer_flush_direct');
-    return _gs_vertexbuffer_flush_direct(
+    return _gs_vertexbuffer_flush_direct!(
       vertbuffer,
       data,
     );
   }
 
-  _dart_gs_vertexbuffer_flush_direct _gs_vertexbuffer_flush_direct;
+  _dart_gs_vertexbuffer_flush_direct? _gs_vertexbuffer_flush_direct;
 
   ffi.Pointer<gs_vb_data> gs_vertexbuffer_get_data(
     ffi.Pointer<gs_vertex_buffer> vertbuffer,
@@ -3505,36 +3505,36 @@ class DiveObslibFFI {
     _gs_vertexbuffer_get_data ??= _dylib.lookupFunction<
         _c_gs_vertexbuffer_get_data,
         _dart_gs_vertexbuffer_get_data>('gs_vertexbuffer_get_data');
-    return _gs_vertexbuffer_get_data(
+    return _gs_vertexbuffer_get_data!(
       vertbuffer,
     );
   }
 
-  _dart_gs_vertexbuffer_get_data _gs_vertexbuffer_get_data;
+  _dart_gs_vertexbuffer_get_data? _gs_vertexbuffer_get_data;
 
   void gs_indexbuffer_destroy(
     ffi.Pointer<gs_index_buffer> indexbuffer,
   ) {
     _gs_indexbuffer_destroy ??= _dylib.lookupFunction<_c_gs_indexbuffer_destroy,
         _dart_gs_indexbuffer_destroy>('gs_indexbuffer_destroy');
-    return _gs_indexbuffer_destroy(
+    return _gs_indexbuffer_destroy!(
       indexbuffer,
     );
   }
 
-  _dart_gs_indexbuffer_destroy _gs_indexbuffer_destroy;
+  _dart_gs_indexbuffer_destroy? _gs_indexbuffer_destroy;
 
   void gs_indexbuffer_flush(
     ffi.Pointer<gs_index_buffer> indexbuffer,
   ) {
     _gs_indexbuffer_flush ??= _dylib.lookupFunction<_c_gs_indexbuffer_flush,
         _dart_gs_indexbuffer_flush>('gs_indexbuffer_flush');
-    return _gs_indexbuffer_flush(
+    return _gs_indexbuffer_flush!(
       indexbuffer,
     );
   }
 
-  _dart_gs_indexbuffer_flush _gs_indexbuffer_flush;
+  _dart_gs_indexbuffer_flush? _gs_indexbuffer_flush;
 
   void gs_indexbuffer_flush_direct(
     ffi.Pointer<gs_index_buffer> indexbuffer,
@@ -3543,13 +3543,13 @@ class DiveObslibFFI {
     _gs_indexbuffer_flush_direct ??= _dylib.lookupFunction<
         _c_gs_indexbuffer_flush_direct,
         _dart_gs_indexbuffer_flush_direct>('gs_indexbuffer_flush_direct');
-    return _gs_indexbuffer_flush_direct(
+    return _gs_indexbuffer_flush_direct!(
       indexbuffer,
       data,
     );
   }
 
-  _dart_gs_indexbuffer_flush_direct _gs_indexbuffer_flush_direct;
+  _dart_gs_indexbuffer_flush_direct? _gs_indexbuffer_flush_direct;
 
   ffi.Pointer<ffi.Void> gs_indexbuffer_get_data(
     ffi.Pointer<gs_index_buffer> indexbuffer,
@@ -3557,12 +3557,12 @@ class DiveObslibFFI {
     _gs_indexbuffer_get_data ??= _dylib.lookupFunction<
         _c_gs_indexbuffer_get_data,
         _dart_gs_indexbuffer_get_data>('gs_indexbuffer_get_data');
-    return _gs_indexbuffer_get_data(
+    return _gs_indexbuffer_get_data!(
       indexbuffer,
     );
   }
 
-  _dart_gs_indexbuffer_get_data _gs_indexbuffer_get_data;
+  _dart_gs_indexbuffer_get_data? _gs_indexbuffer_get_data;
 
   int gs_indexbuffer_get_num_indices(
     ffi.Pointer<gs_index_buffer> indexbuffer,
@@ -3570,12 +3570,12 @@ class DiveObslibFFI {
     _gs_indexbuffer_get_num_indices ??= _dylib.lookupFunction<
         _c_gs_indexbuffer_get_num_indices,
         _dart_gs_indexbuffer_get_num_indices>('gs_indexbuffer_get_num_indices');
-    return _gs_indexbuffer_get_num_indices(
+    return _gs_indexbuffer_get_num_indices!(
       indexbuffer,
     );
   }
 
-  _dart_gs_indexbuffer_get_num_indices _gs_indexbuffer_get_num_indices;
+  _dart_gs_indexbuffer_get_num_indices? _gs_indexbuffer_get_num_indices;
 
   int gs_indexbuffer_get_type(
     ffi.Pointer<gs_index_buffer> indexbuffer,
@@ -3583,12 +3583,12 @@ class DiveObslibFFI {
     _gs_indexbuffer_get_type ??= _dylib.lookupFunction<
         _c_gs_indexbuffer_get_type,
         _dart_gs_indexbuffer_get_type>('gs_indexbuffer_get_type');
-    return _gs_indexbuffer_get_type(
+    return _gs_indexbuffer_get_type!(
       indexbuffer,
     );
   }
 
-  _dart_gs_indexbuffer_get_type _gs_indexbuffer_get_type;
+  _dart_gs_indexbuffer_get_type? _gs_indexbuffer_get_type;
 
   void gs_timer_destroy(
     ffi.Pointer<gs_timer> timer,
@@ -3596,12 +3596,12 @@ class DiveObslibFFI {
     _gs_timer_destroy ??=
         _dylib.lookupFunction<_c_gs_timer_destroy, _dart_gs_timer_destroy>(
             'gs_timer_destroy');
-    return _gs_timer_destroy(
+    return _gs_timer_destroy!(
       timer,
     );
   }
 
-  _dart_gs_timer_destroy _gs_timer_destroy;
+  _dart_gs_timer_destroy? _gs_timer_destroy;
 
   void gs_timer_begin(
     ffi.Pointer<gs_timer> timer,
@@ -3609,24 +3609,24 @@ class DiveObslibFFI {
     _gs_timer_begin ??=
         _dylib.lookupFunction<_c_gs_timer_begin, _dart_gs_timer_begin>(
             'gs_timer_begin');
-    return _gs_timer_begin(
+    return _gs_timer_begin!(
       timer,
     );
   }
 
-  _dart_gs_timer_begin _gs_timer_begin;
+  _dart_gs_timer_begin? _gs_timer_begin;
 
   void gs_timer_end(
     ffi.Pointer<gs_timer> timer,
   ) {
     _gs_timer_end ??= _dylib
         .lookupFunction<_c_gs_timer_end, _dart_gs_timer_end>('gs_timer_end');
-    return _gs_timer_end(
+    return _gs_timer_end!(
       timer,
     );
   }
 
-  _dart_gs_timer_end _gs_timer_end;
+  _dart_gs_timer_end? _gs_timer_end;
 
   int gs_timer_get_data(
     ffi.Pointer<gs_timer> timer,
@@ -3635,37 +3635,37 @@ class DiveObslibFFI {
     _gs_timer_get_data ??=
         _dylib.lookupFunction<_c_gs_timer_get_data, _dart_gs_timer_get_data>(
             'gs_timer_get_data');
-    return _gs_timer_get_data(
+    return _gs_timer_get_data!(
       timer,
       ticks,
     );
   }
 
-  _dart_gs_timer_get_data _gs_timer_get_data;
+  _dart_gs_timer_get_data? _gs_timer_get_data;
 
   void gs_timer_range_destroy(
     ffi.Pointer<gs_timer_range> timer,
   ) {
     _gs_timer_range_destroy ??= _dylib.lookupFunction<_c_gs_timer_range_destroy,
         _dart_gs_timer_range_destroy>('gs_timer_range_destroy');
-    return _gs_timer_range_destroy(
+    return _gs_timer_range_destroy!(
       timer,
     );
   }
 
-  _dart_gs_timer_range_destroy _gs_timer_range_destroy;
+  _dart_gs_timer_range_destroy? _gs_timer_range_destroy;
 
   void gs_timer_range_begin(
     ffi.Pointer<gs_timer_range> range,
   ) {
     _gs_timer_range_begin ??= _dylib.lookupFunction<_c_gs_timer_range_begin,
         _dart_gs_timer_range_begin>('gs_timer_range_begin');
-    return _gs_timer_range_begin(
+    return _gs_timer_range_begin!(
       range,
     );
   }
 
-  _dart_gs_timer_range_begin _gs_timer_range_begin;
+  _dart_gs_timer_range_begin? _gs_timer_range_begin;
 
   void gs_timer_range_end(
     ffi.Pointer<gs_timer_range> range,
@@ -3673,12 +3673,12 @@ class DiveObslibFFI {
     _gs_timer_range_end ??=
         _dylib.lookupFunction<_c_gs_timer_range_end, _dart_gs_timer_range_end>(
             'gs_timer_range_end');
-    return _gs_timer_range_end(
+    return _gs_timer_range_end!(
       range,
     );
   }
 
-  _dart_gs_timer_range_end _gs_timer_range_end;
+  _dart_gs_timer_range_end? _gs_timer_range_end;
 
   int gs_timer_range_get_data(
     ffi.Pointer<gs_timer_range> range,
@@ -3688,23 +3688,23 @@ class DiveObslibFFI {
     _gs_timer_range_get_data ??= _dylib.lookupFunction<
         _c_gs_timer_range_get_data,
         _dart_gs_timer_range_get_data>('gs_timer_range_get_data');
-    return _gs_timer_range_get_data(
+    return _gs_timer_range_get_data!(
       range,
       disjoint,
       frequency,
     );
   }
 
-  _dart_gs_timer_range_get_data _gs_timer_range_get_data;
+  _dart_gs_timer_range_get_data? _gs_timer_range_get_data;
 
   int gs_nv12_available() {
     _gs_nv12_available ??=
         _dylib.lookupFunction<_c_gs_nv12_available, _dart_gs_nv12_available>(
             'gs_nv12_available');
-    return _gs_nv12_available();
+    return _gs_nv12_available!();
   }
 
-  _dart_gs_nv12_available _gs_nv12_available;
+  _dart_gs_nv12_available? _gs_nv12_available;
 
   void gs_debug_marker_begin(
     ffi.Pointer<ffi.Float> color,
@@ -3712,13 +3712,13 @@ class DiveObslibFFI {
   ) {
     _gs_debug_marker_begin ??= _dylib.lookupFunction<_c_gs_debug_marker_begin,
         _dart_gs_debug_marker_begin>('gs_debug_marker_begin');
-    return _gs_debug_marker_begin(
+    return _gs_debug_marker_begin!(
       color,
       markername,
     );
   }
 
-  _dart_gs_debug_marker_begin _gs_debug_marker_begin;
+  _dart_gs_debug_marker_begin? _gs_debug_marker_begin;
 
   void gs_debug_marker_begin_format(
     ffi.Pointer<ffi.Float> color,
@@ -3727,21 +3727,21 @@ class DiveObslibFFI {
     _gs_debug_marker_begin_format ??= _dylib.lookupFunction<
         _c_gs_debug_marker_begin_format,
         _dart_gs_debug_marker_begin_format>('gs_debug_marker_begin_format');
-    return _gs_debug_marker_begin_format(
+    return _gs_debug_marker_begin_format!(
       color,
       format,
     );
   }
 
-  _dart_gs_debug_marker_begin_format _gs_debug_marker_begin_format;
+  _dart_gs_debug_marker_begin_format? _gs_debug_marker_begin_format;
 
   void gs_debug_marker_end() {
     _gs_debug_marker_end ??= _dylib.lookupFunction<_c_gs_debug_marker_end,
         _dart_gs_debug_marker_end>('gs_debug_marker_end');
-    return _gs_debug_marker_end();
+    return _gs_debug_marker_end!();
   }
 
-  _dart_gs_debug_marker_end _gs_debug_marker_end;
+  _dart_gs_debug_marker_end? _gs_debug_marker_end;
 
   /// platform specific function for creating (GL_TEXTURE_RECTANGLE) textures
   /// from shared surface resources
@@ -3752,12 +3752,12 @@ class DiveObslibFFI {
             _c_gs_texture_create_from_iosurface,
             _dart_gs_texture_create_from_iosurface>(
         'gs_texture_create_from_iosurface');
-    return _gs_texture_create_from_iosurface(
+    return _gs_texture_create_from_iosurface!(
       iosurf,
     );
   }
 
-  _dart_gs_texture_create_from_iosurface _gs_texture_create_from_iosurface;
+  _dart_gs_texture_create_from_iosurface? _gs_texture_create_from_iosurface;
 
   int gs_texture_rebind_iosurface(
     ffi.Pointer<gs_texture> texture,
@@ -3766,13 +3766,13 @@ class DiveObslibFFI {
     _gs_texture_rebind_iosurface ??= _dylib.lookupFunction<
         _c_gs_texture_rebind_iosurface,
         _dart_gs_texture_rebind_iosurface>('gs_texture_rebind_iosurface');
-    return _gs_texture_rebind_iosurface(
+    return _gs_texture_rebind_iosurface!(
       texture,
       iosurf,
     );
   }
 
-  _dart_gs_texture_rebind_iosurface _gs_texture_rebind_iosurface;
+  _dart_gs_texture_rebind_iosurface? _gs_texture_rebind_iosurface;
 
   int gs_get_format_bpp(
     int format,
@@ -3780,12 +3780,12 @@ class DiveObslibFFI {
     _gs_get_format_bpp ??=
         _dylib.lookupFunction<_c_gs_get_format_bpp, _dart_gs_get_format_bpp>(
             'gs_get_format_bpp');
-    return _gs_get_format_bpp(
+    return _gs_get_format_bpp!(
       format,
     );
   }
 
-  _dart_gs_get_format_bpp _gs_get_format_bpp;
+  _dart_gs_get_format_bpp? _gs_get_format_bpp;
 
   int gs_is_compressed_format(
     int format,
@@ -3793,12 +3793,12 @@ class DiveObslibFFI {
     _gs_is_compressed_format ??= _dylib.lookupFunction<
         _c_gs_is_compressed_format,
         _dart_gs_is_compressed_format>('gs_is_compressed_format');
-    return _gs_is_compressed_format(
+    return _gs_is_compressed_format!(
       format,
     );
   }
 
-  _dart_gs_is_compressed_format _gs_is_compressed_format;
+  _dart_gs_is_compressed_format? _gs_is_compressed_format;
 
   int gs_get_total_levels(
     int width,
@@ -3807,26 +3807,26 @@ class DiveObslibFFI {
   ) {
     _gs_get_total_levels ??= _dylib.lookupFunction<_c_gs_get_total_levels,
         _dart_gs_get_total_levels>('gs_get_total_levels');
-    return _gs_get_total_levels(
+    return _gs_get_total_levels!(
       width,
       height,
       depth,
     );
   }
 
-  _dart_gs_get_total_levels _gs_get_total_levels;
+  _dart_gs_get_total_levels? _gs_get_total_levels;
 
   void vec2_zero(
     ffi.Pointer<vec2> dst,
   ) {
     _vec2_zero ??=
         _dylib.lookupFunction<_c_vec2_zero, _dart_vec2_zero>('vec2_zero');
-    return _vec2_zero(
+    return _vec2_zero!(
       dst,
     );
   }
 
-  _dart_vec2_zero _vec2_zero;
+  _dart_vec2_zero? _vec2_zero;
 
   void vec2_set(
     ffi.Pointer<vec2> dst,
@@ -3835,14 +3835,14 @@ class DiveObslibFFI {
   ) {
     _vec2_set ??=
         _dylib.lookupFunction<_c_vec2_set, _dart_vec2_set>('vec2_set');
-    return _vec2_set(
+    return _vec2_set!(
       dst,
       x,
       y,
     );
   }
 
-  _dart_vec2_set _vec2_set;
+  _dart_vec2_set? _vec2_set;
 
   void vec2_copy(
     ffi.Pointer<vec2> dst,
@@ -3850,13 +3850,13 @@ class DiveObslibFFI {
   ) {
     _vec2_copy ??=
         _dylib.lookupFunction<_c_vec2_copy, _dart_vec2_copy>('vec2_copy');
-    return _vec2_copy(
+    return _vec2_copy!(
       dst,
       v,
     );
   }
 
-  _dart_vec2_copy _vec2_copy;
+  _dart_vec2_copy? _vec2_copy;
 
   void vec2_add(
     ffi.Pointer<vec2> dst,
@@ -3865,14 +3865,14 @@ class DiveObslibFFI {
   ) {
     _vec2_add ??=
         _dylib.lookupFunction<_c_vec2_add, _dart_vec2_add>('vec2_add');
-    return _vec2_add(
+    return _vec2_add!(
       dst,
       v1,
       v2,
     );
   }
 
-  _dart_vec2_add _vec2_add;
+  _dart_vec2_add? _vec2_add;
 
   void vec2_sub(
     ffi.Pointer<vec2> dst,
@@ -3881,14 +3881,14 @@ class DiveObslibFFI {
   ) {
     _vec2_sub ??=
         _dylib.lookupFunction<_c_vec2_sub, _dart_vec2_sub>('vec2_sub');
-    return _vec2_sub(
+    return _vec2_sub!(
       dst,
       v1,
       v2,
     );
   }
 
-  _dart_vec2_sub _vec2_sub;
+  _dart_vec2_sub? _vec2_sub;
 
   void vec2_mul(
     ffi.Pointer<vec2> dst,
@@ -3897,14 +3897,14 @@ class DiveObslibFFI {
   ) {
     _vec2_mul ??=
         _dylib.lookupFunction<_c_vec2_mul, _dart_vec2_mul>('vec2_mul');
-    return _vec2_mul(
+    return _vec2_mul!(
       dst,
       v1,
       v2,
     );
   }
 
-  _dart_vec2_mul _vec2_mul;
+  _dart_vec2_mul? _vec2_mul;
 
   void vec2_div(
     ffi.Pointer<vec2> dst,
@@ -3913,14 +3913,14 @@ class DiveObslibFFI {
   ) {
     _vec2_div ??=
         _dylib.lookupFunction<_c_vec2_div, _dart_vec2_div>('vec2_div');
-    return _vec2_div(
+    return _vec2_div!(
       dst,
       v1,
       v2,
     );
   }
 
-  _dart_vec2_div _vec2_div;
+  _dart_vec2_div? _vec2_div;
 
   void vec2_addf(
     ffi.Pointer<vec2> dst,
@@ -3929,14 +3929,14 @@ class DiveObslibFFI {
   ) {
     _vec2_addf ??=
         _dylib.lookupFunction<_c_vec2_addf, _dart_vec2_addf>('vec2_addf');
-    return _vec2_addf(
+    return _vec2_addf!(
       dst,
       v,
       f,
     );
   }
 
-  _dart_vec2_addf _vec2_addf;
+  _dart_vec2_addf? _vec2_addf;
 
   void vec2_subf(
     ffi.Pointer<vec2> dst,
@@ -3945,14 +3945,14 @@ class DiveObslibFFI {
   ) {
     _vec2_subf ??=
         _dylib.lookupFunction<_c_vec2_subf, _dart_vec2_subf>('vec2_subf');
-    return _vec2_subf(
+    return _vec2_subf!(
       dst,
       v,
       f,
     );
   }
 
-  _dart_vec2_subf _vec2_subf;
+  _dart_vec2_subf? _vec2_subf;
 
   void vec2_mulf(
     ffi.Pointer<vec2> dst,
@@ -3961,14 +3961,14 @@ class DiveObslibFFI {
   ) {
     _vec2_mulf ??=
         _dylib.lookupFunction<_c_vec2_mulf, _dart_vec2_mulf>('vec2_mulf');
-    return _vec2_mulf(
+    return _vec2_mulf!(
       dst,
       v,
       f,
     );
   }
 
-  _dart_vec2_mulf _vec2_mulf;
+  _dart_vec2_mulf? _vec2_mulf;
 
   void vec2_divf(
     ffi.Pointer<vec2> dst,
@@ -3977,14 +3977,14 @@ class DiveObslibFFI {
   ) {
     _vec2_divf ??=
         _dylib.lookupFunction<_c_vec2_divf, _dart_vec2_divf>('vec2_divf');
-    return _vec2_divf(
+    return _vec2_divf!(
       dst,
       v,
       f,
     );
   }
 
-  _dart_vec2_divf _vec2_divf;
+  _dart_vec2_divf? _vec2_divf;
 
   void vec2_neg(
     ffi.Pointer<vec2> dst,
@@ -3992,13 +3992,13 @@ class DiveObslibFFI {
   ) {
     _vec2_neg ??=
         _dylib.lookupFunction<_c_vec2_neg, _dart_vec2_neg>('vec2_neg');
-    return _vec2_neg(
+    return _vec2_neg!(
       dst,
       v,
     );
   }
 
-  _dart_vec2_neg _vec2_neg;
+  _dart_vec2_neg? _vec2_neg;
 
   double vec2_dot(
     ffi.Pointer<vec2> v1,
@@ -4006,25 +4006,25 @@ class DiveObslibFFI {
   ) {
     _vec2_dot ??=
         _dylib.lookupFunction<_c_vec2_dot, _dart_vec2_dot>('vec2_dot');
-    return _vec2_dot(
+    return _vec2_dot!(
       v1,
       v2,
     );
   }
 
-  _dart_vec2_dot _vec2_dot;
+  _dart_vec2_dot? _vec2_dot;
 
   double vec2_len(
     ffi.Pointer<vec2> v,
   ) {
     _vec2_len ??=
         _dylib.lookupFunction<_c_vec2_len, _dart_vec2_len>('vec2_len');
-    return _vec2_len(
+    return _vec2_len!(
       v,
     );
   }
 
-  _dart_vec2_len _vec2_len;
+  _dart_vec2_len? _vec2_len;
 
   double vec2_dist(
     ffi.Pointer<vec2> v1,
@@ -4032,13 +4032,13 @@ class DiveObslibFFI {
   ) {
     _vec2_dist ??=
         _dylib.lookupFunction<_c_vec2_dist, _dart_vec2_dist>('vec2_dist');
-    return _vec2_dist(
+    return _vec2_dist!(
       v1,
       v2,
     );
   }
 
-  _dart_vec2_dist _vec2_dist;
+  _dart_vec2_dist? _vec2_dist;
 
   void vec2_minf(
     ffi.Pointer<vec2> dst,
@@ -4047,14 +4047,14 @@ class DiveObslibFFI {
   ) {
     _vec2_minf ??=
         _dylib.lookupFunction<_c_vec2_minf, _dart_vec2_minf>('vec2_minf');
-    return _vec2_minf(
+    return _vec2_minf!(
       dst,
       v,
       val,
     );
   }
 
-  _dart_vec2_minf _vec2_minf;
+  _dart_vec2_minf? _vec2_minf;
 
   void vec2_min(
     ffi.Pointer<vec2> dst,
@@ -4063,14 +4063,14 @@ class DiveObslibFFI {
   ) {
     _vec2_min ??=
         _dylib.lookupFunction<_c_vec2_min, _dart_vec2_min>('vec2_min');
-    return _vec2_min(
+    return _vec2_min!(
       dst,
       v,
       min_v,
     );
   }
 
-  _dart_vec2_min _vec2_min;
+  _dart_vec2_min? _vec2_min;
 
   void vec2_maxf(
     ffi.Pointer<vec2> dst,
@@ -4079,14 +4079,14 @@ class DiveObslibFFI {
   ) {
     _vec2_maxf ??=
         _dylib.lookupFunction<_c_vec2_maxf, _dart_vec2_maxf>('vec2_maxf');
-    return _vec2_maxf(
+    return _vec2_maxf!(
       dst,
       v,
       val,
     );
   }
 
-  _dart_vec2_maxf _vec2_maxf;
+  _dart_vec2_maxf? _vec2_maxf;
 
   void vec2_max(
     ffi.Pointer<vec2> dst,
@@ -4095,14 +4095,14 @@ class DiveObslibFFI {
   ) {
     _vec2_max ??=
         _dylib.lookupFunction<_c_vec2_max, _dart_vec2_max>('vec2_max');
-    return _vec2_max(
+    return _vec2_max!(
       dst,
       v,
       max_v,
     );
   }
 
-  _dart_vec2_max _vec2_max;
+  _dart_vec2_max? _vec2_max;
 
   void vec2_abs(
     ffi.Pointer<vec2> dst,
@@ -4110,13 +4110,13 @@ class DiveObslibFFI {
   ) {
     _vec2_abs ??=
         _dylib.lookupFunction<_c_vec2_abs, _dart_vec2_abs>('vec2_abs');
-    return _vec2_abs(
+    return _vec2_abs!(
       dst,
       v,
     );
   }
 
-  _dart_vec2_abs _vec2_abs;
+  _dart_vec2_abs? _vec2_abs;
 
   void vec2_floor(
     ffi.Pointer<vec2> dst,
@@ -4124,13 +4124,13 @@ class DiveObslibFFI {
   ) {
     _vec2_floor ??=
         _dylib.lookupFunction<_c_vec2_floor, _dart_vec2_floor>('vec2_floor');
-    return _vec2_floor(
+    return _vec2_floor!(
       dst,
       v,
     );
   }
 
-  _dart_vec2_floor _vec2_floor;
+  _dart_vec2_floor? _vec2_floor;
 
   void vec2_ceil(
     ffi.Pointer<vec2> dst,
@@ -4138,13 +4138,13 @@ class DiveObslibFFI {
   ) {
     _vec2_ceil ??=
         _dylib.lookupFunction<_c_vec2_ceil, _dart_vec2_ceil>('vec2_ceil');
-    return _vec2_ceil(
+    return _vec2_ceil!(
       dst,
       v,
     );
   }
 
-  _dart_vec2_ceil _vec2_ceil;
+  _dart_vec2_ceil? _vec2_ceil;
 
   int vec2_close(
     ffi.Pointer<vec2> v1,
@@ -4153,14 +4153,14 @@ class DiveObslibFFI {
   ) {
     _vec2_close ??=
         _dylib.lookupFunction<_c_vec2_close, _dart_vec2_close>('vec2_close');
-    return _vec2_close(
+    return _vec2_close!(
       v1,
       v2,
       epsilon,
     );
   }
 
-  _dart_vec2_close _vec2_close;
+  _dart_vec2_close? _vec2_close;
 
   void vec2_norm(
     ffi.Pointer<vec2> dst,
@@ -4168,25 +4168,25 @@ class DiveObslibFFI {
   ) {
     _vec2_norm ??=
         _dylib.lookupFunction<_c_vec2_norm, _dart_vec2_norm>('vec2_norm');
-    return _vec2_norm(
+    return _vec2_norm!(
       dst,
       v,
     );
   }
 
-  _dart_vec2_norm _vec2_norm;
+  _dart_vec2_norm? _vec2_norm;
 
   void vec3_zero(
     ffi.Pointer<vec3> v,
   ) {
     _vec3_zero ??=
         _dylib.lookupFunction<_c_vec3_zero, _dart_vec3_zero>('vec3_zero');
-    return _vec3_zero(
+    return _vec3_zero!(
       v,
     );
   }
 
-  _dart_vec3_zero _vec3_zero;
+  _dart_vec3_zero? _vec3_zero;
 
   void vec3_set(
     ffi.Pointer<vec3> dst,
@@ -4196,7 +4196,7 @@ class DiveObslibFFI {
   ) {
     _vec3_set ??=
         _dylib.lookupFunction<_c_vec3_set, _dart_vec3_set>('vec3_set');
-    return _vec3_set(
+    return _vec3_set!(
       dst,
       x,
       y,
@@ -4204,7 +4204,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_vec3_set _vec3_set;
+  _dart_vec3_set? _vec3_set;
 
   void vec3_copy(
     ffi.Pointer<vec3> dst,
@@ -4212,13 +4212,13 @@ class DiveObslibFFI {
   ) {
     _vec3_copy ??=
         _dylib.lookupFunction<_c_vec3_copy, _dart_vec3_copy>('vec3_copy');
-    return _vec3_copy(
+    return _vec3_copy!(
       dst,
       v,
     );
   }
 
-  _dart_vec3_copy _vec3_copy;
+  _dart_vec3_copy? _vec3_copy;
 
   void vec3_from_vec4(
     ffi.Pointer<vec3> dst,
@@ -4227,13 +4227,13 @@ class DiveObslibFFI {
     _vec3_from_vec4 ??=
         _dylib.lookupFunction<_c_vec3_from_vec4, _dart_vec3_from_vec4>(
             'vec3_from_vec4');
-    return _vec3_from_vec4(
+    return _vec3_from_vec4!(
       dst,
       v,
     );
   }
 
-  _dart_vec3_from_vec4 _vec3_from_vec4;
+  _dart_vec3_from_vec4? _vec3_from_vec4;
 
   void vec3_add(
     ffi.Pointer<vec3> dst,
@@ -4242,14 +4242,14 @@ class DiveObslibFFI {
   ) {
     _vec3_add ??=
         _dylib.lookupFunction<_c_vec3_add, _dart_vec3_add>('vec3_add');
-    return _vec3_add(
+    return _vec3_add!(
       dst,
       v1,
       v2,
     );
   }
 
-  _dart_vec3_add _vec3_add;
+  _dart_vec3_add? _vec3_add;
 
   void vec3_sub(
     ffi.Pointer<vec3> dst,
@@ -4258,14 +4258,14 @@ class DiveObslibFFI {
   ) {
     _vec3_sub ??=
         _dylib.lookupFunction<_c_vec3_sub, _dart_vec3_sub>('vec3_sub');
-    return _vec3_sub(
+    return _vec3_sub!(
       dst,
       v1,
       v2,
     );
   }
 
-  _dart_vec3_sub _vec3_sub;
+  _dart_vec3_sub? _vec3_sub;
 
   void vec3_mul(
     ffi.Pointer<vec3> dst,
@@ -4274,14 +4274,14 @@ class DiveObslibFFI {
   ) {
     _vec3_mul ??=
         _dylib.lookupFunction<_c_vec3_mul, _dart_vec3_mul>('vec3_mul');
-    return _vec3_mul(
+    return _vec3_mul!(
       dst,
       v1,
       v2,
     );
   }
 
-  _dart_vec3_mul _vec3_mul;
+  _dart_vec3_mul? _vec3_mul;
 
   void vec3_div(
     ffi.Pointer<vec3> dst,
@@ -4290,14 +4290,14 @@ class DiveObslibFFI {
   ) {
     _vec3_div ??=
         _dylib.lookupFunction<_c_vec3_div, _dart_vec3_div>('vec3_div');
-    return _vec3_div(
+    return _vec3_div!(
       dst,
       v1,
       v2,
     );
   }
 
-  _dart_vec3_div _vec3_div;
+  _dart_vec3_div? _vec3_div;
 
   void vec3_addf(
     ffi.Pointer<vec3> dst,
@@ -4306,14 +4306,14 @@ class DiveObslibFFI {
   ) {
     _vec3_addf ??=
         _dylib.lookupFunction<_c_vec3_addf, _dart_vec3_addf>('vec3_addf');
-    return _vec3_addf(
+    return _vec3_addf!(
       dst,
       v,
       f,
     );
   }
 
-  _dart_vec3_addf _vec3_addf;
+  _dart_vec3_addf? _vec3_addf;
 
   void vec3_subf(
     ffi.Pointer<vec3> dst,
@@ -4322,14 +4322,14 @@ class DiveObslibFFI {
   ) {
     _vec3_subf ??=
         _dylib.lookupFunction<_c_vec3_subf, _dart_vec3_subf>('vec3_subf');
-    return _vec3_subf(
+    return _vec3_subf!(
       dst,
       v,
       f,
     );
   }
 
-  _dart_vec3_subf _vec3_subf;
+  _dart_vec3_subf? _vec3_subf;
 
   void vec3_mulf(
     ffi.Pointer<vec3> dst,
@@ -4338,14 +4338,14 @@ class DiveObslibFFI {
   ) {
     _vec3_mulf ??=
         _dylib.lookupFunction<_c_vec3_mulf, _dart_vec3_mulf>('vec3_mulf');
-    return _vec3_mulf(
+    return _vec3_mulf!(
       dst,
       v,
       f,
     );
   }
 
-  _dart_vec3_mulf _vec3_mulf;
+  _dart_vec3_mulf? _vec3_mulf;
 
   void vec3_divf(
     ffi.Pointer<vec3> dst,
@@ -4354,14 +4354,14 @@ class DiveObslibFFI {
   ) {
     _vec3_divf ??=
         _dylib.lookupFunction<_c_vec3_divf, _dart_vec3_divf>('vec3_divf');
-    return _vec3_divf(
+    return _vec3_divf!(
       dst,
       v,
       f,
     );
   }
 
-  _dart_vec3_divf _vec3_divf;
+  _dart_vec3_divf? _vec3_divf;
 
   double vec3_dot(
     ffi.Pointer<vec3> v1,
@@ -4369,13 +4369,13 @@ class DiveObslibFFI {
   ) {
     _vec3_dot ??=
         _dylib.lookupFunction<_c_vec3_dot, _dart_vec3_dot>('vec3_dot');
-    return _vec3_dot(
+    return _vec3_dot!(
       v1,
       v2,
     );
   }
 
-  _dart_vec3_dot _vec3_dot;
+  _dart_vec3_dot? _vec3_dot;
 
   void vec3_cross(
     ffi.Pointer<vec3> dst,
@@ -4384,14 +4384,14 @@ class DiveObslibFFI {
   ) {
     _vec3_cross ??=
         _dylib.lookupFunction<_c_vec3_cross, _dart_vec3_cross>('vec3_cross');
-    return _vec3_cross(
+    return _vec3_cross!(
       dst,
       v1,
       v2,
     );
   }
 
-  _dart_vec3_cross _vec3_cross;
+  _dart_vec3_cross? _vec3_cross;
 
   void vec3_neg(
     ffi.Pointer<vec3> dst,
@@ -4399,25 +4399,25 @@ class DiveObslibFFI {
   ) {
     _vec3_neg ??=
         _dylib.lookupFunction<_c_vec3_neg, _dart_vec3_neg>('vec3_neg');
-    return _vec3_neg(
+    return _vec3_neg!(
       dst,
       v,
     );
   }
 
-  _dart_vec3_neg _vec3_neg;
+  _dart_vec3_neg? _vec3_neg;
 
   double vec3_len(
     ffi.Pointer<vec3> v,
   ) {
     _vec3_len ??=
         _dylib.lookupFunction<_c_vec3_len, _dart_vec3_len>('vec3_len');
-    return _vec3_len(
+    return _vec3_len!(
       v,
     );
   }
 
-  _dart_vec3_len _vec3_len;
+  _dart_vec3_len? _vec3_len;
 
   double vec3_dist(
     ffi.Pointer<vec3> v1,
@@ -4425,13 +4425,13 @@ class DiveObslibFFI {
   ) {
     _vec3_dist ??=
         _dylib.lookupFunction<_c_vec3_dist, _dart_vec3_dist>('vec3_dist');
-    return _vec3_dist(
+    return _vec3_dist!(
       v1,
       v2,
     );
   }
 
-  _dart_vec3_dist _vec3_dist;
+  _dart_vec3_dist? _vec3_dist;
 
   void vec3_norm(
     ffi.Pointer<vec3> dst,
@@ -4439,13 +4439,13 @@ class DiveObslibFFI {
   ) {
     _vec3_norm ??=
         _dylib.lookupFunction<_c_vec3_norm, _dart_vec3_norm>('vec3_norm');
-    return _vec3_norm(
+    return _vec3_norm!(
       dst,
       v,
     );
   }
 
-  _dart_vec3_norm _vec3_norm;
+  _dart_vec3_norm? _vec3_norm;
 
   int vec3_close(
     ffi.Pointer<vec3> v1,
@@ -4454,14 +4454,14 @@ class DiveObslibFFI {
   ) {
     _vec3_close ??=
         _dylib.lookupFunction<_c_vec3_close, _dart_vec3_close>('vec3_close');
-    return _vec3_close(
+    return _vec3_close!(
       v1,
       v2,
       epsilon,
     );
   }
 
-  _dart_vec3_close _vec3_close;
+  _dart_vec3_close? _vec3_close;
 
   void vec3_min(
     ffi.Pointer<vec3> dst,
@@ -4470,14 +4470,14 @@ class DiveObslibFFI {
   ) {
     _vec3_min ??=
         _dylib.lookupFunction<_c_vec3_min, _dart_vec3_min>('vec3_min');
-    return _vec3_min(
+    return _vec3_min!(
       dst,
       v1,
       v2,
     );
   }
 
-  _dart_vec3_min _vec3_min;
+  _dart_vec3_min? _vec3_min;
 
   void vec3_minf(
     ffi.Pointer<vec3> dst,
@@ -4486,14 +4486,14 @@ class DiveObslibFFI {
   ) {
     _vec3_minf ??=
         _dylib.lookupFunction<_c_vec3_minf, _dart_vec3_minf>('vec3_minf');
-    return _vec3_minf(
+    return _vec3_minf!(
       dst,
       v,
       f,
     );
   }
 
-  _dart_vec3_minf _vec3_minf;
+  _dart_vec3_minf? _vec3_minf;
 
   void vec3_max(
     ffi.Pointer<vec3> dst,
@@ -4502,14 +4502,14 @@ class DiveObslibFFI {
   ) {
     _vec3_max ??=
         _dylib.lookupFunction<_c_vec3_max, _dart_vec3_max>('vec3_max');
-    return _vec3_max(
+    return _vec3_max!(
       dst,
       v1,
       v2,
     );
   }
 
-  _dart_vec3_max _vec3_max;
+  _dart_vec3_max? _vec3_max;
 
   void vec3_maxf(
     ffi.Pointer<vec3> dst,
@@ -4518,14 +4518,14 @@ class DiveObslibFFI {
   ) {
     _vec3_maxf ??=
         _dylib.lookupFunction<_c_vec3_maxf, _dart_vec3_maxf>('vec3_maxf');
-    return _vec3_maxf(
+    return _vec3_maxf!(
       dst,
       v,
       f,
     );
   }
 
-  _dart_vec3_maxf _vec3_maxf;
+  _dart_vec3_maxf? _vec3_maxf;
 
   void vec3_abs(
     ffi.Pointer<vec3> dst,
@@ -4533,13 +4533,13 @@ class DiveObslibFFI {
   ) {
     _vec3_abs ??=
         _dylib.lookupFunction<_c_vec3_abs, _dart_vec3_abs>('vec3_abs');
-    return _vec3_abs(
+    return _vec3_abs!(
       dst,
       v,
     );
   }
 
-  _dart_vec3_abs _vec3_abs;
+  _dart_vec3_abs? _vec3_abs;
 
   void vec3_floor(
     ffi.Pointer<vec3> dst,
@@ -4547,13 +4547,13 @@ class DiveObslibFFI {
   ) {
     _vec3_floor ??=
         _dylib.lookupFunction<_c_vec3_floor, _dart_vec3_floor>('vec3_floor');
-    return _vec3_floor(
+    return _vec3_floor!(
       dst,
       v,
     );
   }
 
-  _dart_vec3_floor _vec3_floor;
+  _dart_vec3_floor? _vec3_floor;
 
   void vec3_ceil(
     ffi.Pointer<vec3> dst,
@@ -4561,13 +4561,13 @@ class DiveObslibFFI {
   ) {
     _vec3_ceil ??=
         _dylib.lookupFunction<_c_vec3_ceil, _dart_vec3_ceil>('vec3_ceil');
-    return _vec3_ceil(
+    return _vec3_ceil!(
       dst,
       v,
     );
   }
 
-  _dart_vec3_ceil _vec3_ceil;
+  _dart_vec3_ceil? _vec3_ceil;
 
   double vec3_plane_dist(
     ffi.Pointer<vec3> v,
@@ -4576,13 +4576,13 @@ class DiveObslibFFI {
     _vec3_plane_dist ??=
         _dylib.lookupFunction<_c_vec3_plane_dist, _dart_vec3_plane_dist>(
             'vec3_plane_dist');
-    return _vec3_plane_dist(
+    return _vec3_plane_dist!(
       v,
       p,
     );
   }
 
-  _dart_vec3_plane_dist _vec3_plane_dist;
+  _dart_vec3_plane_dist? _vec3_plane_dist;
 
   void vec3_transform(
     ffi.Pointer<vec3> dst,
@@ -4592,14 +4592,14 @@ class DiveObslibFFI {
     _vec3_transform ??=
         _dylib.lookupFunction<_c_vec3_transform, _dart_vec3_transform>(
             'vec3_transform');
-    return _vec3_transform(
+    return _vec3_transform!(
       dst,
       v,
       m,
     );
   }
 
-  _dart_vec3_transform _vec3_transform;
+  _dart_vec3_transform? _vec3_transform;
 
   void vec3_rotate(
     ffi.Pointer<vec3> dst,
@@ -4608,14 +4608,14 @@ class DiveObslibFFI {
   ) {
     _vec3_rotate ??=
         _dylib.lookupFunction<_c_vec3_rotate, _dart_vec3_rotate>('vec3_rotate');
-    return _vec3_rotate(
+    return _vec3_rotate!(
       dst,
       v,
       m,
     );
   }
 
-  _dart_vec3_rotate _vec3_rotate;
+  _dart_vec3_rotate? _vec3_rotate;
 
   void vec3_transform3x4(
     ffi.Pointer<vec3> dst,
@@ -4625,14 +4625,14 @@ class DiveObslibFFI {
     _vec3_transform3x4 ??=
         _dylib.lookupFunction<_c_vec3_transform3x4, _dart_vec3_transform3x4>(
             'vec3_transform3x4');
-    return _vec3_transform3x4(
+    return _vec3_transform3x4!(
       dst,
       v,
       m,
     );
   }
 
-  _dart_vec3_transform3x4 _vec3_transform3x4;
+  _dart_vec3_transform3x4? _vec3_transform3x4;
 
   void vec3_mirror(
     ffi.Pointer<vec3> dst,
@@ -4641,14 +4641,14 @@ class DiveObslibFFI {
   ) {
     _vec3_mirror ??=
         _dylib.lookupFunction<_c_vec3_mirror, _dart_vec3_mirror>('vec3_mirror');
-    return _vec3_mirror(
+    return _vec3_mirror!(
       dst,
       v,
       p,
     );
   }
 
-  _dart_vec3_mirror _vec3_mirror;
+  _dart_vec3_mirror? _vec3_mirror;
 
   void vec3_mirrorv(
     ffi.Pointer<vec3> dst,
@@ -4657,14 +4657,14 @@ class DiveObslibFFI {
   ) {
     _vec3_mirrorv ??= _dylib
         .lookupFunction<_c_vec3_mirrorv, _dart_vec3_mirrorv>('vec3_mirrorv');
-    return _vec3_mirrorv(
+    return _vec3_mirrorv!(
       dst,
       v,
       vec,
     );
   }
 
-  _dart_vec3_mirrorv _vec3_mirrorv;
+  _dart_vec3_mirrorv? _vec3_mirrorv;
 
   void vec3_rand(
     ffi.Pointer<vec3> dst,
@@ -4672,13 +4672,13 @@ class DiveObslibFFI {
   ) {
     _vec3_rand ??=
         _dylib.lookupFunction<_c_vec3_rand, _dart_vec3_rand>('vec3_rand');
-    return _vec3_rand(
+    return _vec3_rand!(
       dst,
       positive_only,
     );
   }
 
-  _dart_vec3_rand _vec3_rand;
+  _dart_vec3_rand? _vec3_rand;
 
   int get_audio_channels(
     int speakers,
@@ -4686,12 +4686,12 @@ class DiveObslibFFI {
     _get_audio_channels ??=
         _dylib.lookupFunction<_c_get_audio_channels, _dart_get_audio_channels>(
             'get_audio_channels');
-    return _get_audio_channels(
+    return _get_audio_channels!(
       speakers,
     );
   }
 
-  _dart_get_audio_channels _get_audio_channels;
+  _dart_get_audio_channels? _get_audio_channels;
 
   int get_audio_bytes_per_channel(
     int format,
@@ -4699,12 +4699,12 @@ class DiveObslibFFI {
     _get_audio_bytes_per_channel ??= _dylib.lookupFunction<
         _c_get_audio_bytes_per_channel,
         _dart_get_audio_bytes_per_channel>('get_audio_bytes_per_channel');
-    return _get_audio_bytes_per_channel(
+    return _get_audio_bytes_per_channel!(
       format,
     );
   }
 
-  _dart_get_audio_bytes_per_channel _get_audio_bytes_per_channel;
+  _dart_get_audio_bytes_per_channel? _get_audio_bytes_per_channel;
 
   int is_audio_planar(
     int format,
@@ -4712,12 +4712,12 @@ class DiveObslibFFI {
     _is_audio_planar ??=
         _dylib.lookupFunction<_c_is_audio_planar, _dart_is_audio_planar>(
             'is_audio_planar');
-    return _is_audio_planar(
+    return _is_audio_planar!(
       format,
     );
   }
 
-  _dart_is_audio_planar _is_audio_planar;
+  _dart_is_audio_planar? _is_audio_planar;
 
   int get_audio_planes(
     int format,
@@ -4726,13 +4726,13 @@ class DiveObslibFFI {
     _get_audio_planes ??=
         _dylib.lookupFunction<_c_get_audio_planes, _dart_get_audio_planes>(
             'get_audio_planes');
-    return _get_audio_planes(
+    return _get_audio_planes!(
       format,
       speakers,
     );
   }
 
-  _dart_get_audio_planes _get_audio_planes;
+  _dart_get_audio_planes? _get_audio_planes;
 
   int get_audio_size(
     int format,
@@ -4742,14 +4742,14 @@ class DiveObslibFFI {
     _get_audio_size ??=
         _dylib.lookupFunction<_c_get_audio_size, _dart_get_audio_size>(
             'get_audio_size');
-    return _get_audio_size(
+    return _get_audio_size!(
       format,
       speakers,
       frames,
     );
   }
 
-  _dart_get_audio_size _get_audio_size;
+  _dart_get_audio_size? _get_audio_size;
 
   int audio_frames_to_ns(
     int sample_rate,
@@ -4758,13 +4758,13 @@ class DiveObslibFFI {
     _audio_frames_to_ns ??=
         _dylib.lookupFunction<_c_audio_frames_to_ns, _dart_audio_frames_to_ns>(
             'audio_frames_to_ns');
-    return _audio_frames_to_ns(
+    return _audio_frames_to_ns!(
       sample_rate,
       frames,
     );
   }
 
-  _dart_audio_frames_to_ns _audio_frames_to_ns;
+  _dart_audio_frames_to_ns? _audio_frames_to_ns;
 
   int ns_to_audio_frames(
     int sample_rate,
@@ -4773,13 +4773,13 @@ class DiveObslibFFI {
     _ns_to_audio_frames ??=
         _dylib.lookupFunction<_c_ns_to_audio_frames, _dart_ns_to_audio_frames>(
             'ns_to_audio_frames');
-    return _ns_to_audio_frames(
+    return _ns_to_audio_frames!(
       sample_rate,
       frames,
     );
   }
 
-  _dart_ns_to_audio_frames _ns_to_audio_frames;
+  _dart_ns_to_audio_frames? _ns_to_audio_frames;
 
   int audio_output_open(
     ffi.Pointer<ffi.Pointer<audio_output>> audio,
@@ -4788,13 +4788,13 @@ class DiveObslibFFI {
     _audio_output_open ??=
         _dylib.lookupFunction<_c_audio_output_open, _dart_audio_output_open>(
             'audio_output_open');
-    return _audio_output_open(
+    return _audio_output_open!(
       audio,
       info,
     );
   }
 
-  _dart_audio_output_open _audio_output_open;
+  _dart_audio_output_open? _audio_output_open;
 
   void audio_output_close(
     ffi.Pointer<audio_output> audio,
@@ -4802,12 +4802,12 @@ class DiveObslibFFI {
     _audio_output_close ??=
         _dylib.lookupFunction<_c_audio_output_close, _dart_audio_output_close>(
             'audio_output_close');
-    return _audio_output_close(
+    return _audio_output_close!(
       audio,
     );
   }
 
-  _dart_audio_output_close _audio_output_close;
+  _dart_audio_output_close? _audio_output_close;
 
   int audio_output_connect(
     ffi.Pointer<audio_output> video,
@@ -4818,7 +4818,7 @@ class DiveObslibFFI {
   ) {
     _audio_output_connect ??= _dylib.lookupFunction<_c_audio_output_connect,
         _dart_audio_output_connect>('audio_output_connect');
-    return _audio_output_connect(
+    return _audio_output_connect!(
       video,
       mix_idx,
       conversion,
@@ -4827,7 +4827,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_audio_output_connect _audio_output_connect;
+  _dart_audio_output_connect? _audio_output_connect;
 
   void audio_output_disconnect(
     ffi.Pointer<audio_output> video,
@@ -4838,7 +4838,7 @@ class DiveObslibFFI {
     _audio_output_disconnect ??= _dylib.lookupFunction<
         _c_audio_output_disconnect,
         _dart_audio_output_disconnect>('audio_output_disconnect');
-    return _audio_output_disconnect(
+    return _audio_output_disconnect!(
       video,
       mix_idx,
       callback,
@@ -4846,19 +4846,19 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_audio_output_disconnect _audio_output_disconnect;
+  _dart_audio_output_disconnect? _audio_output_disconnect;
 
   int audio_output_active(
     ffi.Pointer<audio_output> audio,
   ) {
     _audio_output_active ??= _dylib.lookupFunction<_c_audio_output_active,
         _dart_audio_output_active>('audio_output_active');
-    return _audio_output_active(
+    return _audio_output_active!(
       audio,
     );
   }
 
-  _dart_audio_output_active _audio_output_active;
+  _dart_audio_output_active? _audio_output_active;
 
   int audio_output_get_block_size(
     ffi.Pointer<audio_output> audio,
@@ -4866,12 +4866,12 @@ class DiveObslibFFI {
     _audio_output_get_block_size ??= _dylib.lookupFunction<
         _c_audio_output_get_block_size,
         _dart_audio_output_get_block_size>('audio_output_get_block_size');
-    return _audio_output_get_block_size(
+    return _audio_output_get_block_size!(
       audio,
     );
   }
 
-  _dart_audio_output_get_block_size _audio_output_get_block_size;
+  _dart_audio_output_get_block_size? _audio_output_get_block_size;
 
   int audio_output_get_planes(
     ffi.Pointer<audio_output> audio,
@@ -4879,12 +4879,12 @@ class DiveObslibFFI {
     _audio_output_get_planes ??= _dylib.lookupFunction<
         _c_audio_output_get_planes,
         _dart_audio_output_get_planes>('audio_output_get_planes');
-    return _audio_output_get_planes(
+    return _audio_output_get_planes!(
       audio,
     );
   }
 
-  _dart_audio_output_get_planes _audio_output_get_planes;
+  _dart_audio_output_get_planes? _audio_output_get_planes;
 
   int audio_output_get_channels(
     ffi.Pointer<audio_output> audio,
@@ -4892,12 +4892,12 @@ class DiveObslibFFI {
     _audio_output_get_channels ??= _dylib.lookupFunction<
         _c_audio_output_get_channels,
         _dart_audio_output_get_channels>('audio_output_get_channels');
-    return _audio_output_get_channels(
+    return _audio_output_get_channels!(
       audio,
     );
   }
 
-  _dart_audio_output_get_channels _audio_output_get_channels;
+  _dart_audio_output_get_channels? _audio_output_get_channels;
 
   int audio_output_get_sample_rate(
     ffi.Pointer<audio_output> audio,
@@ -4905,48 +4905,48 @@ class DiveObslibFFI {
     _audio_output_get_sample_rate ??= _dylib.lookupFunction<
         _c_audio_output_get_sample_rate,
         _dart_audio_output_get_sample_rate>('audio_output_get_sample_rate');
-    return _audio_output_get_sample_rate(
+    return _audio_output_get_sample_rate!(
       audio,
     );
   }
 
-  _dart_audio_output_get_sample_rate _audio_output_get_sample_rate;
+  _dart_audio_output_get_sample_rate? _audio_output_get_sample_rate;
 
   ffi.Pointer<audio_output_info> audio_output_get_info(
     ffi.Pointer<audio_output> audio,
   ) {
     _audio_output_get_info ??= _dylib.lookupFunction<_c_audio_output_get_info,
         _dart_audio_output_get_info>('audio_output_get_info');
-    return _audio_output_get_info(
+    return _audio_output_get_info!(
       audio,
     );
   }
 
-  _dart_audio_output_get_info _audio_output_get_info;
+  _dart_audio_output_get_info? _audio_output_get_info;
 
   int format_is_yuv(
     int format,
   ) {
     _format_is_yuv ??= _dylib
         .lookupFunction<_c_format_is_yuv, _dart_format_is_yuv>('format_is_yuv');
-    return _format_is_yuv(
+    return _format_is_yuv!(
       format,
     );
   }
 
-  _dart_format_is_yuv _format_is_yuv;
+  _dart_format_is_yuv? _format_is_yuv;
 
   ffi.Pointer<ffi.Int8> get_video_format_name(
     int format,
   ) {
     _get_video_format_name ??= _dylib.lookupFunction<_c_get_video_format_name,
         _dart_get_video_format_name>('get_video_format_name');
-    return _get_video_format_name(
+    return _get_video_format_name!(
       format,
     );
   }
 
-  _dart_get_video_format_name _get_video_format_name;
+  _dart_get_video_format_name? _get_video_format_name;
 
   ffi.Pointer<ffi.Int8> get_video_colorspace_name(
     int cs,
@@ -4954,12 +4954,12 @@ class DiveObslibFFI {
     _get_video_colorspace_name ??= _dylib.lookupFunction<
         _c_get_video_colorspace_name,
         _dart_get_video_colorspace_name>('get_video_colorspace_name');
-    return _get_video_colorspace_name(
+    return _get_video_colorspace_name!(
       cs,
     );
   }
 
-  _dart_get_video_colorspace_name _get_video_colorspace_name;
+  _dart_get_video_colorspace_name? _get_video_colorspace_name;
 
   int resolve_video_range(
     int format,
@@ -4967,13 +4967,13 @@ class DiveObslibFFI {
   ) {
     _resolve_video_range ??= _dylib.lookupFunction<_c_resolve_video_range,
         _dart_resolve_video_range>('resolve_video_range');
-    return _resolve_video_range(
+    return _resolve_video_range!(
       format,
       range,
     );
   }
 
-  _dart_resolve_video_range _resolve_video_range;
+  _dart_resolve_video_range? _resolve_video_range;
 
   ffi.Pointer<ffi.Int8> get_video_range_name(
     int format,
@@ -4981,13 +4981,13 @@ class DiveObslibFFI {
   ) {
     _get_video_range_name ??= _dylib.lookupFunction<_c_get_video_range_name,
         _dart_get_video_range_name>('get_video_range_name');
-    return _get_video_range_name(
+    return _get_video_range_name!(
       format,
       range,
     );
   }
 
-  _dart_get_video_range_name _get_video_range_name;
+  _dart_get_video_range_name? _get_video_range_name;
 
   int video_format_from_fourcc(
     int fourcc,
@@ -4995,12 +4995,12 @@ class DiveObslibFFI {
     _video_format_from_fourcc ??= _dylib.lookupFunction<
         _c_video_format_from_fourcc,
         _dart_video_format_from_fourcc>('video_format_from_fourcc');
-    return _video_format_from_fourcc(
+    return _video_format_from_fourcc!(
       fourcc,
     );
   }
 
-  _dart_video_format_from_fourcc _video_format_from_fourcc;
+  _dart_video_format_from_fourcc? _video_format_from_fourcc;
 
   int video_format_get_parameters(
     int color_space,
@@ -5012,7 +5012,7 @@ class DiveObslibFFI {
     _video_format_get_parameters ??= _dylib.lookupFunction<
         _c_video_format_get_parameters,
         _dart_video_format_get_parameters>('video_format_get_parameters');
-    return _video_format_get_parameters(
+    return _video_format_get_parameters!(
       color_space,
       range,
       matrix,
@@ -5021,7 +5021,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_video_format_get_parameters _video_format_get_parameters;
+  _dart_video_format_get_parameters? _video_format_get_parameters;
 
   int video_output_open(
     ffi.Pointer<ffi.Pointer<video_output>> video,
@@ -5030,13 +5030,13 @@ class DiveObslibFFI {
     _video_output_open ??=
         _dylib.lookupFunction<_c_video_output_open, _dart_video_output_open>(
             'video_output_open');
-    return _video_output_open(
+    return _video_output_open!(
       video,
       info,
     );
   }
 
-  _dart_video_output_open _video_output_open;
+  _dart_video_output_open? _video_output_open;
 
   void video_output_close(
     ffi.Pointer<video_output> video,
@@ -5044,12 +5044,12 @@ class DiveObslibFFI {
     _video_output_close ??=
         _dylib.lookupFunction<_c_video_output_close, _dart_video_output_close>(
             'video_output_close');
-    return _video_output_close(
+    return _video_output_close!(
       video,
     );
   }
 
-  _dart_video_output_close _video_output_close;
+  _dart_video_output_close? _video_output_close;
 
   int video_output_connect(
     ffi.Pointer<video_output> video,
@@ -5059,7 +5059,7 @@ class DiveObslibFFI {
   ) {
     _video_output_connect ??= _dylib.lookupFunction<_c_video_output_connect,
         _dart_video_output_connect>('video_output_connect');
-    return _video_output_connect(
+    return _video_output_connect!(
       video,
       conversion,
       callback,
@@ -5067,7 +5067,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_video_output_connect _video_output_connect;
+  _dart_video_output_connect? _video_output_connect;
 
   void video_output_disconnect(
     ffi.Pointer<video_output> video,
@@ -5077,38 +5077,38 @@ class DiveObslibFFI {
     _video_output_disconnect ??= _dylib.lookupFunction<
         _c_video_output_disconnect,
         _dart_video_output_disconnect>('video_output_disconnect');
-    return _video_output_disconnect(
+    return _video_output_disconnect!(
       video,
       callback,
       param,
     );
   }
 
-  _dart_video_output_disconnect _video_output_disconnect;
+  _dart_video_output_disconnect? _video_output_disconnect;
 
   int video_output_active(
     ffi.Pointer<video_output> video,
   ) {
     _video_output_active ??= _dylib.lookupFunction<_c_video_output_active,
         _dart_video_output_active>('video_output_active');
-    return _video_output_active(
+    return _video_output_active!(
       video,
     );
   }
 
-  _dart_video_output_active _video_output_active;
+  _dart_video_output_active? _video_output_active;
 
   ffi.Pointer<video_output_info> video_output_get_info(
     ffi.Pointer<video_output> video,
   ) {
     _video_output_get_info ??= _dylib.lookupFunction<_c_video_output_get_info,
         _dart_video_output_get_info>('video_output_get_info');
-    return _video_output_get_info(
+    return _video_output_get_info!(
       video,
     );
   }
 
-  _dart_video_output_get_info _video_output_get_info;
+  _dart_video_output_get_info? _video_output_get_info;
 
   int video_output_lock_frame(
     ffi.Pointer<video_output> video,
@@ -5119,7 +5119,7 @@ class DiveObslibFFI {
     _video_output_lock_frame ??= _dylib.lookupFunction<
         _c_video_output_lock_frame,
         _dart_video_output_lock_frame>('video_output_lock_frame');
-    return _video_output_lock_frame(
+    return _video_output_lock_frame!(
       video,
       frame,
       count,
@@ -5127,7 +5127,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_video_output_lock_frame _video_output_lock_frame;
+  _dart_video_output_lock_frame? _video_output_lock_frame;
 
   void video_output_unlock_frame(
     ffi.Pointer<video_output> video,
@@ -5135,12 +5135,12 @@ class DiveObslibFFI {
     _video_output_unlock_frame ??= _dylib.lookupFunction<
         _c_video_output_unlock_frame,
         _dart_video_output_unlock_frame>('video_output_unlock_frame');
-    return _video_output_unlock_frame(
+    return _video_output_unlock_frame!(
       video,
     );
   }
 
-  _dart_video_output_unlock_frame _video_output_unlock_frame;
+  _dart_video_output_unlock_frame? _video_output_unlock_frame;
 
   int video_output_get_frame_time(
     ffi.Pointer<video_output> video,
@@ -5148,12 +5148,12 @@ class DiveObslibFFI {
     _video_output_get_frame_time ??= _dylib.lookupFunction<
         _c_video_output_get_frame_time,
         _dart_video_output_get_frame_time>('video_output_get_frame_time');
-    return _video_output_get_frame_time(
+    return _video_output_get_frame_time!(
       video,
     );
   }
 
-  _dart_video_output_get_frame_time _video_output_get_frame_time;
+  _dart_video_output_get_frame_time? _video_output_get_frame_time;
 
   void video_output_stop(
     ffi.Pointer<video_output> video,
@@ -5161,24 +5161,24 @@ class DiveObslibFFI {
     _video_output_stop ??=
         _dylib.lookupFunction<_c_video_output_stop, _dart_video_output_stop>(
             'video_output_stop');
-    return _video_output_stop(
+    return _video_output_stop!(
       video,
     );
   }
 
-  _dart_video_output_stop _video_output_stop;
+  _dart_video_output_stop? _video_output_stop;
 
   int video_output_stopped(
     ffi.Pointer<video_output> video,
   ) {
     _video_output_stopped ??= _dylib.lookupFunction<_c_video_output_stopped,
         _dart_video_output_stopped>('video_output_stopped');
-    return _video_output_stopped(
+    return _video_output_stopped!(
       video,
     );
   }
 
-  _dart_video_output_stopped _video_output_stopped;
+  _dart_video_output_stopped? _video_output_stopped;
 
   int video_output_get_format(
     ffi.Pointer<video_output> video,
@@ -5186,24 +5186,24 @@ class DiveObslibFFI {
     _video_output_get_format ??= _dylib.lookupFunction<
         _c_video_output_get_format,
         _dart_video_output_get_format>('video_output_get_format');
-    return _video_output_get_format(
+    return _video_output_get_format!(
       video,
     );
   }
 
-  _dart_video_output_get_format _video_output_get_format;
+  _dart_video_output_get_format? _video_output_get_format;
 
   int video_output_get_width(
     ffi.Pointer<video_output> video,
   ) {
     _video_output_get_width ??= _dylib.lookupFunction<_c_video_output_get_width,
         _dart_video_output_get_width>('video_output_get_width');
-    return _video_output_get_width(
+    return _video_output_get_width!(
       video,
     );
   }
 
-  _dart_video_output_get_width _video_output_get_width;
+  _dart_video_output_get_width? _video_output_get_width;
 
   int video_output_get_height(
     ffi.Pointer<video_output> video,
@@ -5211,12 +5211,12 @@ class DiveObslibFFI {
     _video_output_get_height ??= _dylib.lookupFunction<
         _c_video_output_get_height,
         _dart_video_output_get_height>('video_output_get_height');
-    return _video_output_get_height(
+    return _video_output_get_height!(
       video,
     );
   }
 
-  _dart_video_output_get_height _video_output_get_height;
+  _dart_video_output_get_height? _video_output_get_height;
 
   double video_output_get_frame_rate(
     ffi.Pointer<video_output> video,
@@ -5224,12 +5224,12 @@ class DiveObslibFFI {
     _video_output_get_frame_rate ??= _dylib.lookupFunction<
         _c_video_output_get_frame_rate,
         _dart_video_output_get_frame_rate>('video_output_get_frame_rate');
-    return _video_output_get_frame_rate(
+    return _video_output_get_frame_rate!(
       video,
     );
   }
 
-  _dart_video_output_get_frame_rate _video_output_get_frame_rate;
+  _dart_video_output_get_frame_rate? _video_output_get_frame_rate;
 
   int video_output_get_skipped_frames(
     ffi.Pointer<video_output> video,
@@ -5238,12 +5238,12 @@ class DiveObslibFFI {
             _c_video_output_get_skipped_frames,
             _dart_video_output_get_skipped_frames>(
         'video_output_get_skipped_frames');
-    return _video_output_get_skipped_frames(
+    return _video_output_get_skipped_frames!(
       video,
     );
   }
 
-  _dart_video_output_get_skipped_frames _video_output_get_skipped_frames;
+  _dart_video_output_get_skipped_frames? _video_output_get_skipped_frames;
 
   int video_output_get_total_frames(
     ffi.Pointer<video_output> video,
@@ -5251,12 +5251,12 @@ class DiveObslibFFI {
     _video_output_get_total_frames ??= _dylib.lookupFunction<
         _c_video_output_get_total_frames,
         _dart_video_output_get_total_frames>('video_output_get_total_frames');
-    return _video_output_get_total_frames(
+    return _video_output_get_total_frames!(
       video,
     );
   }
 
-  _dart_video_output_get_total_frames _video_output_get_total_frames;
+  _dart_video_output_get_total_frames? _video_output_get_total_frames;
 
   void video_output_inc_texture_encoders(
     ffi.Pointer<video_output> video,
@@ -5265,12 +5265,12 @@ class DiveObslibFFI {
             _c_video_output_inc_texture_encoders,
             _dart_video_output_inc_texture_encoders>(
         'video_output_inc_texture_encoders');
-    return _video_output_inc_texture_encoders(
+    return _video_output_inc_texture_encoders!(
       video,
     );
   }
 
-  _dart_video_output_inc_texture_encoders _video_output_inc_texture_encoders;
+  _dart_video_output_inc_texture_encoders? _video_output_inc_texture_encoders;
 
   void video_output_dec_texture_encoders(
     ffi.Pointer<video_output> video,
@@ -5279,12 +5279,12 @@ class DiveObslibFFI {
             _c_video_output_dec_texture_encoders,
             _dart_video_output_dec_texture_encoders>(
         'video_output_dec_texture_encoders');
-    return _video_output_dec_texture_encoders(
+    return _video_output_dec_texture_encoders!(
       video,
     );
   }
 
-  _dart_video_output_dec_texture_encoders _video_output_dec_texture_encoders;
+  _dart_video_output_dec_texture_encoders? _video_output_dec_texture_encoders;
 
   void video_output_inc_texture_frames(
     ffi.Pointer<video_output> video,
@@ -5293,12 +5293,12 @@ class DiveObslibFFI {
             _c_video_output_inc_texture_frames,
             _dart_video_output_inc_texture_frames>(
         'video_output_inc_texture_frames');
-    return _video_output_inc_texture_frames(
+    return _video_output_inc_texture_frames!(
       video,
     );
   }
 
-  _dart_video_output_inc_texture_frames _video_output_inc_texture_frames;
+  _dart_video_output_inc_texture_frames? _video_output_inc_texture_frames;
 
   void video_output_inc_texture_skipped_frames(
     ffi.Pointer<video_output> video,
@@ -5307,33 +5307,33 @@ class DiveObslibFFI {
             _c_video_output_inc_texture_skipped_frames,
             _dart_video_output_inc_texture_skipped_frames>(
         'video_output_inc_texture_skipped_frames');
-    return _video_output_inc_texture_skipped_frames(
+    return _video_output_inc_texture_skipped_frames!(
       video,
     );
   }
 
-  _dart_video_output_inc_texture_skipped_frames
+  _dart_video_output_inc_texture_skipped_frames?
       _video_output_inc_texture_skipped_frames;
 
   ffi.Pointer<signal_handler> signal_handler_create() {
     _signal_handler_create ??= _dylib.lookupFunction<_c_signal_handler_create,
         _dart_signal_handler_create>('signal_handler_create');
-    return _signal_handler_create();
+    return _signal_handler_create!();
   }
 
-  _dart_signal_handler_create _signal_handler_create;
+  _dart_signal_handler_create? _signal_handler_create;
 
   void signal_handler_destroy(
     ffi.Pointer<signal_handler> handler,
   ) {
     _signal_handler_destroy ??= _dylib.lookupFunction<_c_signal_handler_destroy,
         _dart_signal_handler_destroy>('signal_handler_destroy');
-    return _signal_handler_destroy(
+    return _signal_handler_destroy!(
       handler,
     );
   }
 
-  _dart_signal_handler_destroy _signal_handler_destroy;
+  _dart_signal_handler_destroy? _signal_handler_destroy;
 
   int signal_handler_add(
     ffi.Pointer<signal_handler> handler,
@@ -5342,13 +5342,13 @@ class DiveObslibFFI {
     _signal_handler_add ??=
         _dylib.lookupFunction<_c_signal_handler_add, _dart_signal_handler_add>(
             'signal_handler_add');
-    return _signal_handler_add(
+    return _signal_handler_add!(
       handler,
       signal_decl,
     );
   }
 
-  _dart_signal_handler_add _signal_handler_add;
+  _dart_signal_handler_add? _signal_handler_add;
 
   int signal_handler_add_array(
     ffi.Pointer<signal_handler> handler,
@@ -5357,13 +5357,13 @@ class DiveObslibFFI {
     _signal_handler_add_array ??= _dylib.lookupFunction<
         _c_signal_handler_add_array,
         _dart_signal_handler_add_array>('signal_handler_add_array');
-    return _signal_handler_add_array(
+    return _signal_handler_add_array!(
       handler,
       signal_decls,
     );
   }
 
-  _dart_signal_handler_add_array _signal_handler_add_array;
+  _dart_signal_handler_add_array? _signal_handler_add_array;
 
   void signal_handler_connect(
     ffi.Pointer<signal_handler> handler,
@@ -5373,7 +5373,7 @@ class DiveObslibFFI {
   ) {
     _signal_handler_connect ??= _dylib.lookupFunction<_c_signal_handler_connect,
         _dart_signal_handler_connect>('signal_handler_connect');
-    return _signal_handler_connect(
+    return _signal_handler_connect!(
       handler,
       signal,
       callback,
@@ -5381,7 +5381,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_signal_handler_connect _signal_handler_connect;
+  _dart_signal_handler_connect? _signal_handler_connect;
 
   void signal_handler_connect_ref(
     ffi.Pointer<signal_handler> handler,
@@ -5392,7 +5392,7 @@ class DiveObslibFFI {
     _signal_handler_connect_ref ??= _dylib.lookupFunction<
         _c_signal_handler_connect_ref,
         _dart_signal_handler_connect_ref>('signal_handler_connect_ref');
-    return _signal_handler_connect_ref(
+    return _signal_handler_connect_ref!(
       handler,
       signal,
       callback,
@@ -5400,7 +5400,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_signal_handler_connect_ref _signal_handler_connect_ref;
+  _dart_signal_handler_connect_ref? _signal_handler_connect_ref;
 
   void signal_handler_disconnect(
     ffi.Pointer<signal_handler> handler,
@@ -5411,7 +5411,7 @@ class DiveObslibFFI {
     _signal_handler_disconnect ??= _dylib.lookupFunction<
         _c_signal_handler_disconnect,
         _dart_signal_handler_disconnect>('signal_handler_disconnect');
-    return _signal_handler_disconnect(
+    return _signal_handler_disconnect!(
       handler,
       signal,
       callback,
@@ -5419,7 +5419,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_signal_handler_disconnect _signal_handler_disconnect;
+  _dart_signal_handler_disconnect? _signal_handler_disconnect;
 
   void signal_handler_connect_global(
     ffi.Pointer<signal_handler> handler,
@@ -5429,14 +5429,14 @@ class DiveObslibFFI {
     _signal_handler_connect_global ??= _dylib.lookupFunction<
         _c_signal_handler_connect_global,
         _dart_signal_handler_connect_global>('signal_handler_connect_global');
-    return _signal_handler_connect_global(
+    return _signal_handler_connect_global!(
       handler,
       callback,
       data,
     );
   }
 
-  _dart_signal_handler_connect_global _signal_handler_connect_global;
+  _dart_signal_handler_connect_global? _signal_handler_connect_global;
 
   void signal_handler_disconnect_global(
     ffi.Pointer<signal_handler> handler,
@@ -5447,23 +5447,23 @@ class DiveObslibFFI {
             _c_signal_handler_disconnect_global,
             _dart_signal_handler_disconnect_global>(
         'signal_handler_disconnect_global');
-    return _signal_handler_disconnect_global(
+    return _signal_handler_disconnect_global!(
       handler,
       callback,
       data,
     );
   }
 
-  _dart_signal_handler_disconnect_global _signal_handler_disconnect_global;
+  _dart_signal_handler_disconnect_global? _signal_handler_disconnect_global;
 
   void signal_handler_remove_current() {
     _signal_handler_remove_current ??= _dylib.lookupFunction<
         _c_signal_handler_remove_current,
         _dart_signal_handler_remove_current>('signal_handler_remove_current');
-    return _signal_handler_remove_current();
+    return _signal_handler_remove_current!();
   }
 
-  _dart_signal_handler_remove_current _signal_handler_remove_current;
+  _dart_signal_handler_remove_current? _signal_handler_remove_current;
 
   void signal_handler_signal(
     ffi.Pointer<signal_handler> handler,
@@ -5472,34 +5472,34 @@ class DiveObslibFFI {
   ) {
     _signal_handler_signal ??= _dylib.lookupFunction<_c_signal_handler_signal,
         _dart_signal_handler_signal>('signal_handler_signal');
-    return _signal_handler_signal(
+    return _signal_handler_signal!(
       handler,
       signal,
       params,
     );
   }
 
-  _dart_signal_handler_signal _signal_handler_signal;
+  _dart_signal_handler_signal? _signal_handler_signal;
 
   ffi.Pointer<proc_handler> proc_handler_create() {
     _proc_handler_create ??= _dylib.lookupFunction<_c_proc_handler_create,
         _dart_proc_handler_create>('proc_handler_create');
-    return _proc_handler_create();
+    return _proc_handler_create!();
   }
 
-  _dart_proc_handler_create _proc_handler_create;
+  _dart_proc_handler_create? _proc_handler_create;
 
   void proc_handler_destroy(
     ffi.Pointer<proc_handler> handler,
   ) {
     _proc_handler_destroy ??= _dylib.lookupFunction<_c_proc_handler_destroy,
         _dart_proc_handler_destroy>('proc_handler_destroy');
-    return _proc_handler_destroy(
+    return _proc_handler_destroy!(
       handler,
     );
   }
 
-  _dart_proc_handler_destroy _proc_handler_destroy;
+  _dart_proc_handler_destroy? _proc_handler_destroy;
 
   void proc_handler_add(
     ffi.Pointer<proc_handler> handler,
@@ -5510,7 +5510,7 @@ class DiveObslibFFI {
     _proc_handler_add ??=
         _dylib.lookupFunction<_c_proc_handler_add, _dart_proc_handler_add>(
             'proc_handler_add');
-    return _proc_handler_add(
+    return _proc_handler_add!(
       handler,
       decl_string,
       proc,
@@ -5518,7 +5518,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_proc_handler_add _proc_handler_add;
+  _dart_proc_handler_add? _proc_handler_add;
 
   /// Calls a function in a procedure handler.  Returns false if the named
   /// procedure is not found.
@@ -5530,23 +5530,23 @@ class DiveObslibFFI {
     _proc_handler_call ??=
         _dylib.lookupFunction<_c_proc_handler_call, _dart_proc_handler_call>(
             'proc_handler_call');
-    return _proc_handler_call(
+    return _proc_handler_call!(
       handler,
       name,
       params,
     );
   }
 
-  _dart_proc_handler_call _proc_handler_call;
+  _dart_proc_handler_call? _proc_handler_call;
 
   ffi.Pointer<obs_data> obs_data_create() {
     _obs_data_create ??=
         _dylib.lookupFunction<_c_obs_data_create, _dart_obs_data_create>(
             'obs_data_create');
-    return _obs_data_create();
+    return _obs_data_create!();
   }
 
-  _dart_obs_data_create _obs_data_create;
+  _dart_obs_data_create? _obs_data_create;
 
   ffi.Pointer<obs_data> obs_data_create_from_json(
     ffi.Pointer<ffi.Int8> json_string,
@@ -5554,12 +5554,12 @@ class DiveObslibFFI {
     _obs_data_create_from_json ??= _dylib.lookupFunction<
         _c_obs_data_create_from_json,
         _dart_obs_data_create_from_json>('obs_data_create_from_json');
-    return _obs_data_create_from_json(
+    return _obs_data_create_from_json!(
       json_string,
     );
   }
 
-  _dart_obs_data_create_from_json _obs_data_create_from_json;
+  _dart_obs_data_create_from_json? _obs_data_create_from_json;
 
   ffi.Pointer<obs_data> obs_data_create_from_json_file(
     ffi.Pointer<ffi.Int8> json_file,
@@ -5567,12 +5567,12 @@ class DiveObslibFFI {
     _obs_data_create_from_json_file ??= _dylib.lookupFunction<
         _c_obs_data_create_from_json_file,
         _dart_obs_data_create_from_json_file>('obs_data_create_from_json_file');
-    return _obs_data_create_from_json_file(
+    return _obs_data_create_from_json_file!(
       json_file,
     );
   }
 
-  _dart_obs_data_create_from_json_file _obs_data_create_from_json_file;
+  _dart_obs_data_create_from_json_file? _obs_data_create_from_json_file;
 
   ffi.Pointer<obs_data> obs_data_create_from_json_file_safe(
     ffi.Pointer<ffi.Int8> json_file,
@@ -5582,13 +5582,13 @@ class DiveObslibFFI {
             _c_obs_data_create_from_json_file_safe,
             _dart_obs_data_create_from_json_file_safe>(
         'obs_data_create_from_json_file_safe');
-    return _obs_data_create_from_json_file_safe(
+    return _obs_data_create_from_json_file_safe!(
       json_file,
       backup_ext,
     );
   }
 
-  _dart_obs_data_create_from_json_file_safe
+  _dart_obs_data_create_from_json_file_safe?
       _obs_data_create_from_json_file_safe;
 
   void obs_data_addref(
@@ -5597,25 +5597,25 @@ class DiveObslibFFI {
     _obs_data_addref ??=
         _dylib.lookupFunction<_c_obs_data_addref, _dart_obs_data_addref>(
             'obs_data_addref');
-    return _obs_data_addref(
+    return _obs_data_addref!(
       data,
     );
   }
 
-  _dart_obs_data_addref _obs_data_addref;
+  _dart_obs_data_addref? _obs_data_addref;
 
   void obs_data_release(
-    ffi.Pointer<obs_data> data,
+    ffi.Pointer<obs_data>? data,
   ) {
     _obs_data_release ??=
         _dylib.lookupFunction<_c_obs_data_release, _dart_obs_data_release>(
             'obs_data_release');
-    return _obs_data_release(
+    return _obs_data_release!(
       data,
     );
   }
 
-  _dart_obs_data_release _obs_data_release;
+  _dart_obs_data_release? _obs_data_release;
 
   ffi.Pointer<ffi.Int8> obs_data_get_json(
     ffi.Pointer<obs_data> data,
@@ -5623,12 +5623,12 @@ class DiveObslibFFI {
     _obs_data_get_json ??=
         _dylib.lookupFunction<_c_obs_data_get_json, _dart_obs_data_get_json>(
             'obs_data_get_json');
-    return _obs_data_get_json(
+    return _obs_data_get_json!(
       data,
     );
   }
 
-  _dart_obs_data_get_json _obs_data_get_json;
+  _dart_obs_data_get_json? _obs_data_get_json;
 
   int obs_data_save_json(
     ffi.Pointer<obs_data> data,
@@ -5637,13 +5637,13 @@ class DiveObslibFFI {
     _obs_data_save_json ??=
         _dylib.lookupFunction<_c_obs_data_save_json, _dart_obs_data_save_json>(
             'obs_data_save_json');
-    return _obs_data_save_json(
+    return _obs_data_save_json!(
       data,
       file,
     );
   }
 
-  _dart_obs_data_save_json _obs_data_save_json;
+  _dart_obs_data_save_json? _obs_data_save_json;
 
   int obs_data_save_json_safe(
     ffi.Pointer<obs_data> data,
@@ -5654,7 +5654,7 @@ class DiveObslibFFI {
     _obs_data_save_json_safe ??= _dylib.lookupFunction<
         _c_obs_data_save_json_safe,
         _dart_obs_data_save_json_safe>('obs_data_save_json_safe');
-    return _obs_data_save_json_safe(
+    return _obs_data_save_json_safe!(
       data,
       file,
       temp_ext,
@@ -5662,7 +5662,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_data_save_json_safe _obs_data_save_json_safe;
+  _dart_obs_data_save_json_safe? _obs_data_save_json_safe;
 
   void obs_data_apply(
     ffi.Pointer<obs_data> target,
@@ -5671,13 +5671,13 @@ class DiveObslibFFI {
     _obs_data_apply ??=
         _dylib.lookupFunction<_c_obs_data_apply, _dart_obs_data_apply>(
             'obs_data_apply');
-    return _obs_data_apply(
+    return _obs_data_apply!(
       target,
       apply_data,
     );
   }
 
-  _dart_obs_data_apply _obs_data_apply;
+  _dart_obs_data_apply? _obs_data_apply;
 
   void obs_data_erase(
     ffi.Pointer<obs_data> data,
@@ -5686,13 +5686,13 @@ class DiveObslibFFI {
     _obs_data_erase ??=
         _dylib.lookupFunction<_c_obs_data_erase, _dart_obs_data_erase>(
             'obs_data_erase');
-    return _obs_data_erase(
+    return _obs_data_erase!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_erase _obs_data_erase;
+  _dart_obs_data_erase? _obs_data_erase;
 
   void obs_data_clear(
     ffi.Pointer<obs_data> data,
@@ -5700,28 +5700,28 @@ class DiveObslibFFI {
     _obs_data_clear ??=
         _dylib.lookupFunction<_c_obs_data_clear, _dart_obs_data_clear>(
             'obs_data_clear');
-    return _obs_data_clear(
+    return _obs_data_clear!(
       data,
     );
   }
 
-  _dart_obs_data_clear _obs_data_clear;
+  _dart_obs_data_clear? _obs_data_clear;
 
   void obs_data_set_string(
-    ffi.Pointer<obs_data> data,
+    ffi.Pointer<obs_data>? data,
     ffi.Pointer<ffi.Int8> name,
     ffi.Pointer<ffi.Int8> val,
   ) {
     _obs_data_set_string ??= _dylib.lookupFunction<_c_obs_data_set_string,
         _dart_obs_data_set_string>('obs_data_set_string');
-    return _obs_data_set_string(
+    return _obs_data_set_string!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_string _obs_data_set_string;
+  _dart_obs_data_set_string? _obs_data_set_string;
 
   void obs_data_set_int(
     ffi.Pointer<obs_data> data,
@@ -5731,14 +5731,14 @@ class DiveObslibFFI {
     _obs_data_set_int ??=
         _dylib.lookupFunction<_c_obs_data_set_int, _dart_obs_data_set_int>(
             'obs_data_set_int');
-    return _obs_data_set_int(
+    return _obs_data_set_int!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_int _obs_data_set_int;
+  _dart_obs_data_set_int? _obs_data_set_int;
 
   void obs_data_set_double(
     ffi.Pointer<obs_data> data,
@@ -5747,31 +5747,31 @@ class DiveObslibFFI {
   ) {
     _obs_data_set_double ??= _dylib.lookupFunction<_c_obs_data_set_double,
         _dart_obs_data_set_double>('obs_data_set_double');
-    return _obs_data_set_double(
+    return _obs_data_set_double!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_double _obs_data_set_double;
+  _dart_obs_data_set_double? _obs_data_set_double;
 
   void obs_data_set_bool(
-    ffi.Pointer<obs_data> data,
+    ffi.Pointer<obs_data>? data,
     ffi.Pointer<ffi.Int8> name,
     int val,
   ) {
     _obs_data_set_bool ??=
         _dylib.lookupFunction<_c_obs_data_set_bool, _dart_obs_data_set_bool>(
             'obs_data_set_bool');
-    return _obs_data_set_bool(
+    return _obs_data_set_bool!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_bool _obs_data_set_bool;
+  _dart_obs_data_set_bool? _obs_data_set_bool;
 
   void obs_data_set_obj(
     ffi.Pointer<obs_data> data,
@@ -5781,14 +5781,14 @@ class DiveObslibFFI {
     _obs_data_set_obj ??=
         _dylib.lookupFunction<_c_obs_data_set_obj, _dart_obs_data_set_obj>(
             'obs_data_set_obj');
-    return _obs_data_set_obj(
+    return _obs_data_set_obj!(
       data,
       name,
       obj,
     );
   }
 
-  _dart_obs_data_set_obj _obs_data_set_obj;
+  _dart_obs_data_set_obj? _obs_data_set_obj;
 
   void obs_data_set_array(
     ffi.Pointer<obs_data> data,
@@ -5798,14 +5798,14 @@ class DiveObslibFFI {
     _obs_data_set_array ??=
         _dylib.lookupFunction<_c_obs_data_set_array, _dart_obs_data_set_array>(
             'obs_data_set_array');
-    return _obs_data_set_array(
+    return _obs_data_set_array!(
       data,
       name,
       array,
     );
   }
 
-  _dart_obs_data_set_array _obs_data_set_array;
+  _dart_obs_data_set_array? _obs_data_set_array;
 
   void obs_data_set_default_string(
     ffi.Pointer<obs_data> data,
@@ -5815,14 +5815,14 @@ class DiveObslibFFI {
     _obs_data_set_default_string ??= _dylib.lookupFunction<
         _c_obs_data_set_default_string,
         _dart_obs_data_set_default_string>('obs_data_set_default_string');
-    return _obs_data_set_default_string(
+    return _obs_data_set_default_string!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_default_string _obs_data_set_default_string;
+  _dart_obs_data_set_default_string? _obs_data_set_default_string;
 
   void obs_data_set_default_int(
     ffi.Pointer<obs_data> data,
@@ -5832,14 +5832,14 @@ class DiveObslibFFI {
     _obs_data_set_default_int ??= _dylib.lookupFunction<
         _c_obs_data_set_default_int,
         _dart_obs_data_set_default_int>('obs_data_set_default_int');
-    return _obs_data_set_default_int(
+    return _obs_data_set_default_int!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_default_int _obs_data_set_default_int;
+  _dart_obs_data_set_default_int? _obs_data_set_default_int;
 
   void obs_data_set_default_double(
     ffi.Pointer<obs_data> data,
@@ -5849,14 +5849,14 @@ class DiveObslibFFI {
     _obs_data_set_default_double ??= _dylib.lookupFunction<
         _c_obs_data_set_default_double,
         _dart_obs_data_set_default_double>('obs_data_set_default_double');
-    return _obs_data_set_default_double(
+    return _obs_data_set_default_double!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_default_double _obs_data_set_default_double;
+  _dart_obs_data_set_default_double? _obs_data_set_default_double;
 
   void obs_data_set_default_bool(
     ffi.Pointer<obs_data> data,
@@ -5866,14 +5866,14 @@ class DiveObslibFFI {
     _obs_data_set_default_bool ??= _dylib.lookupFunction<
         _c_obs_data_set_default_bool,
         _dart_obs_data_set_default_bool>('obs_data_set_default_bool');
-    return _obs_data_set_default_bool(
+    return _obs_data_set_default_bool!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_default_bool _obs_data_set_default_bool;
+  _dart_obs_data_set_default_bool? _obs_data_set_default_bool;
 
   void obs_data_set_default_obj(
     ffi.Pointer<obs_data> data,
@@ -5883,14 +5883,14 @@ class DiveObslibFFI {
     _obs_data_set_default_obj ??= _dylib.lookupFunction<
         _c_obs_data_set_default_obj,
         _dart_obs_data_set_default_obj>('obs_data_set_default_obj');
-    return _obs_data_set_default_obj(
+    return _obs_data_set_default_obj!(
       data,
       name,
       obj,
     );
   }
 
-  _dart_obs_data_set_default_obj _obs_data_set_default_obj;
+  _dart_obs_data_set_default_obj? _obs_data_set_default_obj;
 
   void obs_data_set_autoselect_string(
     ffi.Pointer<obs_data> data,
@@ -5900,14 +5900,14 @@ class DiveObslibFFI {
     _obs_data_set_autoselect_string ??= _dylib.lookupFunction<
         _c_obs_data_set_autoselect_string,
         _dart_obs_data_set_autoselect_string>('obs_data_set_autoselect_string');
-    return _obs_data_set_autoselect_string(
+    return _obs_data_set_autoselect_string!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_autoselect_string _obs_data_set_autoselect_string;
+  _dart_obs_data_set_autoselect_string? _obs_data_set_autoselect_string;
 
   void obs_data_set_autoselect_int(
     ffi.Pointer<obs_data> data,
@@ -5917,14 +5917,14 @@ class DiveObslibFFI {
     _obs_data_set_autoselect_int ??= _dylib.lookupFunction<
         _c_obs_data_set_autoselect_int,
         _dart_obs_data_set_autoselect_int>('obs_data_set_autoselect_int');
-    return _obs_data_set_autoselect_int(
+    return _obs_data_set_autoselect_int!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_autoselect_int _obs_data_set_autoselect_int;
+  _dart_obs_data_set_autoselect_int? _obs_data_set_autoselect_int;
 
   void obs_data_set_autoselect_double(
     ffi.Pointer<obs_data> data,
@@ -5934,14 +5934,14 @@ class DiveObslibFFI {
     _obs_data_set_autoselect_double ??= _dylib.lookupFunction<
         _c_obs_data_set_autoselect_double,
         _dart_obs_data_set_autoselect_double>('obs_data_set_autoselect_double');
-    return _obs_data_set_autoselect_double(
+    return _obs_data_set_autoselect_double!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_autoselect_double _obs_data_set_autoselect_double;
+  _dart_obs_data_set_autoselect_double? _obs_data_set_autoselect_double;
 
   void obs_data_set_autoselect_bool(
     ffi.Pointer<obs_data> data,
@@ -5951,14 +5951,14 @@ class DiveObslibFFI {
     _obs_data_set_autoselect_bool ??= _dylib.lookupFunction<
         _c_obs_data_set_autoselect_bool,
         _dart_obs_data_set_autoselect_bool>('obs_data_set_autoselect_bool');
-    return _obs_data_set_autoselect_bool(
+    return _obs_data_set_autoselect_bool!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_autoselect_bool _obs_data_set_autoselect_bool;
+  _dart_obs_data_set_autoselect_bool? _obs_data_set_autoselect_bool;
 
   void obs_data_set_autoselect_obj(
     ffi.Pointer<obs_data> data,
@@ -5968,14 +5968,14 @@ class DiveObslibFFI {
     _obs_data_set_autoselect_obj ??= _dylib.lookupFunction<
         _c_obs_data_set_autoselect_obj,
         _dart_obs_data_set_autoselect_obj>('obs_data_set_autoselect_obj');
-    return _obs_data_set_autoselect_obj(
+    return _obs_data_set_autoselect_obj!(
       data,
       name,
       obj,
     );
   }
 
-  _dart_obs_data_set_autoselect_obj _obs_data_set_autoselect_obj;
+  _dart_obs_data_set_autoselect_obj? _obs_data_set_autoselect_obj;
 
   ffi.Pointer<ffi.Int8> obs_data_get_string(
     ffi.Pointer<obs_data> data,
@@ -5983,13 +5983,13 @@ class DiveObslibFFI {
   ) {
     _obs_data_get_string ??= _dylib.lookupFunction<_c_obs_data_get_string,
         _dart_obs_data_get_string>('obs_data_get_string');
-    return _obs_data_get_string(
+    return _obs_data_get_string!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_get_string _obs_data_get_string;
+  _dart_obs_data_get_string? _obs_data_get_string;
 
   int obs_data_get_int(
     ffi.Pointer<obs_data> data,
@@ -5998,13 +5998,13 @@ class DiveObslibFFI {
     _obs_data_get_int ??=
         _dylib.lookupFunction<_c_obs_data_get_int, _dart_obs_data_get_int>(
             'obs_data_get_int');
-    return _obs_data_get_int(
+    return _obs_data_get_int!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_get_int _obs_data_get_int;
+  _dart_obs_data_get_int? _obs_data_get_int;
 
   double obs_data_get_double(
     ffi.Pointer<obs_data> data,
@@ -6012,13 +6012,13 @@ class DiveObslibFFI {
   ) {
     _obs_data_get_double ??= _dylib.lookupFunction<_c_obs_data_get_double,
         _dart_obs_data_get_double>('obs_data_get_double');
-    return _obs_data_get_double(
+    return _obs_data_get_double!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_get_double _obs_data_get_double;
+  _dart_obs_data_get_double? _obs_data_get_double;
 
   int obs_data_get_bool(
     ffi.Pointer<obs_data> data,
@@ -6027,13 +6027,13 @@ class DiveObslibFFI {
     _obs_data_get_bool ??=
         _dylib.lookupFunction<_c_obs_data_get_bool, _dart_obs_data_get_bool>(
             'obs_data_get_bool');
-    return _obs_data_get_bool(
+    return _obs_data_get_bool!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_get_bool _obs_data_get_bool;
+  _dart_obs_data_get_bool? _obs_data_get_bool;
 
   ffi.Pointer<obs_data> obs_data_get_obj(
     ffi.Pointer<obs_data> data,
@@ -6042,13 +6042,13 @@ class DiveObslibFFI {
     _obs_data_get_obj ??=
         _dylib.lookupFunction<_c_obs_data_get_obj, _dart_obs_data_get_obj>(
             'obs_data_get_obj');
-    return _obs_data_get_obj(
+    return _obs_data_get_obj!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_get_obj _obs_data_get_obj;
+  _dart_obs_data_get_obj? _obs_data_get_obj;
 
   ffi.Pointer<obs_data_array> obs_data_get_array(
     ffi.Pointer<obs_data> data,
@@ -6057,13 +6057,13 @@ class DiveObslibFFI {
     _obs_data_get_array ??=
         _dylib.lookupFunction<_c_obs_data_get_array, _dart_obs_data_get_array>(
             'obs_data_get_array');
-    return _obs_data_get_array(
+    return _obs_data_get_array!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_get_array _obs_data_get_array;
+  _dart_obs_data_get_array? _obs_data_get_array;
 
   ffi.Pointer<ffi.Int8> obs_data_get_default_string(
     ffi.Pointer<obs_data> data,
@@ -6072,13 +6072,13 @@ class DiveObslibFFI {
     _obs_data_get_default_string ??= _dylib.lookupFunction<
         _c_obs_data_get_default_string,
         _dart_obs_data_get_default_string>('obs_data_get_default_string');
-    return _obs_data_get_default_string(
+    return _obs_data_get_default_string!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_get_default_string _obs_data_get_default_string;
+  _dart_obs_data_get_default_string? _obs_data_get_default_string;
 
   int obs_data_get_default_int(
     ffi.Pointer<obs_data> data,
@@ -6087,13 +6087,13 @@ class DiveObslibFFI {
     _obs_data_get_default_int ??= _dylib.lookupFunction<
         _c_obs_data_get_default_int,
         _dart_obs_data_get_default_int>('obs_data_get_default_int');
-    return _obs_data_get_default_int(
+    return _obs_data_get_default_int!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_get_default_int _obs_data_get_default_int;
+  _dart_obs_data_get_default_int? _obs_data_get_default_int;
 
   double obs_data_get_default_double(
     ffi.Pointer<obs_data> data,
@@ -6102,13 +6102,13 @@ class DiveObslibFFI {
     _obs_data_get_default_double ??= _dylib.lookupFunction<
         _c_obs_data_get_default_double,
         _dart_obs_data_get_default_double>('obs_data_get_default_double');
-    return _obs_data_get_default_double(
+    return _obs_data_get_default_double!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_get_default_double _obs_data_get_default_double;
+  _dart_obs_data_get_default_double? _obs_data_get_default_double;
 
   int obs_data_get_default_bool(
     ffi.Pointer<obs_data> data,
@@ -6117,13 +6117,13 @@ class DiveObslibFFI {
     _obs_data_get_default_bool ??= _dylib.lookupFunction<
         _c_obs_data_get_default_bool,
         _dart_obs_data_get_default_bool>('obs_data_get_default_bool');
-    return _obs_data_get_default_bool(
+    return _obs_data_get_default_bool!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_get_default_bool _obs_data_get_default_bool;
+  _dart_obs_data_get_default_bool? _obs_data_get_default_bool;
 
   ffi.Pointer<obs_data> obs_data_get_default_obj(
     ffi.Pointer<obs_data> data,
@@ -6132,13 +6132,13 @@ class DiveObslibFFI {
     _obs_data_get_default_obj ??= _dylib.lookupFunction<
         _c_obs_data_get_default_obj,
         _dart_obs_data_get_default_obj>('obs_data_get_default_obj');
-    return _obs_data_get_default_obj(
+    return _obs_data_get_default_obj!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_get_default_obj _obs_data_get_default_obj;
+  _dart_obs_data_get_default_obj? _obs_data_get_default_obj;
 
   ffi.Pointer<obs_data_array> obs_data_get_default_array(
     ffi.Pointer<obs_data> data,
@@ -6147,13 +6147,13 @@ class DiveObslibFFI {
     _obs_data_get_default_array ??= _dylib.lookupFunction<
         _c_obs_data_get_default_array,
         _dart_obs_data_get_default_array>('obs_data_get_default_array');
-    return _obs_data_get_default_array(
+    return _obs_data_get_default_array!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_get_default_array _obs_data_get_default_array;
+  _dart_obs_data_get_default_array? _obs_data_get_default_array;
 
   ffi.Pointer<ffi.Int8> obs_data_get_autoselect_string(
     ffi.Pointer<obs_data> data,
@@ -6162,13 +6162,13 @@ class DiveObslibFFI {
     _obs_data_get_autoselect_string ??= _dylib.lookupFunction<
         _c_obs_data_get_autoselect_string,
         _dart_obs_data_get_autoselect_string>('obs_data_get_autoselect_string');
-    return _obs_data_get_autoselect_string(
+    return _obs_data_get_autoselect_string!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_get_autoselect_string _obs_data_get_autoselect_string;
+  _dart_obs_data_get_autoselect_string? _obs_data_get_autoselect_string;
 
   int obs_data_get_autoselect_int(
     ffi.Pointer<obs_data> data,
@@ -6177,13 +6177,13 @@ class DiveObslibFFI {
     _obs_data_get_autoselect_int ??= _dylib.lookupFunction<
         _c_obs_data_get_autoselect_int,
         _dart_obs_data_get_autoselect_int>('obs_data_get_autoselect_int');
-    return _obs_data_get_autoselect_int(
+    return _obs_data_get_autoselect_int!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_get_autoselect_int _obs_data_get_autoselect_int;
+  _dart_obs_data_get_autoselect_int? _obs_data_get_autoselect_int;
 
   double obs_data_get_autoselect_double(
     ffi.Pointer<obs_data> data,
@@ -6192,13 +6192,13 @@ class DiveObslibFFI {
     _obs_data_get_autoselect_double ??= _dylib.lookupFunction<
         _c_obs_data_get_autoselect_double,
         _dart_obs_data_get_autoselect_double>('obs_data_get_autoselect_double');
-    return _obs_data_get_autoselect_double(
+    return _obs_data_get_autoselect_double!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_get_autoselect_double _obs_data_get_autoselect_double;
+  _dart_obs_data_get_autoselect_double? _obs_data_get_autoselect_double;
 
   int obs_data_get_autoselect_bool(
     ffi.Pointer<obs_data> data,
@@ -6207,13 +6207,13 @@ class DiveObslibFFI {
     _obs_data_get_autoselect_bool ??= _dylib.lookupFunction<
         _c_obs_data_get_autoselect_bool,
         _dart_obs_data_get_autoselect_bool>('obs_data_get_autoselect_bool');
-    return _obs_data_get_autoselect_bool(
+    return _obs_data_get_autoselect_bool!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_get_autoselect_bool _obs_data_get_autoselect_bool;
+  _dart_obs_data_get_autoselect_bool? _obs_data_get_autoselect_bool;
 
   ffi.Pointer<obs_data> obs_data_get_autoselect_obj(
     ffi.Pointer<obs_data> data,
@@ -6222,13 +6222,13 @@ class DiveObslibFFI {
     _obs_data_get_autoselect_obj ??= _dylib.lookupFunction<
         _c_obs_data_get_autoselect_obj,
         _dart_obs_data_get_autoselect_obj>('obs_data_get_autoselect_obj');
-    return _obs_data_get_autoselect_obj(
+    return _obs_data_get_autoselect_obj!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_get_autoselect_obj _obs_data_get_autoselect_obj;
+  _dart_obs_data_get_autoselect_obj? _obs_data_get_autoselect_obj;
 
   ffi.Pointer<obs_data_array> obs_data_get_autoselect_array(
     ffi.Pointer<obs_data> data,
@@ -6237,57 +6237,57 @@ class DiveObslibFFI {
     _obs_data_get_autoselect_array ??= _dylib.lookupFunction<
         _c_obs_data_get_autoselect_array,
         _dart_obs_data_get_autoselect_array>('obs_data_get_autoselect_array');
-    return _obs_data_get_autoselect_array(
+    return _obs_data_get_autoselect_array!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_get_autoselect_array _obs_data_get_autoselect_array;
+  _dart_obs_data_get_autoselect_array? _obs_data_get_autoselect_array;
 
   ffi.Pointer<obs_data_array> obs_data_array_create() {
     _obs_data_array_create ??= _dylib.lookupFunction<_c_obs_data_array_create,
         _dart_obs_data_array_create>('obs_data_array_create');
-    return _obs_data_array_create();
+    return _obs_data_array_create!();
   }
 
-  _dart_obs_data_array_create _obs_data_array_create;
+  _dart_obs_data_array_create? _obs_data_array_create;
 
   void obs_data_array_addref(
     ffi.Pointer<obs_data_array> array,
   ) {
     _obs_data_array_addref ??= _dylib.lookupFunction<_c_obs_data_array_addref,
         _dart_obs_data_array_addref>('obs_data_array_addref');
-    return _obs_data_array_addref(
+    return _obs_data_array_addref!(
       array,
     );
   }
 
-  _dart_obs_data_array_addref _obs_data_array_addref;
+  _dart_obs_data_array_addref? _obs_data_array_addref;
 
   void obs_data_array_release(
     ffi.Pointer<obs_data_array> array,
   ) {
     _obs_data_array_release ??= _dylib.lookupFunction<_c_obs_data_array_release,
         _dart_obs_data_array_release>('obs_data_array_release');
-    return _obs_data_array_release(
+    return _obs_data_array_release!(
       array,
     );
   }
 
-  _dart_obs_data_array_release _obs_data_array_release;
+  _dart_obs_data_array_release? _obs_data_array_release;
 
   int obs_data_array_count(
     ffi.Pointer<obs_data_array> array,
   ) {
     _obs_data_array_count ??= _dylib.lookupFunction<_c_obs_data_array_count,
         _dart_obs_data_array_count>('obs_data_array_count');
-    return _obs_data_array_count(
+    return _obs_data_array_count!(
       array,
     );
   }
 
-  _dart_obs_data_array_count _obs_data_array_count;
+  _dart_obs_data_array_count? _obs_data_array_count;
 
   ffi.Pointer<obs_data> obs_data_array_item(
     ffi.Pointer<obs_data_array> array,
@@ -6295,13 +6295,13 @@ class DiveObslibFFI {
   ) {
     _obs_data_array_item ??= _dylib.lookupFunction<_c_obs_data_array_item,
         _dart_obs_data_array_item>('obs_data_array_item');
-    return _obs_data_array_item(
+    return _obs_data_array_item!(
       array,
       idx,
     );
   }
 
-  _dart_obs_data_array_item _obs_data_array_item;
+  _dart_obs_data_array_item? _obs_data_array_item;
 
   int obs_data_array_push_back(
     ffi.Pointer<obs_data_array> array,
@@ -6310,13 +6310,13 @@ class DiveObslibFFI {
     _obs_data_array_push_back ??= _dylib.lookupFunction<
         _c_obs_data_array_push_back,
         _dart_obs_data_array_push_back>('obs_data_array_push_back');
-    return _obs_data_array_push_back(
+    return _obs_data_array_push_back!(
       array,
       obj,
     );
   }
 
-  _dart_obs_data_array_push_back _obs_data_array_push_back;
+  _dart_obs_data_array_push_back? _obs_data_array_push_back;
 
   void obs_data_array_insert(
     ffi.Pointer<obs_data_array> array,
@@ -6325,14 +6325,14 @@ class DiveObslibFFI {
   ) {
     _obs_data_array_insert ??= _dylib.lookupFunction<_c_obs_data_array_insert,
         _dart_obs_data_array_insert>('obs_data_array_insert');
-    return _obs_data_array_insert(
+    return _obs_data_array_insert!(
       array,
       idx,
       obj,
     );
   }
 
-  _dart_obs_data_array_insert _obs_data_array_insert;
+  _dart_obs_data_array_insert? _obs_data_array_insert;
 
   void obs_data_array_push_back_array(
     ffi.Pointer<obs_data_array> array,
@@ -6341,13 +6341,13 @@ class DiveObslibFFI {
     _obs_data_array_push_back_array ??= _dylib.lookupFunction<
         _c_obs_data_array_push_back_array,
         _dart_obs_data_array_push_back_array>('obs_data_array_push_back_array');
-    return _obs_data_array_push_back_array(
+    return _obs_data_array_push_back_array!(
       array,
       array2,
     );
   }
 
-  _dart_obs_data_array_push_back_array _obs_data_array_push_back_array;
+  _dart_obs_data_array_push_back_array? _obs_data_array_push_back_array;
 
   void obs_data_array_erase(
     ffi.Pointer<obs_data_array> array,
@@ -6355,13 +6355,13 @@ class DiveObslibFFI {
   ) {
     _obs_data_array_erase ??= _dylib.lookupFunction<_c_obs_data_array_erase,
         _dart_obs_data_array_erase>('obs_data_array_erase');
-    return _obs_data_array_erase(
+    return _obs_data_array_erase!(
       array,
       idx,
     );
   }
 
-  _dart_obs_data_array_erase _obs_data_array_erase;
+  _dart_obs_data_array_erase? _obs_data_array_erase;
 
   int obs_data_has_user_value(
     ffi.Pointer<obs_data> data,
@@ -6370,13 +6370,13 @@ class DiveObslibFFI {
     _obs_data_has_user_value ??= _dylib.lookupFunction<
         _c_obs_data_has_user_value,
         _dart_obs_data_has_user_value>('obs_data_has_user_value');
-    return _obs_data_has_user_value(
+    return _obs_data_has_user_value!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_has_user_value _obs_data_has_user_value;
+  _dart_obs_data_has_user_value? _obs_data_has_user_value;
 
   int obs_data_has_default_value(
     ffi.Pointer<obs_data> data,
@@ -6385,13 +6385,13 @@ class DiveObslibFFI {
     _obs_data_has_default_value ??= _dylib.lookupFunction<
         _c_obs_data_has_default_value,
         _dart_obs_data_has_default_value>('obs_data_has_default_value');
-    return _obs_data_has_default_value(
+    return _obs_data_has_default_value!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_has_default_value _obs_data_has_default_value;
+  _dart_obs_data_has_default_value? _obs_data_has_default_value;
 
   int obs_data_has_autoselect_value(
     ffi.Pointer<obs_data> data,
@@ -6400,13 +6400,13 @@ class DiveObslibFFI {
     _obs_data_has_autoselect_value ??= _dylib.lookupFunction<
         _c_obs_data_has_autoselect_value,
         _dart_obs_data_has_autoselect_value>('obs_data_has_autoselect_value');
-    return _obs_data_has_autoselect_value(
+    return _obs_data_has_autoselect_value!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_has_autoselect_value _obs_data_has_autoselect_value;
+  _dart_obs_data_has_autoselect_value? _obs_data_has_autoselect_value;
 
   int obs_data_item_has_user_value(
     ffi.Pointer<obs_data_item> data,
@@ -6414,12 +6414,12 @@ class DiveObslibFFI {
     _obs_data_item_has_user_value ??= _dylib.lookupFunction<
         _c_obs_data_item_has_user_value,
         _dart_obs_data_item_has_user_value>('obs_data_item_has_user_value');
-    return _obs_data_item_has_user_value(
+    return _obs_data_item_has_user_value!(
       data,
     );
   }
 
-  _dart_obs_data_item_has_user_value _obs_data_item_has_user_value;
+  _dart_obs_data_item_has_user_value? _obs_data_item_has_user_value;
 
   int obs_data_item_has_default_value(
     ffi.Pointer<obs_data_item> data,
@@ -6428,12 +6428,12 @@ class DiveObslibFFI {
             _c_obs_data_item_has_default_value,
             _dart_obs_data_item_has_default_value>(
         'obs_data_item_has_default_value');
-    return _obs_data_item_has_default_value(
+    return _obs_data_item_has_default_value!(
       data,
     );
   }
 
-  _dart_obs_data_item_has_default_value _obs_data_item_has_default_value;
+  _dart_obs_data_item_has_default_value? _obs_data_item_has_default_value;
 
   int obs_data_item_has_autoselect_value(
     ffi.Pointer<obs_data_item> data,
@@ -6442,12 +6442,12 @@ class DiveObslibFFI {
             _c_obs_data_item_has_autoselect_value,
             _dart_obs_data_item_has_autoselect_value>(
         'obs_data_item_has_autoselect_value');
-    return _obs_data_item_has_autoselect_value(
+    return _obs_data_item_has_autoselect_value!(
       data,
     );
   }
 
-  _dart_obs_data_item_has_autoselect_value _obs_data_item_has_autoselect_value;
+  _dart_obs_data_item_has_autoselect_value? _obs_data_item_has_autoselect_value;
 
   void obs_data_unset_user_value(
     ffi.Pointer<obs_data> data,
@@ -6456,13 +6456,13 @@ class DiveObslibFFI {
     _obs_data_unset_user_value ??= _dylib.lookupFunction<
         _c_obs_data_unset_user_value,
         _dart_obs_data_unset_user_value>('obs_data_unset_user_value');
-    return _obs_data_unset_user_value(
+    return _obs_data_unset_user_value!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_unset_user_value _obs_data_unset_user_value;
+  _dart_obs_data_unset_user_value? _obs_data_unset_user_value;
 
   void obs_data_unset_default_value(
     ffi.Pointer<obs_data> data,
@@ -6471,13 +6471,13 @@ class DiveObslibFFI {
     _obs_data_unset_default_value ??= _dylib.lookupFunction<
         _c_obs_data_unset_default_value,
         _dart_obs_data_unset_default_value>('obs_data_unset_default_value');
-    return _obs_data_unset_default_value(
+    return _obs_data_unset_default_value!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_unset_default_value _obs_data_unset_default_value;
+  _dart_obs_data_unset_default_value? _obs_data_unset_default_value;
 
   void obs_data_unset_autoselect_value(
     ffi.Pointer<obs_data> data,
@@ -6487,13 +6487,13 @@ class DiveObslibFFI {
             _c_obs_data_unset_autoselect_value,
             _dart_obs_data_unset_autoselect_value>(
         'obs_data_unset_autoselect_value');
-    return _obs_data_unset_autoselect_value(
+    return _obs_data_unset_autoselect_value!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_unset_autoselect_value _obs_data_unset_autoselect_value;
+  _dart_obs_data_unset_autoselect_value? _obs_data_unset_autoselect_value;
 
   void obs_data_item_unset_user_value(
     ffi.Pointer<obs_data_item> data,
@@ -6501,12 +6501,12 @@ class DiveObslibFFI {
     _obs_data_item_unset_user_value ??= _dylib.lookupFunction<
         _c_obs_data_item_unset_user_value,
         _dart_obs_data_item_unset_user_value>('obs_data_item_unset_user_value');
-    return _obs_data_item_unset_user_value(
+    return _obs_data_item_unset_user_value!(
       data,
     );
   }
 
-  _dart_obs_data_item_unset_user_value _obs_data_item_unset_user_value;
+  _dart_obs_data_item_unset_user_value? _obs_data_item_unset_user_value;
 
   void obs_data_item_unset_default_value(
     ffi.Pointer<obs_data_item> data,
@@ -6515,12 +6515,12 @@ class DiveObslibFFI {
             _c_obs_data_item_unset_default_value,
             _dart_obs_data_item_unset_default_value>(
         'obs_data_item_unset_default_value');
-    return _obs_data_item_unset_default_value(
+    return _obs_data_item_unset_default_value!(
       data,
     );
   }
 
-  _dart_obs_data_item_unset_default_value _obs_data_item_unset_default_value;
+  _dart_obs_data_item_unset_default_value? _obs_data_item_unset_default_value;
 
   void obs_data_item_unset_autoselect_value(
     ffi.Pointer<obs_data_item> data,
@@ -6529,12 +6529,12 @@ class DiveObslibFFI {
             _c_obs_data_item_unset_autoselect_value,
             _dart_obs_data_item_unset_autoselect_value>(
         'obs_data_item_unset_autoselect_value');
-    return _obs_data_item_unset_autoselect_value(
+    return _obs_data_item_unset_autoselect_value!(
       data,
     );
   }
 
-  _dart_obs_data_item_unset_autoselect_value
+  _dart_obs_data_item_unset_autoselect_value?
       _obs_data_item_unset_autoselect_value;
 
   ffi.Pointer<obs_data_item> obs_data_first(
@@ -6543,12 +6543,12 @@ class DiveObslibFFI {
     _obs_data_first ??=
         _dylib.lookupFunction<_c_obs_data_first, _dart_obs_data_first>(
             'obs_data_first');
-    return _obs_data_first(
+    return _obs_data_first!(
       data,
     );
   }
 
-  _dart_obs_data_first _obs_data_first;
+  _dart_obs_data_first? _obs_data_first;
 
   ffi.Pointer<obs_data_item> obs_data_item_byname(
     ffi.Pointer<obs_data> data,
@@ -6556,13 +6556,13 @@ class DiveObslibFFI {
   ) {
     _obs_data_item_byname ??= _dylib.lookupFunction<_c_obs_data_item_byname,
         _dart_obs_data_item_byname>('obs_data_item_byname');
-    return _obs_data_item_byname(
+    return _obs_data_item_byname!(
       data,
       name,
     );
   }
 
-  _dart_obs_data_item_byname _obs_data_item_byname;
+  _dart_obs_data_item_byname? _obs_data_item_byname;
 
   int obs_data_item_next(
     ffi.Pointer<ffi.Pointer<obs_data_item>> item,
@@ -6570,72 +6570,72 @@ class DiveObslibFFI {
     _obs_data_item_next ??=
         _dylib.lookupFunction<_c_obs_data_item_next, _dart_obs_data_item_next>(
             'obs_data_item_next');
-    return _obs_data_item_next(
+    return _obs_data_item_next!(
       item,
     );
   }
 
-  _dart_obs_data_item_next _obs_data_item_next;
+  _dart_obs_data_item_next? _obs_data_item_next;
 
   void obs_data_item_release(
     ffi.Pointer<ffi.Pointer<obs_data_item>> item,
   ) {
     _obs_data_item_release ??= _dylib.lookupFunction<_c_obs_data_item_release,
         _dart_obs_data_item_release>('obs_data_item_release');
-    return _obs_data_item_release(
+    return _obs_data_item_release!(
       item,
     );
   }
 
-  _dart_obs_data_item_release _obs_data_item_release;
+  _dart_obs_data_item_release? _obs_data_item_release;
 
   void obs_data_item_remove(
     ffi.Pointer<ffi.Pointer<obs_data_item>> item,
   ) {
     _obs_data_item_remove ??= _dylib.lookupFunction<_c_obs_data_item_remove,
         _dart_obs_data_item_remove>('obs_data_item_remove');
-    return _obs_data_item_remove(
+    return _obs_data_item_remove!(
       item,
     );
   }
 
-  _dart_obs_data_item_remove _obs_data_item_remove;
+  _dart_obs_data_item_remove? _obs_data_item_remove;
 
   int obs_data_item_gettype(
     ffi.Pointer<obs_data_item> item,
   ) {
     _obs_data_item_gettype ??= _dylib.lookupFunction<_c_obs_data_item_gettype,
         _dart_obs_data_item_gettype>('obs_data_item_gettype');
-    return _obs_data_item_gettype(
+    return _obs_data_item_gettype!(
       item,
     );
   }
 
-  _dart_obs_data_item_gettype _obs_data_item_gettype;
+  _dart_obs_data_item_gettype? _obs_data_item_gettype;
 
   int obs_data_item_numtype(
     ffi.Pointer<obs_data_item> item,
   ) {
     _obs_data_item_numtype ??= _dylib.lookupFunction<_c_obs_data_item_numtype,
         _dart_obs_data_item_numtype>('obs_data_item_numtype');
-    return _obs_data_item_numtype(
+    return _obs_data_item_numtype!(
       item,
     );
   }
 
-  _dart_obs_data_item_numtype _obs_data_item_numtype;
+  _dart_obs_data_item_numtype? _obs_data_item_numtype;
 
   ffi.Pointer<ffi.Int8> obs_data_item_get_name(
     ffi.Pointer<obs_data_item> item,
   ) {
     _obs_data_item_get_name ??= _dylib.lookupFunction<_c_obs_data_item_get_name,
         _dart_obs_data_item_get_name>('obs_data_item_get_name');
-    return _obs_data_item_get_name(
+    return _obs_data_item_get_name!(
       item,
     );
   }
 
-  _dart_obs_data_item_get_name _obs_data_item_get_name;
+  _dart_obs_data_item_get_name? _obs_data_item_get_name;
 
   void obs_data_item_set_string(
     ffi.Pointer<ffi.Pointer<obs_data_item>> item,
@@ -6644,13 +6644,13 @@ class DiveObslibFFI {
     _obs_data_item_set_string ??= _dylib.lookupFunction<
         _c_obs_data_item_set_string,
         _dart_obs_data_item_set_string>('obs_data_item_set_string');
-    return _obs_data_item_set_string(
+    return _obs_data_item_set_string!(
       item,
       val,
     );
   }
 
-  _dart_obs_data_item_set_string _obs_data_item_set_string;
+  _dart_obs_data_item_set_string? _obs_data_item_set_string;
 
   void obs_data_item_set_int(
     ffi.Pointer<ffi.Pointer<obs_data_item>> item,
@@ -6658,13 +6658,13 @@ class DiveObslibFFI {
   ) {
     _obs_data_item_set_int ??= _dylib.lookupFunction<_c_obs_data_item_set_int,
         _dart_obs_data_item_set_int>('obs_data_item_set_int');
-    return _obs_data_item_set_int(
+    return _obs_data_item_set_int!(
       item,
       val,
     );
   }
 
-  _dart_obs_data_item_set_int _obs_data_item_set_int;
+  _dart_obs_data_item_set_int? _obs_data_item_set_int;
 
   void obs_data_item_set_double(
     ffi.Pointer<ffi.Pointer<obs_data_item>> item,
@@ -6673,13 +6673,13 @@ class DiveObslibFFI {
     _obs_data_item_set_double ??= _dylib.lookupFunction<
         _c_obs_data_item_set_double,
         _dart_obs_data_item_set_double>('obs_data_item_set_double');
-    return _obs_data_item_set_double(
+    return _obs_data_item_set_double!(
       item,
       val,
     );
   }
 
-  _dart_obs_data_item_set_double _obs_data_item_set_double;
+  _dart_obs_data_item_set_double? _obs_data_item_set_double;
 
   void obs_data_item_set_bool(
     ffi.Pointer<ffi.Pointer<obs_data_item>> item,
@@ -6687,13 +6687,13 @@ class DiveObslibFFI {
   ) {
     _obs_data_item_set_bool ??= _dylib.lookupFunction<_c_obs_data_item_set_bool,
         _dart_obs_data_item_set_bool>('obs_data_item_set_bool');
-    return _obs_data_item_set_bool(
+    return _obs_data_item_set_bool!(
       item,
       val,
     );
   }
 
-  _dart_obs_data_item_set_bool _obs_data_item_set_bool;
+  _dart_obs_data_item_set_bool? _obs_data_item_set_bool;
 
   void obs_data_item_set_obj(
     ffi.Pointer<ffi.Pointer<obs_data_item>> item,
@@ -6701,13 +6701,13 @@ class DiveObslibFFI {
   ) {
     _obs_data_item_set_obj ??= _dylib.lookupFunction<_c_obs_data_item_set_obj,
         _dart_obs_data_item_set_obj>('obs_data_item_set_obj');
-    return _obs_data_item_set_obj(
+    return _obs_data_item_set_obj!(
       item,
       val,
     );
   }
 
-  _dart_obs_data_item_set_obj _obs_data_item_set_obj;
+  _dart_obs_data_item_set_obj? _obs_data_item_set_obj;
 
   void obs_data_item_set_array(
     ffi.Pointer<ffi.Pointer<obs_data_item>> item,
@@ -6716,13 +6716,13 @@ class DiveObslibFFI {
     _obs_data_item_set_array ??= _dylib.lookupFunction<
         _c_obs_data_item_set_array,
         _dart_obs_data_item_set_array>('obs_data_item_set_array');
-    return _obs_data_item_set_array(
+    return _obs_data_item_set_array!(
       item,
       val,
     );
   }
 
-  _dart_obs_data_item_set_array _obs_data_item_set_array;
+  _dart_obs_data_item_set_array? _obs_data_item_set_array;
 
   void obs_data_item_set_default_string(
     ffi.Pointer<ffi.Pointer<obs_data_item>> item,
@@ -6732,13 +6732,13 @@ class DiveObslibFFI {
             _c_obs_data_item_set_default_string,
             _dart_obs_data_item_set_default_string>(
         'obs_data_item_set_default_string');
-    return _obs_data_item_set_default_string(
+    return _obs_data_item_set_default_string!(
       item,
       val,
     );
   }
 
-  _dart_obs_data_item_set_default_string _obs_data_item_set_default_string;
+  _dart_obs_data_item_set_default_string? _obs_data_item_set_default_string;
 
   void obs_data_item_set_default_int(
     ffi.Pointer<ffi.Pointer<obs_data_item>> item,
@@ -6747,13 +6747,13 @@ class DiveObslibFFI {
     _obs_data_item_set_default_int ??= _dylib.lookupFunction<
         _c_obs_data_item_set_default_int,
         _dart_obs_data_item_set_default_int>('obs_data_item_set_default_int');
-    return _obs_data_item_set_default_int(
+    return _obs_data_item_set_default_int!(
       item,
       val,
     );
   }
 
-  _dart_obs_data_item_set_default_int _obs_data_item_set_default_int;
+  _dart_obs_data_item_set_default_int? _obs_data_item_set_default_int;
 
   void obs_data_item_set_default_double(
     ffi.Pointer<ffi.Pointer<obs_data_item>> item,
@@ -6763,13 +6763,13 @@ class DiveObslibFFI {
             _c_obs_data_item_set_default_double,
             _dart_obs_data_item_set_default_double>(
         'obs_data_item_set_default_double');
-    return _obs_data_item_set_default_double(
+    return _obs_data_item_set_default_double!(
       item,
       val,
     );
   }
 
-  _dart_obs_data_item_set_default_double _obs_data_item_set_default_double;
+  _dart_obs_data_item_set_default_double? _obs_data_item_set_default_double;
 
   void obs_data_item_set_default_bool(
     ffi.Pointer<ffi.Pointer<obs_data_item>> item,
@@ -6778,13 +6778,13 @@ class DiveObslibFFI {
     _obs_data_item_set_default_bool ??= _dylib.lookupFunction<
         _c_obs_data_item_set_default_bool,
         _dart_obs_data_item_set_default_bool>('obs_data_item_set_default_bool');
-    return _obs_data_item_set_default_bool(
+    return _obs_data_item_set_default_bool!(
       item,
       val,
     );
   }
 
-  _dart_obs_data_item_set_default_bool _obs_data_item_set_default_bool;
+  _dart_obs_data_item_set_default_bool? _obs_data_item_set_default_bool;
 
   void obs_data_item_set_default_obj(
     ffi.Pointer<ffi.Pointer<obs_data_item>> item,
@@ -6793,13 +6793,13 @@ class DiveObslibFFI {
     _obs_data_item_set_default_obj ??= _dylib.lookupFunction<
         _c_obs_data_item_set_default_obj,
         _dart_obs_data_item_set_default_obj>('obs_data_item_set_default_obj');
-    return _obs_data_item_set_default_obj(
+    return _obs_data_item_set_default_obj!(
       item,
       val,
     );
   }
 
-  _dart_obs_data_item_set_default_obj _obs_data_item_set_default_obj;
+  _dart_obs_data_item_set_default_obj? _obs_data_item_set_default_obj;
 
   void obs_data_item_set_default_array(
     ffi.Pointer<ffi.Pointer<obs_data_item>> item,
@@ -6809,13 +6809,13 @@ class DiveObslibFFI {
             _c_obs_data_item_set_default_array,
             _dart_obs_data_item_set_default_array>(
         'obs_data_item_set_default_array');
-    return _obs_data_item_set_default_array(
+    return _obs_data_item_set_default_array!(
       item,
       val,
     );
   }
 
-  _dart_obs_data_item_set_default_array _obs_data_item_set_default_array;
+  _dart_obs_data_item_set_default_array? _obs_data_item_set_default_array;
 
   void obs_data_item_set_autoselect_string(
     ffi.Pointer<ffi.Pointer<obs_data_item>> item,
@@ -6825,13 +6825,13 @@ class DiveObslibFFI {
             _c_obs_data_item_set_autoselect_string,
             _dart_obs_data_item_set_autoselect_string>(
         'obs_data_item_set_autoselect_string');
-    return _obs_data_item_set_autoselect_string(
+    return _obs_data_item_set_autoselect_string!(
       item,
       val,
     );
   }
 
-  _dart_obs_data_item_set_autoselect_string
+  _dart_obs_data_item_set_autoselect_string?
       _obs_data_item_set_autoselect_string;
 
   void obs_data_item_set_autoselect_int(
@@ -6842,13 +6842,13 @@ class DiveObslibFFI {
             _c_obs_data_item_set_autoselect_int,
             _dart_obs_data_item_set_autoselect_int>(
         'obs_data_item_set_autoselect_int');
-    return _obs_data_item_set_autoselect_int(
+    return _obs_data_item_set_autoselect_int!(
       item,
       val,
     );
   }
 
-  _dart_obs_data_item_set_autoselect_int _obs_data_item_set_autoselect_int;
+  _dart_obs_data_item_set_autoselect_int? _obs_data_item_set_autoselect_int;
 
   void obs_data_item_set_autoselect_double(
     ffi.Pointer<ffi.Pointer<obs_data_item>> item,
@@ -6858,13 +6858,13 @@ class DiveObslibFFI {
             _c_obs_data_item_set_autoselect_double,
             _dart_obs_data_item_set_autoselect_double>(
         'obs_data_item_set_autoselect_double');
-    return _obs_data_item_set_autoselect_double(
+    return _obs_data_item_set_autoselect_double!(
       item,
       val,
     );
   }
 
-  _dart_obs_data_item_set_autoselect_double
+  _dart_obs_data_item_set_autoselect_double?
       _obs_data_item_set_autoselect_double;
 
   void obs_data_item_set_autoselect_bool(
@@ -6875,13 +6875,13 @@ class DiveObslibFFI {
             _c_obs_data_item_set_autoselect_bool,
             _dart_obs_data_item_set_autoselect_bool>(
         'obs_data_item_set_autoselect_bool');
-    return _obs_data_item_set_autoselect_bool(
+    return _obs_data_item_set_autoselect_bool!(
       item,
       val,
     );
   }
 
-  _dart_obs_data_item_set_autoselect_bool _obs_data_item_set_autoselect_bool;
+  _dart_obs_data_item_set_autoselect_bool? _obs_data_item_set_autoselect_bool;
 
   void obs_data_item_set_autoselect_obj(
     ffi.Pointer<ffi.Pointer<obs_data_item>> item,
@@ -6891,13 +6891,13 @@ class DiveObslibFFI {
             _c_obs_data_item_set_autoselect_obj,
             _dart_obs_data_item_set_autoselect_obj>(
         'obs_data_item_set_autoselect_obj');
-    return _obs_data_item_set_autoselect_obj(
+    return _obs_data_item_set_autoselect_obj!(
       item,
       val,
     );
   }
 
-  _dart_obs_data_item_set_autoselect_obj _obs_data_item_set_autoselect_obj;
+  _dart_obs_data_item_set_autoselect_obj? _obs_data_item_set_autoselect_obj;
 
   void obs_data_item_set_autoselect_array(
     ffi.Pointer<ffi.Pointer<obs_data_item>> item,
@@ -6907,13 +6907,13 @@ class DiveObslibFFI {
             _c_obs_data_item_set_autoselect_array,
             _dart_obs_data_item_set_autoselect_array>(
         'obs_data_item_set_autoselect_array');
-    return _obs_data_item_set_autoselect_array(
+    return _obs_data_item_set_autoselect_array!(
       item,
       val,
     );
   }
 
-  _dart_obs_data_item_set_autoselect_array _obs_data_item_set_autoselect_array;
+  _dart_obs_data_item_set_autoselect_array? _obs_data_item_set_autoselect_array;
 
   ffi.Pointer<ffi.Int8> obs_data_item_get_string(
     ffi.Pointer<obs_data_item> item,
@@ -6921,24 +6921,24 @@ class DiveObslibFFI {
     _obs_data_item_get_string ??= _dylib.lookupFunction<
         _c_obs_data_item_get_string,
         _dart_obs_data_item_get_string>('obs_data_item_get_string');
-    return _obs_data_item_get_string(
+    return _obs_data_item_get_string!(
       item,
     );
   }
 
-  _dart_obs_data_item_get_string _obs_data_item_get_string;
+  _dart_obs_data_item_get_string? _obs_data_item_get_string;
 
   int obs_data_item_get_int(
     ffi.Pointer<obs_data_item> item,
   ) {
     _obs_data_item_get_int ??= _dylib.lookupFunction<_c_obs_data_item_get_int,
         _dart_obs_data_item_get_int>('obs_data_item_get_int');
-    return _obs_data_item_get_int(
+    return _obs_data_item_get_int!(
       item,
     );
   }
 
-  _dart_obs_data_item_get_int _obs_data_item_get_int;
+  _dart_obs_data_item_get_int? _obs_data_item_get_int;
 
   double obs_data_item_get_double(
     ffi.Pointer<obs_data_item> item,
@@ -6946,36 +6946,36 @@ class DiveObslibFFI {
     _obs_data_item_get_double ??= _dylib.lookupFunction<
         _c_obs_data_item_get_double,
         _dart_obs_data_item_get_double>('obs_data_item_get_double');
-    return _obs_data_item_get_double(
+    return _obs_data_item_get_double!(
       item,
     );
   }
 
-  _dart_obs_data_item_get_double _obs_data_item_get_double;
+  _dart_obs_data_item_get_double? _obs_data_item_get_double;
 
   int obs_data_item_get_bool(
     ffi.Pointer<obs_data_item> item,
   ) {
     _obs_data_item_get_bool ??= _dylib.lookupFunction<_c_obs_data_item_get_bool,
         _dart_obs_data_item_get_bool>('obs_data_item_get_bool');
-    return _obs_data_item_get_bool(
+    return _obs_data_item_get_bool!(
       item,
     );
   }
 
-  _dart_obs_data_item_get_bool _obs_data_item_get_bool;
+  _dart_obs_data_item_get_bool? _obs_data_item_get_bool;
 
   ffi.Pointer<obs_data> obs_data_item_get_obj(
     ffi.Pointer<obs_data_item> item,
   ) {
     _obs_data_item_get_obj ??= _dylib.lookupFunction<_c_obs_data_item_get_obj,
         _dart_obs_data_item_get_obj>('obs_data_item_get_obj');
-    return _obs_data_item_get_obj(
+    return _obs_data_item_get_obj!(
       item,
     );
   }
 
-  _dart_obs_data_item_get_obj _obs_data_item_get_obj;
+  _dart_obs_data_item_get_obj? _obs_data_item_get_obj;
 
   ffi.Pointer<obs_data_array> obs_data_item_get_array(
     ffi.Pointer<obs_data_item> item,
@@ -6983,12 +6983,12 @@ class DiveObslibFFI {
     _obs_data_item_get_array ??= _dylib.lookupFunction<
         _c_obs_data_item_get_array,
         _dart_obs_data_item_get_array>('obs_data_item_get_array');
-    return _obs_data_item_get_array(
+    return _obs_data_item_get_array!(
       item,
     );
   }
 
-  _dart_obs_data_item_get_array _obs_data_item_get_array;
+  _dart_obs_data_item_get_array? _obs_data_item_get_array;
 
   ffi.Pointer<ffi.Int8> obs_data_item_get_default_string(
     ffi.Pointer<obs_data_item> item,
@@ -6997,12 +6997,12 @@ class DiveObslibFFI {
             _c_obs_data_item_get_default_string,
             _dart_obs_data_item_get_default_string>(
         'obs_data_item_get_default_string');
-    return _obs_data_item_get_default_string(
+    return _obs_data_item_get_default_string!(
       item,
     );
   }
 
-  _dart_obs_data_item_get_default_string _obs_data_item_get_default_string;
+  _dart_obs_data_item_get_default_string? _obs_data_item_get_default_string;
 
   int obs_data_item_get_default_int(
     ffi.Pointer<obs_data_item> item,
@@ -7010,12 +7010,12 @@ class DiveObslibFFI {
     _obs_data_item_get_default_int ??= _dylib.lookupFunction<
         _c_obs_data_item_get_default_int,
         _dart_obs_data_item_get_default_int>('obs_data_item_get_default_int');
-    return _obs_data_item_get_default_int(
+    return _obs_data_item_get_default_int!(
       item,
     );
   }
 
-  _dart_obs_data_item_get_default_int _obs_data_item_get_default_int;
+  _dart_obs_data_item_get_default_int? _obs_data_item_get_default_int;
 
   double obs_data_item_get_default_double(
     ffi.Pointer<obs_data_item> item,
@@ -7024,12 +7024,12 @@ class DiveObslibFFI {
             _c_obs_data_item_get_default_double,
             _dart_obs_data_item_get_default_double>(
         'obs_data_item_get_default_double');
-    return _obs_data_item_get_default_double(
+    return _obs_data_item_get_default_double!(
       item,
     );
   }
 
-  _dart_obs_data_item_get_default_double _obs_data_item_get_default_double;
+  _dart_obs_data_item_get_default_double? _obs_data_item_get_default_double;
 
   int obs_data_item_get_default_bool(
     ffi.Pointer<obs_data_item> item,
@@ -7037,12 +7037,12 @@ class DiveObslibFFI {
     _obs_data_item_get_default_bool ??= _dylib.lookupFunction<
         _c_obs_data_item_get_default_bool,
         _dart_obs_data_item_get_default_bool>('obs_data_item_get_default_bool');
-    return _obs_data_item_get_default_bool(
+    return _obs_data_item_get_default_bool!(
       item,
     );
   }
 
-  _dart_obs_data_item_get_default_bool _obs_data_item_get_default_bool;
+  _dart_obs_data_item_get_default_bool? _obs_data_item_get_default_bool;
 
   ffi.Pointer<obs_data> obs_data_item_get_default_obj(
     ffi.Pointer<obs_data_item> item,
@@ -7050,12 +7050,12 @@ class DiveObslibFFI {
     _obs_data_item_get_default_obj ??= _dylib.lookupFunction<
         _c_obs_data_item_get_default_obj,
         _dart_obs_data_item_get_default_obj>('obs_data_item_get_default_obj');
-    return _obs_data_item_get_default_obj(
+    return _obs_data_item_get_default_obj!(
       item,
     );
   }
 
-  _dart_obs_data_item_get_default_obj _obs_data_item_get_default_obj;
+  _dart_obs_data_item_get_default_obj? _obs_data_item_get_default_obj;
 
   ffi.Pointer<obs_data_array> obs_data_item_get_default_array(
     ffi.Pointer<obs_data_item> item,
@@ -7064,12 +7064,12 @@ class DiveObslibFFI {
             _c_obs_data_item_get_default_array,
             _dart_obs_data_item_get_default_array>(
         'obs_data_item_get_default_array');
-    return _obs_data_item_get_default_array(
+    return _obs_data_item_get_default_array!(
       item,
     );
   }
 
-  _dart_obs_data_item_get_default_array _obs_data_item_get_default_array;
+  _dart_obs_data_item_get_default_array? _obs_data_item_get_default_array;
 
   ffi.Pointer<ffi.Int8> obs_data_item_get_autoselect_string(
     ffi.Pointer<obs_data_item> item,
@@ -7078,12 +7078,12 @@ class DiveObslibFFI {
             _c_obs_data_item_get_autoselect_string,
             _dart_obs_data_item_get_autoselect_string>(
         'obs_data_item_get_autoselect_string');
-    return _obs_data_item_get_autoselect_string(
+    return _obs_data_item_get_autoselect_string!(
       item,
     );
   }
 
-  _dart_obs_data_item_get_autoselect_string
+  _dart_obs_data_item_get_autoselect_string?
       _obs_data_item_get_autoselect_string;
 
   int obs_data_item_get_autoselect_int(
@@ -7093,12 +7093,12 @@ class DiveObslibFFI {
             _c_obs_data_item_get_autoselect_int,
             _dart_obs_data_item_get_autoselect_int>(
         'obs_data_item_get_autoselect_int');
-    return _obs_data_item_get_autoselect_int(
+    return _obs_data_item_get_autoselect_int!(
       item,
     );
   }
 
-  _dart_obs_data_item_get_autoselect_int _obs_data_item_get_autoselect_int;
+  _dart_obs_data_item_get_autoselect_int? _obs_data_item_get_autoselect_int;
 
   double obs_data_item_get_autoselect_double(
     ffi.Pointer<obs_data_item> item,
@@ -7107,12 +7107,12 @@ class DiveObslibFFI {
             _c_obs_data_item_get_autoselect_double,
             _dart_obs_data_item_get_autoselect_double>(
         'obs_data_item_get_autoselect_double');
-    return _obs_data_item_get_autoselect_double(
+    return _obs_data_item_get_autoselect_double!(
       item,
     );
   }
 
-  _dart_obs_data_item_get_autoselect_double
+  _dart_obs_data_item_get_autoselect_double?
       _obs_data_item_get_autoselect_double;
 
   int obs_data_item_get_autoselect_bool(
@@ -7122,12 +7122,12 @@ class DiveObslibFFI {
             _c_obs_data_item_get_autoselect_bool,
             _dart_obs_data_item_get_autoselect_bool>(
         'obs_data_item_get_autoselect_bool');
-    return _obs_data_item_get_autoselect_bool(
+    return _obs_data_item_get_autoselect_bool!(
       item,
     );
   }
 
-  _dart_obs_data_item_get_autoselect_bool _obs_data_item_get_autoselect_bool;
+  _dart_obs_data_item_get_autoselect_bool? _obs_data_item_get_autoselect_bool;
 
   ffi.Pointer<obs_data> obs_data_item_get_autoselect_obj(
     ffi.Pointer<obs_data_item> item,
@@ -7136,12 +7136,12 @@ class DiveObslibFFI {
             _c_obs_data_item_get_autoselect_obj,
             _dart_obs_data_item_get_autoselect_obj>(
         'obs_data_item_get_autoselect_obj');
-    return _obs_data_item_get_autoselect_obj(
+    return _obs_data_item_get_autoselect_obj!(
       item,
     );
   }
 
-  _dart_obs_data_item_get_autoselect_obj _obs_data_item_get_autoselect_obj;
+  _dart_obs_data_item_get_autoselect_obj? _obs_data_item_get_autoselect_obj;
 
   ffi.Pointer<obs_data_array> obs_data_item_get_autoselect_array(
     ffi.Pointer<obs_data_item> item,
@@ -7150,12 +7150,12 @@ class DiveObslibFFI {
             _c_obs_data_item_get_autoselect_array,
             _dart_obs_data_item_get_autoselect_array>(
         'obs_data_item_get_autoselect_array');
-    return _obs_data_item_get_autoselect_array(
+    return _obs_data_item_get_autoselect_array!(
       item,
     );
   }
 
-  _dart_obs_data_item_get_autoselect_array _obs_data_item_get_autoselect_array;
+  _dart_obs_data_item_get_autoselect_array? _obs_data_item_get_autoselect_array;
 
   void obs_data_set_vec2(
     ffi.Pointer<obs_data> data,
@@ -7165,14 +7165,14 @@ class DiveObslibFFI {
     _obs_data_set_vec2 ??=
         _dylib.lookupFunction<_c_obs_data_set_vec2, _dart_obs_data_set_vec2>(
             'obs_data_set_vec2');
-    return _obs_data_set_vec2(
+    return _obs_data_set_vec2!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_vec2 _obs_data_set_vec2;
+  _dart_obs_data_set_vec2? _obs_data_set_vec2;
 
   void obs_data_set_vec3(
     ffi.Pointer<obs_data> data,
@@ -7182,14 +7182,14 @@ class DiveObslibFFI {
     _obs_data_set_vec3 ??=
         _dylib.lookupFunction<_c_obs_data_set_vec3, _dart_obs_data_set_vec3>(
             'obs_data_set_vec3');
-    return _obs_data_set_vec3(
+    return _obs_data_set_vec3!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_vec3 _obs_data_set_vec3;
+  _dart_obs_data_set_vec3? _obs_data_set_vec3;
 
   void obs_data_set_vec4(
     ffi.Pointer<obs_data> data,
@@ -7199,14 +7199,14 @@ class DiveObslibFFI {
     _obs_data_set_vec4 ??=
         _dylib.lookupFunction<_c_obs_data_set_vec4, _dart_obs_data_set_vec4>(
             'obs_data_set_vec4');
-    return _obs_data_set_vec4(
+    return _obs_data_set_vec4!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_vec4 _obs_data_set_vec4;
+  _dart_obs_data_set_vec4? _obs_data_set_vec4;
 
   void obs_data_set_quat(
     ffi.Pointer<obs_data> data,
@@ -7216,14 +7216,14 @@ class DiveObslibFFI {
     _obs_data_set_quat ??=
         _dylib.lookupFunction<_c_obs_data_set_quat, _dart_obs_data_set_quat>(
             'obs_data_set_quat');
-    return _obs_data_set_quat(
+    return _obs_data_set_quat!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_quat _obs_data_set_quat;
+  _dart_obs_data_set_quat? _obs_data_set_quat;
 
   void obs_data_set_default_vec2(
     ffi.Pointer<obs_data> data,
@@ -7233,14 +7233,14 @@ class DiveObslibFFI {
     _obs_data_set_default_vec2 ??= _dylib.lookupFunction<
         _c_obs_data_set_default_vec2,
         _dart_obs_data_set_default_vec2>('obs_data_set_default_vec2');
-    return _obs_data_set_default_vec2(
+    return _obs_data_set_default_vec2!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_default_vec2 _obs_data_set_default_vec2;
+  _dart_obs_data_set_default_vec2? _obs_data_set_default_vec2;
 
   void obs_data_set_default_vec3(
     ffi.Pointer<obs_data> data,
@@ -7250,14 +7250,14 @@ class DiveObslibFFI {
     _obs_data_set_default_vec3 ??= _dylib.lookupFunction<
         _c_obs_data_set_default_vec3,
         _dart_obs_data_set_default_vec3>('obs_data_set_default_vec3');
-    return _obs_data_set_default_vec3(
+    return _obs_data_set_default_vec3!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_default_vec3 _obs_data_set_default_vec3;
+  _dart_obs_data_set_default_vec3? _obs_data_set_default_vec3;
 
   void obs_data_set_default_vec4(
     ffi.Pointer<obs_data> data,
@@ -7267,14 +7267,14 @@ class DiveObslibFFI {
     _obs_data_set_default_vec4 ??= _dylib.lookupFunction<
         _c_obs_data_set_default_vec4,
         _dart_obs_data_set_default_vec4>('obs_data_set_default_vec4');
-    return _obs_data_set_default_vec4(
+    return _obs_data_set_default_vec4!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_default_vec4 _obs_data_set_default_vec4;
+  _dart_obs_data_set_default_vec4? _obs_data_set_default_vec4;
 
   void obs_data_set_default_quat(
     ffi.Pointer<obs_data> data,
@@ -7284,14 +7284,14 @@ class DiveObslibFFI {
     _obs_data_set_default_quat ??= _dylib.lookupFunction<
         _c_obs_data_set_default_quat,
         _dart_obs_data_set_default_quat>('obs_data_set_default_quat');
-    return _obs_data_set_default_quat(
+    return _obs_data_set_default_quat!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_default_quat _obs_data_set_default_quat;
+  _dart_obs_data_set_default_quat? _obs_data_set_default_quat;
 
   void obs_data_set_autoselect_vec2(
     ffi.Pointer<obs_data> data,
@@ -7301,14 +7301,14 @@ class DiveObslibFFI {
     _obs_data_set_autoselect_vec2 ??= _dylib.lookupFunction<
         _c_obs_data_set_autoselect_vec2,
         _dart_obs_data_set_autoselect_vec2>('obs_data_set_autoselect_vec2');
-    return _obs_data_set_autoselect_vec2(
+    return _obs_data_set_autoselect_vec2!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_autoselect_vec2 _obs_data_set_autoselect_vec2;
+  _dart_obs_data_set_autoselect_vec2? _obs_data_set_autoselect_vec2;
 
   void obs_data_set_autoselect_vec3(
     ffi.Pointer<obs_data> data,
@@ -7318,14 +7318,14 @@ class DiveObslibFFI {
     _obs_data_set_autoselect_vec3 ??= _dylib.lookupFunction<
         _c_obs_data_set_autoselect_vec3,
         _dart_obs_data_set_autoselect_vec3>('obs_data_set_autoselect_vec3');
-    return _obs_data_set_autoselect_vec3(
+    return _obs_data_set_autoselect_vec3!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_autoselect_vec3 _obs_data_set_autoselect_vec3;
+  _dart_obs_data_set_autoselect_vec3? _obs_data_set_autoselect_vec3;
 
   void obs_data_set_autoselect_vec4(
     ffi.Pointer<obs_data> data,
@@ -7335,14 +7335,14 @@ class DiveObslibFFI {
     _obs_data_set_autoselect_vec4 ??= _dylib.lookupFunction<
         _c_obs_data_set_autoselect_vec4,
         _dart_obs_data_set_autoselect_vec4>('obs_data_set_autoselect_vec4');
-    return _obs_data_set_autoselect_vec4(
+    return _obs_data_set_autoselect_vec4!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_autoselect_vec4 _obs_data_set_autoselect_vec4;
+  _dart_obs_data_set_autoselect_vec4? _obs_data_set_autoselect_vec4;
 
   void obs_data_set_autoselect_quat(
     ffi.Pointer<obs_data> data,
@@ -7352,14 +7352,14 @@ class DiveObslibFFI {
     _obs_data_set_autoselect_quat ??= _dylib.lookupFunction<
         _c_obs_data_set_autoselect_quat,
         _dart_obs_data_set_autoselect_quat>('obs_data_set_autoselect_quat');
-    return _obs_data_set_autoselect_quat(
+    return _obs_data_set_autoselect_quat!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_set_autoselect_quat _obs_data_set_autoselect_quat;
+  _dart_obs_data_set_autoselect_quat? _obs_data_set_autoselect_quat;
 
   void obs_data_get_vec2(
     ffi.Pointer<obs_data> data,
@@ -7369,14 +7369,14 @@ class DiveObslibFFI {
     _obs_data_get_vec2 ??=
         _dylib.lookupFunction<_c_obs_data_get_vec2, _dart_obs_data_get_vec2>(
             'obs_data_get_vec2');
-    return _obs_data_get_vec2(
+    return _obs_data_get_vec2!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_get_vec2 _obs_data_get_vec2;
+  _dart_obs_data_get_vec2? _obs_data_get_vec2;
 
   void obs_data_get_vec3(
     ffi.Pointer<obs_data> data,
@@ -7386,14 +7386,14 @@ class DiveObslibFFI {
     _obs_data_get_vec3 ??=
         _dylib.lookupFunction<_c_obs_data_get_vec3, _dart_obs_data_get_vec3>(
             'obs_data_get_vec3');
-    return _obs_data_get_vec3(
+    return _obs_data_get_vec3!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_get_vec3 _obs_data_get_vec3;
+  _dart_obs_data_get_vec3? _obs_data_get_vec3;
 
   void obs_data_get_vec4(
     ffi.Pointer<obs_data> data,
@@ -7403,14 +7403,14 @@ class DiveObslibFFI {
     _obs_data_get_vec4 ??=
         _dylib.lookupFunction<_c_obs_data_get_vec4, _dart_obs_data_get_vec4>(
             'obs_data_get_vec4');
-    return _obs_data_get_vec4(
+    return _obs_data_get_vec4!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_get_vec4 _obs_data_get_vec4;
+  _dart_obs_data_get_vec4? _obs_data_get_vec4;
 
   void obs_data_get_quat(
     ffi.Pointer<obs_data> data,
@@ -7420,14 +7420,14 @@ class DiveObslibFFI {
     _obs_data_get_quat ??=
         _dylib.lookupFunction<_c_obs_data_get_quat, _dart_obs_data_get_quat>(
             'obs_data_get_quat');
-    return _obs_data_get_quat(
+    return _obs_data_get_quat!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_get_quat _obs_data_get_quat;
+  _dart_obs_data_get_quat? _obs_data_get_quat;
 
   void obs_data_get_default_vec2(
     ffi.Pointer<obs_data> data,
@@ -7437,14 +7437,14 @@ class DiveObslibFFI {
     _obs_data_get_default_vec2 ??= _dylib.lookupFunction<
         _c_obs_data_get_default_vec2,
         _dart_obs_data_get_default_vec2>('obs_data_get_default_vec2');
-    return _obs_data_get_default_vec2(
+    return _obs_data_get_default_vec2!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_get_default_vec2 _obs_data_get_default_vec2;
+  _dart_obs_data_get_default_vec2? _obs_data_get_default_vec2;
 
   void obs_data_get_default_vec3(
     ffi.Pointer<obs_data> data,
@@ -7454,14 +7454,14 @@ class DiveObslibFFI {
     _obs_data_get_default_vec3 ??= _dylib.lookupFunction<
         _c_obs_data_get_default_vec3,
         _dart_obs_data_get_default_vec3>('obs_data_get_default_vec3');
-    return _obs_data_get_default_vec3(
+    return _obs_data_get_default_vec3!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_get_default_vec3 _obs_data_get_default_vec3;
+  _dart_obs_data_get_default_vec3? _obs_data_get_default_vec3;
 
   void obs_data_get_default_vec4(
     ffi.Pointer<obs_data> data,
@@ -7471,14 +7471,14 @@ class DiveObslibFFI {
     _obs_data_get_default_vec4 ??= _dylib.lookupFunction<
         _c_obs_data_get_default_vec4,
         _dart_obs_data_get_default_vec4>('obs_data_get_default_vec4');
-    return _obs_data_get_default_vec4(
+    return _obs_data_get_default_vec4!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_get_default_vec4 _obs_data_get_default_vec4;
+  _dart_obs_data_get_default_vec4? _obs_data_get_default_vec4;
 
   void obs_data_get_default_quat(
     ffi.Pointer<obs_data> data,
@@ -7488,14 +7488,14 @@ class DiveObslibFFI {
     _obs_data_get_default_quat ??= _dylib.lookupFunction<
         _c_obs_data_get_default_quat,
         _dart_obs_data_get_default_quat>('obs_data_get_default_quat');
-    return _obs_data_get_default_quat(
+    return _obs_data_get_default_quat!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_get_default_quat _obs_data_get_default_quat;
+  _dart_obs_data_get_default_quat? _obs_data_get_default_quat;
 
   void obs_data_get_autoselect_vec2(
     ffi.Pointer<obs_data> data,
@@ -7505,14 +7505,14 @@ class DiveObslibFFI {
     _obs_data_get_autoselect_vec2 ??= _dylib.lookupFunction<
         _c_obs_data_get_autoselect_vec2,
         _dart_obs_data_get_autoselect_vec2>('obs_data_get_autoselect_vec2');
-    return _obs_data_get_autoselect_vec2(
+    return _obs_data_get_autoselect_vec2!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_get_autoselect_vec2 _obs_data_get_autoselect_vec2;
+  _dart_obs_data_get_autoselect_vec2? _obs_data_get_autoselect_vec2;
 
   void obs_data_get_autoselect_vec3(
     ffi.Pointer<obs_data> data,
@@ -7522,14 +7522,14 @@ class DiveObslibFFI {
     _obs_data_get_autoselect_vec3 ??= _dylib.lookupFunction<
         _c_obs_data_get_autoselect_vec3,
         _dart_obs_data_get_autoselect_vec3>('obs_data_get_autoselect_vec3');
-    return _obs_data_get_autoselect_vec3(
+    return _obs_data_get_autoselect_vec3!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_get_autoselect_vec3 _obs_data_get_autoselect_vec3;
+  _dart_obs_data_get_autoselect_vec3? _obs_data_get_autoselect_vec3;
 
   void obs_data_get_autoselect_vec4(
     ffi.Pointer<obs_data> data,
@@ -7539,14 +7539,14 @@ class DiveObslibFFI {
     _obs_data_get_autoselect_vec4 ??= _dylib.lookupFunction<
         _c_obs_data_get_autoselect_vec4,
         _dart_obs_data_get_autoselect_vec4>('obs_data_get_autoselect_vec4');
-    return _obs_data_get_autoselect_vec4(
+    return _obs_data_get_autoselect_vec4!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_get_autoselect_vec4 _obs_data_get_autoselect_vec4;
+  _dart_obs_data_get_autoselect_vec4? _obs_data_get_autoselect_vec4;
 
   void obs_data_get_autoselect_quat(
     ffi.Pointer<obs_data> data,
@@ -7556,14 +7556,14 @@ class DiveObslibFFI {
     _obs_data_get_autoselect_quat ??= _dylib.lookupFunction<
         _c_obs_data_get_autoselect_quat,
         _dart_obs_data_get_autoselect_quat>('obs_data_get_autoselect_quat');
-    return _obs_data_get_autoselect_quat(
+    return _obs_data_get_autoselect_quat!(
       data,
       name,
       val,
     );
   }
 
-  _dart_obs_data_get_autoselect_quat _obs_data_get_autoselect_quat;
+  _dart_obs_data_get_autoselect_quat? _obs_data_get_autoselect_quat;
 
   int obs_data_get_frames_per_second(
     ffi.Pointer<obs_data> data,
@@ -7574,7 +7574,7 @@ class DiveObslibFFI {
     _obs_data_get_frames_per_second ??= _dylib.lookupFunction<
         _c_obs_data_get_frames_per_second,
         _dart_obs_data_get_frames_per_second>('obs_data_get_frames_per_second');
-    return _obs_data_get_frames_per_second(
+    return _obs_data_get_frames_per_second!(
       data,
       name,
       fps,
@@ -7582,7 +7582,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_data_get_frames_per_second _obs_data_get_frames_per_second;
+  _dart_obs_data_get_frames_per_second? _obs_data_get_frames_per_second;
 
   int obs_data_get_default_frames_per_second(
     ffi.Pointer<obs_data> data,
@@ -7594,7 +7594,7 @@ class DiveObslibFFI {
             _c_obs_data_get_default_frames_per_second,
             _dart_obs_data_get_default_frames_per_second>(
         'obs_data_get_default_frames_per_second');
-    return _obs_data_get_default_frames_per_second(
+    return _obs_data_get_default_frames_per_second!(
       data,
       name,
       fps,
@@ -7602,7 +7602,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_data_get_default_frames_per_second
+  _dart_obs_data_get_default_frames_per_second?
       _obs_data_get_default_frames_per_second;
 
   int obs_data_get_autoselect_frames_per_second(
@@ -7615,7 +7615,7 @@ class DiveObslibFFI {
             _c_obs_data_get_autoselect_frames_per_second,
             _dart_obs_data_get_autoselect_frames_per_second>(
         'obs_data_get_autoselect_frames_per_second');
-    return _obs_data_get_autoselect_frames_per_second(
+    return _obs_data_get_autoselect_frames_per_second!(
       data,
       name,
       fps,
@@ -7623,7 +7623,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_data_get_autoselect_frames_per_second
+  _dart_obs_data_get_autoselect_frames_per_second?
       _obs_data_get_autoselect_frames_per_second;
 
   int obs_data_item_get_frames_per_second(
@@ -7635,14 +7635,14 @@ class DiveObslibFFI {
             _c_obs_data_item_get_frames_per_second,
             _dart_obs_data_item_get_frames_per_second>(
         'obs_data_item_get_frames_per_second');
-    return _obs_data_item_get_frames_per_second(
+    return _obs_data_item_get_frames_per_second!(
       item,
       fps,
       option,
     );
   }
 
-  _dart_obs_data_item_get_frames_per_second
+  _dart_obs_data_item_get_frames_per_second?
       _obs_data_item_get_frames_per_second;
 
   int obs_data_item_get_default_frames_per_second(
@@ -7654,14 +7654,14 @@ class DiveObslibFFI {
             _c_obs_data_item_get_default_frames_per_second,
             _dart_obs_data_item_get_default_frames_per_second>(
         'obs_data_item_get_default_frames_per_second');
-    return _obs_data_item_get_default_frames_per_second(
+    return _obs_data_item_get_default_frames_per_second!(
       item,
       fps,
       option,
     );
   }
 
-  _dart_obs_data_item_get_default_frames_per_second
+  _dart_obs_data_item_get_default_frames_per_second?
       _obs_data_item_get_default_frames_per_second;
 
   int obs_data_item_get_autoselect_frames_per_second(
@@ -7673,14 +7673,14 @@ class DiveObslibFFI {
             _c_obs_data_item_get_autoselect_frames_per_second,
             _dart_obs_data_item_get_autoselect_frames_per_second>(
         'obs_data_item_get_autoselect_frames_per_second');
-    return _obs_data_item_get_autoselect_frames_per_second(
+    return _obs_data_item_get_autoselect_frames_per_second!(
       item,
       fps,
       option,
     );
   }
 
-  _dart_obs_data_item_get_autoselect_frames_per_second
+  _dart_obs_data_item_get_autoselect_frames_per_second?
       _obs_data_item_get_autoselect_frames_per_second;
 
   ffi.Pointer<obs_data> obs_data_newref(
@@ -7689,12 +7689,12 @@ class DiveObslibFFI {
     _obs_data_newref ??=
         _dylib.lookupFunction<_c_obs_data_newref, _dart_obs_data_newref>(
             'obs_data_newref');
-    return _obs_data_newref(
+    return _obs_data_newref!(
       data,
     );
   }
 
-  _dart_obs_data_newref _obs_data_newref;
+  _dart_obs_data_newref? _obs_data_newref;
 
   /// Registers a modal UI definition to the current obs context.  This should be
   /// used in obs_module_load.
@@ -7705,12 +7705,12 @@ class DiveObslibFFI {
   ) {
     _obs_register_modal_ui ??= _dylib.lookupFunction<_c_obs_register_modal_ui,
         _dart_obs_register_modal_ui>('obs_register_modal_ui');
-    return _obs_register_modal_ui(
+    return _obs_register_modal_ui!(
       info,
     );
   }
 
-  _dart_obs_register_modal_ui _obs_register_modal_ui;
+  _dart_obs_register_modal_ui? _obs_register_modal_ui;
 
   /// Registers a modeless UI definition to the current obs context.  This should
   /// be used in obs_module_load.
@@ -7722,12 +7722,12 @@ class DiveObslibFFI {
     _obs_register_modeless_ui ??= _dylib.lookupFunction<
         _c_obs_register_modeless_ui,
         _dart_obs_register_modeless_ui>('obs_register_modeless_ui');
-    return _obs_register_modeless_ui(
+    return _obs_register_modeless_ui!(
       info,
     );
   }
 
-  _dart_obs_register_modeless_ui _obs_register_modeless_ui;
+  _dart_obs_register_modeless_ui? _obs_register_modeless_ui;
 
   /// Requests modal UI to be displayed.  Returns when user is complete.
   ///
@@ -7749,7 +7749,7 @@ class DiveObslibFFI {
   ) {
     _obs_exec_ui ??=
         _dylib.lookupFunction<_c_obs_exec_ui, _dart_obs_exec_ui>('obs_exec_ui');
-    return _obs_exec_ui(
+    return _obs_exec_ui!(
       id,
       task,
       target,
@@ -7758,7 +7758,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_exec_ui _obs_exec_ui;
+  _dart_obs_exec_ui? _obs_exec_ui;
 
   /// Requests modeless UI to be created.  Returns immediately.
   ///
@@ -7779,7 +7779,7 @@ class DiveObslibFFI {
   ) {
     _obs_create_ui ??= _dylib
         .lookupFunction<_c_obs_create_ui, _dart_obs_create_ui>('obs_create_ui');
-    return _obs_create_ui(
+    return _obs_create_ui!(
       id,
       task,
       target,
@@ -7788,15 +7788,15 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_create_ui _obs_create_ui;
+  _dart_obs_create_ui? _obs_create_ui;
 
   ffi.Pointer<obs_properties> obs_properties_create() {
     _obs_properties_create ??= _dylib.lookupFunction<_c_obs_properties_create,
         _dart_obs_properties_create>('obs_properties_create');
-    return _obs_properties_create();
+    return _obs_properties_create!();
   }
 
-  _dart_obs_properties_create _obs_properties_create;
+  _dart_obs_properties_create? _obs_properties_create;
 
   ffi.Pointer<obs_properties> obs_properties_create_param(
     ffi.Pointer<ffi.Void> param,
@@ -7805,25 +7805,25 @@ class DiveObslibFFI {
     _obs_properties_create_param ??= _dylib.lookupFunction<
         _c_obs_properties_create_param,
         _dart_obs_properties_create_param>('obs_properties_create_param');
-    return _obs_properties_create_param(
+    return _obs_properties_create_param!(
       param,
       destroy,
     );
   }
 
-  _dart_obs_properties_create_param _obs_properties_create_param;
+  _dart_obs_properties_create_param? _obs_properties_create_param;
 
   void obs_properties_destroy(
     ffi.Pointer<obs_properties> props,
   ) {
     _obs_properties_destroy ??= _dylib.lookupFunction<_c_obs_properties_destroy,
         _dart_obs_properties_destroy>('obs_properties_destroy');
-    return _obs_properties_destroy(
+    return _obs_properties_destroy!(
       props,
     );
   }
 
-  _dart_obs_properties_destroy _obs_properties_destroy;
+  _dart_obs_properties_destroy? _obs_properties_destroy;
 
   void obs_properties_set_flags(
     ffi.Pointer<obs_properties> props,
@@ -7832,13 +7832,13 @@ class DiveObslibFFI {
     _obs_properties_set_flags ??= _dylib.lookupFunction<
         _c_obs_properties_set_flags,
         _dart_obs_properties_set_flags>('obs_properties_set_flags');
-    return _obs_properties_set_flags(
+    return _obs_properties_set_flags!(
       props,
       flags,
     );
   }
 
-  _dart_obs_properties_set_flags _obs_properties_set_flags;
+  _dart_obs_properties_set_flags? _obs_properties_set_flags;
 
   int obs_properties_get_flags(
     ffi.Pointer<obs_properties> props,
@@ -7846,12 +7846,12 @@ class DiveObslibFFI {
     _obs_properties_get_flags ??= _dylib.lookupFunction<
         _c_obs_properties_get_flags,
         _dart_obs_properties_get_flags>('obs_properties_get_flags');
-    return _obs_properties_get_flags(
+    return _obs_properties_get_flags!(
       props,
     );
   }
 
-  _dart_obs_properties_get_flags _obs_properties_get_flags;
+  _dart_obs_properties_get_flags? _obs_properties_get_flags;
 
   void obs_properties_set_param(
     ffi.Pointer<obs_properties> props,
@@ -7861,14 +7861,14 @@ class DiveObslibFFI {
     _obs_properties_set_param ??= _dylib.lookupFunction<
         _c_obs_properties_set_param,
         _dart_obs_properties_set_param>('obs_properties_set_param');
-    return _obs_properties_set_param(
+    return _obs_properties_set_param!(
       props,
       param,
       destroy,
     );
   }
 
-  _dart_obs_properties_set_param _obs_properties_set_param;
+  _dart_obs_properties_set_param? _obs_properties_set_param;
 
   ffi.Pointer<ffi.Void> obs_properties_get_param(
     ffi.Pointer<obs_properties> props,
@@ -7876,24 +7876,24 @@ class DiveObslibFFI {
     _obs_properties_get_param ??= _dylib.lookupFunction<
         _c_obs_properties_get_param,
         _dart_obs_properties_get_param>('obs_properties_get_param');
-    return _obs_properties_get_param(
+    return _obs_properties_get_param!(
       props,
     );
   }
 
-  _dart_obs_properties_get_param _obs_properties_get_param;
+  _dart_obs_properties_get_param? _obs_properties_get_param;
 
   ffi.Pointer<obs_property> obs_properties_first(
     ffi.Pointer<obs_properties> props,
   ) {
     _obs_properties_first ??= _dylib.lookupFunction<_c_obs_properties_first,
         _dart_obs_properties_first>('obs_properties_first');
-    return _obs_properties_first(
+    return _obs_properties_first!(
       props,
     );
   }
 
-  _dart_obs_properties_first _obs_properties_first;
+  _dart_obs_properties_first? _obs_properties_first;
 
   ffi.Pointer<obs_property> obs_properties_get(
     ffi.Pointer<obs_properties> props,
@@ -7902,13 +7902,13 @@ class DiveObslibFFI {
     _obs_properties_get ??=
         _dylib.lookupFunction<_c_obs_properties_get, _dart_obs_properties_get>(
             'obs_properties_get');
-    return _obs_properties_get(
+    return _obs_properties_get!(
       props,
       property,
     );
   }
 
-  _dart_obs_properties_get _obs_properties_get;
+  _dart_obs_properties_get? _obs_properties_get;
 
   ffi.Pointer<obs_properties> obs_properties_get_parent(
     ffi.Pointer<obs_properties> props,
@@ -7916,12 +7916,12 @@ class DiveObslibFFI {
     _obs_properties_get_parent ??= _dylib.lookupFunction<
         _c_obs_properties_get_parent,
         _dart_obs_properties_get_parent>('obs_properties_get_parent');
-    return _obs_properties_get_parent(
+    return _obs_properties_get_parent!(
       props,
     );
   }
 
-  _dart_obs_properties_get_parent _obs_properties_get_parent;
+  _dart_obs_properties_get_parent? _obs_properties_get_parent;
 
   /// Remove a property from a properties list.
   ///
@@ -7939,13 +7939,13 @@ class DiveObslibFFI {
     _obs_properties_remove_by_name ??= _dylib.lookupFunction<
         _c_obs_properties_remove_by_name,
         _dart_obs_properties_remove_by_name>('obs_properties_remove_by_name');
-    return _obs_properties_remove_by_name(
+    return _obs_properties_remove_by_name!(
       props,
       property,
     );
   }
 
-  _dart_obs_properties_remove_by_name _obs_properties_remove_by_name;
+  _dart_obs_properties_remove_by_name? _obs_properties_remove_by_name;
 
   /// Applies settings to the properties by calling all the necessary
   /// modification callbacks
@@ -7956,13 +7956,13 @@ class DiveObslibFFI {
     _obs_properties_apply_settings ??= _dylib.lookupFunction<
         _c_obs_properties_apply_settings,
         _dart_obs_properties_apply_settings>('obs_properties_apply_settings');
-    return _obs_properties_apply_settings(
+    return _obs_properties_apply_settings!(
       props,
       settings,
     );
   }
 
-  _dart_obs_properties_apply_settings _obs_properties_apply_settings;
+  _dart_obs_properties_apply_settings? _obs_properties_apply_settings;
 
   ffi.Pointer<obs_property> obs_properties_add_bool(
     ffi.Pointer<obs_properties> props,
@@ -7972,14 +7972,14 @@ class DiveObslibFFI {
     _obs_properties_add_bool ??= _dylib.lookupFunction<
         _c_obs_properties_add_bool,
         _dart_obs_properties_add_bool>('obs_properties_add_bool');
-    return _obs_properties_add_bool(
+    return _obs_properties_add_bool!(
       props,
       name,
       description,
     );
   }
 
-  _dart_obs_properties_add_bool _obs_properties_add_bool;
+  _dart_obs_properties_add_bool? _obs_properties_add_bool;
 
   ffi.Pointer<obs_property> obs_properties_add_int(
     ffi.Pointer<obs_properties> props,
@@ -7991,7 +7991,7 @@ class DiveObslibFFI {
   ) {
     _obs_properties_add_int ??= _dylib.lookupFunction<_c_obs_properties_add_int,
         _dart_obs_properties_add_int>('obs_properties_add_int');
-    return _obs_properties_add_int(
+    return _obs_properties_add_int!(
       props,
       name,
       description,
@@ -8001,7 +8001,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_properties_add_int _obs_properties_add_int;
+  _dart_obs_properties_add_int? _obs_properties_add_int;
 
   ffi.Pointer<obs_property> obs_properties_add_float(
     ffi.Pointer<obs_properties> props,
@@ -8014,7 +8014,7 @@ class DiveObslibFFI {
     _obs_properties_add_float ??= _dylib.lookupFunction<
         _c_obs_properties_add_float,
         _dart_obs_properties_add_float>('obs_properties_add_float');
-    return _obs_properties_add_float(
+    return _obs_properties_add_float!(
       props,
       name,
       description,
@@ -8024,7 +8024,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_properties_add_float _obs_properties_add_float;
+  _dart_obs_properties_add_float? _obs_properties_add_float;
 
   ffi.Pointer<obs_property> obs_properties_add_int_slider(
     ffi.Pointer<obs_properties> props,
@@ -8037,7 +8037,7 @@ class DiveObslibFFI {
     _obs_properties_add_int_slider ??= _dylib.lookupFunction<
         _c_obs_properties_add_int_slider,
         _dart_obs_properties_add_int_slider>('obs_properties_add_int_slider');
-    return _obs_properties_add_int_slider(
+    return _obs_properties_add_int_slider!(
       props,
       name,
       description,
@@ -8047,7 +8047,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_properties_add_int_slider _obs_properties_add_int_slider;
+  _dart_obs_properties_add_int_slider? _obs_properties_add_int_slider;
 
   ffi.Pointer<obs_property> obs_properties_add_float_slider(
     ffi.Pointer<obs_properties> props,
@@ -8061,7 +8061,7 @@ class DiveObslibFFI {
             _c_obs_properties_add_float_slider,
             _dart_obs_properties_add_float_slider>(
         'obs_properties_add_float_slider');
-    return _obs_properties_add_float_slider(
+    return _obs_properties_add_float_slider!(
       props,
       name,
       description,
@@ -8071,7 +8071,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_properties_add_float_slider _obs_properties_add_float_slider;
+  _dart_obs_properties_add_float_slider? _obs_properties_add_float_slider;
 
   ffi.Pointer<obs_property> obs_properties_add_text(
     ffi.Pointer<obs_properties> props,
@@ -8082,7 +8082,7 @@ class DiveObslibFFI {
     _obs_properties_add_text ??= _dylib.lookupFunction<
         _c_obs_properties_add_text,
         _dart_obs_properties_add_text>('obs_properties_add_text');
-    return _obs_properties_add_text(
+    return _obs_properties_add_text!(
       props,
       name,
       description,
@@ -8090,7 +8090,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_properties_add_text _obs_properties_add_text;
+  _dart_obs_properties_add_text? _obs_properties_add_text;
 
   /// Adds a 'path' property.  Can be a directory or a file.
   ///
@@ -8117,7 +8117,7 @@ class DiveObslibFFI {
     _obs_properties_add_path ??= _dylib.lookupFunction<
         _c_obs_properties_add_path,
         _dart_obs_properties_add_path>('obs_properties_add_path');
-    return _obs_properties_add_path(
+    return _obs_properties_add_path!(
       props,
       name,
       description,
@@ -8127,7 +8127,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_properties_add_path _obs_properties_add_path;
+  _dart_obs_properties_add_path? _obs_properties_add_path;
 
   ffi.Pointer<obs_property> obs_properties_add_list(
     ffi.Pointer<obs_properties> props,
@@ -8139,7 +8139,7 @@ class DiveObslibFFI {
     _obs_properties_add_list ??= _dylib.lookupFunction<
         _c_obs_properties_add_list,
         _dart_obs_properties_add_list>('obs_properties_add_list');
-    return _obs_properties_add_list(
+    return _obs_properties_add_list!(
       props,
       name,
       description,
@@ -8148,7 +8148,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_properties_add_list _obs_properties_add_list;
+  _dart_obs_properties_add_list? _obs_properties_add_list;
 
   ffi.Pointer<obs_property> obs_properties_add_color(
     ffi.Pointer<obs_properties> props,
@@ -8158,14 +8158,14 @@ class DiveObslibFFI {
     _obs_properties_add_color ??= _dylib.lookupFunction<
         _c_obs_properties_add_color,
         _dart_obs_properties_add_color>('obs_properties_add_color');
-    return _obs_properties_add_color(
+    return _obs_properties_add_color!(
       props,
       name,
       description,
     );
   }
 
-  _dart_obs_properties_add_color _obs_properties_add_color;
+  _dart_obs_properties_add_color? _obs_properties_add_color;
 
   ffi.Pointer<obs_property> obs_properties_add_button(
     ffi.Pointer<obs_properties> props,
@@ -8176,7 +8176,7 @@ class DiveObslibFFI {
     _obs_properties_add_button ??= _dylib.lookupFunction<
         _c_obs_properties_add_button,
         _dart_obs_properties_add_button>('obs_properties_add_button');
-    return _obs_properties_add_button(
+    return _obs_properties_add_button!(
       props,
       name,
       text,
@@ -8184,7 +8184,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_properties_add_button _obs_properties_add_button;
+  _dart_obs_properties_add_button? _obs_properties_add_button;
 
   ffi.Pointer<obs_property> obs_properties_add_button2(
     ffi.Pointer<obs_properties> props,
@@ -8196,7 +8196,7 @@ class DiveObslibFFI {
     _obs_properties_add_button2 ??= _dylib.lookupFunction<
         _c_obs_properties_add_button2,
         _dart_obs_properties_add_button2>('obs_properties_add_button2');
-    return _obs_properties_add_button2(
+    return _obs_properties_add_button2!(
       props,
       name,
       text,
@@ -8205,7 +8205,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_properties_add_button2 _obs_properties_add_button2;
+  _dart_obs_properties_add_button2? _obs_properties_add_button2;
 
   /// Adds a font selection property.
   ///
@@ -8222,14 +8222,14 @@ class DiveObslibFFI {
     _obs_properties_add_font ??= _dylib.lookupFunction<
         _c_obs_properties_add_font,
         _dart_obs_properties_add_font>('obs_properties_add_font');
-    return _obs_properties_add_font(
+    return _obs_properties_add_font!(
       props,
       name,
       description,
     );
   }
 
-  _dart_obs_properties_add_font _obs_properties_add_font;
+  _dart_obs_properties_add_font? _obs_properties_add_font;
 
   ffi.Pointer<obs_property> obs_properties_add_editable_list(
     ffi.Pointer<obs_properties> props,
@@ -8243,7 +8243,7 @@ class DiveObslibFFI {
             _c_obs_properties_add_editable_list,
             _dart_obs_properties_add_editable_list>(
         'obs_properties_add_editable_list');
-    return _obs_properties_add_editable_list(
+    return _obs_properties_add_editable_list!(
       props,
       name,
       description,
@@ -8253,7 +8253,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_properties_add_editable_list _obs_properties_add_editable_list;
+  _dart_obs_properties_add_editable_list? _obs_properties_add_editable_list;
 
   ffi.Pointer<obs_property> obs_properties_add_frame_rate(
     ffi.Pointer<obs_properties> props,
@@ -8263,14 +8263,14 @@ class DiveObslibFFI {
     _obs_properties_add_frame_rate ??= _dylib.lookupFunction<
         _c_obs_properties_add_frame_rate,
         _dart_obs_properties_add_frame_rate>('obs_properties_add_frame_rate');
-    return _obs_properties_add_frame_rate(
+    return _obs_properties_add_frame_rate!(
       props,
       name,
       description,
     );
   }
 
-  _dart_obs_properties_add_frame_rate _obs_properties_add_frame_rate;
+  _dart_obs_properties_add_frame_rate? _obs_properties_add_frame_rate;
 
   ffi.Pointer<obs_property> obs_properties_add_group(
     ffi.Pointer<obs_properties> props,
@@ -8282,7 +8282,7 @@ class DiveObslibFFI {
     _obs_properties_add_group ??= _dylib.lookupFunction<
         _c_obs_properties_add_group,
         _dart_obs_properties_add_group>('obs_properties_add_group');
-    return _obs_properties_add_group(
+    return _obs_properties_add_group!(
       props,
       name,
       description,
@@ -8291,7 +8291,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_properties_add_group _obs_properties_add_group;
+  _dart_obs_properties_add_group? _obs_properties_add_group;
 
   void obs_property_set_modified_callback(
     ffi.Pointer<obs_property> p,
@@ -8301,13 +8301,13 @@ class DiveObslibFFI {
             _c_obs_property_set_modified_callback,
             _dart_obs_property_set_modified_callback>(
         'obs_property_set_modified_callback');
-    return _obs_property_set_modified_callback(
+    return _obs_property_set_modified_callback!(
       p,
       modified,
     );
   }
 
-  _dart_obs_property_set_modified_callback _obs_property_set_modified_callback;
+  _dart_obs_property_set_modified_callback? _obs_property_set_modified_callback;
 
   void obs_property_set_modified_callback2(
     ffi.Pointer<obs_property> p,
@@ -8318,14 +8318,14 @@ class DiveObslibFFI {
             _c_obs_property_set_modified_callback2,
             _dart_obs_property_set_modified_callback2>(
         'obs_property_set_modified_callback2');
-    return _obs_property_set_modified_callback2(
+    return _obs_property_set_modified_callback2!(
       p,
       modified,
       priv,
     );
   }
 
-  _dart_obs_property_set_modified_callback2
+  _dart_obs_property_set_modified_callback2?
       _obs_property_set_modified_callback2;
 
   int obs_property_modified(
@@ -8334,13 +8334,13 @@ class DiveObslibFFI {
   ) {
     _obs_property_modified ??= _dylib.lookupFunction<_c_obs_property_modified,
         _dart_obs_property_modified>('obs_property_modified');
-    return _obs_property_modified(
+    return _obs_property_modified!(
       p,
       settings,
     );
   }
 
-  _dart_obs_property_modified _obs_property_modified;
+  _dart_obs_property_modified? _obs_property_modified;
 
   int obs_property_button_clicked(
     ffi.Pointer<obs_property> p,
@@ -8349,13 +8349,13 @@ class DiveObslibFFI {
     _obs_property_button_clicked ??= _dylib.lookupFunction<
         _c_obs_property_button_clicked,
         _dart_obs_property_button_clicked>('obs_property_button_clicked');
-    return _obs_property_button_clicked(
+    return _obs_property_button_clicked!(
       p,
       obj,
     );
   }
 
-  _dart_obs_property_button_clicked _obs_property_button_clicked;
+  _dart_obs_property_button_clicked? _obs_property_button_clicked;
 
   void obs_property_set_visible(
     ffi.Pointer<obs_property> p,
@@ -8364,13 +8364,13 @@ class DiveObslibFFI {
     _obs_property_set_visible ??= _dylib.lookupFunction<
         _c_obs_property_set_visible,
         _dart_obs_property_set_visible>('obs_property_set_visible');
-    return _obs_property_set_visible(
+    return _obs_property_set_visible!(
       p,
       visible,
     );
   }
 
-  _dart_obs_property_set_visible _obs_property_set_visible;
+  _dart_obs_property_set_visible? _obs_property_set_visible;
 
   void obs_property_set_enabled(
     ffi.Pointer<obs_property> p,
@@ -8379,13 +8379,13 @@ class DiveObslibFFI {
     _obs_property_set_enabled ??= _dylib.lookupFunction<
         _c_obs_property_set_enabled,
         _dart_obs_property_set_enabled>('obs_property_set_enabled');
-    return _obs_property_set_enabled(
+    return _obs_property_set_enabled!(
       p,
       enabled,
     );
   }
 
-  _dart_obs_property_set_enabled _obs_property_set_enabled;
+  _dart_obs_property_set_enabled? _obs_property_set_enabled;
 
   void obs_property_set_description(
     ffi.Pointer<obs_property> p,
@@ -8394,13 +8394,13 @@ class DiveObslibFFI {
     _obs_property_set_description ??= _dylib.lookupFunction<
         _c_obs_property_set_description,
         _dart_obs_property_set_description>('obs_property_set_description');
-    return _obs_property_set_description(
+    return _obs_property_set_description!(
       p,
       description,
     );
   }
 
-  _dart_obs_property_set_description _obs_property_set_description;
+  _dart_obs_property_set_description? _obs_property_set_description;
 
   void obs_property_set_long_description(
     ffi.Pointer<obs_property> p,
@@ -8410,13 +8410,13 @@ class DiveObslibFFI {
             _c_obs_property_set_long_description,
             _dart_obs_property_set_long_description>(
         'obs_property_set_long_description');
-    return _obs_property_set_long_description(
+    return _obs_property_set_long_description!(
       p,
       long_description,
     );
   }
 
-  _dart_obs_property_set_long_description _obs_property_set_long_description;
+  _dart_obs_property_set_long_description? _obs_property_set_long_description;
 
   ffi.Pointer<ffi.Int8> obs_property_name(
     ffi.Pointer<obs_property> p,
@@ -8424,12 +8424,12 @@ class DiveObslibFFI {
     _obs_property_name ??=
         _dylib.lookupFunction<_c_obs_property_name, _dart_obs_property_name>(
             'obs_property_name');
-    return _obs_property_name(
+    return _obs_property_name!(
       p,
     );
   }
 
-  _dart_obs_property_name _obs_property_name;
+  _dart_obs_property_name? _obs_property_name;
 
   ffi.Pointer<ffi.Int8> obs_property_description(
     ffi.Pointer<obs_property> p,
@@ -8437,12 +8437,12 @@ class DiveObslibFFI {
     _obs_property_description ??= _dylib.lookupFunction<
         _c_obs_property_description,
         _dart_obs_property_description>('obs_property_description');
-    return _obs_property_description(
+    return _obs_property_description!(
       p,
     );
   }
 
-  _dart_obs_property_description _obs_property_description;
+  _dart_obs_property_description? _obs_property_description;
 
   ffi.Pointer<ffi.Int8> obs_property_long_description(
     ffi.Pointer<obs_property> p,
@@ -8450,48 +8450,48 @@ class DiveObslibFFI {
     _obs_property_long_description ??= _dylib.lookupFunction<
         _c_obs_property_long_description,
         _dart_obs_property_long_description>('obs_property_long_description');
-    return _obs_property_long_description(
+    return _obs_property_long_description!(
       p,
     );
   }
 
-  _dart_obs_property_long_description _obs_property_long_description;
+  _dart_obs_property_long_description? _obs_property_long_description;
 
   int obs_property_get_type(
     ffi.Pointer<obs_property> p,
   ) {
     _obs_property_get_type ??= _dylib.lookupFunction<_c_obs_property_get_type,
         _dart_obs_property_get_type>('obs_property_get_type');
-    return _obs_property_get_type(
+    return _obs_property_get_type!(
       p,
     );
   }
 
-  _dart_obs_property_get_type _obs_property_get_type;
+  _dart_obs_property_get_type? _obs_property_get_type;
 
   int obs_property_enabled(
     ffi.Pointer<obs_property> p,
   ) {
     _obs_property_enabled ??= _dylib.lookupFunction<_c_obs_property_enabled,
         _dart_obs_property_enabled>('obs_property_enabled');
-    return _obs_property_enabled(
+    return _obs_property_enabled!(
       p,
     );
   }
 
-  _dart_obs_property_enabled _obs_property_enabled;
+  _dart_obs_property_enabled? _obs_property_enabled;
 
   int obs_property_visible(
     ffi.Pointer<obs_property> p,
   ) {
     _obs_property_visible ??= _dylib.lookupFunction<_c_obs_property_visible,
         _dart_obs_property_visible>('obs_property_visible');
-    return _obs_property_visible(
+    return _obs_property_visible!(
       p,
     );
   }
 
-  _dart_obs_property_visible _obs_property_visible;
+  _dart_obs_property_visible? _obs_property_visible;
 
   int obs_property_next(
     ffi.Pointer<ffi.Pointer<obs_property>> p,
@@ -8499,60 +8499,60 @@ class DiveObslibFFI {
     _obs_property_next ??=
         _dylib.lookupFunction<_c_obs_property_next, _dart_obs_property_next>(
             'obs_property_next');
-    return _obs_property_next(
+    return _obs_property_next!(
       p,
     );
   }
 
-  _dart_obs_property_next _obs_property_next;
+  _dart_obs_property_next? _obs_property_next;
 
   int obs_property_int_min(
     ffi.Pointer<obs_property> p,
   ) {
     _obs_property_int_min ??= _dylib.lookupFunction<_c_obs_property_int_min,
         _dart_obs_property_int_min>('obs_property_int_min');
-    return _obs_property_int_min(
+    return _obs_property_int_min!(
       p,
     );
   }
 
-  _dart_obs_property_int_min _obs_property_int_min;
+  _dart_obs_property_int_min? _obs_property_int_min;
 
   int obs_property_int_max(
     ffi.Pointer<obs_property> p,
   ) {
     _obs_property_int_max ??= _dylib.lookupFunction<_c_obs_property_int_max,
         _dart_obs_property_int_max>('obs_property_int_max');
-    return _obs_property_int_max(
+    return _obs_property_int_max!(
       p,
     );
   }
 
-  _dart_obs_property_int_max _obs_property_int_max;
+  _dart_obs_property_int_max? _obs_property_int_max;
 
   int obs_property_int_step(
     ffi.Pointer<obs_property> p,
   ) {
     _obs_property_int_step ??= _dylib.lookupFunction<_c_obs_property_int_step,
         _dart_obs_property_int_step>('obs_property_int_step');
-    return _obs_property_int_step(
+    return _obs_property_int_step!(
       p,
     );
   }
 
-  _dart_obs_property_int_step _obs_property_int_step;
+  _dart_obs_property_int_step? _obs_property_int_step;
 
   int obs_property_int_type(
     ffi.Pointer<obs_property> p,
   ) {
     _obs_property_int_type ??= _dylib.lookupFunction<_c_obs_property_int_type,
         _dart_obs_property_int_type>('obs_property_int_type');
-    return _obs_property_int_type(
+    return _obs_property_int_type!(
       p,
     );
   }
 
-  _dart_obs_property_int_type _obs_property_int_type;
+  _dart_obs_property_int_type? _obs_property_int_type;
 
   ffi.Pointer<ffi.Int8> obs_property_int_suffix(
     ffi.Pointer<obs_property> p,
@@ -8560,36 +8560,36 @@ class DiveObslibFFI {
     _obs_property_int_suffix ??= _dylib.lookupFunction<
         _c_obs_property_int_suffix,
         _dart_obs_property_int_suffix>('obs_property_int_suffix');
-    return _obs_property_int_suffix(
+    return _obs_property_int_suffix!(
       p,
     );
   }
 
-  _dart_obs_property_int_suffix _obs_property_int_suffix;
+  _dart_obs_property_int_suffix? _obs_property_int_suffix;
 
   double obs_property_float_min(
     ffi.Pointer<obs_property> p,
   ) {
     _obs_property_float_min ??= _dylib.lookupFunction<_c_obs_property_float_min,
         _dart_obs_property_float_min>('obs_property_float_min');
-    return _obs_property_float_min(
+    return _obs_property_float_min!(
       p,
     );
   }
 
-  _dart_obs_property_float_min _obs_property_float_min;
+  _dart_obs_property_float_min? _obs_property_float_min;
 
   double obs_property_float_max(
     ffi.Pointer<obs_property> p,
   ) {
     _obs_property_float_max ??= _dylib.lookupFunction<_c_obs_property_float_max,
         _dart_obs_property_float_max>('obs_property_float_max');
-    return _obs_property_float_max(
+    return _obs_property_float_max!(
       p,
     );
   }
 
-  _dart_obs_property_float_max _obs_property_float_max;
+  _dart_obs_property_float_max? _obs_property_float_max;
 
   double obs_property_float_step(
     ffi.Pointer<obs_property> p,
@@ -8597,12 +8597,12 @@ class DiveObslibFFI {
     _obs_property_float_step ??= _dylib.lookupFunction<
         _c_obs_property_float_step,
         _dart_obs_property_float_step>('obs_property_float_step');
-    return _obs_property_float_step(
+    return _obs_property_float_step!(
       p,
     );
   }
 
-  _dart_obs_property_float_step _obs_property_float_step;
+  _dart_obs_property_float_step? _obs_property_float_step;
 
   int obs_property_float_type(
     ffi.Pointer<obs_property> p,
@@ -8610,12 +8610,12 @@ class DiveObslibFFI {
     _obs_property_float_type ??= _dylib.lookupFunction<
         _c_obs_property_float_type,
         _dart_obs_property_float_type>('obs_property_float_type');
-    return _obs_property_float_type(
+    return _obs_property_float_type!(
       p,
     );
   }
 
-  _dart_obs_property_float_type _obs_property_float_type;
+  _dart_obs_property_float_type? _obs_property_float_type;
 
   ffi.Pointer<ffi.Int8> obs_property_float_suffix(
     ffi.Pointer<obs_property> p,
@@ -8623,24 +8623,24 @@ class DiveObslibFFI {
     _obs_property_float_suffix ??= _dylib.lookupFunction<
         _c_obs_property_float_suffix,
         _dart_obs_property_float_suffix>('obs_property_float_suffix');
-    return _obs_property_float_suffix(
+    return _obs_property_float_suffix!(
       p,
     );
   }
 
-  _dart_obs_property_float_suffix _obs_property_float_suffix;
+  _dart_obs_property_float_suffix? _obs_property_float_suffix;
 
   int obs_property_text_type(
     ffi.Pointer<obs_property> p,
   ) {
     _obs_property_text_type ??= _dylib.lookupFunction<_c_obs_property_text_type,
         _dart_obs_property_text_type>('obs_property_text_type');
-    return _obs_property_text_type(
+    return _obs_property_text_type!(
       p,
     );
   }
 
-  _dart_obs_property_text_type _obs_property_text_type;
+  _dart_obs_property_text_type? _obs_property_text_type;
 
   int obs_property_text_monospace(
     ffi.Pointer<obs_property> p,
@@ -8648,24 +8648,24 @@ class DiveObslibFFI {
     _obs_property_text_monospace ??= _dylib.lookupFunction<
         _c_obs_property_text_monospace,
         _dart_obs_property_text_monospace>('obs_property_text_monospace');
-    return _obs_property_text_monospace(
+    return _obs_property_text_monospace!(
       p,
     );
   }
 
-  _dart_obs_property_text_monospace _obs_property_text_monospace;
+  _dart_obs_property_text_monospace? _obs_property_text_monospace;
 
   int obs_property_path_type(
     ffi.Pointer<obs_property> p,
   ) {
     _obs_property_path_type ??= _dylib.lookupFunction<_c_obs_property_path_type,
         _dart_obs_property_path_type>('obs_property_path_type');
-    return _obs_property_path_type(
+    return _obs_property_path_type!(
       p,
     );
   }
 
-  _dart_obs_property_path_type _obs_property_path_type;
+  _dart_obs_property_path_type? _obs_property_path_type;
 
   ffi.Pointer<ffi.Int8> obs_property_path_filter(
     ffi.Pointer<obs_property> p,
@@ -8673,12 +8673,12 @@ class DiveObslibFFI {
     _obs_property_path_filter ??= _dylib.lookupFunction<
         _c_obs_property_path_filter,
         _dart_obs_property_path_filter>('obs_property_path_filter');
-    return _obs_property_path_filter(
+    return _obs_property_path_filter!(
       p,
     );
   }
 
-  _dart_obs_property_path_filter _obs_property_path_filter;
+  _dart_obs_property_path_filter? _obs_property_path_filter;
 
   ffi.Pointer<ffi.Int8> obs_property_path_default_path(
     ffi.Pointer<obs_property> p,
@@ -8686,24 +8686,24 @@ class DiveObslibFFI {
     _obs_property_path_default_path ??= _dylib.lookupFunction<
         _c_obs_property_path_default_path,
         _dart_obs_property_path_default_path>('obs_property_path_default_path');
-    return _obs_property_path_default_path(
+    return _obs_property_path_default_path!(
       p,
     );
   }
 
-  _dart_obs_property_path_default_path _obs_property_path_default_path;
+  _dart_obs_property_path_default_path? _obs_property_path_default_path;
 
   int obs_property_list_type(
     ffi.Pointer<obs_property> p,
   ) {
     _obs_property_list_type ??= _dylib.lookupFunction<_c_obs_property_list_type,
         _dart_obs_property_list_type>('obs_property_list_type');
-    return _obs_property_list_type(
+    return _obs_property_list_type!(
       p,
     );
   }
 
-  _dart_obs_property_list_type _obs_property_list_type;
+  _dart_obs_property_list_type? _obs_property_list_type;
 
   int obs_property_list_format(
     ffi.Pointer<obs_property> p,
@@ -8711,12 +8711,12 @@ class DiveObslibFFI {
     _obs_property_list_format ??= _dylib.lookupFunction<
         _c_obs_property_list_format,
         _dart_obs_property_list_format>('obs_property_list_format');
-    return _obs_property_list_format(
+    return _obs_property_list_format!(
       p,
     );
   }
 
-  _dart_obs_property_list_format _obs_property_list_format;
+  _dart_obs_property_list_format? _obs_property_list_format;
 
   void obs_property_int_set_limits(
     ffi.Pointer<obs_property> p,
@@ -8727,7 +8727,7 @@ class DiveObslibFFI {
     _obs_property_int_set_limits ??= _dylib.lookupFunction<
         _c_obs_property_int_set_limits,
         _dart_obs_property_int_set_limits>('obs_property_int_set_limits');
-    return _obs_property_int_set_limits(
+    return _obs_property_int_set_limits!(
       p,
       min,
       max,
@@ -8735,7 +8735,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_property_int_set_limits _obs_property_int_set_limits;
+  _dart_obs_property_int_set_limits? _obs_property_int_set_limits;
 
   void obs_property_float_set_limits(
     ffi.Pointer<obs_property> p,
@@ -8746,7 +8746,7 @@ class DiveObslibFFI {
     _obs_property_float_set_limits ??= _dylib.lookupFunction<
         _c_obs_property_float_set_limits,
         _dart_obs_property_float_set_limits>('obs_property_float_set_limits');
-    return _obs_property_float_set_limits(
+    return _obs_property_float_set_limits!(
       p,
       min,
       max,
@@ -8754,7 +8754,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_property_float_set_limits _obs_property_float_set_limits;
+  _dart_obs_property_float_set_limits? _obs_property_float_set_limits;
 
   void obs_property_int_set_suffix(
     ffi.Pointer<obs_property> p,
@@ -8763,13 +8763,13 @@ class DiveObslibFFI {
     _obs_property_int_set_suffix ??= _dylib.lookupFunction<
         _c_obs_property_int_set_suffix,
         _dart_obs_property_int_set_suffix>('obs_property_int_set_suffix');
-    return _obs_property_int_set_suffix(
+    return _obs_property_int_set_suffix!(
       p,
       suffix,
     );
   }
 
-  _dart_obs_property_int_set_suffix _obs_property_int_set_suffix;
+  _dart_obs_property_int_set_suffix? _obs_property_int_set_suffix;
 
   void obs_property_float_set_suffix(
     ffi.Pointer<obs_property> p,
@@ -8778,13 +8778,13 @@ class DiveObslibFFI {
     _obs_property_float_set_suffix ??= _dylib.lookupFunction<
         _c_obs_property_float_set_suffix,
         _dart_obs_property_float_set_suffix>('obs_property_float_set_suffix');
-    return _obs_property_float_set_suffix(
+    return _obs_property_float_set_suffix!(
       p,
       suffix,
     );
   }
 
-  _dart_obs_property_float_set_suffix _obs_property_float_set_suffix;
+  _dart_obs_property_float_set_suffix? _obs_property_float_set_suffix;
 
   void obs_property_text_set_monospace(
     ffi.Pointer<obs_property> p,
@@ -8794,13 +8794,13 @@ class DiveObslibFFI {
             _c_obs_property_text_set_monospace,
             _dart_obs_property_text_set_monospace>(
         'obs_property_text_set_monospace');
-    return _obs_property_text_set_monospace(
+    return _obs_property_text_set_monospace!(
       p,
       monospace,
     );
   }
 
-  _dart_obs_property_text_set_monospace _obs_property_text_set_monospace;
+  _dart_obs_property_text_set_monospace? _obs_property_text_set_monospace;
 
   void obs_property_list_clear(
     ffi.Pointer<obs_property> p,
@@ -8808,12 +8808,12 @@ class DiveObslibFFI {
     _obs_property_list_clear ??= _dylib.lookupFunction<
         _c_obs_property_list_clear,
         _dart_obs_property_list_clear>('obs_property_list_clear');
-    return _obs_property_list_clear(
+    return _obs_property_list_clear!(
       p,
     );
   }
 
-  _dart_obs_property_list_clear _obs_property_list_clear;
+  _dart_obs_property_list_clear? _obs_property_list_clear;
 
   int obs_property_list_add_string(
     ffi.Pointer<obs_property> p,
@@ -8823,14 +8823,14 @@ class DiveObslibFFI {
     _obs_property_list_add_string ??= _dylib.lookupFunction<
         _c_obs_property_list_add_string,
         _dart_obs_property_list_add_string>('obs_property_list_add_string');
-    return _obs_property_list_add_string(
+    return _obs_property_list_add_string!(
       p,
       name,
       val,
     );
   }
 
-  _dart_obs_property_list_add_string _obs_property_list_add_string;
+  _dart_obs_property_list_add_string? _obs_property_list_add_string;
 
   int obs_property_list_add_int(
     ffi.Pointer<obs_property> p,
@@ -8840,14 +8840,14 @@ class DiveObslibFFI {
     _obs_property_list_add_int ??= _dylib.lookupFunction<
         _c_obs_property_list_add_int,
         _dart_obs_property_list_add_int>('obs_property_list_add_int');
-    return _obs_property_list_add_int(
+    return _obs_property_list_add_int!(
       p,
       name,
       val,
     );
   }
 
-  _dart_obs_property_list_add_int _obs_property_list_add_int;
+  _dart_obs_property_list_add_int? _obs_property_list_add_int;
 
   int obs_property_list_add_float(
     ffi.Pointer<obs_property> p,
@@ -8857,14 +8857,14 @@ class DiveObslibFFI {
     _obs_property_list_add_float ??= _dylib.lookupFunction<
         _c_obs_property_list_add_float,
         _dart_obs_property_list_add_float>('obs_property_list_add_float');
-    return _obs_property_list_add_float(
+    return _obs_property_list_add_float!(
       p,
       name,
       val,
     );
   }
 
-  _dart_obs_property_list_add_float _obs_property_list_add_float;
+  _dart_obs_property_list_add_float? _obs_property_list_add_float;
 
   void obs_property_list_insert_string(
     ffi.Pointer<obs_property> p,
@@ -8876,7 +8876,7 @@ class DiveObslibFFI {
             _c_obs_property_list_insert_string,
             _dart_obs_property_list_insert_string>(
         'obs_property_list_insert_string');
-    return _obs_property_list_insert_string(
+    return _obs_property_list_insert_string!(
       p,
       idx,
       name,
@@ -8884,7 +8884,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_property_list_insert_string _obs_property_list_insert_string;
+  _dart_obs_property_list_insert_string? _obs_property_list_insert_string;
 
   void obs_property_list_insert_int(
     ffi.Pointer<obs_property> p,
@@ -8895,7 +8895,7 @@ class DiveObslibFFI {
     _obs_property_list_insert_int ??= _dylib.lookupFunction<
         _c_obs_property_list_insert_int,
         _dart_obs_property_list_insert_int>('obs_property_list_insert_int');
-    return _obs_property_list_insert_int(
+    return _obs_property_list_insert_int!(
       p,
       idx,
       name,
@@ -8903,7 +8903,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_property_list_insert_int _obs_property_list_insert_int;
+  _dart_obs_property_list_insert_int? _obs_property_list_insert_int;
 
   void obs_property_list_insert_float(
     ffi.Pointer<obs_property> p,
@@ -8914,7 +8914,7 @@ class DiveObslibFFI {
     _obs_property_list_insert_float ??= _dylib.lookupFunction<
         _c_obs_property_list_insert_float,
         _dart_obs_property_list_insert_float>('obs_property_list_insert_float');
-    return _obs_property_list_insert_float(
+    return _obs_property_list_insert_float!(
       p,
       idx,
       name,
@@ -8922,7 +8922,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_property_list_insert_float _obs_property_list_insert_float;
+  _dart_obs_property_list_insert_float? _obs_property_list_insert_float;
 
   void obs_property_list_item_disable(
     ffi.Pointer<obs_property> p,
@@ -8932,14 +8932,14 @@ class DiveObslibFFI {
     _obs_property_list_item_disable ??= _dylib.lookupFunction<
         _c_obs_property_list_item_disable,
         _dart_obs_property_list_item_disable>('obs_property_list_item_disable');
-    return _obs_property_list_item_disable(
+    return _obs_property_list_item_disable!(
       p,
       idx,
       disabled,
     );
   }
 
-  _dart_obs_property_list_item_disable _obs_property_list_item_disable;
+  _dart_obs_property_list_item_disable? _obs_property_list_item_disable;
 
   int obs_property_list_item_disabled(
     ffi.Pointer<obs_property> p,
@@ -8949,13 +8949,13 @@ class DiveObslibFFI {
             _c_obs_property_list_item_disabled,
             _dart_obs_property_list_item_disabled>(
         'obs_property_list_item_disabled');
-    return _obs_property_list_item_disabled(
+    return _obs_property_list_item_disabled!(
       p,
       idx,
     );
   }
 
-  _dart_obs_property_list_item_disabled _obs_property_list_item_disabled;
+  _dart_obs_property_list_item_disabled? _obs_property_list_item_disabled;
 
   void obs_property_list_item_remove(
     ffi.Pointer<obs_property> p,
@@ -8964,13 +8964,13 @@ class DiveObslibFFI {
     _obs_property_list_item_remove ??= _dylib.lookupFunction<
         _c_obs_property_list_item_remove,
         _dart_obs_property_list_item_remove>('obs_property_list_item_remove');
-    return _obs_property_list_item_remove(
+    return _obs_property_list_item_remove!(
       p,
       idx,
     );
   }
 
-  _dart_obs_property_list_item_remove _obs_property_list_item_remove;
+  _dart_obs_property_list_item_remove? _obs_property_list_item_remove;
 
   int obs_property_list_item_count(
     ffi.Pointer<obs_property> p,
@@ -8978,12 +8978,12 @@ class DiveObslibFFI {
     _obs_property_list_item_count ??= _dylib.lookupFunction<
         _c_obs_property_list_item_count,
         _dart_obs_property_list_item_count>('obs_property_list_item_count');
-    return _obs_property_list_item_count(
+    return _obs_property_list_item_count!(
       p,
     );
   }
 
-  _dart_obs_property_list_item_count _obs_property_list_item_count;
+  _dart_obs_property_list_item_count? _obs_property_list_item_count;
 
   ffi.Pointer<ffi.Int8> obs_property_list_item_name(
     ffi.Pointer<obs_property> p,
@@ -8992,13 +8992,13 @@ class DiveObslibFFI {
     _obs_property_list_item_name ??= _dylib.lookupFunction<
         _c_obs_property_list_item_name,
         _dart_obs_property_list_item_name>('obs_property_list_item_name');
-    return _obs_property_list_item_name(
+    return _obs_property_list_item_name!(
       p,
       idx,
     );
   }
 
-  _dart_obs_property_list_item_name _obs_property_list_item_name;
+  _dart_obs_property_list_item_name? _obs_property_list_item_name;
 
   ffi.Pointer<ffi.Int8> obs_property_list_item_string(
     ffi.Pointer<obs_property> p,
@@ -9007,13 +9007,13 @@ class DiveObslibFFI {
     _obs_property_list_item_string ??= _dylib.lookupFunction<
         _c_obs_property_list_item_string,
         _dart_obs_property_list_item_string>('obs_property_list_item_string');
-    return _obs_property_list_item_string(
+    return _obs_property_list_item_string!(
       p,
       idx,
     );
   }
 
-  _dart_obs_property_list_item_string _obs_property_list_item_string;
+  _dart_obs_property_list_item_string? _obs_property_list_item_string;
 
   int obs_property_list_item_int(
     ffi.Pointer<obs_property> p,
@@ -9022,13 +9022,13 @@ class DiveObslibFFI {
     _obs_property_list_item_int ??= _dylib.lookupFunction<
         _c_obs_property_list_item_int,
         _dart_obs_property_list_item_int>('obs_property_list_item_int');
-    return _obs_property_list_item_int(
+    return _obs_property_list_item_int!(
       p,
       idx,
     );
   }
 
-  _dart_obs_property_list_item_int _obs_property_list_item_int;
+  _dart_obs_property_list_item_int? _obs_property_list_item_int;
 
   double obs_property_list_item_float(
     ffi.Pointer<obs_property> p,
@@ -9037,13 +9037,13 @@ class DiveObslibFFI {
     _obs_property_list_item_float ??= _dylib.lookupFunction<
         _c_obs_property_list_item_float,
         _dart_obs_property_list_item_float>('obs_property_list_item_float');
-    return _obs_property_list_item_float(
+    return _obs_property_list_item_float!(
       p,
       idx,
     );
   }
 
-  _dart_obs_property_list_item_float _obs_property_list_item_float;
+  _dart_obs_property_list_item_float? _obs_property_list_item_float;
 
   int obs_property_editable_list_type(
     ffi.Pointer<obs_property> p,
@@ -9052,12 +9052,12 @@ class DiveObslibFFI {
             _c_obs_property_editable_list_type,
             _dart_obs_property_editable_list_type>(
         'obs_property_editable_list_type');
-    return _obs_property_editable_list_type(
+    return _obs_property_editable_list_type!(
       p,
     );
   }
 
-  _dart_obs_property_editable_list_type _obs_property_editable_list_type;
+  _dart_obs_property_editable_list_type? _obs_property_editable_list_type;
 
   ffi.Pointer<ffi.Int8> obs_property_editable_list_filter(
     ffi.Pointer<obs_property> p,
@@ -9066,12 +9066,12 @@ class DiveObslibFFI {
             _c_obs_property_editable_list_filter,
             _dart_obs_property_editable_list_filter>(
         'obs_property_editable_list_filter');
-    return _obs_property_editable_list_filter(
+    return _obs_property_editable_list_filter!(
       p,
     );
   }
 
-  _dart_obs_property_editable_list_filter _obs_property_editable_list_filter;
+  _dart_obs_property_editable_list_filter? _obs_property_editable_list_filter;
 
   ffi.Pointer<ffi.Int8> obs_property_editable_list_default_path(
     ffi.Pointer<obs_property> p,
@@ -9080,12 +9080,12 @@ class DiveObslibFFI {
             _c_obs_property_editable_list_default_path,
             _dart_obs_property_editable_list_default_path>(
         'obs_property_editable_list_default_path');
-    return _obs_property_editable_list_default_path(
+    return _obs_property_editable_list_default_path!(
       p,
     );
   }
 
-  _dart_obs_property_editable_list_default_path
+  _dart_obs_property_editable_list_default_path?
       _obs_property_editable_list_default_path;
 
   void obs_property_frame_rate_clear(
@@ -9094,12 +9094,12 @@ class DiveObslibFFI {
     _obs_property_frame_rate_clear ??= _dylib.lookupFunction<
         _c_obs_property_frame_rate_clear,
         _dart_obs_property_frame_rate_clear>('obs_property_frame_rate_clear');
-    return _obs_property_frame_rate_clear(
+    return _obs_property_frame_rate_clear!(
       p,
     );
   }
 
-  _dart_obs_property_frame_rate_clear _obs_property_frame_rate_clear;
+  _dart_obs_property_frame_rate_clear? _obs_property_frame_rate_clear;
 
   void obs_property_frame_rate_options_clear(
     ffi.Pointer<obs_property> p,
@@ -9108,12 +9108,12 @@ class DiveObslibFFI {
             _c_obs_property_frame_rate_options_clear,
             _dart_obs_property_frame_rate_options_clear>(
         'obs_property_frame_rate_options_clear');
-    return _obs_property_frame_rate_options_clear(
+    return _obs_property_frame_rate_options_clear!(
       p,
     );
   }
 
-  _dart_obs_property_frame_rate_options_clear
+  _dart_obs_property_frame_rate_options_clear?
       _obs_property_frame_rate_options_clear;
 
   void obs_property_frame_rate_fps_ranges_clear(
@@ -9123,12 +9123,12 @@ class DiveObslibFFI {
             _c_obs_property_frame_rate_fps_ranges_clear,
             _dart_obs_property_frame_rate_fps_ranges_clear>(
         'obs_property_frame_rate_fps_ranges_clear');
-    return _obs_property_frame_rate_fps_ranges_clear(
+    return _obs_property_frame_rate_fps_ranges_clear!(
       p,
     );
   }
 
-  _dart_obs_property_frame_rate_fps_ranges_clear
+  _dart_obs_property_frame_rate_fps_ranges_clear?
       _obs_property_frame_rate_fps_ranges_clear;
 
   int obs_property_frame_rate_option_add(
@@ -9140,14 +9140,14 @@ class DiveObslibFFI {
             _c_obs_property_frame_rate_option_add,
             _dart_obs_property_frame_rate_option_add>(
         'obs_property_frame_rate_option_add');
-    return _obs_property_frame_rate_option_add(
+    return _obs_property_frame_rate_option_add!(
       p,
       name,
       description,
     );
   }
 
-  _dart_obs_property_frame_rate_option_add _obs_property_frame_rate_option_add;
+  _dart_obs_property_frame_rate_option_add? _obs_property_frame_rate_option_add;
 
   void obs_property_frame_rate_option_insert(
     ffi.Pointer<obs_property> p,
@@ -9159,7 +9159,7 @@ class DiveObslibFFI {
             _c_obs_property_frame_rate_option_insert,
             _dart_obs_property_frame_rate_option_insert>(
         'obs_property_frame_rate_option_insert');
-    return _obs_property_frame_rate_option_insert(
+    return _obs_property_frame_rate_option_insert!(
       p,
       idx,
       name,
@@ -9167,7 +9167,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_property_frame_rate_option_insert
+  _dart_obs_property_frame_rate_option_insert?
       _obs_property_frame_rate_option_insert;
 
   int obs_property_frame_rate_options_count(
@@ -9177,12 +9177,12 @@ class DiveObslibFFI {
             _c_obs_property_frame_rate_options_count,
             _dart_obs_property_frame_rate_options_count>(
         'obs_property_frame_rate_options_count');
-    return _obs_property_frame_rate_options_count(
+    return _obs_property_frame_rate_options_count!(
       p,
     );
   }
 
-  _dart_obs_property_frame_rate_options_count
+  _dart_obs_property_frame_rate_options_count?
       _obs_property_frame_rate_options_count;
 
   ffi.Pointer<ffi.Int8> obs_property_frame_rate_option_name(
@@ -9193,13 +9193,13 @@ class DiveObslibFFI {
             _c_obs_property_frame_rate_option_name,
             _dart_obs_property_frame_rate_option_name>(
         'obs_property_frame_rate_option_name');
-    return _obs_property_frame_rate_option_name(
+    return _obs_property_frame_rate_option_name!(
       p,
       idx,
     );
   }
 
-  _dart_obs_property_frame_rate_option_name
+  _dart_obs_property_frame_rate_option_name?
       _obs_property_frame_rate_option_name;
 
   ffi.Pointer<ffi.Int8> obs_property_frame_rate_option_description(
@@ -9210,13 +9210,13 @@ class DiveObslibFFI {
             _c_obs_property_frame_rate_option_description,
             _dart_obs_property_frame_rate_option_description>(
         'obs_property_frame_rate_option_description');
-    return _obs_property_frame_rate_option_description(
+    return _obs_property_frame_rate_option_description!(
       p,
       idx,
     );
   }
 
-  _dart_obs_property_frame_rate_option_description
+  _dart_obs_property_frame_rate_option_description?
       _obs_property_frame_rate_option_description;
 
   int obs_property_frame_rate_fps_ranges_count(
@@ -9226,12 +9226,12 @@ class DiveObslibFFI {
             _c_obs_property_frame_rate_fps_ranges_count,
             _dart_obs_property_frame_rate_fps_ranges_count>(
         'obs_property_frame_rate_fps_ranges_count');
-    return _obs_property_frame_rate_fps_ranges_count(
+    return _obs_property_frame_rate_fps_ranges_count!(
       p,
     );
   }
 
-  _dart_obs_property_frame_rate_fps_ranges_count
+  _dart_obs_property_frame_rate_fps_ranges_count?
       _obs_property_frame_rate_fps_ranges_count;
 
   int obs_property_group_type(
@@ -9240,12 +9240,12 @@ class DiveObslibFFI {
     _obs_property_group_type ??= _dylib.lookupFunction<
         _c_obs_property_group_type,
         _dart_obs_property_group_type>('obs_property_group_type');
-    return _obs_property_group_type(
+    return _obs_property_group_type!(
       p,
     );
   }
 
-  _dart_obs_property_group_type _obs_property_group_type;
+  _dart_obs_property_group_type? _obs_property_group_type;
 
   ffi.Pointer<obs_properties> obs_property_group_content(
     ffi.Pointer<obs_property> p,
@@ -9253,24 +9253,24 @@ class DiveObslibFFI {
     _obs_property_group_content ??= _dylib.lookupFunction<
         _c_obs_property_group_content,
         _dart_obs_property_group_content>('obs_property_group_content');
-    return _obs_property_group_content(
+    return _obs_property_group_content!(
       p,
     );
   }
 
-  _dart_obs_property_group_content _obs_property_group_content;
+  _dart_obs_property_group_content? _obs_property_group_content;
 
   int obs_proprety_text_type(
     ffi.Pointer<obs_property> p,
   ) {
     _obs_proprety_text_type ??= _dylib.lookupFunction<_c_obs_proprety_text_type,
         _dart_obs_proprety_text_type>('obs_proprety_text_type');
-    return _obs_proprety_text_type(
+    return _obs_proprety_text_type!(
       p,
     );
   }
 
-  _dart_obs_proprety_text_type _obs_proprety_text_type;
+  _dart_obs_proprety_text_type? _obs_proprety_text_type;
 
   void obs_register_source_s(
     ffi.Pointer<obs_source_info> info,
@@ -9278,13 +9278,13 @@ class DiveObslibFFI {
   ) {
     _obs_register_source_s ??= _dylib.lookupFunction<_c_obs_register_source_s,
         _dart_obs_register_source_s>('obs_register_source_s');
-    return _obs_register_source_s(
+    return _obs_register_source_s!(
       info,
       size,
     );
   }
 
-  _dart_obs_register_source_s _obs_register_source_s;
+  _dart_obs_register_source_s? _obs_register_source_s;
 
   void obs_register_encoder_s(
     ffi.Pointer<obs_encoder_info> info,
@@ -9292,13 +9292,13 @@ class DiveObslibFFI {
   ) {
     _obs_register_encoder_s ??= _dylib.lookupFunction<_c_obs_register_encoder_s,
         _dart_obs_register_encoder_s>('obs_register_encoder_s');
-    return _obs_register_encoder_s(
+    return _obs_register_encoder_s!(
       info,
       size,
     );
   }
 
-  _dart_obs_register_encoder_s _obs_register_encoder_s;
+  _dart_obs_register_encoder_s? _obs_register_encoder_s;
 
   void obs_register_output_s(
     ffi.Pointer<obs_output_info> info,
@@ -9306,13 +9306,13 @@ class DiveObslibFFI {
   ) {
     _obs_register_output_s ??= _dylib.lookupFunction<_c_obs_register_output_s,
         _dart_obs_register_output_s>('obs_register_output_s');
-    return _obs_register_output_s(
+    return _obs_register_output_s!(
       info,
       size,
     );
   }
 
-  _dart_obs_register_output_s _obs_register_output_s;
+  _dart_obs_register_output_s? _obs_register_output_s;
 
   void obs_register_service_s(
     ffi.Pointer<obs_service_info> info,
@@ -9320,13 +9320,13 @@ class DiveObslibFFI {
   ) {
     _obs_register_service_s ??= _dylib.lookupFunction<_c_obs_register_service_s,
         _dart_obs_register_service_s>('obs_register_service_s');
-    return _obs_register_service_s(
+    return _obs_register_service_s!(
       info,
       size,
     );
   }
 
-  _dart_obs_register_service_s _obs_register_service_s;
+  _dart_obs_register_service_s? _obs_register_service_s;
 
   /// @brief Create a fader
   /// @param type the type of the fader
@@ -9341,12 +9341,12 @@ class DiveObslibFFI {
     _obs_fader_create ??=
         _dylib.lookupFunction<_c_obs_fader_create, _dart_obs_fader_create>(
             'obs_fader_create');
-    return _obs_fader_create(
+    return _obs_fader_create!(
       type,
     );
   }
 
-  _dart_obs_fader_create _obs_fader_create;
+  _dart_obs_fader_create? _obs_fader_create;
 
   /// @brief Destroy a fader
   /// @param fader pointer to the fader object
@@ -9358,12 +9358,12 @@ class DiveObslibFFI {
     _obs_fader_destroy ??=
         _dylib.lookupFunction<_c_obs_fader_destroy, _dart_obs_fader_destroy>(
             'obs_fader_destroy');
-    return _obs_fader_destroy(
+    return _obs_fader_destroy!(
       fader,
     );
   }
 
-  _dart_obs_fader_destroy _obs_fader_destroy;
+  _dart_obs_fader_destroy? _obs_fader_destroy;
 
   /// @brief Set the fader dB value
   /// @param fader pointer to the fader object
@@ -9376,13 +9376,13 @@ class DiveObslibFFI {
     _obs_fader_set_db ??=
         _dylib.lookupFunction<_c_obs_fader_set_db, _dart_obs_fader_set_db>(
             'obs_fader_set_db');
-    return _obs_fader_set_db(
+    return _obs_fader_set_db!(
       fader,
       db,
     );
   }
 
-  _dart_obs_fader_set_db _obs_fader_set_db;
+  _dart_obs_fader_set_db? _obs_fader_set_db;
 
   /// @brief Get the current fader dB value
   /// @param fader pointer to the fader object
@@ -9393,12 +9393,12 @@ class DiveObslibFFI {
     _obs_fader_get_db ??=
         _dylib.lookupFunction<_c_obs_fader_get_db, _dart_obs_fader_get_db>(
             'obs_fader_get_db');
-    return _obs_fader_get_db(
+    return _obs_fader_get_db!(
       fader,
     );
   }
 
-  _dart_obs_fader_get_db _obs_fader_get_db;
+  _dart_obs_fader_get_db? _obs_fader_get_db;
 
   /// @brief Set the fader value from deflection
   /// @param fader pointer to the fader object
@@ -9417,13 +9417,13 @@ class DiveObslibFFI {
     _obs_fader_set_deflection ??= _dylib.lookupFunction<
         _c_obs_fader_set_deflection,
         _dart_obs_fader_set_deflection>('obs_fader_set_deflection');
-    return _obs_fader_set_deflection(
+    return _obs_fader_set_deflection!(
       fader,
       def,
     );
   }
 
-  _dart_obs_fader_set_deflection _obs_fader_set_deflection;
+  _dart_obs_fader_set_deflection? _obs_fader_set_deflection;
 
   /// @brief Get the current fader deflection
   /// @param fader pointer to the fader object
@@ -9434,12 +9434,12 @@ class DiveObslibFFI {
     _obs_fader_get_deflection ??= _dylib.lookupFunction<
         _c_obs_fader_get_deflection,
         _dart_obs_fader_get_deflection>('obs_fader_get_deflection');
-    return _obs_fader_get_deflection(
+    return _obs_fader_get_deflection!(
       fader,
     );
   }
 
-  _dart_obs_fader_get_deflection _obs_fader_get_deflection;
+  _dart_obs_fader_get_deflection? _obs_fader_get_deflection;
 
   /// @brief Set the fader value from multiplier
   /// @param fader pointer to the fader object
@@ -9451,13 +9451,13 @@ class DiveObslibFFI {
     _obs_fader_set_mul ??=
         _dylib.lookupFunction<_c_obs_fader_set_mul, _dart_obs_fader_set_mul>(
             'obs_fader_set_mul');
-    return _obs_fader_set_mul(
+    return _obs_fader_set_mul!(
       fader,
       mul,
     );
   }
 
-  _dart_obs_fader_set_mul _obs_fader_set_mul;
+  _dart_obs_fader_set_mul? _obs_fader_set_mul;
 
   /// @brief Get the current fader multiplier value
   /// @param fader pointer to the fader object
@@ -9468,12 +9468,12 @@ class DiveObslibFFI {
     _obs_fader_get_mul ??=
         _dylib.lookupFunction<_c_obs_fader_get_mul, _dart_obs_fader_get_mul>(
             'obs_fader_get_mul');
-    return _obs_fader_get_mul(
+    return _obs_fader_get_mul!(
       fader,
     );
   }
 
-  _dart_obs_fader_get_mul _obs_fader_get_mul;
+  _dart_obs_fader_get_mul? _obs_fader_get_mul;
 
   /// @brief Attach the fader to a source
   /// @param fader pointer to the fader object
@@ -9489,13 +9489,13 @@ class DiveObslibFFI {
     _obs_fader_attach_source ??= _dylib.lookupFunction<
         _c_obs_fader_attach_source,
         _dart_obs_fader_attach_source>('obs_fader_attach_source');
-    return _obs_fader_attach_source(
+    return _obs_fader_attach_source!(
       fader,
       source,
     );
   }
 
-  _dart_obs_fader_attach_source _obs_fader_attach_source;
+  _dart_obs_fader_attach_source? _obs_fader_attach_source;
 
   /// @brief Detach the fader from the currently attached source
   /// @param fader pointer to the fader object
@@ -9505,12 +9505,12 @@ class DiveObslibFFI {
     _obs_fader_detach_source ??= _dylib.lookupFunction<
         _c_obs_fader_detach_source,
         _dart_obs_fader_detach_source>('obs_fader_detach_source');
-    return _obs_fader_detach_source(
+    return _obs_fader_detach_source!(
       fader,
     );
   }
 
-  _dart_obs_fader_detach_source _obs_fader_detach_source;
+  _dart_obs_fader_detach_source? _obs_fader_detach_source;
 
   void obs_fader_add_callback(
     ffi.Pointer<obs_fader> fader,
@@ -9519,14 +9519,14 @@ class DiveObslibFFI {
   ) {
     _obs_fader_add_callback ??= _dylib.lookupFunction<_c_obs_fader_add_callback,
         _dart_obs_fader_add_callback>('obs_fader_add_callback');
-    return _obs_fader_add_callback(
+    return _obs_fader_add_callback!(
       fader,
       callback,
       param,
     );
   }
 
-  _dart_obs_fader_add_callback _obs_fader_add_callback;
+  _dart_obs_fader_add_callback? _obs_fader_add_callback;
 
   void obs_fader_remove_callback(
     ffi.Pointer<obs_fader> fader,
@@ -9536,14 +9536,14 @@ class DiveObslibFFI {
     _obs_fader_remove_callback ??= _dylib.lookupFunction<
         _c_obs_fader_remove_callback,
         _dart_obs_fader_remove_callback>('obs_fader_remove_callback');
-    return _obs_fader_remove_callback(
+    return _obs_fader_remove_callback!(
       fader,
       callback,
       param,
     );
   }
 
-  _dart_obs_fader_remove_callback _obs_fader_remove_callback;
+  _dart_obs_fader_remove_callback? _obs_fader_remove_callback;
 
   /// @brief Create a volume meter
   /// @param type the mapping type to use for the volume meter
@@ -9558,28 +9558,28 @@ class DiveObslibFFI {
   ) {
     _obs_volmeter_create ??= _dylib.lookupFunction<_c_obs_volmeter_create,
         _dart_obs_volmeter_create>('obs_volmeter_create');
-    return _obs_volmeter_create(
+    return _obs_volmeter_create!(
       type,
     );
   }
 
-  _dart_obs_volmeter_create _obs_volmeter_create;
+  _dart_obs_volmeter_create? _obs_volmeter_create;
 
   /// @brief Destroy a volume meter
   /// @param volmeter pointer to the volmeter object
   ///
   /// Destroy the volume meter and free all related data
   void obs_volmeter_destroy(
-    ffi.Pointer<obs_volmeter> volmeter,
+    ffi.Pointer<obs_volmeter>? volmeter,
   ) {
     _obs_volmeter_destroy ??= _dylib.lookupFunction<_c_obs_volmeter_destroy,
         _dart_obs_volmeter_destroy>('obs_volmeter_destroy');
-    return _obs_volmeter_destroy(
+    return _obs_volmeter_destroy!(
       volmeter,
     );
   }
 
-  _dart_obs_volmeter_destroy _obs_volmeter_destroy;
+  _dart_obs_volmeter_destroy? _obs_volmeter_destroy;
 
   /// @brief Attach the volume meter to a source
   /// @param volmeter pointer to the volume meter object
@@ -9590,19 +9590,19 @@ class DiveObslibFFI {
   /// volume updates on the source and after preparing the data emit its own
   /// signal.
   int obs_volmeter_attach_source(
-    ffi.Pointer<obs_volmeter> volmeter,
-    ffi.Pointer<obs_source> source,
+    ffi.Pointer<obs_volmeter>? volmeter,
+    ffi.Pointer<obs_source>? source,
   ) {
     _obs_volmeter_attach_source ??= _dylib.lookupFunction<
         _c_obs_volmeter_attach_source,
         _dart_obs_volmeter_attach_source>('obs_volmeter_attach_source');
-    return _obs_volmeter_attach_source(
+    return _obs_volmeter_attach_source!(
       volmeter,
       source,
     );
   }
 
-  _dart_obs_volmeter_attach_source _obs_volmeter_attach_source;
+  _dart_obs_volmeter_attach_source? _obs_volmeter_attach_source;
 
   /// @brief Detach the volume meter from the currently attached source
   /// @param volmeter pointer to the volume meter object
@@ -9612,31 +9612,31 @@ class DiveObslibFFI {
     _obs_volmeter_detach_source ??= _dylib.lookupFunction<
         _c_obs_volmeter_detach_source,
         _dart_obs_volmeter_detach_source>('obs_volmeter_detach_source');
-    return _obs_volmeter_detach_source(
+    return _obs_volmeter_detach_source!(
       volmeter,
     );
   }
 
-  _dart_obs_volmeter_detach_source _obs_volmeter_detach_source;
+  _dart_obs_volmeter_detach_source? _obs_volmeter_detach_source;
 
   /// @brief Set the peak meter type for the volume meter
   /// @param volmeter pointer to the volume meter object
   /// @param peak_meter_type set if true-peak needs to be measured.
   void obs_volmeter_set_peak_meter_type(
-    ffi.Pointer<obs_volmeter> volmeter,
+    ffi.Pointer<obs_volmeter>? volmeter,
     int peak_meter_type,
   ) {
     _obs_volmeter_set_peak_meter_type ??= _dylib.lookupFunction<
             _c_obs_volmeter_set_peak_meter_type,
             _dart_obs_volmeter_set_peak_meter_type>(
         'obs_volmeter_set_peak_meter_type');
-    return _obs_volmeter_set_peak_meter_type(
+    return _obs_volmeter_set_peak_meter_type!(
       volmeter,
       peak_meter_type,
     );
   }
 
-  _dart_obs_volmeter_set_peak_meter_type _obs_volmeter_set_peak_meter_type;
+  _dart_obs_volmeter_set_peak_meter_type? _obs_volmeter_set_peak_meter_type;
 
   /// @brief Set the update interval for the volume meter
   /// @param volmeter pointer to the volume meter object
@@ -9662,13 +9662,13 @@ class DiveObslibFFI {
             _c_obs_volmeter_set_update_interval,
             _dart_obs_volmeter_set_update_interval>(
         'obs_volmeter_set_update_interval');
-    return _obs_volmeter_set_update_interval(
+    return _obs_volmeter_set_update_interval!(
       volmeter,
       ms,
     );
   }
 
-  _dart_obs_volmeter_set_update_interval _obs_volmeter_set_update_interval;
+  _dart_obs_volmeter_set_update_interval? _obs_volmeter_set_update_interval;
 
   /// @brief Get the update interval currently used for the volume meter
   /// @param volmeter pointer to the volume meter object
@@ -9680,27 +9680,27 @@ class DiveObslibFFI {
             _c_obs_volmeter_get_update_interval,
             _dart_obs_volmeter_get_update_interval>(
         'obs_volmeter_get_update_interval');
-    return _obs_volmeter_get_update_interval(
+    return _obs_volmeter_get_update_interval!(
       volmeter,
     );
   }
 
-  _dart_obs_volmeter_get_update_interval _obs_volmeter_get_update_interval;
+  _dart_obs_volmeter_get_update_interval? _obs_volmeter_get_update_interval;
 
   /// @brief Get the number of channels which are configured for this source.
   /// @param volmeter pointer to the volume meter object
   int obs_volmeter_get_nr_channels(
-    ffi.Pointer<obs_volmeter> volmeter,
+    ffi.Pointer<obs_volmeter>? volmeter,
   ) {
     _obs_volmeter_get_nr_channels ??= _dylib.lookupFunction<
         _c_obs_volmeter_get_nr_channels,
         _dart_obs_volmeter_get_nr_channels>('obs_volmeter_get_nr_channels');
-    return _obs_volmeter_get_nr_channels(
+    return _obs_volmeter_get_nr_channels!(
       volmeter,
     );
   }
 
-  _dart_obs_volmeter_get_nr_channels _obs_volmeter_get_nr_channels;
+  _dart_obs_volmeter_get_nr_channels? _obs_volmeter_get_nr_channels;
 
   void obs_volmeter_add_callback(
     ffi.Pointer<obs_volmeter> volmeter,
@@ -9710,14 +9710,14 @@ class DiveObslibFFI {
     _obs_volmeter_add_callback ??= _dylib.lookupFunction<
         _c_obs_volmeter_add_callback,
         _dart_obs_volmeter_add_callback>('obs_volmeter_add_callback');
-    return _obs_volmeter_add_callback(
+    return _obs_volmeter_add_callback!(
       volmeter,
       callback,
       param,
     );
   }
 
-  _dart_obs_volmeter_add_callback _obs_volmeter_add_callback;
+  _dart_obs_volmeter_add_callback? _obs_volmeter_add_callback;
 
   void obs_volmeter_remove_callback(
     ffi.Pointer<obs_volmeter> volmeter,
@@ -9727,38 +9727,38 @@ class DiveObslibFFI {
     _obs_volmeter_remove_callback ??= _dylib.lookupFunction<
         _c_obs_volmeter_remove_callback,
         _dart_obs_volmeter_remove_callback>('obs_volmeter_remove_callback');
-    return _obs_volmeter_remove_callback(
+    return _obs_volmeter_remove_callback!(
       volmeter,
       callback,
       param,
     );
   }
 
-  _dart_obs_volmeter_remove_callback _obs_volmeter_remove_callback;
+  _dart_obs_volmeter_remove_callback? _obs_volmeter_remove_callback;
 
   double obs_mul_to_db(
     double mul,
   ) {
     _obs_mul_to_db ??= _dylib
         .lookupFunction<_c_obs_mul_to_db, _dart_obs_mul_to_db>('obs_mul_to_db');
-    return _obs_mul_to_db(
+    return _obs_mul_to_db!(
       mul,
     );
   }
 
-  _dart_obs_mul_to_db _obs_mul_to_db;
+  _dart_obs_mul_to_db? _obs_mul_to_db;
 
   double obs_db_to_mul(
     double db,
   ) {
     _obs_db_to_mul ??= _dylib
         .lookupFunction<_c_obs_db_to_mul, _dart_obs_db_to_mul>('obs_db_to_mul');
-    return _obs_db_to_mul(
+    return _obs_db_to_mul!(
       db,
     );
   }
 
-  _dart_obs_db_to_mul _obs_db_to_mul;
+  _dart_obs_db_to_mul? _obs_db_to_mul;
 
   int obs_hotkey_get_id(
     ffi.Pointer<obs_hotkey> key,
@@ -9766,24 +9766,24 @@ class DiveObslibFFI {
     _obs_hotkey_get_id ??=
         _dylib.lookupFunction<_c_obs_hotkey_get_id, _dart_obs_hotkey_get_id>(
             'obs_hotkey_get_id');
-    return _obs_hotkey_get_id(
+    return _obs_hotkey_get_id!(
       key,
     );
   }
 
-  _dart_obs_hotkey_get_id _obs_hotkey_get_id;
+  _dart_obs_hotkey_get_id? _obs_hotkey_get_id;
 
   ffi.Pointer<ffi.Int8> obs_hotkey_get_name(
     ffi.Pointer<obs_hotkey> key,
   ) {
     _obs_hotkey_get_name ??= _dylib.lookupFunction<_c_obs_hotkey_get_name,
         _dart_obs_hotkey_get_name>('obs_hotkey_get_name');
-    return _obs_hotkey_get_name(
+    return _obs_hotkey_get_name!(
       key,
     );
   }
 
-  _dart_obs_hotkey_get_name _obs_hotkey_get_name;
+  _dart_obs_hotkey_get_name? _obs_hotkey_get_name;
 
   ffi.Pointer<ffi.Int8> obs_hotkey_get_description(
     ffi.Pointer<obs_hotkey> key,
@@ -9791,12 +9791,12 @@ class DiveObslibFFI {
     _obs_hotkey_get_description ??= _dylib.lookupFunction<
         _c_obs_hotkey_get_description,
         _dart_obs_hotkey_get_description>('obs_hotkey_get_description');
-    return _obs_hotkey_get_description(
+    return _obs_hotkey_get_description!(
       key,
     );
   }
 
-  _dart_obs_hotkey_get_description _obs_hotkey_get_description;
+  _dart_obs_hotkey_get_description? _obs_hotkey_get_description;
 
   int obs_hotkey_get_registerer_type(
     ffi.Pointer<obs_hotkey> key,
@@ -9804,12 +9804,12 @@ class DiveObslibFFI {
     _obs_hotkey_get_registerer_type ??= _dylib.lookupFunction<
         _c_obs_hotkey_get_registerer_type,
         _dart_obs_hotkey_get_registerer_type>('obs_hotkey_get_registerer_type');
-    return _obs_hotkey_get_registerer_type(
+    return _obs_hotkey_get_registerer_type!(
       key,
     );
   }
 
-  _dart_obs_hotkey_get_registerer_type _obs_hotkey_get_registerer_type;
+  _dart_obs_hotkey_get_registerer_type? _obs_hotkey_get_registerer_type;
 
   ffi.Pointer<ffi.Void> obs_hotkey_get_registerer(
     ffi.Pointer<obs_hotkey> key,
@@ -9817,12 +9817,12 @@ class DiveObslibFFI {
     _obs_hotkey_get_registerer ??= _dylib.lookupFunction<
         _c_obs_hotkey_get_registerer,
         _dart_obs_hotkey_get_registerer>('obs_hotkey_get_registerer');
-    return _obs_hotkey_get_registerer(
+    return _obs_hotkey_get_registerer!(
       key,
     );
   }
 
-  _dart_obs_hotkey_get_registerer _obs_hotkey_get_registerer;
+  _dart_obs_hotkey_get_registerer? _obs_hotkey_get_registerer;
 
   int obs_hotkey_get_pair_partner_id(
     ffi.Pointer<obs_hotkey> key,
@@ -9830,12 +9830,12 @@ class DiveObslibFFI {
     _obs_hotkey_get_pair_partner_id ??= _dylib.lookupFunction<
         _c_obs_hotkey_get_pair_partner_id,
         _dart_obs_hotkey_get_pair_partner_id>('obs_hotkey_get_pair_partner_id');
-    return _obs_hotkey_get_pair_partner_id(
+    return _obs_hotkey_get_pair_partner_id!(
       key,
     );
   }
 
-  _dart_obs_hotkey_get_pair_partner_id _obs_hotkey_get_pair_partner_id;
+  _dart_obs_hotkey_get_pair_partner_id? _obs_hotkey_get_pair_partner_id;
 
   int obs_hotkey_binding_get_hotkey_id(
     ffi.Pointer<obs_hotkey_binding> binding,
@@ -9844,12 +9844,12 @@ class DiveObslibFFI {
             _c_obs_hotkey_binding_get_hotkey_id,
             _dart_obs_hotkey_binding_get_hotkey_id>(
         'obs_hotkey_binding_get_hotkey_id');
-    return _obs_hotkey_binding_get_hotkey_id(
+    return _obs_hotkey_binding_get_hotkey_id!(
       binding,
     );
   }
 
-  _dart_obs_hotkey_binding_get_hotkey_id _obs_hotkey_binding_get_hotkey_id;
+  _dart_obs_hotkey_binding_get_hotkey_id? _obs_hotkey_binding_get_hotkey_id;
 
   ffi.Pointer<obs_hotkey> obs_hotkey_binding_get_hotkey(
     ffi.Pointer<obs_hotkey_binding> binding,
@@ -9857,12 +9857,12 @@ class DiveObslibFFI {
     _obs_hotkey_binding_get_hotkey ??= _dylib.lookupFunction<
         _c_obs_hotkey_binding_get_hotkey,
         _dart_obs_hotkey_binding_get_hotkey>('obs_hotkey_binding_get_hotkey');
-    return _obs_hotkey_binding_get_hotkey(
+    return _obs_hotkey_binding_get_hotkey!(
       binding,
     );
   }
 
-  _dart_obs_hotkey_binding_get_hotkey _obs_hotkey_binding_get_hotkey;
+  _dart_obs_hotkey_binding_get_hotkey? _obs_hotkey_binding_get_hotkey;
 
   void obs_hotkey_set_name(
     int id,
@@ -9870,13 +9870,13 @@ class DiveObslibFFI {
   ) {
     _obs_hotkey_set_name ??= _dylib.lookupFunction<_c_obs_hotkey_set_name,
         _dart_obs_hotkey_set_name>('obs_hotkey_set_name');
-    return _obs_hotkey_set_name(
+    return _obs_hotkey_set_name!(
       id,
       name,
     );
   }
 
-  _dart_obs_hotkey_set_name _obs_hotkey_set_name;
+  _dart_obs_hotkey_set_name? _obs_hotkey_set_name;
 
   void obs_hotkey_set_description(
     int id,
@@ -9885,13 +9885,13 @@ class DiveObslibFFI {
     _obs_hotkey_set_description ??= _dylib.lookupFunction<
         _c_obs_hotkey_set_description,
         _dart_obs_hotkey_set_description>('obs_hotkey_set_description');
-    return _obs_hotkey_set_description(
+    return _obs_hotkey_set_description!(
       id,
       desc,
     );
   }
 
-  _dart_obs_hotkey_set_description _obs_hotkey_set_description;
+  _dart_obs_hotkey_set_description? _obs_hotkey_set_description;
 
   void obs_hotkey_pair_set_names(
     int id,
@@ -9901,14 +9901,14 @@ class DiveObslibFFI {
     _obs_hotkey_pair_set_names ??= _dylib.lookupFunction<
         _c_obs_hotkey_pair_set_names,
         _dart_obs_hotkey_pair_set_names>('obs_hotkey_pair_set_names');
-    return _obs_hotkey_pair_set_names(
+    return _obs_hotkey_pair_set_names!(
       id,
       name0,
       name1,
     );
   }
 
-  _dart_obs_hotkey_pair_set_names _obs_hotkey_pair_set_names;
+  _dart_obs_hotkey_pair_set_names? _obs_hotkey_pair_set_names;
 
   void obs_hotkey_pair_set_descriptions(
     int id,
@@ -9919,14 +9919,14 @@ class DiveObslibFFI {
             _c_obs_hotkey_pair_set_descriptions,
             _dart_obs_hotkey_pair_set_descriptions>(
         'obs_hotkey_pair_set_descriptions');
-    return _obs_hotkey_pair_set_descriptions(
+    return _obs_hotkey_pair_set_descriptions!(
       id,
       desc0,
       desc1,
     );
   }
 
-  _dart_obs_hotkey_pair_set_descriptions _obs_hotkey_pair_set_descriptions;
+  _dart_obs_hotkey_pair_set_descriptions? _obs_hotkey_pair_set_descriptions;
 
   void obs_hotkeys_set_translations_s(
     ffi.Pointer<obs_hotkeys_translations> translations,
@@ -9935,13 +9935,13 @@ class DiveObslibFFI {
     _obs_hotkeys_set_translations_s ??= _dylib.lookupFunction<
         _c_obs_hotkeys_set_translations_s,
         _dart_obs_hotkeys_set_translations_s>('obs_hotkeys_set_translations_s');
-    return _obs_hotkeys_set_translations_s(
+    return _obs_hotkeys_set_translations_s!(
       translations,
       size,
     );
   }
 
-  _dart_obs_hotkeys_set_translations_s _obs_hotkeys_set_translations_s;
+  _dart_obs_hotkeys_set_translations_s? _obs_hotkeys_set_translations_s;
 
   void obs_hotkeys_set_audio_hotkeys_translations(
     ffi.Pointer<ffi.Int8> mute,
@@ -9953,7 +9953,7 @@ class DiveObslibFFI {
             _c_obs_hotkeys_set_audio_hotkeys_translations,
             _dart_obs_hotkeys_set_audio_hotkeys_translations>(
         'obs_hotkeys_set_audio_hotkeys_translations');
-    return _obs_hotkeys_set_audio_hotkeys_translations(
+    return _obs_hotkeys_set_audio_hotkeys_translations!(
       mute,
       unmute,
       push_to_mute,
@@ -9961,7 +9961,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_hotkeys_set_audio_hotkeys_translations
+  _dart_obs_hotkeys_set_audio_hotkeys_translations?
       _obs_hotkeys_set_audio_hotkeys_translations;
 
   void obs_hotkeys_set_sceneitem_hotkeys_translations(
@@ -9972,13 +9972,13 @@ class DiveObslibFFI {
             _c_obs_hotkeys_set_sceneitem_hotkeys_translations,
             _dart_obs_hotkeys_set_sceneitem_hotkeys_translations>(
         'obs_hotkeys_set_sceneitem_hotkeys_translations');
-    return _obs_hotkeys_set_sceneitem_hotkeys_translations(
+    return _obs_hotkeys_set_sceneitem_hotkeys_translations!(
       show_1,
       hide_1,
     );
   }
 
-  _dart_obs_hotkeys_set_sceneitem_hotkeys_translations
+  _dart_obs_hotkeys_set_sceneitem_hotkeys_translations?
       _obs_hotkeys_set_sceneitem_hotkeys_translations;
 
   int obs_hotkey_register_frontend(
@@ -9990,7 +9990,7 @@ class DiveObslibFFI {
     _obs_hotkey_register_frontend ??= _dylib.lookupFunction<
         _c_obs_hotkey_register_frontend,
         _dart_obs_hotkey_register_frontend>('obs_hotkey_register_frontend');
-    return _obs_hotkey_register_frontend(
+    return _obs_hotkey_register_frontend!(
       name,
       description,
       func,
@@ -9998,7 +9998,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_hotkey_register_frontend _obs_hotkey_register_frontend;
+  _dart_obs_hotkey_register_frontend? _obs_hotkey_register_frontend;
 
   int obs_hotkey_register_encoder(
     ffi.Pointer<obs_encoder> encoder,
@@ -10010,7 +10010,7 @@ class DiveObslibFFI {
     _obs_hotkey_register_encoder ??= _dylib.lookupFunction<
         _c_obs_hotkey_register_encoder,
         _dart_obs_hotkey_register_encoder>('obs_hotkey_register_encoder');
-    return _obs_hotkey_register_encoder(
+    return _obs_hotkey_register_encoder!(
       encoder,
       name,
       description,
@@ -10019,7 +10019,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_hotkey_register_encoder _obs_hotkey_register_encoder;
+  _dart_obs_hotkey_register_encoder? _obs_hotkey_register_encoder;
 
   int obs_hotkey_register_output(
     ffi.Pointer<obs_output> output,
@@ -10031,7 +10031,7 @@ class DiveObslibFFI {
     _obs_hotkey_register_output ??= _dylib.lookupFunction<
         _c_obs_hotkey_register_output,
         _dart_obs_hotkey_register_output>('obs_hotkey_register_output');
-    return _obs_hotkey_register_output(
+    return _obs_hotkey_register_output!(
       output,
       name,
       description,
@@ -10040,7 +10040,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_hotkey_register_output _obs_hotkey_register_output;
+  _dart_obs_hotkey_register_output? _obs_hotkey_register_output;
 
   int obs_hotkey_register_service(
     ffi.Pointer<obs_service> service,
@@ -10052,7 +10052,7 @@ class DiveObslibFFI {
     _obs_hotkey_register_service ??= _dylib.lookupFunction<
         _c_obs_hotkey_register_service,
         _dart_obs_hotkey_register_service>('obs_hotkey_register_service');
-    return _obs_hotkey_register_service(
+    return _obs_hotkey_register_service!(
       service,
       name,
       description,
@@ -10061,7 +10061,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_hotkey_register_service _obs_hotkey_register_service;
+  _dart_obs_hotkey_register_service? _obs_hotkey_register_service;
 
   int obs_hotkey_register_source(
     ffi.Pointer<obs_source> source,
@@ -10073,7 +10073,7 @@ class DiveObslibFFI {
     _obs_hotkey_register_source ??= _dylib.lookupFunction<
         _c_obs_hotkey_register_source,
         _dart_obs_hotkey_register_source>('obs_hotkey_register_source');
-    return _obs_hotkey_register_source(
+    return _obs_hotkey_register_source!(
       source,
       name,
       description,
@@ -10082,7 +10082,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_hotkey_register_source _obs_hotkey_register_source;
+  _dart_obs_hotkey_register_source? _obs_hotkey_register_source;
 
   int obs_hotkey_pair_register_frontend(
     ffi.Pointer<ffi.Int8> name0,
@@ -10098,7 +10098,7 @@ class DiveObslibFFI {
             _c_obs_hotkey_pair_register_frontend,
             _dart_obs_hotkey_pair_register_frontend>(
         'obs_hotkey_pair_register_frontend');
-    return _obs_hotkey_pair_register_frontend(
+    return _obs_hotkey_pair_register_frontend!(
       name0,
       description0,
       name1,
@@ -10110,7 +10110,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_hotkey_pair_register_frontend _obs_hotkey_pair_register_frontend;
+  _dart_obs_hotkey_pair_register_frontend? _obs_hotkey_pair_register_frontend;
 
   int obs_hotkey_pair_register_encoder(
     ffi.Pointer<obs_encoder> encoder,
@@ -10127,7 +10127,7 @@ class DiveObslibFFI {
             _c_obs_hotkey_pair_register_encoder,
             _dart_obs_hotkey_pair_register_encoder>(
         'obs_hotkey_pair_register_encoder');
-    return _obs_hotkey_pair_register_encoder(
+    return _obs_hotkey_pair_register_encoder!(
       encoder,
       name0,
       description0,
@@ -10140,7 +10140,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_hotkey_pair_register_encoder _obs_hotkey_pair_register_encoder;
+  _dart_obs_hotkey_pair_register_encoder? _obs_hotkey_pair_register_encoder;
 
   int obs_hotkey_pair_register_output(
     ffi.Pointer<obs_output> output,
@@ -10157,7 +10157,7 @@ class DiveObslibFFI {
             _c_obs_hotkey_pair_register_output,
             _dart_obs_hotkey_pair_register_output>(
         'obs_hotkey_pair_register_output');
-    return _obs_hotkey_pair_register_output(
+    return _obs_hotkey_pair_register_output!(
       output,
       name0,
       description0,
@@ -10170,7 +10170,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_hotkey_pair_register_output _obs_hotkey_pair_register_output;
+  _dart_obs_hotkey_pair_register_output? _obs_hotkey_pair_register_output;
 
   int obs_hotkey_pair_register_service(
     ffi.Pointer<obs_service> service,
@@ -10187,7 +10187,7 @@ class DiveObslibFFI {
             _c_obs_hotkey_pair_register_service,
             _dart_obs_hotkey_pair_register_service>(
         'obs_hotkey_pair_register_service');
-    return _obs_hotkey_pair_register_service(
+    return _obs_hotkey_pair_register_service!(
       service,
       name0,
       description0,
@@ -10200,7 +10200,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_hotkey_pair_register_service _obs_hotkey_pair_register_service;
+  _dart_obs_hotkey_pair_register_service? _obs_hotkey_pair_register_service;
 
   int obs_hotkey_pair_register_source(
     ffi.Pointer<obs_source> source,
@@ -10217,7 +10217,7 @@ class DiveObslibFFI {
             _c_obs_hotkey_pair_register_source,
             _dart_obs_hotkey_pair_register_source>(
         'obs_hotkey_pair_register_source');
-    return _obs_hotkey_pair_register_source(
+    return _obs_hotkey_pair_register_source!(
       source,
       name0,
       description0,
@@ -10230,19 +10230,19 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_hotkey_pair_register_source _obs_hotkey_pair_register_source;
+  _dart_obs_hotkey_pair_register_source? _obs_hotkey_pair_register_source;
 
   void obs_hotkey_unregister(
     int id,
   ) {
     _obs_hotkey_unregister ??= _dylib.lookupFunction<_c_obs_hotkey_unregister,
         _dart_obs_hotkey_unregister>('obs_hotkey_unregister');
-    return _obs_hotkey_unregister(
+    return _obs_hotkey_unregister!(
       id,
     );
   }
 
-  _dart_obs_hotkey_unregister _obs_hotkey_unregister;
+  _dart_obs_hotkey_unregister? _obs_hotkey_unregister;
 
   void obs_hotkey_pair_unregister(
     int id,
@@ -10250,12 +10250,12 @@ class DiveObslibFFI {
     _obs_hotkey_pair_unregister ??= _dylib.lookupFunction<
         _c_obs_hotkey_pair_unregister,
         _dart_obs_hotkey_pair_unregister>('obs_hotkey_pair_unregister');
-    return _obs_hotkey_pair_unregister(
+    return _obs_hotkey_pair_unregister!(
       id,
     );
   }
 
-  _dart_obs_hotkey_pair_unregister _obs_hotkey_pair_unregister;
+  _dart_obs_hotkey_pair_unregister? _obs_hotkey_pair_unregister;
 
   void obs_hotkey_load_bindings(
     int id,
@@ -10265,14 +10265,14 @@ class DiveObslibFFI {
     _obs_hotkey_load_bindings ??= _dylib.lookupFunction<
         _c_obs_hotkey_load_bindings,
         _dart_obs_hotkey_load_bindings>('obs_hotkey_load_bindings');
-    return _obs_hotkey_load_bindings(
+    return _obs_hotkey_load_bindings!(
       id,
       combinations,
       num,
     );
   }
 
-  _dart_obs_hotkey_load_bindings _obs_hotkey_load_bindings;
+  _dart_obs_hotkey_load_bindings? _obs_hotkey_load_bindings;
 
   void obs_hotkey_load(
     int id,
@@ -10281,13 +10281,13 @@ class DiveObslibFFI {
     _obs_hotkey_load ??=
         _dylib.lookupFunction<_c_obs_hotkey_load, _dart_obs_hotkey_load>(
             'obs_hotkey_load');
-    return _obs_hotkey_load(
+    return _obs_hotkey_load!(
       id,
       data,
     );
   }
 
-  _dart_obs_hotkey_load _obs_hotkey_load;
+  _dart_obs_hotkey_load? _obs_hotkey_load;
 
   void obs_hotkeys_load_encoder(
     ffi.Pointer<obs_encoder> encoder,
@@ -10296,13 +10296,13 @@ class DiveObslibFFI {
     _obs_hotkeys_load_encoder ??= _dylib.lookupFunction<
         _c_obs_hotkeys_load_encoder,
         _dart_obs_hotkeys_load_encoder>('obs_hotkeys_load_encoder');
-    return _obs_hotkeys_load_encoder(
+    return _obs_hotkeys_load_encoder!(
       encoder,
       hotkeys,
     );
   }
 
-  _dart_obs_hotkeys_load_encoder _obs_hotkeys_load_encoder;
+  _dart_obs_hotkeys_load_encoder? _obs_hotkeys_load_encoder;
 
   void obs_hotkeys_load_output(
     ffi.Pointer<obs_output> output,
@@ -10311,13 +10311,13 @@ class DiveObslibFFI {
     _obs_hotkeys_load_output ??= _dylib.lookupFunction<
         _c_obs_hotkeys_load_output,
         _dart_obs_hotkeys_load_output>('obs_hotkeys_load_output');
-    return _obs_hotkeys_load_output(
+    return _obs_hotkeys_load_output!(
       output,
       hotkeys,
     );
   }
 
-  _dart_obs_hotkeys_load_output _obs_hotkeys_load_output;
+  _dart_obs_hotkeys_load_output? _obs_hotkeys_load_output;
 
   void obs_hotkeys_load_service(
     ffi.Pointer<obs_service> service,
@@ -10326,13 +10326,13 @@ class DiveObslibFFI {
     _obs_hotkeys_load_service ??= _dylib.lookupFunction<
         _c_obs_hotkeys_load_service,
         _dart_obs_hotkeys_load_service>('obs_hotkeys_load_service');
-    return _obs_hotkeys_load_service(
+    return _obs_hotkeys_load_service!(
       service,
       hotkeys,
     );
   }
 
-  _dart_obs_hotkeys_load_service _obs_hotkeys_load_service;
+  _dart_obs_hotkeys_load_service? _obs_hotkeys_load_service;
 
   void obs_hotkeys_load_source(
     ffi.Pointer<obs_source> source,
@@ -10341,13 +10341,13 @@ class DiveObslibFFI {
     _obs_hotkeys_load_source ??= _dylib.lookupFunction<
         _c_obs_hotkeys_load_source,
         _dart_obs_hotkeys_load_source>('obs_hotkeys_load_source');
-    return _obs_hotkeys_load_source(
+    return _obs_hotkeys_load_source!(
       source,
       hotkeys,
     );
   }
 
-  _dart_obs_hotkeys_load_source _obs_hotkeys_load_source;
+  _dart_obs_hotkeys_load_source? _obs_hotkeys_load_source;
 
   void obs_hotkey_pair_load(
     int id,
@@ -10356,14 +10356,14 @@ class DiveObslibFFI {
   ) {
     _obs_hotkey_pair_load ??= _dylib.lookupFunction<_c_obs_hotkey_pair_load,
         _dart_obs_hotkey_pair_load>('obs_hotkey_pair_load');
-    return _obs_hotkey_pair_load(
+    return _obs_hotkey_pair_load!(
       id,
       data0,
       data1,
     );
   }
 
-  _dart_obs_hotkey_pair_load _obs_hotkey_pair_load;
+  _dart_obs_hotkey_pair_load? _obs_hotkey_pair_load;
 
   ffi.Pointer<obs_data_array> obs_hotkey_save(
     int id,
@@ -10371,12 +10371,12 @@ class DiveObslibFFI {
     _obs_hotkey_save ??=
         _dylib.lookupFunction<_c_obs_hotkey_save, _dart_obs_hotkey_save>(
             'obs_hotkey_save');
-    return _obs_hotkey_save(
+    return _obs_hotkey_save!(
       id,
     );
   }
 
-  _dart_obs_hotkey_save _obs_hotkey_save;
+  _dart_obs_hotkey_save? _obs_hotkey_save;
 
   void obs_hotkey_pair_save(
     int id,
@@ -10385,14 +10385,14 @@ class DiveObslibFFI {
   ) {
     _obs_hotkey_pair_save ??= _dylib.lookupFunction<_c_obs_hotkey_pair_save,
         _dart_obs_hotkey_pair_save>('obs_hotkey_pair_save');
-    return _obs_hotkey_pair_save(
+    return _obs_hotkey_pair_save!(
       id,
       p_data0,
       p_data1,
     );
   }
 
-  _dart_obs_hotkey_pair_save _obs_hotkey_pair_save;
+  _dart_obs_hotkey_pair_save? _obs_hotkey_pair_save;
 
   ffi.Pointer<obs_data> obs_hotkeys_save_encoder(
     ffi.Pointer<obs_encoder> encoder,
@@ -10400,12 +10400,12 @@ class DiveObslibFFI {
     _obs_hotkeys_save_encoder ??= _dylib.lookupFunction<
         _c_obs_hotkeys_save_encoder,
         _dart_obs_hotkeys_save_encoder>('obs_hotkeys_save_encoder');
-    return _obs_hotkeys_save_encoder(
+    return _obs_hotkeys_save_encoder!(
       encoder,
     );
   }
 
-  _dart_obs_hotkeys_save_encoder _obs_hotkeys_save_encoder;
+  _dart_obs_hotkeys_save_encoder? _obs_hotkeys_save_encoder;
 
   ffi.Pointer<obs_data> obs_hotkeys_save_output(
     ffi.Pointer<obs_output> output,
@@ -10413,12 +10413,12 @@ class DiveObslibFFI {
     _obs_hotkeys_save_output ??= _dylib.lookupFunction<
         _c_obs_hotkeys_save_output,
         _dart_obs_hotkeys_save_output>('obs_hotkeys_save_output');
-    return _obs_hotkeys_save_output(
+    return _obs_hotkeys_save_output!(
       output,
     );
   }
 
-  _dart_obs_hotkeys_save_output _obs_hotkeys_save_output;
+  _dart_obs_hotkeys_save_output? _obs_hotkeys_save_output;
 
   ffi.Pointer<obs_data> obs_hotkeys_save_service(
     ffi.Pointer<obs_service> service,
@@ -10426,12 +10426,12 @@ class DiveObslibFFI {
     _obs_hotkeys_save_service ??= _dylib.lookupFunction<
         _c_obs_hotkeys_save_service,
         _dart_obs_hotkeys_save_service>('obs_hotkeys_save_service');
-    return _obs_hotkeys_save_service(
+    return _obs_hotkeys_save_service!(
       service,
     );
   }
 
-  _dart_obs_hotkeys_save_service _obs_hotkeys_save_service;
+  _dart_obs_hotkeys_save_service? _obs_hotkeys_save_service;
 
   ffi.Pointer<obs_data> obs_hotkeys_save_source(
     ffi.Pointer<obs_source> source,
@@ -10439,12 +10439,12 @@ class DiveObslibFFI {
     _obs_hotkeys_save_source ??= _dylib.lookupFunction<
         _c_obs_hotkeys_save_source,
         _dart_obs_hotkeys_save_source>('obs_hotkeys_save_source');
-    return _obs_hotkeys_save_source(
+    return _obs_hotkeys_save_source!(
       source,
     );
   }
 
-  _dart_obs_hotkeys_save_source _obs_hotkeys_save_source;
+  _dart_obs_hotkeys_save_source? _obs_hotkeys_save_source;
 
   void obs_enum_hotkeys(
     ffi.Pointer<ffi.NativeFunction<obs_hotkey_enum_func>> func,
@@ -10453,13 +10453,13 @@ class DiveObslibFFI {
     _obs_enum_hotkeys ??=
         _dylib.lookupFunction<_c_obs_enum_hotkeys, _dart_obs_enum_hotkeys>(
             'obs_enum_hotkeys');
-    return _obs_enum_hotkeys(
+    return _obs_enum_hotkeys!(
       func,
       data,
     );
   }
 
-  _dart_obs_enum_hotkeys _obs_enum_hotkeys;
+  _dart_obs_enum_hotkeys? _obs_enum_hotkeys;
 
   void obs_enum_hotkey_bindings(
     ffi.Pointer<ffi.NativeFunction<obs_hotkey_binding_enum_func>> func,
@@ -10468,13 +10468,13 @@ class DiveObslibFFI {
     _obs_enum_hotkey_bindings ??= _dylib.lookupFunction<
         _c_obs_enum_hotkey_bindings,
         _dart_obs_enum_hotkey_bindings>('obs_enum_hotkey_bindings');
-    return _obs_enum_hotkey_bindings(
+    return _obs_enum_hotkey_bindings!(
       func,
       data,
     );
   }
 
-  _dart_obs_enum_hotkey_bindings _obs_enum_hotkey_bindings;
+  _dart_obs_enum_hotkey_bindings? _obs_enum_hotkey_bindings;
 
   void obs_hotkey_enable_background_press(
     int enable,
@@ -10483,12 +10483,12 @@ class DiveObslibFFI {
             _c_obs_hotkey_enable_background_press,
             _dart_obs_hotkey_enable_background_press>(
         'obs_hotkey_enable_background_press');
-    return _obs_hotkey_enable_background_press(
+    return _obs_hotkey_enable_background_press!(
       enable,
     );
   }
 
-  _dart_obs_hotkey_enable_background_press _obs_hotkey_enable_background_press;
+  _dart_obs_hotkey_enable_background_press? _obs_hotkey_enable_background_press;
 
   void obs_hotkey_enable_strict_modifiers(
     int enable,
@@ -10497,12 +10497,12 @@ class DiveObslibFFI {
             _c_obs_hotkey_enable_strict_modifiers,
             _dart_obs_hotkey_enable_strict_modifiers>(
         'obs_hotkey_enable_strict_modifiers');
-    return _obs_hotkey_enable_strict_modifiers(
+    return _obs_hotkey_enable_strict_modifiers!(
       enable,
     );
   }
 
-  _dart_obs_hotkey_enable_strict_modifiers _obs_hotkey_enable_strict_modifiers;
+  _dart_obs_hotkey_enable_strict_modifiers? _obs_hotkey_enable_strict_modifiers;
 
   void obs_hotkey_set_callback_routing_func(
     ffi.Pointer<ffi.NativeFunction<obs_hotkey_callback_router_func>> func,
@@ -10512,13 +10512,13 @@ class DiveObslibFFI {
             _c_obs_hotkey_set_callback_routing_func,
             _dart_obs_hotkey_set_callback_routing_func>(
         'obs_hotkey_set_callback_routing_func');
-    return _obs_hotkey_set_callback_routing_func(
+    return _obs_hotkey_set_callback_routing_func!(
       func,
       data,
     );
   }
 
-  _dart_obs_hotkey_set_callback_routing_func
+  _dart_obs_hotkey_set_callback_routing_func?
       _obs_hotkey_set_callback_routing_func;
 
   void obs_hotkey_trigger_routed_callback(
@@ -10529,13 +10529,13 @@ class DiveObslibFFI {
             _c_obs_hotkey_trigger_routed_callback,
             _dart_obs_hotkey_trigger_routed_callback>(
         'obs_hotkey_trigger_routed_callback');
-    return _obs_hotkey_trigger_routed_callback(
+    return _obs_hotkey_trigger_routed_callback!(
       id,
       pressed,
     );
   }
 
-  _dart_obs_hotkey_trigger_routed_callback _obs_hotkey_trigger_routed_callback;
+  _dart_obs_hotkey_trigger_routed_callback? _obs_hotkey_trigger_routed_callback;
 
   void obs_hotkey_enable_callback_rerouting(
     int enable,
@@ -10544,12 +10544,12 @@ class DiveObslibFFI {
             _c_obs_hotkey_enable_callback_rerouting,
             _dart_obs_hotkey_enable_callback_rerouting>(
         'obs_hotkey_enable_callback_rerouting');
-    return _obs_hotkey_enable_callback_rerouting(
+    return _obs_hotkey_enable_callback_rerouting!(
       enable,
     );
   }
 
-  _dart_obs_hotkey_enable_callback_rerouting
+  _dart_obs_hotkey_enable_callback_rerouting?
       _obs_hotkey_enable_callback_rerouting;
 
   void obs_hotkey_update_atomic(
@@ -10559,13 +10559,13 @@ class DiveObslibFFI {
     _obs_hotkey_update_atomic ??= _dylib.lookupFunction<
         _c_obs_hotkey_update_atomic,
         _dart_obs_hotkey_update_atomic>('obs_hotkey_update_atomic');
-    return _obs_hotkey_update_atomic(
+    return _obs_hotkey_update_atomic!(
       func,
       data,
     );
   }
 
-  _dart_obs_hotkey_update_atomic _obs_hotkey_update_atomic;
+  _dart_obs_hotkey_update_atomic? _obs_hotkey_update_atomic;
 
   void obs_key_to_str(
     int key,
@@ -10574,13 +10574,13 @@ class DiveObslibFFI {
     _obs_key_to_str ??=
         _dylib.lookupFunction<_c_obs_key_to_str, _dart_obs_key_to_str>(
             'obs_key_to_str');
-    return _obs_key_to_str(
+    return _obs_key_to_str!(
       key,
       str,
     );
   }
 
-  _dart_obs_key_to_str _obs_key_to_str;
+  _dart_obs_key_to_str? _obs_key_to_str;
 
   int obs_key_from_virtual_key(
     int code,
@@ -10588,24 +10588,24 @@ class DiveObslibFFI {
     _obs_key_from_virtual_key ??= _dylib.lookupFunction<
         _c_obs_key_from_virtual_key,
         _dart_obs_key_from_virtual_key>('obs_key_from_virtual_key');
-    return _obs_key_from_virtual_key(
+    return _obs_key_from_virtual_key!(
       code,
     );
   }
 
-  _dart_obs_key_from_virtual_key _obs_key_from_virtual_key;
+  _dart_obs_key_from_virtual_key? _obs_key_from_virtual_key;
 
   int obs_key_to_virtual_key(
     int key,
   ) {
     _obs_key_to_virtual_key ??= _dylib.lookupFunction<_c_obs_key_to_virtual_key,
         _dart_obs_key_to_virtual_key>('obs_key_to_virtual_key');
-    return _obs_key_to_virtual_key(
+    return _obs_key_to_virtual_key!(
       key,
     );
   }
 
-  _dart_obs_key_to_virtual_key _obs_key_to_virtual_key;
+  _dart_obs_key_to_virtual_key? _obs_key_to_virtual_key;
 
   ffi.Pointer<ffi.Int8> obs_key_to_name(
     int key,
@@ -10613,12 +10613,12 @@ class DiveObslibFFI {
     _obs_key_to_name ??=
         _dylib.lookupFunction<_c_obs_key_to_name, _dart_obs_key_to_name>(
             'obs_key_to_name');
-    return _obs_key_to_name(
+    return _obs_key_to_name!(
       key,
     );
   }
 
-  _dart_obs_key_to_name _obs_key_to_name;
+  _dart_obs_key_to_name? _obs_key_to_name;
 
   int obs_key_from_name(
     ffi.Pointer<ffi.Int8> name,
@@ -10626,12 +10626,12 @@ class DiveObslibFFI {
     _obs_key_from_name ??=
         _dylib.lookupFunction<_c_obs_key_from_name, _dart_obs_key_from_name>(
             'obs_key_from_name');
-    return _obs_key_from_name(
+    return _obs_key_from_name!(
       name,
     );
   }
 
-  _dart_obs_key_from_name _obs_key_from_name;
+  _dart_obs_key_from_name? _obs_key_from_name;
 
   /// Find a core libobs data file
   /// @param path name of the base file
@@ -10643,12 +10643,12 @@ class DiveObslibFFI {
     _obs_find_data_file ??=
         _dylib.lookupFunction<_c_obs_find_data_file, _dart_obs_find_data_file>(
             'obs_find_data_file');
-    return _obs_find_data_file(
+    return _obs_find_data_file!(
       file,
     );
   }
 
-  _dart_obs_find_data_file _obs_find_data_file;
+  _dart_obs_find_data_file? _obs_find_data_file;
 
   /// Add a path to search libobs data files in.
   /// @param path Full path to directory to look in.
@@ -10659,12 +10659,12 @@ class DiveObslibFFI {
     _obs_add_data_path ??=
         _dylib.lookupFunction<_c_obs_add_data_path, _dart_obs_add_data_path>(
             'obs_add_data_path');
-    return _obs_add_data_path(
+    return _obs_add_data_path!(
       path,
     );
   }
 
-  _dart_obs_add_data_path _obs_add_data_path;
+  _dart_obs_add_data_path? _obs_add_data_path;
 
   /// Remove a path from libobs core data paths.
   /// @param path The path to compare to currently set paths.
@@ -10677,12 +10677,12 @@ class DiveObslibFFI {
   ) {
     _obs_remove_data_path ??= _dylib.lookupFunction<_c_obs_remove_data_path,
         _dart_obs_remove_data_path>('obs_remove_data_path');
-    return _obs_remove_data_path(
+    return _obs_remove_data_path!(
       path,
     );
   }
 
-  _dart_obs_remove_data_path _obs_remove_data_path;
+  _dart_obs_remove_data_path? _obs_remove_data_path;
 
   // FYI: Don't call obs_startup because it must run on the main thread
   // and FFI does not run on the main thread.
@@ -10700,52 +10700,52 @@ class DiveObslibFFI {
   ) {
     _obs_startup ??=
         _dylib.lookupFunction<_c_obs_startup, _dart_obs_startup>('obs_startup');
-    return _obs_startup(
+    return _obs_startup!(
       locale,
       module_config_path,
       store,
     );
   }
 
-  _dart_obs_startup _obs_startup;
+  _dart_obs_startup? _obs_startup;
 
   /// Releases all data associated with OBS and terminates the OBS context
   void obs_shutdown() {
     _obs_shutdown ??= _dylib
         .lookupFunction<_c_obs_shutdown, _dart_obs_shutdown>('obs_shutdown');
-    return _obs_shutdown();
+    return _obs_shutdown!();
   }
 
-  _dart_obs_shutdown _obs_shutdown;
+  _dart_obs_shutdown? _obs_shutdown;
 
   /// @return true if the main OBS context has been initialized
   int obs_initialized() {
     _obs_initialized ??=
         _dylib.lookupFunction<_c_obs_initialized, _dart_obs_initialized>(
             'obs_initialized');
-    return _obs_initialized();
+    return _obs_initialized!();
   }
 
-  _dart_obs_initialized _obs_initialized;
+  _dart_obs_initialized? _obs_initialized;
 
   /// @return The current core version
   int obs_get_version() {
     _obs_get_version ??=
         _dylib.lookupFunction<_c_obs_get_version, _dart_obs_get_version>(
             'obs_get_version');
-    return _obs_get_version();
+    return _obs_get_version!();
   }
 
-  _dart_obs_get_version _obs_get_version;
+  _dart_obs_get_version? _obs_get_version;
 
   /// @return The current core version string
   ffi.Pointer<ffi.Int8> obs_get_version_string() {
     _obs_get_version_string ??= _dylib.lookupFunction<_c_obs_get_version_string,
         _dart_obs_get_version_string>('obs_get_version_string');
-    return _obs_get_version_string();
+    return _obs_get_version_string!();
   }
 
-  _dart_obs_get_version_string _obs_get_version_string;
+  _dart_obs_get_version_string? _obs_get_version_string;
 
   /// Sets things up for calls to obs_get_cmdline_args. Called only once at startup
   /// and safely copies argv/argc from main(). Subsequent calls do nothing.
@@ -10759,13 +10759,13 @@ class DiveObslibFFI {
   ) {
     _obs_set_cmdline_args ??= _dylib.lookupFunction<_c_obs_set_cmdline_args,
         _dart_obs_set_cmdline_args>('obs_set_cmdline_args');
-    return _obs_set_cmdline_args(
+    return _obs_set_cmdline_args!(
       argc,
       argv,
     );
   }
 
-  _dart_obs_set_cmdline_args _obs_set_cmdline_args;
+  _dart_obs_set_cmdline_args? _obs_set_cmdline_args;
 
   /// Sets a new locale to use for modules.  This will call obs_module_set_locale
   /// for each module with the new locale.
@@ -10777,22 +10777,22 @@ class DiveObslibFFI {
     _obs_set_locale ??=
         _dylib.lookupFunction<_c_obs_set_locale, _dart_obs_set_locale>(
             'obs_set_locale');
-    return _obs_set_locale(
+    return _obs_set_locale!(
       locale,
     );
   }
 
-  _dart_obs_set_locale _obs_set_locale;
+  _dart_obs_set_locale? _obs_set_locale;
 
   /// @return the current locale
   ffi.Pointer<ffi.Int8> obs_get_locale() {
     _obs_get_locale ??=
         _dylib.lookupFunction<_c_obs_get_locale, _dart_obs_get_locale>(
             'obs_get_locale');
-    return _obs_get_locale();
+    return _obs_get_locale!();
   }
 
-  _dart_obs_get_locale _obs_get_locale;
+  _dart_obs_get_locale? _obs_get_locale;
 
   /// Returns the profiler name store (see util/profiler.h) used by OBS, which is
   /// either a name store passed to obs_startup, an internal name store, or NULL
@@ -10801,10 +10801,10 @@ class DiveObslibFFI {
     _obs_get_profiler_name_store ??= _dylib.lookupFunction<
         _c_obs_get_profiler_name_store,
         _dart_obs_get_profiler_name_store>('obs_get_profiler_name_store');
-    return _obs_get_profiler_name_store();
+    return _obs_get_profiler_name_store!();
   }
 
-  _dart_obs_get_profiler_name_store _obs_get_profiler_name_store;
+  _dart_obs_get_profiler_name_store? _obs_get_profiler_name_store;
 
   /// Sets base video output base resolution/fps/format.
   ///
@@ -10826,12 +10826,12 @@ class DiveObslibFFI {
     _obs_reset_video ??=
         _dylib.lookupFunction<_c_obs_reset_video, _dart_obs_reset_video>(
             'obs_reset_video');
-    return _obs_reset_video(
+    return _obs_reset_video!(
       ovi,
     );
   }
 
-  _dart_obs_reset_video _obs_reset_video;
+  _dart_obs_reset_video? _obs_reset_video;
 
   /// Sets base audio output format/channels/samples/etc
   ///
@@ -10842,12 +10842,12 @@ class DiveObslibFFI {
     _obs_reset_audio ??=
         _dylib.lookupFunction<_c_obs_reset_audio, _dart_obs_reset_audio>(
             'obs_reset_audio');
-    return _obs_reset_audio(
+    return _obs_reset_audio!(
       oai,
     );
   }
 
-  _dart_obs_reset_audio _obs_reset_audio;
+  _dart_obs_reset_audio? _obs_reset_audio;
 
   /// Gets the current video settings, returns false if no video
   int obs_get_video_info(
@@ -10856,12 +10856,12 @@ class DiveObslibFFI {
     _obs_get_video_info ??=
         _dylib.lookupFunction<_c_obs_get_video_info, _dart_obs_get_video_info>(
             'obs_get_video_info');
-    return _obs_get_video_info(
+    return _obs_get_video_info!(
       ovi,
     );
   }
 
-  _dart_obs_get_video_info _obs_get_video_info;
+  _dart_obs_get_video_info? _obs_get_video_info;
 
   /// Gets the current audio settings, returns false if no audio
   int obs_get_audio_info(
@@ -10870,12 +10870,12 @@ class DiveObslibFFI {
     _obs_get_audio_info ??=
         _dylib.lookupFunction<_c_obs_get_audio_info, _dart_obs_get_audio_info>(
             'obs_get_audio_info');
-    return _obs_get_audio_info(
+    return _obs_get_audio_info!(
       oai,
     );
   }
 
-  _dart_obs_get_audio_info _obs_get_audio_info;
+  _dart_obs_get_audio_info? _obs_get_audio_info;
 
   /// Opens a plugin module directly from a specific path.
   ///
@@ -10904,14 +10904,14 @@ class DiveObslibFFI {
     _obs_open_module ??=
         _dylib.lookupFunction<_c_obs_open_module, _dart_obs_open_module>(
             'obs_open_module');
-    return _obs_open_module(
+    return _obs_open_module!(
       module,
       path,
       data_path,
     );
   }
 
-  _dart_obs_open_module _obs_open_module;
+  _dart_obs_open_module? _obs_open_module;
 
   /// Initializes the module, which calls its obs_module_load export.  If the
   /// module is already loaded, then this function does nothing and returns
@@ -10922,12 +10922,12 @@ class DiveObslibFFI {
     _obs_init_module ??=
         _dylib.lookupFunction<_c_obs_init_module, _dart_obs_init_module>(
             'obs_init_module');
-    return _obs_init_module(
+    return _obs_init_module!(
       module,
     );
   }
 
-  _dart_obs_init_module _obs_init_module;
+  _dart_obs_init_module? _obs_init_module;
 
   /// Returns a module based upon its name, or NULL if not found
   ffi.Pointer<obs_module> obs_get_module(
@@ -10936,12 +10936,12 @@ class DiveObslibFFI {
     _obs_get_module ??=
         _dylib.lookupFunction<_c_obs_get_module, _dart_obs_get_module>(
             'obs_get_module');
-    return _obs_get_module(
+    return _obs_get_module!(
       name,
     );
   }
 
-  _dart_obs_get_module _obs_get_module;
+  _dart_obs_get_module? _obs_get_module;
 
   /// Returns locale text from a specific module
   int obs_module_get_locale_string(
@@ -10952,14 +10952,14 @@ class DiveObslibFFI {
     _obs_module_get_locale_string ??= _dylib.lookupFunction<
         _c_obs_module_get_locale_string,
         _dart_obs_module_get_locale_string>('obs_module_get_locale_string');
-    return _obs_module_get_locale_string(
+    return _obs_module_get_locale_string!(
       mod,
       lookup_string,
       translated_string,
     );
   }
 
-  _dart_obs_module_get_locale_string _obs_module_get_locale_string;
+  _dart_obs_module_get_locale_string? _obs_module_get_locale_string;
 
   ffi.Pointer<ffi.Int8> obs_module_get_locale_text(
     ffi.Pointer<obs_module> mod,
@@ -10968,22 +10968,22 @@ class DiveObslibFFI {
     _obs_module_get_locale_text ??= _dylib.lookupFunction<
         _c_obs_module_get_locale_text,
         _dart_obs_module_get_locale_text>('obs_module_get_locale_text');
-    return _obs_module_get_locale_text(
+    return _obs_module_get_locale_text!(
       mod,
       text,
     );
   }
 
-  _dart_obs_module_get_locale_text _obs_module_get_locale_text;
+  _dart_obs_module_get_locale_text? _obs_module_get_locale_text;
 
   /// Logs loaded modules
   void obs_log_loaded_modules() {
     _obs_log_loaded_modules ??= _dylib.lookupFunction<_c_obs_log_loaded_modules,
         _dart_obs_log_loaded_modules>('obs_log_loaded_modules');
-    return _obs_log_loaded_modules();
+    return _obs_log_loaded_modules!();
   }
 
-  _dart_obs_log_loaded_modules _obs_log_loaded_modules;
+  _dart_obs_log_loaded_modules? _obs_log_loaded_modules;
 
   /// Returns the module file name
   ffi.Pointer<ffi.Int8> obs_get_module_file_name(
@@ -10992,12 +10992,12 @@ class DiveObslibFFI {
     _obs_get_module_file_name ??= _dylib.lookupFunction<
         _c_obs_get_module_file_name,
         _dart_obs_get_module_file_name>('obs_get_module_file_name');
-    return _obs_get_module_file_name(
+    return _obs_get_module_file_name!(
       module,
     );
   }
 
-  _dart_obs_get_module_file_name _obs_get_module_file_name;
+  _dart_obs_get_module_file_name? _obs_get_module_file_name;
 
   /// Returns the module full name
   ffi.Pointer<ffi.Int8> obs_get_module_name(
@@ -11005,12 +11005,12 @@ class DiveObslibFFI {
   ) {
     _obs_get_module_name ??= _dylib.lookupFunction<_c_obs_get_module_name,
         _dart_obs_get_module_name>('obs_get_module_name');
-    return _obs_get_module_name(
+    return _obs_get_module_name!(
       module,
     );
   }
 
-  _dart_obs_get_module_name _obs_get_module_name;
+  _dart_obs_get_module_name? _obs_get_module_name;
 
   /// Returns the module author(s)
   ffi.Pointer<ffi.Int8> obs_get_module_author(
@@ -11018,12 +11018,12 @@ class DiveObslibFFI {
   ) {
     _obs_get_module_author ??= _dylib.lookupFunction<_c_obs_get_module_author,
         _dart_obs_get_module_author>('obs_get_module_author');
-    return _obs_get_module_author(
+    return _obs_get_module_author!(
       module,
     );
   }
 
-  _dart_obs_get_module_author _obs_get_module_author;
+  _dart_obs_get_module_author? _obs_get_module_author;
 
   /// Returns the module description
   ffi.Pointer<ffi.Int8> obs_get_module_description(
@@ -11032,12 +11032,12 @@ class DiveObslibFFI {
     _obs_get_module_description ??= _dylib.lookupFunction<
         _c_obs_get_module_description,
         _dart_obs_get_module_description>('obs_get_module_description');
-    return _obs_get_module_description(
+    return _obs_get_module_description!(
       module,
     );
   }
 
-  _dart_obs_get_module_description _obs_get_module_description;
+  _dart_obs_get_module_description? _obs_get_module_description;
 
   /// Returns the module binary path
   ffi.Pointer<ffi.Int8> obs_get_module_binary_path(
@@ -11046,12 +11046,12 @@ class DiveObslibFFI {
     _obs_get_module_binary_path ??= _dylib.lookupFunction<
         _c_obs_get_module_binary_path,
         _dart_obs_get_module_binary_path>('obs_get_module_binary_path');
-    return _obs_get_module_binary_path(
+    return _obs_get_module_binary_path!(
       module,
     );
   }
 
-  _dart_obs_get_module_binary_path _obs_get_module_binary_path;
+  _dart_obs_get_module_binary_path? _obs_get_module_binary_path;
 
   /// Returns the module data path
   ffi.Pointer<ffi.Int8> obs_get_module_data_path(
@@ -11060,12 +11060,12 @@ class DiveObslibFFI {
     _obs_get_module_data_path ??= _dylib.lookupFunction<
         _c_obs_get_module_data_path,
         _dart_obs_get_module_data_path>('obs_get_module_data_path');
-    return _obs_get_module_data_path(
+    return _obs_get_module_data_path!(
       module,
     );
   }
 
-  _dart_obs_get_module_data_path _obs_get_module_data_path;
+  _dart_obs_get_module_data_path? _obs_get_module_data_path;
 
   /// Adds a module search path to be used with obs_find_modules.  If the search
   /// path strings contain %module%, that text will be replaced with the module
@@ -11079,32 +11079,32 @@ class DiveObslibFFI {
   ) {
     _obs_add_module_path ??= _dylib.lookupFunction<_c_obs_add_module_path,
         _dart_obs_add_module_path>('obs_add_module_path');
-    return _obs_add_module_path(
+    return _obs_add_module_path!(
       bin,
       data,
     );
   }
 
-  _dart_obs_add_module_path _obs_add_module_path;
+  _dart_obs_add_module_path? _obs_add_module_path;
 
   /// Automatically loads all modules from module paths (convenience function)
   void obs_load_all_modules() {
     _obs_load_all_modules ??= _dylib.lookupFunction<_c_obs_load_all_modules,
         _dart_obs_load_all_modules>('obs_load_all_modules');
-    return _obs_load_all_modules();
+    return _obs_load_all_modules!();
   }
 
-  _dart_obs_load_all_modules _obs_load_all_modules;
+  _dart_obs_load_all_modules? _obs_load_all_modules;
 
   /// Notifies modules that all modules have been loaded.  This function should
   /// be called after all modules have been loaded.
   void obs_post_load_modules() {
     _obs_post_load_modules ??= _dylib.lookupFunction<_c_obs_post_load_modules,
         _dart_obs_post_load_modules>('obs_post_load_modules');
-    return _obs_post_load_modules();
+    return _obs_post_load_modules!();
   }
 
-  _dart_obs_post_load_modules _obs_post_load_modules;
+  _dart_obs_post_load_modules? _obs_post_load_modules;
 
   /// Finds all modules within the search paths added by obs_add_module_path.
   void obs_find_modules(
@@ -11114,13 +11114,13 @@ class DiveObslibFFI {
     _obs_find_modules ??=
         _dylib.lookupFunction<_c_obs_find_modules, _dart_obs_find_modules>(
             'obs_find_modules');
-    return _obs_find_modules(
+    return _obs_find_modules!(
       callback,
       param,
     );
   }
 
-  _dart_obs_find_modules _obs_find_modules;
+  _dart_obs_find_modules? _obs_find_modules;
 
   /// Enumerates all loaded modules
   void obs_enum_modules(
@@ -11130,13 +11130,13 @@ class DiveObslibFFI {
     _obs_enum_modules ??=
         _dylib.lookupFunction<_c_obs_enum_modules, _dart_obs_enum_modules>(
             'obs_enum_modules');
-    return _obs_enum_modules(
+    return _obs_enum_modules!(
       callback,
       param,
     );
   }
 
-  _dart_obs_enum_modules _obs_enum_modules;
+  _dart_obs_enum_modules? _obs_enum_modules;
 
   /// Helper function for using default module locale
   ffi.Pointer<text_lookup> obs_module_load_locale(
@@ -11146,14 +11146,14 @@ class DiveObslibFFI {
   ) {
     _obs_module_load_locale ??= _dylib.lookupFunction<_c_obs_module_load_locale,
         _dart_obs_module_load_locale>('obs_module_load_locale');
-    return _obs_module_load_locale(
+    return _obs_module_load_locale!(
       module,
       default_locale,
       locale,
     );
   }
 
-  _dart_obs_module_load_locale _obs_module_load_locale;
+  _dart_obs_module_load_locale? _obs_module_load_locale;
 
   /// Returns the location of a plugin module data file.
   ///
@@ -11170,13 +11170,13 @@ class DiveObslibFFI {
   ) {
     _obs_find_module_file ??= _dylib.lookupFunction<_c_obs_find_module_file,
         _dart_obs_find_module_file>('obs_find_module_file');
-    return _obs_find_module_file(
+    return _obs_find_module_file!(
       module,
       file,
     );
   }
 
-  _dart_obs_find_module_file _obs_find_module_file;
+  _dart_obs_find_module_file? _obs_find_module_file;
 
   /// Returns the path of a plugin module config file (whether it exists or not)
   ///
@@ -11194,13 +11194,13 @@ class DiveObslibFFI {
     _obs_module_get_config_path ??= _dylib.lookupFunction<
         _c_obs_module_get_config_path,
         _dart_obs_module_get_config_path>('obs_module_get_config_path');
-    return _obs_module_get_config_path(
+    return _obs_module_get_config_path!(
       module,
       file,
     );
   }
 
-  _dart_obs_module_get_config_path _obs_module_get_config_path;
+  _dart_obs_module_get_config_path? _obs_module_get_config_path;
 
   /// Enumerates all source types (inputs, filters, transitions, etc).
   int obs_enum_source_types(
@@ -11209,13 +11209,13 @@ class DiveObslibFFI {
   ) {
     _obs_enum_source_types ??= _dylib.lookupFunction<_c_obs_enum_source_types,
         _dart_obs_enum_source_types>('obs_enum_source_types');
-    return _obs_enum_source_types(
+    return _obs_enum_source_types!(
       idx,
       id,
     );
   }
 
-  _dart_obs_enum_source_types _obs_enum_source_types;
+  _dart_obs_enum_source_types? _obs_enum_source_types;
 
   /// Enumerates all available inputs source types.
   ///
@@ -11227,29 +11227,29 @@ class DiveObslibFFI {
   ) {
     _obs_enum_input_types ??= _dylib.lookupFunction<_c_obs_enum_input_types,
         _dart_obs_enum_input_types>('obs_enum_input_types');
-    return _obs_enum_input_types(
+    return _obs_enum_input_types!(
       idx,
       id,
     );
   }
 
-  _dart_obs_enum_input_types _obs_enum_input_types;
+  _dart_obs_enum_input_types? _obs_enum_input_types;
 
   int obs_enum_input_types2(
     int idx,
-    ffi.Pointer<ffi.Pointer<ffi.Int8>> id,
-    ffi.Pointer<ffi.Pointer<ffi.Int8>> unversioned_id,
+    ffi.Pointer<ffi.Pointer<ffi.Int8>>? id,
+    ffi.Pointer<ffi.Pointer<ffi.Int8>>? unversioned_id,
   ) {
     _obs_enum_input_types2 ??= _dylib.lookupFunction<_c_obs_enum_input_types2,
         _dart_obs_enum_input_types2>('obs_enum_input_types2');
-    return _obs_enum_input_types2(
+    return _obs_enum_input_types2!(
       idx,
       id,
       unversioned_id,
     );
   }
 
-  _dart_obs_enum_input_types2 _obs_enum_input_types2;
+  _dart_obs_enum_input_types2? _obs_enum_input_types2;
 
   ffi.Pointer<ffi.Int8> obs_get_latest_input_type_id(
     ffi.Pointer<ffi.Int8> unversioned_id,
@@ -11257,12 +11257,12 @@ class DiveObslibFFI {
     _obs_get_latest_input_type_id ??= _dylib.lookupFunction<
         _c_obs_get_latest_input_type_id,
         _dart_obs_get_latest_input_type_id>('obs_get_latest_input_type_id');
-    return _obs_get_latest_input_type_id(
+    return _obs_get_latest_input_type_id!(
       unversioned_id,
     );
   }
 
-  _dart_obs_get_latest_input_type_id _obs_get_latest_input_type_id;
+  _dart_obs_get_latest_input_type_id? _obs_get_latest_input_type_id;
 
   /// Enumerates all available filter source types.
   ///
@@ -11274,13 +11274,13 @@ class DiveObslibFFI {
   ) {
     _obs_enum_filter_types ??= _dylib.lookupFunction<_c_obs_enum_filter_types,
         _dart_obs_enum_filter_types>('obs_enum_filter_types');
-    return _obs_enum_filter_types(
+    return _obs_enum_filter_types!(
       idx,
       id,
     );
   }
 
-  _dart_obs_enum_filter_types _obs_enum_filter_types;
+  _dart_obs_enum_filter_types? _obs_enum_filter_types;
 
   /// Enumerates all available transition source types.
   ///
@@ -11293,13 +11293,13 @@ class DiveObslibFFI {
     _obs_enum_transition_types ??= _dylib.lookupFunction<
         _c_obs_enum_transition_types,
         _dart_obs_enum_transition_types>('obs_enum_transition_types');
-    return _obs_enum_transition_types(
+    return _obs_enum_transition_types!(
       idx,
       id,
     );
   }
 
-  _dart_obs_enum_transition_types _obs_enum_transition_types;
+  _dart_obs_enum_transition_types? _obs_enum_transition_types;
 
   /// Enumerates all available output types.
   int obs_enum_output_types(
@@ -11308,13 +11308,13 @@ class DiveObslibFFI {
   ) {
     _obs_enum_output_types ??= _dylib.lookupFunction<_c_obs_enum_output_types,
         _dart_obs_enum_output_types>('obs_enum_output_types');
-    return _obs_enum_output_types(
+    return _obs_enum_output_types!(
       idx,
       id,
     );
   }
 
-  _dart_obs_enum_output_types _obs_enum_output_types;
+  _dart_obs_enum_output_types? _obs_enum_output_types;
 
   /// Enumerates all available encoder types.
   int obs_enum_encoder_types(
@@ -11323,13 +11323,13 @@ class DiveObslibFFI {
   ) {
     _obs_enum_encoder_types ??= _dylib.lookupFunction<_c_obs_enum_encoder_types,
         _dart_obs_enum_encoder_types>('obs_enum_encoder_types');
-    return _obs_enum_encoder_types(
+    return _obs_enum_encoder_types!(
       idx,
       id,
     );
   }
 
-  _dart_obs_enum_encoder_types _obs_enum_encoder_types;
+  _dart_obs_enum_encoder_types? _obs_enum_encoder_types;
 
   /// Enumerates all available service types.
   int obs_enum_service_types(
@@ -11338,61 +11338,61 @@ class DiveObslibFFI {
   ) {
     _obs_enum_service_types ??= _dylib.lookupFunction<_c_obs_enum_service_types,
         _dart_obs_enum_service_types>('obs_enum_service_types');
-    return _obs_enum_service_types(
+    return _obs_enum_service_types!(
       idx,
       id,
     );
   }
 
-  _dart_obs_enum_service_types _obs_enum_service_types;
+  _dart_obs_enum_service_types? _obs_enum_service_types;
 
   /// Helper function for entering the OBS graphics context
   void obs_enter_graphics() {
     _obs_enter_graphics ??=
         _dylib.lookupFunction<_c_obs_enter_graphics, _dart_obs_enter_graphics>(
             'obs_enter_graphics');
-    return _obs_enter_graphics();
+    return _obs_enter_graphics!();
   }
 
-  _dart_obs_enter_graphics _obs_enter_graphics;
+  _dart_obs_enter_graphics? _obs_enter_graphics;
 
   /// Helper function for leaving the OBS graphics context
   void obs_leave_graphics() {
     _obs_leave_graphics ??=
         _dylib.lookupFunction<_c_obs_leave_graphics, _dart_obs_leave_graphics>(
             'obs_leave_graphics');
-    return _obs_leave_graphics();
+    return _obs_leave_graphics!();
   }
 
-  _dart_obs_leave_graphics _obs_leave_graphics;
+  _dart_obs_leave_graphics? _obs_leave_graphics;
 
   /// Gets the main audio output handler for this OBS context
   ffi.Pointer<audio_output> obs_get_audio() {
     _obs_get_audio ??= _dylib
         .lookupFunction<_c_obs_get_audio, _dart_obs_get_audio>('obs_get_audio');
-    return _obs_get_audio();
+    return _obs_get_audio!();
   }
 
-  _dart_obs_get_audio _obs_get_audio;
+  _dart_obs_get_audio? _obs_get_audio;
 
   /// Gets the main video output handler for this OBS context
   ffi.Pointer<video_output> obs_get_video() {
     _obs_get_video ??= _dylib
         .lookupFunction<_c_obs_get_video, _dart_obs_get_video>('obs_get_video');
-    return _obs_get_video();
+    return _obs_get_video!();
   }
 
-  _dart_obs_get_video _obs_get_video;
+  _dart_obs_get_video? _obs_get_video;
 
   /// Returns true if video is active, false otherwise
   int obs_video_active() {
     _obs_video_active ??=
         _dylib.lookupFunction<_c_obs_video_active, _dart_obs_video_active>(
             'obs_video_active');
-    return _obs_video_active();
+    return _obs_video_active!();
   }
 
-  _dart_obs_video_active _obs_video_active;
+  _dart_obs_video_active? _obs_video_active;
 
   /// Sets the primary output source for a channel.
   void obs_set_output_source(
@@ -11401,13 +11401,13 @@ class DiveObslibFFI {
   ) {
     _obs_set_output_source ??= _dylib.lookupFunction<_c_obs_set_output_source,
         _dart_obs_set_output_source>('obs_set_output_source');
-    return _obs_set_output_source(
+    return _obs_set_output_source!(
       channel,
       source,
     );
   }
 
-  _dart_obs_set_output_source _obs_set_output_source;
+  _dart_obs_set_output_source? _obs_set_output_source;
 
   /// Gets the primary output source for a channel and increments the reference
   /// counter for that source.  Use obs_source_release to release.
@@ -11416,12 +11416,12 @@ class DiveObslibFFI {
   ) {
     _obs_get_output_source ??= _dylib.lookupFunction<_c_obs_get_output_source,
         _dart_obs_get_output_source>('obs_get_output_source');
-    return _obs_get_output_source(
+    return _obs_get_output_source!(
       channel,
     );
   }
 
-  _dart_obs_get_output_source _obs_get_output_source;
+  _dart_obs_get_output_source? _obs_get_output_source;
 
   /// Enumerates all input sources
   ///
@@ -11437,13 +11437,13 @@ class DiveObslibFFI {
     _obs_enum_sources ??=
         _dylib.lookupFunction<_c_obs_enum_sources, _dart_obs_enum_sources>(
             'obs_enum_sources');
-    return _obs_enum_sources(
+    return _obs_enum_sources!(
       enum_proc,
       param,
     );
   }
 
-  _dart_obs_enum_sources _obs_enum_sources;
+  _dart_obs_enum_sources? _obs_enum_sources;
 
   /// Enumerates scenes
   void obs_enum_scenes(
@@ -11453,13 +11453,13 @@ class DiveObslibFFI {
     _obs_enum_scenes ??=
         _dylib.lookupFunction<_c_obs_enum_scenes, _dart_obs_enum_scenes>(
             'obs_enum_scenes');
-    return _obs_enum_scenes(
+    return _obs_enum_scenes!(
       enum_proc,
       param,
     );
   }
 
-  _dart_obs_enum_scenes _obs_enum_scenes;
+  _dart_obs_enum_scenes? _obs_enum_scenes;
 
   /// Enumerates outputs
   void obs_enum_outputs(
@@ -11469,13 +11469,13 @@ class DiveObslibFFI {
     _obs_enum_outputs ??=
         _dylib.lookupFunction<_c_obs_enum_outputs, _dart_obs_enum_outputs>(
             'obs_enum_outputs');
-    return _obs_enum_outputs(
+    return _obs_enum_outputs!(
       enum_proc,
       param,
     );
   }
 
-  _dart_obs_enum_outputs _obs_enum_outputs;
+  _dart_obs_enum_outputs? _obs_enum_outputs;
 
   /// Enumerates encoders
   void obs_enum_encoders(
@@ -11485,13 +11485,13 @@ class DiveObslibFFI {
     _obs_enum_encoders ??=
         _dylib.lookupFunction<_c_obs_enum_encoders, _dart_obs_enum_encoders>(
             'obs_enum_encoders');
-    return _obs_enum_encoders(
+    return _obs_enum_encoders!(
       enum_proc,
       param,
     );
   }
 
-  _dart_obs_enum_encoders _obs_enum_encoders;
+  _dart_obs_enum_encoders? _obs_enum_encoders;
 
   /// Enumerates encoders
   void obs_enum_services(
@@ -11501,13 +11501,13 @@ class DiveObslibFFI {
     _obs_enum_services ??=
         _dylib.lookupFunction<_c_obs_enum_services, _dart_obs_enum_services>(
             'obs_enum_services');
-    return _obs_enum_services(
+    return _obs_enum_services!(
       enum_proc,
       param,
     );
   }
 
-  _dart_obs_enum_services _obs_enum_services;
+  _dart_obs_enum_services? _obs_enum_services;
 
   /// Gets a source by its name.
   ///
@@ -11518,12 +11518,12 @@ class DiveObslibFFI {
   ) {
     _obs_get_source_by_name ??= _dylib.lookupFunction<_c_obs_get_source_by_name,
         _dart_obs_get_source_by_name>('obs_get_source_by_name');
-    return _obs_get_source_by_name(
+    return _obs_get_source_by_name!(
       name,
     );
   }
 
-  _dart_obs_get_source_by_name _obs_get_source_by_name;
+  _dart_obs_get_source_by_name? _obs_get_source_by_name;
 
   /// Gets an output by its name.
   ffi.Pointer<obs_output> obs_get_output_by_name(
@@ -11531,12 +11531,12 @@ class DiveObslibFFI {
   ) {
     _obs_get_output_by_name ??= _dylib.lookupFunction<_c_obs_get_output_by_name,
         _dart_obs_get_output_by_name>('obs_get_output_by_name');
-    return _obs_get_output_by_name(
+    return _obs_get_output_by_name!(
       name,
     );
   }
 
-  _dart_obs_get_output_by_name _obs_get_output_by_name;
+  _dart_obs_get_output_by_name? _obs_get_output_by_name;
 
   /// Gets an encoder by its name.
   ffi.Pointer<obs_encoder> obs_get_encoder_by_name(
@@ -11545,12 +11545,12 @@ class DiveObslibFFI {
     _obs_get_encoder_by_name ??= _dylib.lookupFunction<
         _c_obs_get_encoder_by_name,
         _dart_obs_get_encoder_by_name>('obs_get_encoder_by_name');
-    return _obs_get_encoder_by_name(
+    return _obs_get_encoder_by_name!(
       name,
     );
   }
 
-  _dart_obs_get_encoder_by_name _obs_get_encoder_by_name;
+  _dart_obs_get_encoder_by_name? _obs_get_encoder_by_name;
 
   /// Gets an service by its name.
   ffi.Pointer<obs_service> obs_get_service_by_name(
@@ -11559,12 +11559,12 @@ class DiveObslibFFI {
     _obs_get_service_by_name ??= _dylib.lookupFunction<
         _c_obs_get_service_by_name,
         _dart_obs_get_service_by_name>('obs_get_service_by_name');
-    return _obs_get_service_by_name(
+    return _obs_get_service_by_name!(
       name,
     );
   }
 
-  _dart_obs_get_service_by_name _obs_get_service_by_name;
+  _dart_obs_get_service_by_name? _obs_get_service_by_name;
 
   /// Returns a commonly used base effect
   ffi.Pointer<gs_effect> obs_get_base_effect(
@@ -11572,58 +11572,58 @@ class DiveObslibFFI {
   ) {
     _obs_get_base_effect ??= _dylib.lookupFunction<_c_obs_get_base_effect,
         _dart_obs_get_base_effect>('obs_get_base_effect');
-    return _obs_get_base_effect(
+    return _obs_get_base_effect!(
       effect,
     );
   }
 
-  _dart_obs_get_base_effect _obs_get_base_effect;
+  _dart_obs_get_base_effect? _obs_get_base_effect;
 
   ffi.Pointer<gs_effect> obs_get_default_rect_effect() {
     _obs_get_default_rect_effect ??= _dylib.lookupFunction<
         _c_obs_get_default_rect_effect,
         _dart_obs_get_default_rect_effect>('obs_get_default_rect_effect');
-    return _obs_get_default_rect_effect();
+    return _obs_get_default_rect_effect!();
   }
 
-  _dart_obs_get_default_rect_effect _obs_get_default_rect_effect;
+  _dart_obs_get_default_rect_effect? _obs_get_default_rect_effect;
 
   /// Returns the primary obs signal handler
   ffi.Pointer<signal_handler> obs_get_signal_handler() {
     _obs_get_signal_handler ??= _dylib.lookupFunction<_c_obs_get_signal_handler,
         _dart_obs_get_signal_handler>('obs_get_signal_handler');
-    return _obs_get_signal_handler();
+    return _obs_get_signal_handler!();
   }
 
-  _dart_obs_get_signal_handler _obs_get_signal_handler;
+  _dart_obs_get_signal_handler? _obs_get_signal_handler;
 
   /// Returns the primary obs procedure handler
   ffi.Pointer<proc_handler> obs_get_proc_handler() {
     _obs_get_proc_handler ??= _dylib.lookupFunction<_c_obs_get_proc_handler,
         _dart_obs_get_proc_handler>('obs_get_proc_handler');
-    return _obs_get_proc_handler();
+    return _obs_get_proc_handler!();
   }
 
-  _dart_obs_get_proc_handler _obs_get_proc_handler;
+  _dart_obs_get_proc_handler? _obs_get_proc_handler;
 
   /// Renders the main view
   void obs_render_main_view() {
     _obs_render_main_view ??= _dylib.lookupFunction<_c_obs_render_main_view,
         _dart_obs_render_main_view>('obs_render_main_view');
-    return _obs_render_main_view();
+    return _obs_render_main_view!();
   }
 
-  _dart_obs_render_main_view _obs_render_main_view;
+  _dart_obs_render_main_view? _obs_render_main_view;
 
   /// Renders the last main output texture
   void obs_render_main_texture() {
     _obs_render_main_texture ??= _dylib.lookupFunction<
         _c_obs_render_main_texture,
         _dart_obs_render_main_texture>('obs_render_main_texture');
-    return _obs_render_main_texture();
+    return _obs_render_main_texture!();
   }
 
-  _dart_obs_render_main_texture _obs_render_main_texture;
+  _dart_obs_render_main_texture? _obs_render_main_texture;
 
   /// Renders the last main output texture ignoring background color
   void obs_render_main_texture_src_color_only() {
@@ -11631,10 +11631,10 @@ class DiveObslibFFI {
             _c_obs_render_main_texture_src_color_only,
             _dart_obs_render_main_texture_src_color_only>(
         'obs_render_main_texture_src_color_only');
-    return _obs_render_main_texture_src_color_only();
+    return _obs_render_main_texture_src_color_only!();
   }
 
-  _dart_obs_render_main_texture_src_color_only
+  _dart_obs_render_main_texture_src_color_only?
       _obs_render_main_texture_src_color_only;
 
   /// Returns the last main output texture.  This can return NULL if the texture
@@ -11642,10 +11642,10 @@ class DiveObslibFFI {
   ffi.Pointer<gs_texture> obs_get_main_texture() {
     _obs_get_main_texture ??= _dylib.lookupFunction<_c_obs_get_main_texture,
         _dart_obs_get_main_texture>('obs_get_main_texture');
-    return _obs_get_main_texture();
+    return _obs_get_main_texture!();
   }
 
-  _dart_obs_get_main_texture _obs_get_main_texture;
+  _dart_obs_get_main_texture? _obs_get_main_texture;
 
   /// Sets the master user volume
   void obs_set_master_volume(
@@ -11653,21 +11653,21 @@ class DiveObslibFFI {
   ) {
     _obs_set_master_volume ??= _dylib.lookupFunction<_c_obs_set_master_volume,
         _dart_obs_set_master_volume>('obs_set_master_volume');
-    return _obs_set_master_volume(
+    return _obs_set_master_volume!(
       volume,
     );
   }
 
-  _dart_obs_set_master_volume _obs_set_master_volume;
+  _dart_obs_set_master_volume? _obs_set_master_volume;
 
   /// Gets the master user volume
   double obs_get_master_volume() {
     _obs_get_master_volume ??= _dylib.lookupFunction<_c_obs_get_master_volume,
         _dart_obs_get_master_volume>('obs_get_master_volume');
-    return _obs_get_master_volume();
+    return _obs_get_master_volume!();
   }
 
-  _dart_obs_get_master_volume _obs_get_master_volume;
+  _dart_obs_get_master_volume? _obs_get_master_volume;
 
   /// Saves a source to settings data
   ffi.Pointer<obs_data> obs_save_source(
@@ -11676,12 +11676,12 @@ class DiveObslibFFI {
     _obs_save_source ??=
         _dylib.lookupFunction<_c_obs_save_source, _dart_obs_save_source>(
             'obs_save_source');
-    return _obs_save_source(
+    return _obs_save_source!(
       source,
     );
   }
 
-  _dart_obs_save_source _obs_save_source;
+  _dart_obs_save_source? _obs_save_source;
 
   /// Loads a source from settings data
   ffi.Pointer<obs_source> obs_load_source(
@@ -11690,12 +11690,12 @@ class DiveObslibFFI {
     _obs_load_source ??=
         _dylib.lookupFunction<_c_obs_load_source, _dart_obs_load_source>(
             'obs_load_source');
-    return _obs_load_source(
+    return _obs_load_source!(
       data,
     );
   }
 
-  _dart_obs_load_source _obs_load_source;
+  _dart_obs_load_source? _obs_load_source;
 
   /// Send a save signal to sources
   void obs_source_save(
@@ -11704,12 +11704,12 @@ class DiveObslibFFI {
     _obs_source_save ??=
         _dylib.lookupFunction<_c_obs_source_save, _dart_obs_source_save>(
             'obs_source_save');
-    return _obs_source_save(
+    return _obs_source_save!(
       source,
     );
   }
 
-  _dart_obs_source_save _obs_source_save;
+  _dart_obs_source_save? _obs_source_save;
 
   /// Send a load signal to sources
   void obs_source_load(
@@ -11718,12 +11718,12 @@ class DiveObslibFFI {
     _obs_source_load ??=
         _dylib.lookupFunction<_c_obs_source_load, _dart_obs_source_load>(
             'obs_source_load');
-    return _obs_source_load(
+    return _obs_source_load!(
       source,
     );
   }
 
-  _dart_obs_source_load _obs_source_load;
+  _dart_obs_source_load? _obs_source_load;
 
   /// Loads sources from a data array
   void obs_load_sources(
@@ -11734,24 +11734,24 @@ class DiveObslibFFI {
     _obs_load_sources ??=
         _dylib.lookupFunction<_c_obs_load_sources, _dart_obs_load_sources>(
             'obs_load_sources');
-    return _obs_load_sources(
+    return _obs_load_sources!(
       array,
       cb,
       private_data,
     );
   }
 
-  _dart_obs_load_sources _obs_load_sources;
+  _dart_obs_load_sources? _obs_load_sources;
 
   /// Saves sources to a data array
   ffi.Pointer<obs_data_array> obs_save_sources() {
     _obs_save_sources ??=
         _dylib.lookupFunction<_c_obs_save_sources, _dart_obs_save_sources>(
             'obs_save_sources');
-    return _obs_save_sources();
+    return _obs_save_sources!();
   }
 
-  _dart_obs_save_sources _obs_save_sources;
+  _dart_obs_save_sources? _obs_save_sources;
 
   ffi.Pointer<obs_data_array> obs_save_sources_filtered(
     ffi.Pointer<ffi.NativeFunction<obs_save_source_filter_cb>> cb,
@@ -11760,13 +11760,13 @@ class DiveObslibFFI {
     _obs_save_sources_filtered ??= _dylib.lookupFunction<
         _c_obs_save_sources_filtered,
         _dart_obs_save_sources_filtered>('obs_save_sources_filtered');
-    return _obs_save_sources_filtered(
+    return _obs_save_sources_filtered!(
       cb,
       data,
     );
   }
 
-  _dart_obs_save_sources_filtered _obs_save_sources_filtered;
+  _dart_obs_save_sources_filtered? _obs_save_sources_filtered;
 
   int obs_obj_get_type(
     ffi.Pointer<ffi.Void> obj,
@@ -11774,12 +11774,12 @@ class DiveObslibFFI {
     _obs_obj_get_type ??=
         _dylib.lookupFunction<_c_obs_obj_get_type, _dart_obs_obj_get_type>(
             'obs_obj_get_type');
-    return _obs_obj_get_type(
+    return _obs_obj_get_type!(
       obj,
     );
   }
 
-  _dart_obs_obj_get_type _obs_obj_get_type;
+  _dart_obs_obj_get_type? _obs_obj_get_type;
 
   ffi.Pointer<ffi.Int8> obs_obj_get_id(
     ffi.Pointer<ffi.Void> obj,
@@ -11787,12 +11787,12 @@ class DiveObslibFFI {
     _obs_obj_get_id ??=
         _dylib.lookupFunction<_c_obs_obj_get_id, _dart_obs_obj_get_id>(
             'obs_obj_get_id');
-    return _obs_obj_get_id(
+    return _obs_obj_get_id!(
       obj,
     );
   }
 
-  _dart_obs_obj_get_id _obs_obj_get_id;
+  _dart_obs_obj_get_id? _obs_obj_get_id;
 
   int obs_obj_invalid(
     ffi.Pointer<ffi.Void> obj,
@@ -11800,12 +11800,12 @@ class DiveObslibFFI {
     _obs_obj_invalid ??=
         _dylib.lookupFunction<_c_obs_obj_invalid, _dart_obs_obj_invalid>(
             'obs_obj_invalid');
-    return _obs_obj_invalid(
+    return _obs_obj_invalid!(
       obj,
     );
   }
 
-  _dart_obs_obj_invalid _obs_obj_invalid;
+  _dart_obs_obj_invalid? _obs_obj_invalid;
 
   ffi.Pointer<ffi.Void> obs_obj_get_data(
     ffi.Pointer<ffi.Void> obj,
@@ -11813,12 +11813,12 @@ class DiveObslibFFI {
     _obs_obj_get_data ??=
         _dylib.lookupFunction<_c_obs_obj_get_data, _dart_obs_obj_get_data>(
             'obs_obj_get_data');
-    return _obs_obj_get_data(
+    return _obs_obj_get_data!(
       obj,
     );
   }
 
-  _dart_obs_obj_get_data _obs_obj_get_data;
+  _dart_obs_obj_get_data? _obs_obj_get_data;
 
   void obs_enum_audio_monitoring_devices(
     ffi.Pointer<ffi.NativeFunction<obs_enum_audio_device_cb>> cb,
@@ -11828,13 +11828,13 @@ class DiveObslibFFI {
             _c_obs_enum_audio_monitoring_devices,
             _dart_obs_enum_audio_monitoring_devices>(
         'obs_enum_audio_monitoring_devices');
-    return _obs_enum_audio_monitoring_devices(
+    return _obs_enum_audio_monitoring_devices!(
       cb,
       data,
     );
   }
 
-  _dart_obs_enum_audio_monitoring_devices _obs_enum_audio_monitoring_devices;
+  _dart_obs_enum_audio_monitoring_devices? _obs_enum_audio_monitoring_devices;
 
   int obs_set_audio_monitoring_device(
     ffi.Pointer<ffi.Int8> name,
@@ -11844,13 +11844,13 @@ class DiveObslibFFI {
             _c_obs_set_audio_monitoring_device,
             _dart_obs_set_audio_monitoring_device>(
         'obs_set_audio_monitoring_device');
-    return _obs_set_audio_monitoring_device(
+    return _obs_set_audio_monitoring_device!(
       name,
       id,
     );
   }
 
-  _dart_obs_set_audio_monitoring_device _obs_set_audio_monitoring_device;
+  _dart_obs_set_audio_monitoring_device? _obs_set_audio_monitoring_device;
 
   void obs_get_audio_monitoring_device(
     ffi.Pointer<ffi.Pointer<ffi.Int8>> name,
@@ -11860,13 +11860,13 @@ class DiveObslibFFI {
             _c_obs_get_audio_monitoring_device,
             _dart_obs_get_audio_monitoring_device>(
         'obs_get_audio_monitoring_device');
-    return _obs_get_audio_monitoring_device(
+    return _obs_get_audio_monitoring_device!(
       name,
       id,
     );
   }
 
-  _dart_obs_get_audio_monitoring_device _obs_get_audio_monitoring_device;
+  _dart_obs_get_audio_monitoring_device? _obs_get_audio_monitoring_device;
 
   void obs_add_tick_callback(
     ffi.Pointer<ffi.NativeFunction<_typedefC_113>> tick,
@@ -11874,13 +11874,13 @@ class DiveObslibFFI {
   ) {
     _obs_add_tick_callback ??= _dylib.lookupFunction<_c_obs_add_tick_callback,
         _dart_obs_add_tick_callback>('obs_add_tick_callback');
-    return _obs_add_tick_callback(
+    return _obs_add_tick_callback!(
       tick,
       param,
     );
   }
 
-  _dart_obs_add_tick_callback _obs_add_tick_callback;
+  _dart_obs_add_tick_callback? _obs_add_tick_callback;
 
   void obs_remove_tick_callback(
     ffi.Pointer<ffi.NativeFunction<_typedefC_114>> tick,
@@ -11889,13 +11889,13 @@ class DiveObslibFFI {
     _obs_remove_tick_callback ??= _dylib.lookupFunction<
         _c_obs_remove_tick_callback,
         _dart_obs_remove_tick_callback>('obs_remove_tick_callback');
-    return _obs_remove_tick_callback(
+    return _obs_remove_tick_callback!(
       tick,
       param,
     );
   }
 
-  _dart_obs_remove_tick_callback _obs_remove_tick_callback;
+  _dart_obs_remove_tick_callback? _obs_remove_tick_callback;
 
   void obs_add_main_render_callback(
     ffi.Pointer<ffi.NativeFunction<_typedefC_115>> draw,
@@ -11904,13 +11904,13 @@ class DiveObslibFFI {
     _obs_add_main_render_callback ??= _dylib.lookupFunction<
         _c_obs_add_main_render_callback,
         _dart_obs_add_main_render_callback>('obs_add_main_render_callback');
-    return _obs_add_main_render_callback(
+    return _obs_add_main_render_callback!(
       draw,
       param,
     );
   }
 
-  _dart_obs_add_main_render_callback _obs_add_main_render_callback;
+  _dart_obs_add_main_render_callback? _obs_add_main_render_callback;
 
   void obs_remove_main_render_callback(
     ffi.Pointer<ffi.NativeFunction<_typedefC_116>> draw,
@@ -11920,13 +11920,13 @@ class DiveObslibFFI {
             _c_obs_remove_main_render_callback,
             _dart_obs_remove_main_render_callback>(
         'obs_remove_main_render_callback');
-    return _obs_remove_main_render_callback(
+    return _obs_remove_main_render_callback!(
       draw,
       param,
     );
   }
 
-  _dart_obs_remove_main_render_callback _obs_remove_main_render_callback;
+  _dart_obs_remove_main_render_callback? _obs_remove_main_render_callback;
 
   void obs_add_raw_video_callback(
     ffi.Pointer<video_scale_info> conversion,
@@ -11936,14 +11936,14 @@ class DiveObslibFFI {
     _obs_add_raw_video_callback ??= _dylib.lookupFunction<
         _c_obs_add_raw_video_callback,
         _dart_obs_add_raw_video_callback>('obs_add_raw_video_callback');
-    return _obs_add_raw_video_callback(
+    return _obs_add_raw_video_callback!(
       conversion,
       callback,
       param,
     );
   }
 
-  _dart_obs_add_raw_video_callback _obs_add_raw_video_callback;
+  _dart_obs_add_raw_video_callback? _obs_add_raw_video_callback;
 
   void obs_remove_raw_video_callback(
     ffi.Pointer<ffi.NativeFunction<_typedefC_118>> callback,
@@ -11952,105 +11952,105 @@ class DiveObslibFFI {
     _obs_remove_raw_video_callback ??= _dylib.lookupFunction<
         _c_obs_remove_raw_video_callback,
         _dart_obs_remove_raw_video_callback>('obs_remove_raw_video_callback');
-    return _obs_remove_raw_video_callback(
+    return _obs_remove_raw_video_callback!(
       callback,
       param,
     );
   }
 
-  _dart_obs_remove_raw_video_callback _obs_remove_raw_video_callback;
+  _dart_obs_remove_raw_video_callback? _obs_remove_raw_video_callback;
 
   int obs_get_video_frame_time() {
     _obs_get_video_frame_time ??= _dylib.lookupFunction<
         _c_obs_get_video_frame_time,
         _dart_obs_get_video_frame_time>('obs_get_video_frame_time');
-    return _obs_get_video_frame_time();
+    return _obs_get_video_frame_time!();
   }
 
-  _dart_obs_get_video_frame_time _obs_get_video_frame_time;
+  _dart_obs_get_video_frame_time? _obs_get_video_frame_time;
 
   double obs_get_active_fps() {
     _obs_get_active_fps ??=
         _dylib.lookupFunction<_c_obs_get_active_fps, _dart_obs_get_active_fps>(
             'obs_get_active_fps');
-    return _obs_get_active_fps();
+    return _obs_get_active_fps!();
   }
 
-  _dart_obs_get_active_fps _obs_get_active_fps;
+  _dart_obs_get_active_fps? _obs_get_active_fps;
 
   int obs_get_average_frame_time_ns() {
     _obs_get_average_frame_time_ns ??= _dylib.lookupFunction<
         _c_obs_get_average_frame_time_ns,
         _dart_obs_get_average_frame_time_ns>('obs_get_average_frame_time_ns');
-    return _obs_get_average_frame_time_ns();
+    return _obs_get_average_frame_time_ns!();
   }
 
-  _dart_obs_get_average_frame_time_ns _obs_get_average_frame_time_ns;
+  _dart_obs_get_average_frame_time_ns? _obs_get_average_frame_time_ns;
 
   int obs_get_frame_interval_ns() {
     _obs_get_frame_interval_ns ??= _dylib.lookupFunction<
         _c_obs_get_frame_interval_ns,
         _dart_obs_get_frame_interval_ns>('obs_get_frame_interval_ns');
-    return _obs_get_frame_interval_ns();
+    return _obs_get_frame_interval_ns!();
   }
 
-  _dart_obs_get_frame_interval_ns _obs_get_frame_interval_ns;
+  _dart_obs_get_frame_interval_ns? _obs_get_frame_interval_ns;
 
   int obs_get_total_frames() {
     _obs_get_total_frames ??= _dylib.lookupFunction<_c_obs_get_total_frames,
         _dart_obs_get_total_frames>('obs_get_total_frames');
-    return _obs_get_total_frames();
+    return _obs_get_total_frames!();
   }
 
-  _dart_obs_get_total_frames _obs_get_total_frames;
+  _dart_obs_get_total_frames? _obs_get_total_frames;
 
   int obs_get_lagged_frames() {
     _obs_get_lagged_frames ??= _dylib.lookupFunction<_c_obs_get_lagged_frames,
         _dart_obs_get_lagged_frames>('obs_get_lagged_frames');
-    return _obs_get_lagged_frames();
+    return _obs_get_lagged_frames!();
   }
 
-  _dart_obs_get_lagged_frames _obs_get_lagged_frames;
+  _dart_obs_get_lagged_frames? _obs_get_lagged_frames;
 
   int obs_nv12_tex_active() {
     _obs_nv12_tex_active ??= _dylib.lookupFunction<_c_obs_nv12_tex_active,
         _dart_obs_nv12_tex_active>('obs_nv12_tex_active');
-    return _obs_nv12_tex_active();
+    return _obs_nv12_tex_active!();
   }
 
-  _dart_obs_nv12_tex_active _obs_nv12_tex_active;
+  _dart_obs_nv12_tex_active? _obs_nv12_tex_active;
 
   void obs_apply_private_data(
     ffi.Pointer<obs_data> settings,
   ) {
     _obs_apply_private_data ??= _dylib.lookupFunction<_c_obs_apply_private_data,
         _dart_obs_apply_private_data>('obs_apply_private_data');
-    return _obs_apply_private_data(
+    return _obs_apply_private_data!(
       settings,
     );
   }
 
-  _dart_obs_apply_private_data _obs_apply_private_data;
+  _dart_obs_apply_private_data? _obs_apply_private_data;
 
   void obs_set_private_data(
     ffi.Pointer<obs_data> settings,
   ) {
     _obs_set_private_data ??= _dylib.lookupFunction<_c_obs_set_private_data,
         _dart_obs_set_private_data>('obs_set_private_data');
-    return _obs_set_private_data(
+    return _obs_set_private_data!(
       settings,
     );
   }
 
-  _dart_obs_set_private_data _obs_set_private_data;
+  _dart_obs_set_private_data? _obs_set_private_data;
 
   ffi.Pointer<obs_data> obs_get_private_data() {
     _obs_get_private_data ??= _dylib.lookupFunction<_c_obs_get_private_data,
         _dart_obs_get_private_data>('obs_get_private_data');
-    return _obs_get_private_data();
+    return _obs_get_private_data!();
   }
 
-  _dart_obs_get_private_data _obs_get_private_data;
+  _dart_obs_get_private_data? _obs_get_private_data;
 
   void obs_queue_task(
     int type,
@@ -12061,7 +12061,7 @@ class DiveObslibFFI {
     _obs_queue_task ??=
         _dylib.lookupFunction<_c_obs_queue_task, _dart_obs_queue_task>(
             'obs_queue_task');
-    return _obs_queue_task(
+    return _obs_queue_task!(
       type,
       task,
       param,
@@ -12069,7 +12069,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_queue_task _obs_queue_task;
+  _dart_obs_queue_task? _obs_queue_task;
 
   void obs_set_ui_task_handler(
     ffi.Pointer<ffi.NativeFunction<obs_task_handler_t>> handler,
@@ -12077,12 +12077,12 @@ class DiveObslibFFI {
     _obs_set_ui_task_handler ??= _dylib.lookupFunction<
         _c_obs_set_ui_task_handler,
         _dart_obs_set_ui_task_handler>('obs_set_ui_task_handler');
-    return _obs_set_ui_task_handler(
+    return _obs_set_ui_task_handler!(
       handler,
     );
   }
 
-  _dart_obs_set_ui_task_handler _obs_set_ui_task_handler;
+  _dart_obs_set_ui_task_handler? _obs_set_ui_task_handler;
 
   /// Creates a view context.
   ///
@@ -12092,10 +12092,10 @@ class DiveObslibFFI {
     _obs_view_create ??=
         _dylib.lookupFunction<_c_obs_view_create, _dart_obs_view_create>(
             'obs_view_create');
-    return _obs_view_create();
+    return _obs_view_create!();
   }
 
-  _dart_obs_view_create _obs_view_create;
+  _dart_obs_view_create? _obs_view_create;
 
   /// Destroys this view context
   void obs_view_destroy(
@@ -12104,12 +12104,12 @@ class DiveObslibFFI {
     _obs_view_destroy ??=
         _dylib.lookupFunction<_c_obs_view_destroy, _dart_obs_view_destroy>(
             'obs_view_destroy');
-    return _obs_view_destroy(
+    return _obs_view_destroy!(
       view,
     );
   }
 
-  _dart_obs_view_destroy _obs_view_destroy;
+  _dart_obs_view_destroy? _obs_view_destroy;
 
   /// Sets the source to be used for this view context.
   void obs_view_set_source(
@@ -12119,14 +12119,14 @@ class DiveObslibFFI {
   ) {
     _obs_view_set_source ??= _dylib.lookupFunction<_c_obs_view_set_source,
         _dart_obs_view_set_source>('obs_view_set_source');
-    return _obs_view_set_source(
+    return _obs_view_set_source!(
       view,
       channel,
       source,
     );
   }
 
-  _dart_obs_view_set_source _obs_view_set_source;
+  _dart_obs_view_set_source? _obs_view_set_source;
 
   /// Gets the source currently in use for this view context
   ffi.Pointer<obs_source> obs_view_get_source(
@@ -12135,13 +12135,13 @@ class DiveObslibFFI {
   ) {
     _obs_view_get_source ??= _dylib.lookupFunction<_c_obs_view_get_source,
         _dart_obs_view_get_source>('obs_view_get_source');
-    return _obs_view_get_source(
+    return _obs_view_get_source!(
       view,
       channel,
     );
   }
 
-  _dart_obs_view_get_source _obs_view_get_source;
+  _dart_obs_view_get_source? _obs_view_get_source;
 
   /// Renders the sources of this view context
   void obs_view_render(
@@ -12150,12 +12150,12 @@ class DiveObslibFFI {
     _obs_view_render ??=
         _dylib.lookupFunction<_c_obs_view_render, _dart_obs_view_render>(
             'obs_view_render');
-    return _obs_view_render(
+    return _obs_view_render!(
       view,
     );
   }
 
-  _dart_obs_view_render _obs_view_render;
+  _dart_obs_view_render? _obs_view_render;
 
   /// Adds a new window display linked to the main render pipeline.  This creates
   /// a new swap chain which updates every frame.
@@ -12169,13 +12169,13 @@ class DiveObslibFFI {
     _obs_display_create ??=
         _dylib.lookupFunction<_c_obs_display_create, _dart_obs_display_create>(
             'obs_display_create');
-    return _obs_display_create(
+    return _obs_display_create!(
       graphics_data,
       backround_color,
     );
   }
 
-  _dart_obs_display_create _obs_display_create;
+  _dart_obs_display_create? _obs_display_create;
 
   /// Destroys a display context
   void obs_display_destroy(
@@ -12183,12 +12183,12 @@ class DiveObslibFFI {
   ) {
     _obs_display_destroy ??= _dylib.lookupFunction<_c_obs_display_destroy,
         _dart_obs_display_destroy>('obs_display_destroy');
-    return _obs_display_destroy(
+    return _obs_display_destroy!(
       display,
     );
   }
 
-  _dart_obs_display_destroy _obs_display_destroy;
+  _dart_obs_display_destroy? _obs_display_destroy;
 
   /// Changes the size of this display
   void obs_display_resize(
@@ -12199,14 +12199,14 @@ class DiveObslibFFI {
     _obs_display_resize ??=
         _dylib.lookupFunction<_c_obs_display_resize, _dart_obs_display_resize>(
             'obs_display_resize');
-    return _obs_display_resize(
+    return _obs_display_resize!(
       display,
       cx,
       cy,
     );
   }
 
-  _dart_obs_display_resize _obs_display_resize;
+  _dart_obs_display_resize? _obs_display_resize;
 
   /// Adds a draw callback for this display context
   ///
@@ -12222,14 +12222,14 @@ class DiveObslibFFI {
     _obs_display_add_draw_callback ??= _dylib.lookupFunction<
         _c_obs_display_add_draw_callback,
         _dart_obs_display_add_draw_callback>('obs_display_add_draw_callback');
-    return _obs_display_add_draw_callback(
+    return _obs_display_add_draw_callback!(
       display,
       draw,
       param,
     );
   }
 
-  _dart_obs_display_add_draw_callback _obs_display_add_draw_callback;
+  _dart_obs_display_add_draw_callback? _obs_display_add_draw_callback;
 
   /// Removes a draw callback for this display context
   void obs_display_remove_draw_callback(
@@ -12241,14 +12241,14 @@ class DiveObslibFFI {
             _c_obs_display_remove_draw_callback,
             _dart_obs_display_remove_draw_callback>(
         'obs_display_remove_draw_callback');
-    return _obs_display_remove_draw_callback(
+    return _obs_display_remove_draw_callback!(
       display,
       draw,
       param,
     );
   }
 
-  _dart_obs_display_remove_draw_callback _obs_display_remove_draw_callback;
+  _dart_obs_display_remove_draw_callback? _obs_display_remove_draw_callback;
 
   void obs_display_set_enabled(
     ffi.Pointer<obs_display> display,
@@ -12257,25 +12257,25 @@ class DiveObslibFFI {
     _obs_display_set_enabled ??= _dylib.lookupFunction<
         _c_obs_display_set_enabled,
         _dart_obs_display_set_enabled>('obs_display_set_enabled');
-    return _obs_display_set_enabled(
+    return _obs_display_set_enabled!(
       display,
       enable,
     );
   }
 
-  _dart_obs_display_set_enabled _obs_display_set_enabled;
+  _dart_obs_display_set_enabled? _obs_display_set_enabled;
 
   int obs_display_enabled(
     ffi.Pointer<obs_display> display,
   ) {
     _obs_display_enabled ??= _dylib.lookupFunction<_c_obs_display_enabled,
         _dart_obs_display_enabled>('obs_display_enabled');
-    return _obs_display_enabled(
+    return _obs_display_enabled!(
       display,
     );
   }
 
-  _dart_obs_display_enabled _obs_display_enabled;
+  _dart_obs_display_enabled? _obs_display_enabled;
 
   void obs_display_set_background_color(
     ffi.Pointer<obs_display> display,
@@ -12285,13 +12285,13 @@ class DiveObslibFFI {
             _c_obs_display_set_background_color,
             _dart_obs_display_set_background_color>(
         'obs_display_set_background_color');
-    return _obs_display_set_background_color(
+    return _obs_display_set_background_color!(
       display,
       color,
     );
   }
 
-  _dart_obs_display_set_background_color _obs_display_set_background_color;
+  _dart_obs_display_set_background_color? _obs_display_set_background_color;
 
   void obs_display_size(
     ffi.Pointer<obs_display> display,
@@ -12301,14 +12301,14 @@ class DiveObslibFFI {
     _obs_display_size ??=
         _dylib.lookupFunction<_c_obs_display_size, _dart_obs_display_size>(
             'obs_display_size');
-    return _obs_display_size(
+    return _obs_display_size!(
       display,
       width,
       height,
     );
   }
 
-  _dart_obs_display_size _obs_display_size;
+  _dart_obs_display_size? _obs_display_size;
 
   /// Returns the translated display name of a source
   ffi.Pointer<ffi.Int8> obs_source_get_display_name(
@@ -12317,12 +12317,12 @@ class DiveObslibFFI {
     _obs_source_get_display_name ??= _dylib.lookupFunction<
         _c_obs_source_get_display_name,
         _dart_obs_source_get_display_name>('obs_source_get_display_name');
-    return _obs_source_get_display_name(
+    return _obs_source_get_display_name!(
       id,
     );
   }
 
-  _dart_obs_source_get_display_name _obs_source_get_display_name;
+  _dart_obs_source_get_display_name? _obs_source_get_display_name;
 
   /// Creates a source of the specified type with the specified settings.
   ///
@@ -12331,13 +12331,13 @@ class DiveObslibFFI {
   ffi.Pointer<obs_source> obs_source_create(
     ffi.Pointer<ffi.Int8> id,
     ffi.Pointer<ffi.Int8> name,
-    ffi.Pointer<obs_data> settings,
+    ffi.Pointer<obs_data>? settings,
     ffi.Pointer<obs_data> hotkey_data,
   ) {
     _obs_source_create ??=
         _dylib.lookupFunction<_c_obs_source_create, _dart_obs_source_create>(
             'obs_source_create');
-    return _obs_source_create(
+    return _obs_source_create!(
       id,
       name,
       settings,
@@ -12345,7 +12345,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_source_create _obs_source_create;
+  _dart_obs_source_create? _obs_source_create;
 
   ffi.Pointer<obs_source> obs_source_create_private(
     ffi.Pointer<ffi.Int8> id,
@@ -12355,14 +12355,14 @@ class DiveObslibFFI {
     _obs_source_create_private ??= _dylib.lookupFunction<
         _c_obs_source_create_private,
         _dart_obs_source_create_private>('obs_source_create_private');
-    return _obs_source_create_private(
+    return _obs_source_create_private!(
       id,
       name,
       settings,
     );
   }
 
-  _dart_obs_source_create_private _obs_source_create_private;
+  _dart_obs_source_create_private? _obs_source_create_private;
 
   ffi.Pointer<obs_source> obs_source_duplicate(
     ffi.Pointer<obs_source> source,
@@ -12371,14 +12371,14 @@ class DiveObslibFFI {
   ) {
     _obs_source_duplicate ??= _dylib.lookupFunction<_c_obs_source_duplicate,
         _dart_obs_source_duplicate>('obs_source_duplicate');
-    return _obs_source_duplicate(
+    return _obs_source_duplicate!(
       source,
       desired_name,
       create_private,
     );
   }
 
-  _dart_obs_source_duplicate _obs_source_duplicate;
+  _dart_obs_source_duplicate? _obs_source_duplicate;
 
   /// Adds/releases a reference to a source.  When the last reference is
   /// released, the source is destroyed.
@@ -12388,37 +12388,37 @@ class DiveObslibFFI {
     _obs_source_addref ??=
         _dylib.lookupFunction<_c_obs_source_addref, _dart_obs_source_addref>(
             'obs_source_addref');
-    return _obs_source_addref(
+    return _obs_source_addref!(
       source,
     );
   }
 
-  _dart_obs_source_addref _obs_source_addref;
+  _dart_obs_source_addref? _obs_source_addref;
 
   void obs_source_release(
-    ffi.Pointer<obs_source> source,
+    ffi.Pointer<obs_source>? source,
   ) {
     _obs_source_release ??=
         _dylib.lookupFunction<_c_obs_source_release, _dart_obs_source_release>(
             'obs_source_release');
-    return _obs_source_release(
+    return _obs_source_release!(
       source,
     );
   }
 
-  _dart_obs_source_release _obs_source_release;
+  _dart_obs_source_release? _obs_source_release;
 
   void obs_weak_source_addref(
     ffi.Pointer<obs_weak_source> weak,
   ) {
     _obs_weak_source_addref ??= _dylib.lookupFunction<_c_obs_weak_source_addref,
         _dart_obs_weak_source_addref>('obs_weak_source_addref');
-    return _obs_weak_source_addref(
+    return _obs_weak_source_addref!(
       weak,
     );
   }
 
-  _dart_obs_weak_source_addref _obs_weak_source_addref;
+  _dart_obs_weak_source_addref? _obs_weak_source_addref;
 
   void obs_weak_source_release(
     ffi.Pointer<obs_weak_source> weak,
@@ -12426,12 +12426,12 @@ class DiveObslibFFI {
     _obs_weak_source_release ??= _dylib.lookupFunction<
         _c_obs_weak_source_release,
         _dart_obs_weak_source_release>('obs_weak_source_release');
-    return _obs_weak_source_release(
+    return _obs_weak_source_release!(
       weak,
     );
   }
 
-  _dart_obs_weak_source_release _obs_weak_source_release;
+  _dart_obs_weak_source_release? _obs_weak_source_release;
 
   ffi.Pointer<obs_source> obs_source_get_ref(
     ffi.Pointer<obs_source> source,
@@ -12439,12 +12439,12 @@ class DiveObslibFFI {
     _obs_source_get_ref ??=
         _dylib.lookupFunction<_c_obs_source_get_ref, _dart_obs_source_get_ref>(
             'obs_source_get_ref');
-    return _obs_source_get_ref(
+    return _obs_source_get_ref!(
       source,
     );
   }
 
-  _dart_obs_source_get_ref _obs_source_get_ref;
+  _dart_obs_source_get_ref? _obs_source_get_ref;
 
   ffi.Pointer<obs_weak_source> obs_source_get_weak_source(
     ffi.Pointer<obs_source> source,
@@ -12452,12 +12452,12 @@ class DiveObslibFFI {
     _obs_source_get_weak_source ??= _dylib.lookupFunction<
         _c_obs_source_get_weak_source,
         _dart_obs_source_get_weak_source>('obs_source_get_weak_source');
-    return _obs_source_get_weak_source(
+    return _obs_source_get_weak_source!(
       source,
     );
   }
 
-  _dart_obs_source_get_weak_source _obs_source_get_weak_source;
+  _dart_obs_source_get_weak_source? _obs_source_get_weak_source;
 
   ffi.Pointer<obs_source> obs_weak_source_get_source(
     ffi.Pointer<obs_weak_source> weak,
@@ -12465,12 +12465,12 @@ class DiveObslibFFI {
     _obs_weak_source_get_source ??= _dylib.lookupFunction<
         _c_obs_weak_source_get_source,
         _dart_obs_weak_source_get_source>('obs_weak_source_get_source');
-    return _obs_weak_source_get_source(
+    return _obs_weak_source_get_source!(
       weak,
     );
   }
 
-  _dart_obs_weak_source_get_source _obs_weak_source_get_source;
+  _dart_obs_weak_source_get_source? _obs_weak_source_get_source;
 
   int obs_weak_source_references_source(
     ffi.Pointer<obs_weak_source> weak,
@@ -12480,13 +12480,13 @@ class DiveObslibFFI {
             _c_obs_weak_source_references_source,
             _dart_obs_weak_source_references_source>(
         'obs_weak_source_references_source');
-    return _obs_weak_source_references_source(
+    return _obs_weak_source_references_source!(
       weak,
       source,
     );
   }
 
-  _dart_obs_weak_source_references_source _obs_weak_source_references_source;
+  _dart_obs_weak_source_references_source? _obs_weak_source_references_source;
 
   /// Notifies all references that the source should be released
   void obs_source_remove(
@@ -12495,12 +12495,12 @@ class DiveObslibFFI {
     _obs_source_remove ??=
         _dylib.lookupFunction<_c_obs_source_remove, _dart_obs_source_remove>(
             'obs_source_remove');
-    return _obs_source_remove(
+    return _obs_source_remove!(
       source,
     );
   }
 
-  _dart_obs_source_remove _obs_source_remove;
+  _dart_obs_source_remove? _obs_source_remove;
 
   /// Returns true if the source should be released
   int obs_source_removed(
@@ -12509,12 +12509,12 @@ class DiveObslibFFI {
     _obs_source_removed ??=
         _dylib.lookupFunction<_c_obs_source_removed, _dart_obs_source_removed>(
             'obs_source_removed');
-    return _obs_source_removed(
+    return _obs_source_removed!(
       source,
     );
   }
 
-  _dart_obs_source_removed _obs_source_removed;
+  _dart_obs_source_removed? _obs_source_removed;
 
   /// Returns capability flags of a source
   int obs_source_get_output_flags(
@@ -12523,12 +12523,12 @@ class DiveObslibFFI {
     _obs_source_get_output_flags ??= _dylib.lookupFunction<
         _c_obs_source_get_output_flags,
         _dart_obs_source_get_output_flags>('obs_source_get_output_flags');
-    return _obs_source_get_output_flags(
+    return _obs_source_get_output_flags!(
       source,
     );
   }
 
-  _dart_obs_source_get_output_flags _obs_source_get_output_flags;
+  _dart_obs_source_get_output_flags? _obs_source_get_output_flags;
 
   /// Returns capability flags of a source type
   int obs_get_source_output_flags(
@@ -12537,12 +12537,12 @@ class DiveObslibFFI {
     _obs_get_source_output_flags ??= _dylib.lookupFunction<
         _c_obs_get_source_output_flags,
         _dart_obs_get_source_output_flags>('obs_get_source_output_flags');
-    return _obs_get_source_output_flags(
+    return _obs_get_source_output_flags!(
       id,
     );
   }
 
-  _dart_obs_get_source_output_flags _obs_get_source_output_flags;
+  _dart_obs_get_source_output_flags? _obs_get_source_output_flags;
 
   /// Gets the default settings for a source type
   ffi.Pointer<obs_data> obs_get_source_defaults(
@@ -12551,12 +12551,12 @@ class DiveObslibFFI {
     _obs_get_source_defaults ??= _dylib.lookupFunction<
         _c_obs_get_source_defaults,
         _dart_obs_get_source_defaults>('obs_get_source_defaults');
-    return _obs_get_source_defaults(
+    return _obs_get_source_defaults!(
       id,
     );
   }
 
-  _dart_obs_get_source_defaults _obs_get_source_defaults;
+  _dart_obs_get_source_defaults? _obs_get_source_defaults;
 
   /// Returns the property list, if any.  Free with obs_properties_destroy
   ffi.Pointer<obs_properties> obs_get_source_properties(
@@ -12565,12 +12565,12 @@ class DiveObslibFFI {
     _obs_get_source_properties ??= _dylib.lookupFunction<
         _c_obs_get_source_properties,
         _dart_obs_get_source_properties>('obs_get_source_properties');
-    return _obs_get_source_properties(
+    return _obs_get_source_properties!(
       id,
     );
   }
 
-  _dart_obs_get_source_properties _obs_get_source_properties;
+  _dart_obs_get_source_properties? _obs_get_source_properties;
 
   /// Returns whether the source has custom properties or not
   int obs_is_source_configurable(
@@ -12579,12 +12579,12 @@ class DiveObslibFFI {
     _obs_is_source_configurable ??= _dylib.lookupFunction<
         _c_obs_is_source_configurable,
         _dart_obs_is_source_configurable>('obs_is_source_configurable');
-    return _obs_is_source_configurable(
+    return _obs_is_source_configurable!(
       id,
     );
   }
 
-  _dart_obs_is_source_configurable _obs_is_source_configurable;
+  _dart_obs_is_source_configurable? _obs_is_source_configurable;
 
   int obs_source_configurable(
     ffi.Pointer<obs_source> source,
@@ -12592,12 +12592,12 @@ class DiveObslibFFI {
     _obs_source_configurable ??= _dylib.lookupFunction<
         _c_obs_source_configurable,
         _dart_obs_source_configurable>('obs_source_configurable');
-    return _obs_source_configurable(
+    return _obs_source_configurable!(
       source,
     );
   }
 
-  _dart_obs_source_configurable _obs_source_configurable;
+  _dart_obs_source_configurable? _obs_source_configurable;
 
   /// Returns the properties list for a specific existing source.  Free with
   /// obs_properties_destroy
@@ -12606,12 +12606,12 @@ class DiveObslibFFI {
   ) {
     _obs_source_properties ??= _dylib.lookupFunction<_c_obs_source_properties,
         _dart_obs_source_properties>('obs_source_properties');
-    return _obs_source_properties(
+    return _obs_source_properties!(
       source,
     );
   }
 
-  _dart_obs_source_properties _obs_source_properties;
+  _dart_obs_source_properties? _obs_source_properties;
 
   /// Updates settings for this source
   void obs_source_update(
@@ -12621,13 +12621,13 @@ class DiveObslibFFI {
     _obs_source_update ??=
         _dylib.lookupFunction<_c_obs_source_update, _dart_obs_source_update>(
             'obs_source_update');
-    return _obs_source_update(
+    return _obs_source_update!(
       source,
       settings,
     );
   }
 
-  _dart_obs_source_update _obs_source_update;
+  _dart_obs_source_update? _obs_source_update;
 
   /// Renders a video source.
   void obs_source_video_render(
@@ -12636,12 +12636,12 @@ class DiveObslibFFI {
     _obs_source_video_render ??= _dylib.lookupFunction<
         _c_obs_source_video_render,
         _dart_obs_source_video_render>('obs_source_video_render');
-    return _obs_source_video_render(
+    return _obs_source_video_render!(
       source,
     );
   }
 
-  _dart_obs_source_video_render _obs_source_video_render;
+  _dart_obs_source_video_render? _obs_source_video_render;
 
   /// Gets the width of a source (if it has video)
   int obs_source_get_width(
@@ -12649,12 +12649,12 @@ class DiveObslibFFI {
   ) {
     _obs_source_get_width ??= _dylib.lookupFunction<_c_obs_source_get_width,
         _dart_obs_source_get_width>('obs_source_get_width');
-    return _obs_source_get_width(
+    return _obs_source_get_width!(
       source,
     );
   }
 
-  _dart_obs_source_get_width _obs_source_get_width;
+  _dart_obs_source_get_width? _obs_source_get_width;
 
   /// Gets the height of a source (if it has video)
   int obs_source_get_height(
@@ -12662,12 +12662,12 @@ class DiveObslibFFI {
   ) {
     _obs_source_get_height ??= _dylib.lookupFunction<_c_obs_source_get_height,
         _dart_obs_source_get_height>('obs_source_get_height');
-    return _obs_source_get_height(
+    return _obs_source_get_height!(
       source,
     );
   }
 
-  _dart_obs_source_get_height _obs_source_get_height;
+  _dart_obs_source_get_height? _obs_source_get_height;
 
   /// If the source is a filter, returns the parent source of the filter.  Only
   /// guaranteed to be valid inside of the video_render, filter_audio,
@@ -12677,12 +12677,12 @@ class DiveObslibFFI {
   ) {
     _obs_filter_get_parent ??= _dylib.lookupFunction<_c_obs_filter_get_parent,
         _dart_obs_filter_get_parent>('obs_filter_get_parent');
-    return _obs_filter_get_parent(
+    return _obs_filter_get_parent!(
       filter,
     );
   }
 
-  _dart_obs_filter_get_parent _obs_filter_get_parent;
+  _dart_obs_filter_get_parent? _obs_filter_get_parent;
 
   /// If the source is a filter, returns the target source of the filter.  Only
   /// guaranteed to be valid inside of the video_render, filter_audio,
@@ -12692,12 +12692,12 @@ class DiveObslibFFI {
   ) {
     _obs_filter_get_target ??= _dylib.lookupFunction<_c_obs_filter_get_target,
         _dart_obs_filter_get_target>('obs_filter_get_target');
-    return _obs_filter_get_target(
+    return _obs_filter_get_target!(
       filter,
     );
   }
 
-  _dart_obs_filter_get_target _obs_filter_get_target;
+  _dart_obs_filter_get_target? _obs_filter_get_target;
 
   /// Used to directly render a non-async source without any filter processing
   void obs_source_default_render(
@@ -12706,12 +12706,12 @@ class DiveObslibFFI {
     _obs_source_default_render ??= _dylib.lookupFunction<
         _c_obs_source_default_render,
         _dart_obs_source_default_render>('obs_source_default_render');
-    return _obs_source_default_render(
+    return _obs_source_default_render!(
       source,
     );
   }
 
-  _dart_obs_source_default_render _obs_source_default_render;
+  _dart_obs_source_default_render? _obs_source_default_render;
 
   /// Adds a filter to the source (which is used whenever the source is used)
   void obs_source_filter_add(
@@ -12720,13 +12720,13 @@ class DiveObslibFFI {
   ) {
     _obs_source_filter_add ??= _dylib.lookupFunction<_c_obs_source_filter_add,
         _dart_obs_source_filter_add>('obs_source_filter_add');
-    return _obs_source_filter_add(
+    return _obs_source_filter_add!(
       source,
       filter,
     );
   }
 
-  _dart_obs_source_filter_add _obs_source_filter_add;
+  _dart_obs_source_filter_add? _obs_source_filter_add;
 
   /// Removes a filter from the source
   void obs_source_filter_remove(
@@ -12736,13 +12736,13 @@ class DiveObslibFFI {
     _obs_source_filter_remove ??= _dylib.lookupFunction<
         _c_obs_source_filter_remove,
         _dart_obs_source_filter_remove>('obs_source_filter_remove');
-    return _obs_source_filter_remove(
+    return _obs_source_filter_remove!(
       source,
       filter,
     );
   }
 
-  _dart_obs_source_filter_remove _obs_source_filter_remove;
+  _dart_obs_source_filter_remove? _obs_source_filter_remove;
 
   /// Modifies the order of a specific filter
   void obs_source_filter_set_order(
@@ -12753,14 +12753,14 @@ class DiveObslibFFI {
     _obs_source_filter_set_order ??= _dylib.lookupFunction<
         _c_obs_source_filter_set_order,
         _dart_obs_source_filter_set_order>('obs_source_filter_set_order');
-    return _obs_source_filter_set_order(
+    return _obs_source_filter_set_order!(
       source,
       filter,
       movement,
     );
   }
 
-  _dart_obs_source_filter_set_order _obs_source_filter_set_order;
+  _dart_obs_source_filter_set_order? _obs_source_filter_set_order;
 
   /// Gets the settings string for a source
   ffi.Pointer<obs_data> obs_source_get_settings(
@@ -12769,12 +12769,12 @@ class DiveObslibFFI {
     _obs_source_get_settings ??= _dylib.lookupFunction<
         _c_obs_source_get_settings,
         _dart_obs_source_get_settings>('obs_source_get_settings');
-    return _obs_source_get_settings(
+    return _obs_source_get_settings!(
       source,
     );
   }
 
-  _dart_obs_source_get_settings _obs_source_get_settings;
+  _dart_obs_source_get_settings? _obs_source_get_settings;
 
   /// Gets the name of a source
   ffi.Pointer<ffi.Int8> obs_source_get_name(
@@ -12782,12 +12782,12 @@ class DiveObslibFFI {
   ) {
     _obs_source_get_name ??= _dylib.lookupFunction<_c_obs_source_get_name,
         _dart_obs_source_get_name>('obs_source_get_name');
-    return _obs_source_get_name(
+    return _obs_source_get_name!(
       source,
     );
   }
 
-  _dart_obs_source_get_name _obs_source_get_name;
+  _dart_obs_source_get_name? _obs_source_get_name;
 
   /// Sets the name of a source
   void obs_source_set_name(
@@ -12796,13 +12796,13 @@ class DiveObslibFFI {
   ) {
     _obs_source_set_name ??= _dylib.lookupFunction<_c_obs_source_set_name,
         _dart_obs_source_set_name>('obs_source_set_name');
-    return _obs_source_set_name(
+    return _obs_source_set_name!(
       source,
       name,
     );
   }
 
-  _dart_obs_source_set_name _obs_source_set_name;
+  _dart_obs_source_set_name? _obs_source_set_name;
 
   /// Gets the source type
   int obs_source_get_type(
@@ -12810,12 +12810,12 @@ class DiveObslibFFI {
   ) {
     _obs_source_get_type ??= _dylib.lookupFunction<_c_obs_source_get_type,
         _dart_obs_source_get_type>('obs_source_get_type');
-    return _obs_source_get_type(
+    return _obs_source_get_type!(
       source,
     );
   }
 
-  _dart_obs_source_get_type _obs_source_get_type;
+  _dart_obs_source_get_type? _obs_source_get_type;
 
   /// Gets the source identifier
   ffi.Pointer<ffi.Int8> obs_source_get_id(
@@ -12824,12 +12824,12 @@ class DiveObslibFFI {
     _obs_source_get_id ??=
         _dylib.lookupFunction<_c_obs_source_get_id, _dart_obs_source_get_id>(
             'obs_source_get_id');
-    return _obs_source_get_id(
+    return _obs_source_get_id!(
       source,
     );
   }
 
-  _dart_obs_source_get_id _obs_source_get_id;
+  _dart_obs_source_get_id? _obs_source_get_id;
 
   ffi.Pointer<ffi.Int8> obs_source_get_unversioned_id(
     ffi.Pointer<obs_source> source,
@@ -12837,12 +12837,12 @@ class DiveObslibFFI {
     _obs_source_get_unversioned_id ??= _dylib.lookupFunction<
         _c_obs_source_get_unversioned_id,
         _dart_obs_source_get_unversioned_id>('obs_source_get_unversioned_id');
-    return _obs_source_get_unversioned_id(
+    return _obs_source_get_unversioned_id!(
       source,
     );
   }
 
-  _dart_obs_source_get_unversioned_id _obs_source_get_unversioned_id;
+  _dart_obs_source_get_unversioned_id? _obs_source_get_unversioned_id;
 
   /// Returns the signal handler for a source
   ffi.Pointer<signal_handler> obs_source_get_signal_handler(
@@ -12851,12 +12851,12 @@ class DiveObslibFFI {
     _obs_source_get_signal_handler ??= _dylib.lookupFunction<
         _c_obs_source_get_signal_handler,
         _dart_obs_source_get_signal_handler>('obs_source_get_signal_handler');
-    return _obs_source_get_signal_handler(
+    return _obs_source_get_signal_handler!(
       source,
     );
   }
 
-  _dart_obs_source_get_signal_handler _obs_source_get_signal_handler;
+  _dart_obs_source_get_signal_handler? _obs_source_get_signal_handler;
 
   /// Returns the procedure handler for a source
   ffi.Pointer<proc_handler> obs_source_get_proc_handler(
@@ -12865,12 +12865,12 @@ class DiveObslibFFI {
     _obs_source_get_proc_handler ??= _dylib.lookupFunction<
         _c_obs_source_get_proc_handler,
         _dart_obs_source_get_proc_handler>('obs_source_get_proc_handler');
-    return _obs_source_get_proc_handler(
+    return _obs_source_get_proc_handler!(
       source,
     );
   }
 
-  _dart_obs_source_get_proc_handler _obs_source_get_proc_handler;
+  _dart_obs_source_get_proc_handler? _obs_source_get_proc_handler;
 
   /// Sets the user volume for a source that has audio output
   void obs_source_set_volume(
@@ -12879,13 +12879,13 @@ class DiveObslibFFI {
   ) {
     _obs_source_set_volume ??= _dylib.lookupFunction<_c_obs_source_set_volume,
         _dart_obs_source_set_volume>('obs_source_set_volume');
-    return _obs_source_set_volume(
+    return _obs_source_set_volume!(
       source,
       volume,
     );
   }
 
-  _dart_obs_source_set_volume _obs_source_set_volume;
+  _dart_obs_source_set_volume? _obs_source_set_volume;
 
   /// Gets the user volume for a source that has audio output
   double obs_source_get_volume(
@@ -12893,12 +12893,12 @@ class DiveObslibFFI {
   ) {
     _obs_source_get_volume ??= _dylib.lookupFunction<_c_obs_source_get_volume,
         _dart_obs_source_get_volume>('obs_source_get_volume');
-    return _obs_source_get_volume(
+    return _obs_source_get_volume!(
       source,
     );
   }
 
-  _dart_obs_source_get_volume _obs_source_get_volume;
+  _dart_obs_source_get_volume? _obs_source_get_volume;
 
   int obs_source_get_speaker_layout(
     ffi.Pointer<obs_source> source,
@@ -12906,12 +12906,12 @@ class DiveObslibFFI {
     _obs_source_get_speaker_layout ??= _dylib.lookupFunction<
         _c_obs_source_get_speaker_layout,
         _dart_obs_source_get_speaker_layout>('obs_source_get_speaker_layout');
-    return _obs_source_get_speaker_layout(
+    return _obs_source_get_speaker_layout!(
       source,
     );
   }
 
-  _dart_obs_source_get_speaker_layout _obs_source_get_speaker_layout;
+  _dart_obs_source_get_speaker_layout? _obs_source_get_speaker_layout;
 
   /// Sets the balance value for a stereo audio source
   void obs_source_set_balance_value(
@@ -12921,13 +12921,13 @@ class DiveObslibFFI {
     _obs_source_set_balance_value ??= _dylib.lookupFunction<
         _c_obs_source_set_balance_value,
         _dart_obs_source_set_balance_value>('obs_source_set_balance_value');
-    return _obs_source_set_balance_value(
+    return _obs_source_set_balance_value!(
       source,
       balance,
     );
   }
 
-  _dart_obs_source_set_balance_value _obs_source_set_balance_value;
+  _dart_obs_source_set_balance_value? _obs_source_set_balance_value;
 
   /// Gets the balance value for a stereo audio source
   double obs_source_get_balance_value(
@@ -12936,12 +12936,12 @@ class DiveObslibFFI {
     _obs_source_get_balance_value ??= _dylib.lookupFunction<
         _c_obs_source_get_balance_value,
         _dart_obs_source_get_balance_value>('obs_source_get_balance_value');
-    return _obs_source_get_balance_value(
+    return _obs_source_get_balance_value!(
       source,
     );
   }
 
-  _dart_obs_source_get_balance_value _obs_source_get_balance_value;
+  _dart_obs_source_get_balance_value? _obs_source_get_balance_value;
 
   /// Sets the audio sync offset (in nanoseconds) for a source
   void obs_source_set_sync_offset(
@@ -12951,13 +12951,13 @@ class DiveObslibFFI {
     _obs_source_set_sync_offset ??= _dylib.lookupFunction<
         _c_obs_source_set_sync_offset,
         _dart_obs_source_set_sync_offset>('obs_source_set_sync_offset');
-    return _obs_source_set_sync_offset(
+    return _obs_source_set_sync_offset!(
       source,
       offset,
     );
   }
 
-  _dart_obs_source_set_sync_offset _obs_source_set_sync_offset;
+  _dart_obs_source_set_sync_offset? _obs_source_set_sync_offset;
 
   /// Gets the audio sync offset (in nanoseconds) for a source
   int obs_source_get_sync_offset(
@@ -12966,12 +12966,12 @@ class DiveObslibFFI {
     _obs_source_get_sync_offset ??= _dylib.lookupFunction<
         _c_obs_source_get_sync_offset,
         _dart_obs_source_get_sync_offset>('obs_source_get_sync_offset');
-    return _obs_source_get_sync_offset(
+    return _obs_source_get_sync_offset!(
       source,
     );
   }
 
-  _dart_obs_source_get_sync_offset _obs_source_get_sync_offset;
+  _dart_obs_source_get_sync_offset? _obs_source_get_sync_offset;
 
   /// Enumerates active child sources used by this source
   void obs_source_enum_active_sources(
@@ -12982,14 +12982,14 @@ class DiveObslibFFI {
     _obs_source_enum_active_sources ??= _dylib.lookupFunction<
         _c_obs_source_enum_active_sources,
         _dart_obs_source_enum_active_sources>('obs_source_enum_active_sources');
-    return _obs_source_enum_active_sources(
+    return _obs_source_enum_active_sources!(
       source,
       enum_callback,
       param,
     );
   }
 
-  _dart_obs_source_enum_active_sources _obs_source_enum_active_sources;
+  _dart_obs_source_enum_active_sources? _obs_source_enum_active_sources;
 
   /// Enumerates the entire active child source tree used by this source
   void obs_source_enum_active_tree(
@@ -13000,14 +13000,14 @@ class DiveObslibFFI {
     _obs_source_enum_active_tree ??= _dylib.lookupFunction<
         _c_obs_source_enum_active_tree,
         _dart_obs_source_enum_active_tree>('obs_source_enum_active_tree');
-    return _obs_source_enum_active_tree(
+    return _obs_source_enum_active_tree!(
       source,
       enum_callback,
       param,
     );
   }
 
-  _dart_obs_source_enum_active_tree _obs_source_enum_active_tree;
+  _dart_obs_source_enum_active_tree? _obs_source_enum_active_tree;
 
   /// Returns true if active, false if not
   int obs_source_active(
@@ -13016,12 +13016,12 @@ class DiveObslibFFI {
     _obs_source_active ??=
         _dylib.lookupFunction<_c_obs_source_active, _dart_obs_source_active>(
             'obs_source_active');
-    return _obs_source_active(
+    return _obs_source_active!(
       source,
     );
   }
 
-  _dart_obs_source_active _obs_source_active;
+  _dart_obs_source_active? _obs_source_active;
 
   /// Returns true if currently displayed somewhere (active or not), false if not
   int obs_source_showing(
@@ -13030,12 +13030,12 @@ class DiveObslibFFI {
     _obs_source_showing ??=
         _dylib.lookupFunction<_c_obs_source_showing, _dart_obs_source_showing>(
             'obs_source_showing');
-    return _obs_source_showing(
+    return _obs_source_showing!(
       source,
     );
   }
 
-  _dart_obs_source_showing _obs_source_showing;
+  _dart_obs_source_showing? _obs_source_showing;
 
   /// Sets source flags.  Note that these are different from the main output
   /// flags.  These are generally things that can be set by the source or user,
@@ -13046,13 +13046,13 @@ class DiveObslibFFI {
   ) {
     _obs_source_set_flags ??= _dylib.lookupFunction<_c_obs_source_set_flags,
         _dart_obs_source_set_flags>('obs_source_set_flags');
-    return _obs_source_set_flags(
+    return _obs_source_set_flags!(
       source,
       flags,
     );
   }
 
-  _dart_obs_source_set_flags _obs_source_set_flags;
+  _dart_obs_source_set_flags? _obs_source_set_flags;
 
   /// Gets source flags.
   int obs_source_get_flags(
@@ -13060,12 +13060,12 @@ class DiveObslibFFI {
   ) {
     _obs_source_get_flags ??= _dylib.lookupFunction<_c_obs_source_get_flags,
         _dart_obs_source_get_flags>('obs_source_get_flags');
-    return _obs_source_get_flags(
+    return _obs_source_get_flags!(
       source,
     );
   }
 
-  _dart_obs_source_get_flags _obs_source_get_flags;
+  _dart_obs_source_get_flags? _obs_source_get_flags;
 
   /// Sets audio mixer flags.  These flags are used to specify which mixers
   /// the source's audio should be applied to.
@@ -13076,13 +13076,13 @@ class DiveObslibFFI {
     _obs_source_set_audio_mixers ??= _dylib.lookupFunction<
         _c_obs_source_set_audio_mixers,
         _dart_obs_source_set_audio_mixers>('obs_source_set_audio_mixers');
-    return _obs_source_set_audio_mixers(
+    return _obs_source_set_audio_mixers!(
       source,
       mixers,
     );
   }
 
-  _dart_obs_source_set_audio_mixers _obs_source_set_audio_mixers;
+  _dart_obs_source_set_audio_mixers? _obs_source_set_audio_mixers;
 
   /// Gets audio mixer flags
   int obs_source_get_audio_mixers(
@@ -13091,12 +13091,12 @@ class DiveObslibFFI {
     _obs_source_get_audio_mixers ??= _dylib.lookupFunction<
         _c_obs_source_get_audio_mixers,
         _dart_obs_source_get_audio_mixers>('obs_source_get_audio_mixers');
-    return _obs_source_get_audio_mixers(
+    return _obs_source_get_audio_mixers!(
       source,
     );
   }
 
-  _dart_obs_source_get_audio_mixers _obs_source_get_audio_mixers;
+  _dart_obs_source_get_audio_mixers? _obs_source_get_audio_mixers;
 
   /// Increments the 'showing' reference counter to indicate that the source is
   /// being shown somewhere.  If the reference counter was 0, will call the 'show'
@@ -13106,12 +13106,12 @@ class DiveObslibFFI {
   ) {
     _obs_source_inc_showing ??= _dylib.lookupFunction<_c_obs_source_inc_showing,
         _dart_obs_source_inc_showing>('obs_source_inc_showing');
-    return _obs_source_inc_showing(
+    return _obs_source_inc_showing!(
       source,
     );
   }
 
-  _dart_obs_source_inc_showing _obs_source_inc_showing;
+  _dart_obs_source_inc_showing? _obs_source_inc_showing;
 
   /// Increments the 'active' reference counter to indicate that the source is
   /// fully active.  If the reference counter was 0, will call the 'activate'
@@ -13126,12 +13126,12 @@ class DiveObslibFFI {
   ) {
     _obs_source_inc_active ??= _dylib.lookupFunction<_c_obs_source_inc_active,
         _dart_obs_source_inc_active>('obs_source_inc_active');
-    return _obs_source_inc_active(
+    return _obs_source_inc_active!(
       source,
     );
   }
 
-  _dart_obs_source_inc_active _obs_source_inc_active;
+  _dart_obs_source_inc_active? _obs_source_inc_active;
 
   /// Decrements the 'showing' reference counter to indicate that the source is
   /// no longer being shown somewhere.  If the reference counter is set to 0,
@@ -13141,12 +13141,12 @@ class DiveObslibFFI {
   ) {
     _obs_source_dec_showing ??= _dylib.lookupFunction<_c_obs_source_dec_showing,
         _dart_obs_source_dec_showing>('obs_source_dec_showing');
-    return _obs_source_dec_showing(
+    return _obs_source_dec_showing!(
       source,
     );
   }
 
-  _dart_obs_source_dec_showing _obs_source_dec_showing;
+  _dart_obs_source_dec_showing? _obs_source_dec_showing;
 
   /// Decrements the 'active' reference counter to indicate that the source is no
   /// longer fully active.  If the reference counter is set to 0, will call the
@@ -13160,12 +13160,12 @@ class DiveObslibFFI {
   ) {
     _obs_source_dec_active ??= _dylib.lookupFunction<_c_obs_source_dec_active,
         _dart_obs_source_dec_active>('obs_source_dec_active');
-    return _obs_source_dec_active(
+    return _obs_source_dec_active!(
       source,
     );
   }
 
-  _dart_obs_source_dec_active _obs_source_dec_active;
+  _dart_obs_source_dec_active? _obs_source_dec_active;
 
   /// Enumerates filters assigned to the source
   void obs_source_enum_filters(
@@ -13176,14 +13176,14 @@ class DiveObslibFFI {
     _obs_source_enum_filters ??= _dylib.lookupFunction<
         _c_obs_source_enum_filters,
         _dart_obs_source_enum_filters>('obs_source_enum_filters');
-    return _obs_source_enum_filters(
+    return _obs_source_enum_filters!(
       source,
       callback,
       param,
     );
   }
 
-  _dart_obs_source_enum_filters _obs_source_enum_filters;
+  _dart_obs_source_enum_filters? _obs_source_enum_filters;
 
   /// Gets a filter of a source by its display name.
   ffi.Pointer<obs_source> obs_source_get_filter_by_name(
@@ -13193,13 +13193,13 @@ class DiveObslibFFI {
     _obs_source_get_filter_by_name ??= _dylib.lookupFunction<
         _c_obs_source_get_filter_by_name,
         _dart_obs_source_get_filter_by_name>('obs_source_get_filter_by_name');
-    return _obs_source_get_filter_by_name(
+    return _obs_source_get_filter_by_name!(
       source,
       name,
     );
   }
 
-  _dart_obs_source_get_filter_by_name _obs_source_get_filter_by_name;
+  _dart_obs_source_get_filter_by_name? _obs_source_get_filter_by_name;
 
   void obs_source_copy_filters(
     ffi.Pointer<obs_source> dst,
@@ -13208,13 +13208,13 @@ class DiveObslibFFI {
     _obs_source_copy_filters ??= _dylib.lookupFunction<
         _c_obs_source_copy_filters,
         _dart_obs_source_copy_filters>('obs_source_copy_filters');
-    return _obs_source_copy_filters(
+    return _obs_source_copy_filters!(
       dst,
       src,
     );
   }
 
-  _dart_obs_source_copy_filters _obs_source_copy_filters;
+  _dart_obs_source_copy_filters? _obs_source_copy_filters;
 
   void obs_source_copy_single_filter(
     ffi.Pointer<obs_source> dst,
@@ -13223,13 +13223,13 @@ class DiveObslibFFI {
     _obs_source_copy_single_filter ??= _dylib.lookupFunction<
         _c_obs_source_copy_single_filter,
         _dart_obs_source_copy_single_filter>('obs_source_copy_single_filter');
-    return _obs_source_copy_single_filter(
+    return _obs_source_copy_single_filter!(
       dst,
       filter,
     );
   }
 
-  _dart_obs_source_copy_single_filter _obs_source_copy_single_filter;
+  _dart_obs_source_copy_single_filter? _obs_source_copy_single_filter;
 
   int obs_source_enabled(
     ffi.Pointer<obs_source> source,
@@ -13237,12 +13237,12 @@ class DiveObslibFFI {
     _obs_source_enabled ??=
         _dylib.lookupFunction<_c_obs_source_enabled, _dart_obs_source_enabled>(
             'obs_source_enabled');
-    return _obs_source_enabled(
+    return _obs_source_enabled!(
       source,
     );
   }
 
-  _dart_obs_source_enabled _obs_source_enabled;
+  _dart_obs_source_enabled? _obs_source_enabled;
 
   void obs_source_set_enabled(
     ffi.Pointer<obs_source> source,
@@ -13250,13 +13250,13 @@ class DiveObslibFFI {
   ) {
     _obs_source_set_enabled ??= _dylib.lookupFunction<_c_obs_source_set_enabled,
         _dart_obs_source_set_enabled>('obs_source_set_enabled');
-    return _obs_source_set_enabled(
+    return _obs_source_set_enabled!(
       source,
       enabled,
     );
   }
 
-  _dart_obs_source_set_enabled _obs_source_set_enabled;
+  _dart_obs_source_set_enabled? _obs_source_set_enabled;
 
   int obs_source_muted(
     ffi.Pointer<obs_source> source,
@@ -13264,12 +13264,12 @@ class DiveObslibFFI {
     _obs_source_muted ??=
         _dylib.lookupFunction<_c_obs_source_muted, _dart_obs_source_muted>(
             'obs_source_muted');
-    return _obs_source_muted(
+    return _obs_source_muted!(
       source,
     );
   }
 
-  _dart_obs_source_muted _obs_source_muted;
+  _dart_obs_source_muted? _obs_source_muted;
 
   void obs_source_set_muted(
     ffi.Pointer<obs_source> source,
@@ -13277,13 +13277,13 @@ class DiveObslibFFI {
   ) {
     _obs_source_set_muted ??= _dylib.lookupFunction<_c_obs_source_set_muted,
         _dart_obs_source_set_muted>('obs_source_set_muted');
-    return _obs_source_set_muted(
+    return _obs_source_set_muted!(
       source,
       muted,
     );
   }
 
-  _dart_obs_source_set_muted _obs_source_set_muted;
+  _dart_obs_source_set_muted? _obs_source_set_muted;
 
   int obs_source_push_to_mute_enabled(
     ffi.Pointer<obs_source> source,
@@ -13292,12 +13292,12 @@ class DiveObslibFFI {
             _c_obs_source_push_to_mute_enabled,
             _dart_obs_source_push_to_mute_enabled>(
         'obs_source_push_to_mute_enabled');
-    return _obs_source_push_to_mute_enabled(
+    return _obs_source_push_to_mute_enabled!(
       source,
     );
   }
 
-  _dart_obs_source_push_to_mute_enabled _obs_source_push_to_mute_enabled;
+  _dart_obs_source_push_to_mute_enabled? _obs_source_push_to_mute_enabled;
 
   void obs_source_enable_push_to_mute(
     ffi.Pointer<obs_source> source,
@@ -13306,13 +13306,13 @@ class DiveObslibFFI {
     _obs_source_enable_push_to_mute ??= _dylib.lookupFunction<
         _c_obs_source_enable_push_to_mute,
         _dart_obs_source_enable_push_to_mute>('obs_source_enable_push_to_mute');
-    return _obs_source_enable_push_to_mute(
+    return _obs_source_enable_push_to_mute!(
       source,
       enabled,
     );
   }
 
-  _dart_obs_source_enable_push_to_mute _obs_source_enable_push_to_mute;
+  _dart_obs_source_enable_push_to_mute? _obs_source_enable_push_to_mute;
 
   int obs_source_get_push_to_mute_delay(
     ffi.Pointer<obs_source> source,
@@ -13321,12 +13321,12 @@ class DiveObslibFFI {
             _c_obs_source_get_push_to_mute_delay,
             _dart_obs_source_get_push_to_mute_delay>(
         'obs_source_get_push_to_mute_delay');
-    return _obs_source_get_push_to_mute_delay(
+    return _obs_source_get_push_to_mute_delay!(
       source,
     );
   }
 
-  _dart_obs_source_get_push_to_mute_delay _obs_source_get_push_to_mute_delay;
+  _dart_obs_source_get_push_to_mute_delay? _obs_source_get_push_to_mute_delay;
 
   void obs_source_set_push_to_mute_delay(
     ffi.Pointer<obs_source> source,
@@ -13336,13 +13336,13 @@ class DiveObslibFFI {
             _c_obs_source_set_push_to_mute_delay,
             _dart_obs_source_set_push_to_mute_delay>(
         'obs_source_set_push_to_mute_delay');
-    return _obs_source_set_push_to_mute_delay(
+    return _obs_source_set_push_to_mute_delay!(
       source,
       delay,
     );
   }
 
-  _dart_obs_source_set_push_to_mute_delay _obs_source_set_push_to_mute_delay;
+  _dart_obs_source_set_push_to_mute_delay? _obs_source_set_push_to_mute_delay;
 
   int obs_source_push_to_talk_enabled(
     ffi.Pointer<obs_source> source,
@@ -13351,12 +13351,12 @@ class DiveObslibFFI {
             _c_obs_source_push_to_talk_enabled,
             _dart_obs_source_push_to_talk_enabled>(
         'obs_source_push_to_talk_enabled');
-    return _obs_source_push_to_talk_enabled(
+    return _obs_source_push_to_talk_enabled!(
       source,
     );
   }
 
-  _dart_obs_source_push_to_talk_enabled _obs_source_push_to_talk_enabled;
+  _dart_obs_source_push_to_talk_enabled? _obs_source_push_to_talk_enabled;
 
   void obs_source_enable_push_to_talk(
     ffi.Pointer<obs_source> source,
@@ -13365,13 +13365,13 @@ class DiveObslibFFI {
     _obs_source_enable_push_to_talk ??= _dylib.lookupFunction<
         _c_obs_source_enable_push_to_talk,
         _dart_obs_source_enable_push_to_talk>('obs_source_enable_push_to_talk');
-    return _obs_source_enable_push_to_talk(
+    return _obs_source_enable_push_to_talk!(
       source,
       enabled,
     );
   }
 
-  _dart_obs_source_enable_push_to_talk _obs_source_enable_push_to_talk;
+  _dart_obs_source_enable_push_to_talk? _obs_source_enable_push_to_talk;
 
   int obs_source_get_push_to_talk_delay(
     ffi.Pointer<obs_source> source,
@@ -13380,12 +13380,12 @@ class DiveObslibFFI {
             _c_obs_source_get_push_to_talk_delay,
             _dart_obs_source_get_push_to_talk_delay>(
         'obs_source_get_push_to_talk_delay');
-    return _obs_source_get_push_to_talk_delay(
+    return _obs_source_get_push_to_talk_delay!(
       source,
     );
   }
 
-  _dart_obs_source_get_push_to_talk_delay _obs_source_get_push_to_talk_delay;
+  _dart_obs_source_get_push_to_talk_delay? _obs_source_get_push_to_talk_delay;
 
   void obs_source_set_push_to_talk_delay(
     ffi.Pointer<obs_source> source,
@@ -13395,13 +13395,13 @@ class DiveObslibFFI {
             _c_obs_source_set_push_to_talk_delay,
             _dart_obs_source_set_push_to_talk_delay>(
         'obs_source_set_push_to_talk_delay');
-    return _obs_source_set_push_to_talk_delay(
+    return _obs_source_set_push_to_talk_delay!(
       source,
       delay,
     );
   }
 
-  _dart_obs_source_set_push_to_talk_delay _obs_source_set_push_to_talk_delay;
+  _dart_obs_source_set_push_to_talk_delay? _obs_source_set_push_to_talk_delay;
 
   void obs_source_add_audio_capture_callback(
     ffi.Pointer<obs_source> source,
@@ -13412,14 +13412,14 @@ class DiveObslibFFI {
             _c_obs_source_add_audio_capture_callback,
             _dart_obs_source_add_audio_capture_callback>(
         'obs_source_add_audio_capture_callback');
-    return _obs_source_add_audio_capture_callback(
+    return _obs_source_add_audio_capture_callback!(
       source,
       callback,
       param,
     );
   }
 
-  _dart_obs_source_add_audio_capture_callback
+  _dart_obs_source_add_audio_capture_callback?
       _obs_source_add_audio_capture_callback;
 
   void obs_source_remove_audio_capture_callback(
@@ -13431,14 +13431,14 @@ class DiveObslibFFI {
             _c_obs_source_remove_audio_capture_callback,
             _dart_obs_source_remove_audio_capture_callback>(
         'obs_source_remove_audio_capture_callback');
-    return _obs_source_remove_audio_capture_callback(
+    return _obs_source_remove_audio_capture_callback!(
       source,
       callback,
       param,
     );
   }
 
-  _dart_obs_source_remove_audio_capture_callback
+  _dart_obs_source_remove_audio_capture_callback?
       _obs_source_remove_audio_capture_callback;
 
   void obs_source_set_deinterlace_mode(
@@ -13449,13 +13449,13 @@ class DiveObslibFFI {
             _c_obs_source_set_deinterlace_mode,
             _dart_obs_source_set_deinterlace_mode>(
         'obs_source_set_deinterlace_mode');
-    return _obs_source_set_deinterlace_mode(
+    return _obs_source_set_deinterlace_mode!(
       source,
       mode,
     );
   }
 
-  _dart_obs_source_set_deinterlace_mode _obs_source_set_deinterlace_mode;
+  _dart_obs_source_set_deinterlace_mode? _obs_source_set_deinterlace_mode;
 
   int obs_source_get_deinterlace_mode(
     ffi.Pointer<obs_source> source,
@@ -13464,12 +13464,12 @@ class DiveObslibFFI {
             _c_obs_source_get_deinterlace_mode,
             _dart_obs_source_get_deinterlace_mode>(
         'obs_source_get_deinterlace_mode');
-    return _obs_source_get_deinterlace_mode(
+    return _obs_source_get_deinterlace_mode!(
       source,
     );
   }
 
-  _dart_obs_source_get_deinterlace_mode _obs_source_get_deinterlace_mode;
+  _dart_obs_source_get_deinterlace_mode? _obs_source_get_deinterlace_mode;
 
   void obs_source_set_deinterlace_field_order(
     ffi.Pointer<obs_source> source,
@@ -13479,13 +13479,13 @@ class DiveObslibFFI {
             _c_obs_source_set_deinterlace_field_order,
             _dart_obs_source_set_deinterlace_field_order>(
         'obs_source_set_deinterlace_field_order');
-    return _obs_source_set_deinterlace_field_order(
+    return _obs_source_set_deinterlace_field_order!(
       source,
       field_order,
     );
   }
 
-  _dart_obs_source_set_deinterlace_field_order
+  _dart_obs_source_set_deinterlace_field_order?
       _obs_source_set_deinterlace_field_order;
 
   int obs_source_get_deinterlace_field_order(
@@ -13495,12 +13495,12 @@ class DiveObslibFFI {
             _c_obs_source_get_deinterlace_field_order,
             _dart_obs_source_get_deinterlace_field_order>(
         'obs_source_get_deinterlace_field_order');
-    return _obs_source_get_deinterlace_field_order(
+    return _obs_source_get_deinterlace_field_order!(
       source,
     );
   }
 
-  _dart_obs_source_get_deinterlace_field_order
+  _dart_obs_source_get_deinterlace_field_order?
       _obs_source_get_deinterlace_field_order;
 
   void obs_source_set_monitoring_type(
@@ -13510,13 +13510,13 @@ class DiveObslibFFI {
     _obs_source_set_monitoring_type ??= _dylib.lookupFunction<
         _c_obs_source_set_monitoring_type,
         _dart_obs_source_set_monitoring_type>('obs_source_set_monitoring_type');
-    return _obs_source_set_monitoring_type(
+    return _obs_source_set_monitoring_type!(
       source,
       type,
     );
   }
 
-  _dart_obs_source_set_monitoring_type _obs_source_set_monitoring_type;
+  _dart_obs_source_set_monitoring_type? _obs_source_set_monitoring_type;
 
   int obs_source_get_monitoring_type(
     ffi.Pointer<obs_source> source,
@@ -13524,12 +13524,12 @@ class DiveObslibFFI {
     _obs_source_get_monitoring_type ??= _dylib.lookupFunction<
         _c_obs_source_get_monitoring_type,
         _dart_obs_source_get_monitoring_type>('obs_source_get_monitoring_type');
-    return _obs_source_get_monitoring_type(
+    return _obs_source_get_monitoring_type!(
       source,
     );
   }
 
-  _dart_obs_source_get_monitoring_type _obs_source_get_monitoring_type;
+  _dart_obs_source_get_monitoring_type? _obs_source_get_monitoring_type;
 
   /// Gets private front-end settings data.  This data is saved/loaded
   /// automatically.  Returns an incremented reference.
@@ -13540,12 +13540,12 @@ class DiveObslibFFI {
             _c_obs_source_get_private_settings,
             _dart_obs_source_get_private_settings>(
         'obs_source_get_private_settings');
-    return _obs_source_get_private_settings(
+    return _obs_source_get_private_settings!(
       item,
     );
   }
 
-  _dart_obs_source_get_private_settings _obs_source_get_private_settings;
+  _dart_obs_source_get_private_settings? _obs_source_get_private_settings;
 
   ffi.Pointer<ffi.Void> obs_source_get_type_data(
     ffi.Pointer<obs_source> source,
@@ -13553,12 +13553,12 @@ class DiveObslibFFI {
     _obs_source_get_type_data ??= _dylib.lookupFunction<
         _c_obs_source_get_type_data,
         _dart_obs_source_get_type_data>('obs_source_get_type_data');
-    return _obs_source_get_type_data(
+    return _obs_source_get_type_data!(
       source,
     );
   }
 
-  _dart_obs_source_get_type_data _obs_source_get_type_data;
+  _dart_obs_source_get_type_data? _obs_source_get_type_data;
 
   /// Helper function to set the color matrix information when drawing the source.
   ///
@@ -13579,14 +13579,14 @@ class DiveObslibFFI {
             _c_obs_source_draw_set_color_matrix,
             _dart_obs_source_draw_set_color_matrix>(
         'obs_source_draw_set_color_matrix');
-    return _obs_source_draw_set_color_matrix(
+    return _obs_source_draw_set_color_matrix!(
       color_matrix,
       color_range_min,
       color_range_max,
     );
   }
 
-  _dart_obs_source_draw_set_color_matrix _obs_source_draw_set_color_matrix;
+  _dart_obs_source_draw_set_color_matrix? _obs_source_draw_set_color_matrix;
 
   /// Helper function to draw sprites for a source (synchronous video).
   ///
@@ -13608,7 +13608,7 @@ class DiveObslibFFI {
     _obs_source_draw ??=
         _dylib.lookupFunction<_c_obs_source_draw, _dart_obs_source_draw>(
             'obs_source_draw');
-    return _obs_source_draw(
+    return _obs_source_draw!(
       image,
       x,
       y,
@@ -13618,7 +13618,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_source_draw _obs_source_draw;
+  _dart_obs_source_draw? _obs_source_draw;
 
   /// Outputs asynchronous video data.  Set to NULL to deactivate the texture
   ///
@@ -13632,13 +13632,13 @@ class DiveObslibFFI {
     _obs_source_output_video ??= _dylib.lookupFunction<
         _c_obs_source_output_video,
         _dart_obs_source_output_video>('obs_source_output_video');
-    return _obs_source_output_video(
+    return _obs_source_output_video!(
       source,
       frame,
     );
   }
 
-  _dart_obs_source_output_video _obs_source_output_video;
+  _dart_obs_source_output_video? _obs_source_output_video;
 
   void obs_source_output_video2(
     ffi.Pointer<obs_source> source,
@@ -13647,13 +13647,13 @@ class DiveObslibFFI {
     _obs_source_output_video2 ??= _dylib.lookupFunction<
         _c_obs_source_output_video2,
         _dart_obs_source_output_video2>('obs_source_output_video2');
-    return _obs_source_output_video2(
+    return _obs_source_output_video2!(
       source,
       frame,
     );
   }
 
-  _dart_obs_source_output_video2 _obs_source_output_video2;
+  _dart_obs_source_output_video2? _obs_source_output_video2;
 
   void obs_source_set_async_rotation(
     ffi.Pointer<obs_source> source,
@@ -13662,13 +13662,13 @@ class DiveObslibFFI {
     _obs_source_set_async_rotation ??= _dylib.lookupFunction<
         _c_obs_source_set_async_rotation,
         _dart_obs_source_set_async_rotation>('obs_source_set_async_rotation');
-    return _obs_source_set_async_rotation(
+    return _obs_source_set_async_rotation!(
       source,
       rotation,
     );
   }
 
-  _dart_obs_source_set_async_rotation _obs_source_set_async_rotation;
+  _dart_obs_source_set_async_rotation? _obs_source_set_async_rotation;
 
   /// Preloads asynchronous video data to allow instantaneous playback
   ///
@@ -13682,13 +13682,13 @@ class DiveObslibFFI {
     _obs_source_preload_video ??= _dylib.lookupFunction<
         _c_obs_source_preload_video,
         _dart_obs_source_preload_video>('obs_source_preload_video');
-    return _obs_source_preload_video(
+    return _obs_source_preload_video!(
       source,
       frame,
     );
   }
 
-  _dart_obs_source_preload_video _obs_source_preload_video;
+  _dart_obs_source_preload_video? _obs_source_preload_video;
 
   void obs_source_preload_video2(
     ffi.Pointer<obs_source> source,
@@ -13697,13 +13697,13 @@ class DiveObslibFFI {
     _obs_source_preload_video2 ??= _dylib.lookupFunction<
         _c_obs_source_preload_video2,
         _dart_obs_source_preload_video2>('obs_source_preload_video2');
-    return _obs_source_preload_video2(
+    return _obs_source_preload_video2!(
       source,
       frame,
     );
   }
 
-  _dart_obs_source_preload_video2 _obs_source_preload_video2;
+  _dart_obs_source_preload_video2? _obs_source_preload_video2;
 
   /// Shows any preloaded video data
   void obs_source_show_preloaded_video(
@@ -13713,12 +13713,12 @@ class DiveObslibFFI {
             _c_obs_source_show_preloaded_video,
             _dart_obs_source_show_preloaded_video>(
         'obs_source_show_preloaded_video');
-    return _obs_source_show_preloaded_video(
+    return _obs_source_show_preloaded_video!(
       source,
     );
   }
 
-  _dart_obs_source_show_preloaded_video _obs_source_show_preloaded_video;
+  _dart_obs_source_show_preloaded_video? _obs_source_show_preloaded_video;
 
   /// Sets current async video frame immediately
   ///
@@ -13732,13 +13732,13 @@ class DiveObslibFFI {
     _obs_source_set_video_frame ??= _dylib.lookupFunction<
         _c_obs_source_set_video_frame,
         _dart_obs_source_set_video_frame>('obs_source_set_video_frame');
-    return _obs_source_set_video_frame(
+    return _obs_source_set_video_frame!(
       source,
       frame,
     );
   }
 
-  _dart_obs_source_set_video_frame _obs_source_set_video_frame;
+  _dart_obs_source_set_video_frame? _obs_source_set_video_frame;
 
   void obs_source_set_video_frame2(
     ffi.Pointer<obs_source> source,
@@ -13747,13 +13747,13 @@ class DiveObslibFFI {
     _obs_source_set_video_frame2 ??= _dylib.lookupFunction<
         _c_obs_source_set_video_frame2,
         _dart_obs_source_set_video_frame2>('obs_source_set_video_frame2');
-    return _obs_source_set_video_frame2(
+    return _obs_source_set_video_frame2!(
       source,
       frame,
     );
   }
 
-  _dart_obs_source_set_video_frame2 _obs_source_set_video_frame2;
+  _dart_obs_source_set_video_frame2? _obs_source_set_video_frame2;
 
   /// Outputs audio data (always asynchronous)
   void obs_source_output_audio(
@@ -13763,13 +13763,13 @@ class DiveObslibFFI {
     _obs_source_output_audio ??= _dylib.lookupFunction<
         _c_obs_source_output_audio,
         _dart_obs_source_output_audio>('obs_source_output_audio');
-    return _obs_source_output_audio(
+    return _obs_source_output_audio!(
       source,
       audio,
     );
   }
 
-  _dart_obs_source_output_audio _obs_source_output_audio;
+  _dart_obs_source_output_audio? _obs_source_output_audio;
 
   /// Signal an update to any currently used properties via 'update_properties'
   void obs_source_update_properties(
@@ -13778,12 +13778,12 @@ class DiveObslibFFI {
     _obs_source_update_properties ??= _dylib.lookupFunction<
         _c_obs_source_update_properties,
         _dart_obs_source_update_properties>('obs_source_update_properties');
-    return _obs_source_update_properties(
+    return _obs_source_update_properties!(
       source,
     );
   }
 
-  _dart_obs_source_update_properties _obs_source_update_properties;
+  _dart_obs_source_update_properties? _obs_source_update_properties;
 
   /// Gets the current async video frame
   ffi.Pointer<obs_source_frame> obs_source_get_frame(
@@ -13791,12 +13791,12 @@ class DiveObslibFFI {
   ) {
     _obs_source_get_frame ??= _dylib.lookupFunction<_c_obs_source_get_frame,
         _dart_obs_source_get_frame>('obs_source_get_frame');
-    return _obs_source_get_frame(
+    return _obs_source_get_frame!(
       source,
     );
   }
 
-  _dart_obs_source_get_frame _obs_source_get_frame;
+  _dart_obs_source_get_frame? _obs_source_get_frame;
 
   /// Releases the current async video frame
   void obs_source_release_frame(
@@ -13806,13 +13806,13 @@ class DiveObslibFFI {
     _obs_source_release_frame ??= _dylib.lookupFunction<
         _c_obs_source_release_frame,
         _dart_obs_source_release_frame>('obs_source_release_frame');
-    return _obs_source_release_frame(
+    return _obs_source_release_frame!(
       source,
       frame,
     );
   }
 
-  _dart_obs_source_release_frame _obs_source_release_frame;
+  _dart_obs_source_release_frame? _obs_source_release_frame;
 
   /// Default RGB filter handler for generic effect filters.  Processes the
   /// filter chain and renders them to texture if needed, then the filter is
@@ -13832,14 +13832,14 @@ class DiveObslibFFI {
             _c_obs_source_process_filter_begin,
             _dart_obs_source_process_filter_begin>(
         'obs_source_process_filter_begin');
-    return _obs_source_process_filter_begin(
+    return _obs_source_process_filter_begin!(
       filter,
       format,
       allow_direct,
     );
   }
 
-  _dart_obs_source_process_filter_begin _obs_source_process_filter_begin;
+  _dart_obs_source_process_filter_begin? _obs_source_process_filter_begin;
 
   /// Draws the filter.
   ///
@@ -13855,7 +13855,7 @@ class DiveObslibFFI {
     _obs_source_process_filter_end ??= _dylib.lookupFunction<
         _c_obs_source_process_filter_end,
         _dart_obs_source_process_filter_end>('obs_source_process_filter_end');
-    return _obs_source_process_filter_end(
+    return _obs_source_process_filter_end!(
       filter,
       effect,
       width,
@@ -13863,7 +13863,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_source_process_filter_end _obs_source_process_filter_end;
+  _dart_obs_source_process_filter_end? _obs_source_process_filter_end;
 
   /// Draws the filter with a specific technique.
   ///
@@ -13881,7 +13881,7 @@ class DiveObslibFFI {
             _c_obs_source_process_filter_tech_end,
             _dart_obs_source_process_filter_tech_end>(
         'obs_source_process_filter_tech_end');
-    return _obs_source_process_filter_tech_end(
+    return _obs_source_process_filter_tech_end!(
       filter,
       effect,
       width,
@@ -13890,7 +13890,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_source_process_filter_tech_end _obs_source_process_filter_tech_end;
+  _dart_obs_source_process_filter_tech_end? _obs_source_process_filter_tech_end;
 
   /// Skips the filter if the filter is invalid and cannot be rendered
   void obs_source_skip_video_filter(
@@ -13899,12 +13899,12 @@ class DiveObslibFFI {
     _obs_source_skip_video_filter ??= _dylib.lookupFunction<
         _c_obs_source_skip_video_filter,
         _dart_obs_source_skip_video_filter>('obs_source_skip_video_filter');
-    return _obs_source_skip_video_filter(
+    return _obs_source_skip_video_filter!(
       filter,
     );
   }
 
-  _dart_obs_source_skip_video_filter _obs_source_skip_video_filter;
+  _dart_obs_source_skip_video_filter? _obs_source_skip_video_filter;
 
   /// Adds an active child source.  Must be called by parent sources on child
   /// sources when the child is added and active.  This ensures that the source is
@@ -13918,13 +13918,13 @@ class DiveObslibFFI {
     _obs_source_add_active_child ??= _dylib.lookupFunction<
         _c_obs_source_add_active_child,
         _dart_obs_source_add_active_child>('obs_source_add_active_child');
-    return _obs_source_add_active_child(
+    return _obs_source_add_active_child!(
       parent,
       child,
     );
   }
 
-  _dart_obs_source_add_active_child _obs_source_add_active_child;
+  _dart_obs_source_add_active_child? _obs_source_add_active_child;
 
   /// Removes an active child source.  Must be called by parent sources on child
   /// sources when the child is removed or inactive.  This ensures that the source
@@ -13936,13 +13936,13 @@ class DiveObslibFFI {
     _obs_source_remove_active_child ??= _dylib.lookupFunction<
         _c_obs_source_remove_active_child,
         _dart_obs_source_remove_active_child>('obs_source_remove_active_child');
-    return _obs_source_remove_active_child(
+    return _obs_source_remove_active_child!(
       parent,
       child,
     );
   }
 
-  _dart_obs_source_remove_active_child _obs_source_remove_active_child;
+  _dart_obs_source_remove_active_child? _obs_source_remove_active_child;
 
   /// Sends a mouse down/up event to a source
   void obs_source_send_mouse_click(
@@ -13955,7 +13955,7 @@ class DiveObslibFFI {
     _obs_source_send_mouse_click ??= _dylib.lookupFunction<
         _c_obs_source_send_mouse_click,
         _dart_obs_source_send_mouse_click>('obs_source_send_mouse_click');
-    return _obs_source_send_mouse_click(
+    return _obs_source_send_mouse_click!(
       source,
       event,
       type,
@@ -13964,7 +13964,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_source_send_mouse_click _obs_source_send_mouse_click;
+  _dart_obs_source_send_mouse_click? _obs_source_send_mouse_click;
 
   /// Sends a mouse move event to a source.
   void obs_source_send_mouse_move(
@@ -13975,14 +13975,14 @@ class DiveObslibFFI {
     _obs_source_send_mouse_move ??= _dylib.lookupFunction<
         _c_obs_source_send_mouse_move,
         _dart_obs_source_send_mouse_move>('obs_source_send_mouse_move');
-    return _obs_source_send_mouse_move(
+    return _obs_source_send_mouse_move!(
       source,
       event,
       mouse_leave,
     );
   }
 
-  _dart_obs_source_send_mouse_move _obs_source_send_mouse_move;
+  _dart_obs_source_send_mouse_move? _obs_source_send_mouse_move;
 
   /// Sends a mouse wheel event to a source
   void obs_source_send_mouse_wheel(
@@ -13994,7 +13994,7 @@ class DiveObslibFFI {
     _obs_source_send_mouse_wheel ??= _dylib.lookupFunction<
         _c_obs_source_send_mouse_wheel,
         _dart_obs_source_send_mouse_wheel>('obs_source_send_mouse_wheel');
-    return _obs_source_send_mouse_wheel(
+    return _obs_source_send_mouse_wheel!(
       source,
       event,
       x_delta,
@@ -14002,7 +14002,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_source_send_mouse_wheel _obs_source_send_mouse_wheel;
+  _dart_obs_source_send_mouse_wheel? _obs_source_send_mouse_wheel;
 
   /// Sends a got-focus or lost-focus event to a source
   void obs_source_send_focus(
@@ -14011,13 +14011,13 @@ class DiveObslibFFI {
   ) {
     _obs_source_send_focus ??= _dylib.lookupFunction<_c_obs_source_send_focus,
         _dart_obs_source_send_focus>('obs_source_send_focus');
-    return _obs_source_send_focus(
+    return _obs_source_send_focus!(
       source,
       focus,
     );
   }
 
-  _dart_obs_source_send_focus _obs_source_send_focus;
+  _dart_obs_source_send_focus? _obs_source_send_focus;
 
   /// Sends a key up/down event to a source
   void obs_source_send_key_click(
@@ -14028,14 +14028,14 @@ class DiveObslibFFI {
     _obs_source_send_key_click ??= _dylib.lookupFunction<
         _c_obs_source_send_key_click,
         _dart_obs_source_send_key_click>('obs_source_send_key_click');
-    return _obs_source_send_key_click(
+    return _obs_source_send_key_click!(
       source,
       event,
       key_up,
     );
   }
 
-  _dart_obs_source_send_key_click _obs_source_send_key_click;
+  _dart_obs_source_send_key_click? _obs_source_send_key_click;
 
   /// Sets the default source flags.
   void obs_source_set_default_flags(
@@ -14045,13 +14045,13 @@ class DiveObslibFFI {
     _obs_source_set_default_flags ??= _dylib.lookupFunction<
         _c_obs_source_set_default_flags,
         _dart_obs_source_set_default_flags>('obs_source_set_default_flags');
-    return _obs_source_set_default_flags(
+    return _obs_source_set_default_flags!(
       source,
       flags,
     );
   }
 
-  _dart_obs_source_set_default_flags _obs_source_set_default_flags;
+  _dart_obs_source_set_default_flags? _obs_source_set_default_flags;
 
   /// Gets the base width for a source (not taking in to account filtering)
   int obs_source_get_base_width(
@@ -14060,12 +14060,12 @@ class DiveObslibFFI {
     _obs_source_get_base_width ??= _dylib.lookupFunction<
         _c_obs_source_get_base_width,
         _dart_obs_source_get_base_width>('obs_source_get_base_width');
-    return _obs_source_get_base_width(
+    return _obs_source_get_base_width!(
       source,
     );
   }
 
-  _dart_obs_source_get_base_width _obs_source_get_base_width;
+  _dart_obs_source_get_base_width? _obs_source_get_base_width;
 
   /// Gets the base height for a source (not taking in to account filtering)
   int obs_source_get_base_height(
@@ -14074,12 +14074,12 @@ class DiveObslibFFI {
     _obs_source_get_base_height ??= _dylib.lookupFunction<
         _c_obs_source_get_base_height,
         _dart_obs_source_get_base_height>('obs_source_get_base_height');
-    return _obs_source_get_base_height(
+    return _obs_source_get_base_height!(
       source,
     );
   }
 
-  _dart_obs_source_get_base_height _obs_source_get_base_height;
+  _dart_obs_source_get_base_height? _obs_source_get_base_height;
 
   int obs_source_audio_pending(
     ffi.Pointer<obs_source> source,
@@ -14087,12 +14087,12 @@ class DiveObslibFFI {
     _obs_source_audio_pending ??= _dylib.lookupFunction<
         _c_obs_source_audio_pending,
         _dart_obs_source_audio_pending>('obs_source_audio_pending');
-    return _obs_source_audio_pending(
+    return _obs_source_audio_pending!(
       source,
     );
   }
 
-  _dart_obs_source_audio_pending _obs_source_audio_pending;
+  _dart_obs_source_audio_pending? _obs_source_audio_pending;
 
   int obs_source_get_audio_timestamp(
     ffi.Pointer<obs_source> source,
@@ -14100,12 +14100,12 @@ class DiveObslibFFI {
     _obs_source_get_audio_timestamp ??= _dylib.lookupFunction<
         _c_obs_source_get_audio_timestamp,
         _dart_obs_source_get_audio_timestamp>('obs_source_get_audio_timestamp');
-    return _obs_source_get_audio_timestamp(
+    return _obs_source_get_audio_timestamp!(
       source,
     );
   }
 
-  _dart_obs_source_get_audio_timestamp _obs_source_get_audio_timestamp;
+  _dart_obs_source_get_audio_timestamp? _obs_source_get_audio_timestamp;
 
   void obs_source_get_audio_mix(
     ffi.Pointer<obs_source> source,
@@ -14114,13 +14114,13 @@ class DiveObslibFFI {
     _obs_source_get_audio_mix ??= _dylib.lookupFunction<
         _c_obs_source_get_audio_mix,
         _dart_obs_source_get_audio_mix>('obs_source_get_audio_mix');
-    return _obs_source_get_audio_mix(
+    return _obs_source_get_audio_mix!(
       source,
       audio,
     );
   }
 
-  _dart_obs_source_get_audio_mix _obs_source_get_audio_mix;
+  _dart_obs_source_get_audio_mix? _obs_source_get_audio_mix;
 
   void obs_source_set_async_unbuffered(
     ffi.Pointer<obs_source> source,
@@ -14130,13 +14130,13 @@ class DiveObslibFFI {
             _c_obs_source_set_async_unbuffered,
             _dart_obs_source_set_async_unbuffered>(
         'obs_source_set_async_unbuffered');
-    return _obs_source_set_async_unbuffered(
+    return _obs_source_set_async_unbuffered!(
       source,
       unbuffered,
     );
   }
 
-  _dart_obs_source_set_async_unbuffered _obs_source_set_async_unbuffered;
+  _dart_obs_source_set_async_unbuffered? _obs_source_set_async_unbuffered;
 
   int obs_source_async_unbuffered(
     ffi.Pointer<obs_source> source,
@@ -14144,12 +14144,12 @@ class DiveObslibFFI {
     _obs_source_async_unbuffered ??= _dylib.lookupFunction<
         _c_obs_source_async_unbuffered,
         _dart_obs_source_async_unbuffered>('obs_source_async_unbuffered');
-    return _obs_source_async_unbuffered(
+    return _obs_source_async_unbuffered!(
       source,
     );
   }
 
-  _dart_obs_source_async_unbuffered _obs_source_async_unbuffered;
+  _dart_obs_source_async_unbuffered? _obs_source_async_unbuffered;
 
   /// Used to decouple audio from video so that audio doesn't attempt to sync up
   /// with video.  I.E. Audio acts independently.  Only works when in unbuffered
@@ -14161,13 +14161,13 @@ class DiveObslibFFI {
     _obs_source_set_async_decoupled ??= _dylib.lookupFunction<
         _c_obs_source_set_async_decoupled,
         _dart_obs_source_set_async_decoupled>('obs_source_set_async_decoupled');
-    return _obs_source_set_async_decoupled(
+    return _obs_source_set_async_decoupled!(
       source,
       decouple,
     );
   }
 
-  _dart_obs_source_set_async_decoupled _obs_source_set_async_decoupled;
+  _dart_obs_source_set_async_decoupled? _obs_source_set_async_decoupled;
 
   int obs_source_async_decoupled(
     ffi.Pointer<obs_source> source,
@@ -14175,12 +14175,12 @@ class DiveObslibFFI {
     _obs_source_async_decoupled ??= _dylib.lookupFunction<
         _c_obs_source_async_decoupled,
         _dart_obs_source_async_decoupled>('obs_source_async_decoupled');
-    return _obs_source_async_decoupled(
+    return _obs_source_async_decoupled!(
       source,
     );
   }
 
-  _dart_obs_source_async_decoupled _obs_source_async_decoupled;
+  _dart_obs_source_async_decoupled? _obs_source_async_decoupled;
 
   void obs_source_set_audio_active(
     ffi.Pointer<obs_source> source,
@@ -14189,13 +14189,13 @@ class DiveObslibFFI {
     _obs_source_set_audio_active ??= _dylib.lookupFunction<
         _c_obs_source_set_audio_active,
         _dart_obs_source_set_audio_active>('obs_source_set_audio_active');
-    return _obs_source_set_audio_active(
+    return _obs_source_set_audio_active!(
       source,
       show_1,
     );
   }
 
-  _dart_obs_source_set_audio_active _obs_source_set_audio_active;
+  _dart_obs_source_set_audio_active? _obs_source_set_audio_active;
 
   int obs_source_audio_active(
     ffi.Pointer<obs_source> source,
@@ -14203,12 +14203,12 @@ class DiveObslibFFI {
     _obs_source_audio_active ??= _dylib.lookupFunction<
         _c_obs_source_audio_active,
         _dart_obs_source_audio_active>('obs_source_audio_active');
-    return _obs_source_audio_active(
+    return _obs_source_audio_active!(
       source,
     );
   }
 
-  _dart_obs_source_audio_active _obs_source_audio_active;
+  _dart_obs_source_audio_active? _obs_source_audio_active;
 
   int obs_source_get_last_obs_version(
     ffi.Pointer<obs_source> source,
@@ -14217,65 +14217,65 @@ class DiveObslibFFI {
             _c_obs_source_get_last_obs_version,
             _dart_obs_source_get_last_obs_version>(
         'obs_source_get_last_obs_version');
-    return _obs_source_get_last_obs_version(
+    return _obs_source_get_last_obs_version!(
       source,
     );
   }
 
-  _dart_obs_source_get_last_obs_version _obs_source_get_last_obs_version;
+  _dart_obs_source_get_last_obs_version? _obs_source_get_last_obs_version;
 
   /// Media controls
   void obs_source_media_play_pause(
-    ffi.Pointer<obs_source> source,
+    ffi.Pointer<obs_source>? source,
     int pause,
   ) {
     _obs_source_media_play_pause ??= _dylib.lookupFunction<
         _c_obs_source_media_play_pause,
         _dart_obs_source_media_play_pause>('obs_source_media_play_pause');
-    return _obs_source_media_play_pause(
+    return _obs_source_media_play_pause!(
       source,
       pause,
     );
   }
 
-  _dart_obs_source_media_play_pause _obs_source_media_play_pause;
+  _dart_obs_source_media_play_pause? _obs_source_media_play_pause;
 
   void obs_source_media_restart(
-    ffi.Pointer<obs_source> source,
+    ffi.Pointer<obs_source>? source,
   ) {
     _obs_source_media_restart ??= _dylib.lookupFunction<
         _c_obs_source_media_restart,
         _dart_obs_source_media_restart>('obs_source_media_restart');
-    return _obs_source_media_restart(
+    return _obs_source_media_restart!(
       source,
     );
   }
 
-  _dart_obs_source_media_restart _obs_source_media_restart;
+  _dart_obs_source_media_restart? _obs_source_media_restart;
 
   void obs_source_media_stop(
-    ffi.Pointer<obs_source> source,
+    ffi.Pointer<obs_source>? source,
   ) {
     _obs_source_media_stop ??= _dylib.lookupFunction<_c_obs_source_media_stop,
         _dart_obs_source_media_stop>('obs_source_media_stop');
-    return _obs_source_media_stop(
+    return _obs_source_media_stop!(
       source,
     );
   }
 
-  _dart_obs_source_media_stop _obs_source_media_stop;
+  _dart_obs_source_media_stop? _obs_source_media_stop;
 
   void obs_source_media_next(
     ffi.Pointer<obs_source> source,
   ) {
     _obs_source_media_next ??= _dylib.lookupFunction<_c_obs_source_media_next,
         _dart_obs_source_media_next>('obs_source_media_next');
-    return _obs_source_media_next(
+    return _obs_source_media_next!(
       source,
     );
   }
 
-  _dart_obs_source_media_next _obs_source_media_next;
+  _dart_obs_source_media_next? _obs_source_media_next;
 
   void obs_source_media_previous(
     ffi.Pointer<obs_source> source,
@@ -14283,66 +14283,66 @@ class DiveObslibFFI {
     _obs_source_media_previous ??= _dylib.lookupFunction<
         _c_obs_source_media_previous,
         _dart_obs_source_media_previous>('obs_source_media_previous');
-    return _obs_source_media_previous(
+    return _obs_source_media_previous!(
       source,
     );
   }
 
-  _dart_obs_source_media_previous _obs_source_media_previous;
+  _dart_obs_source_media_previous? _obs_source_media_previous;
 
   int obs_source_media_get_duration(
-    ffi.Pointer<obs_source> source,
+    ffi.Pointer<obs_source>? source,
   ) {
     _obs_source_media_get_duration ??= _dylib.lookupFunction<
         _c_obs_source_media_get_duration,
         _dart_obs_source_media_get_duration>('obs_source_media_get_duration');
-    return _obs_source_media_get_duration(
+    return _obs_source_media_get_duration!(
       source,
     );
   }
 
-  _dart_obs_source_media_get_duration _obs_source_media_get_duration;
+  _dart_obs_source_media_get_duration? _obs_source_media_get_duration;
 
   int obs_source_media_get_time(
-    ffi.Pointer<obs_source> source,
+    ffi.Pointer<obs_source>? source,
   ) {
     _obs_source_media_get_time ??= _dylib.lookupFunction<
         _c_obs_source_media_get_time,
         _dart_obs_source_media_get_time>('obs_source_media_get_time');
-    return _obs_source_media_get_time(
+    return _obs_source_media_get_time!(
       source,
     );
   }
 
-  _dart_obs_source_media_get_time _obs_source_media_get_time;
+  _dart_obs_source_media_get_time? _obs_source_media_get_time;
 
   void obs_source_media_set_time(
-    ffi.Pointer<obs_source> source,
+    ffi.Pointer<obs_source>? source,
     int ms,
   ) {
     _obs_source_media_set_time ??= _dylib.lookupFunction<
         _c_obs_source_media_set_time,
         _dart_obs_source_media_set_time>('obs_source_media_set_time');
-    return _obs_source_media_set_time(
+    return _obs_source_media_set_time!(
       source,
       ms,
     );
   }
 
-  _dart_obs_source_media_set_time _obs_source_media_set_time;
+  _dart_obs_source_media_set_time? _obs_source_media_set_time;
 
   int obs_source_media_get_state(
-    ffi.Pointer<obs_source> source,
+    ffi.Pointer<obs_source>? source,
   ) {
     _obs_source_media_get_state ??= _dylib.lookupFunction<
         _c_obs_source_media_get_state,
         _dart_obs_source_media_get_state>('obs_source_media_get_state');
-    return _obs_source_media_get_state(
+    return _obs_source_media_get_state!(
       source,
     );
   }
 
-  _dart_obs_source_media_get_state _obs_source_media_get_state;
+  _dart_obs_source_media_get_state? _obs_source_media_get_state;
 
   void obs_source_media_started(
     ffi.Pointer<obs_source> source,
@@ -14350,24 +14350,24 @@ class DiveObslibFFI {
     _obs_source_media_started ??= _dylib.lookupFunction<
         _c_obs_source_media_started,
         _dart_obs_source_media_started>('obs_source_media_started');
-    return _obs_source_media_started(
+    return _obs_source_media_started!(
       source,
     );
   }
 
-  _dart_obs_source_media_started _obs_source_media_started;
+  _dart_obs_source_media_started? _obs_source_media_started;
 
   void obs_source_media_ended(
     ffi.Pointer<obs_source> source,
   ) {
     _obs_source_media_ended ??= _dylib.lookupFunction<_c_obs_source_media_ended,
         _dart_obs_source_media_ended>('obs_source_media_ended');
-    return _obs_source_media_ended(
+    return _obs_source_media_ended!(
       source,
     );
   }
 
-  _dart_obs_source_media_ended _obs_source_media_ended;
+  _dart_obs_source_media_ended? _obs_source_media_ended;
 
   ffi.Pointer<obs_source> obs_transition_get_source(
     ffi.Pointer<obs_source> transition,
@@ -14376,25 +14376,25 @@ class DiveObslibFFI {
     _obs_transition_get_source ??= _dylib.lookupFunction<
         _c_obs_transition_get_source,
         _dart_obs_transition_get_source>('obs_transition_get_source');
-    return _obs_transition_get_source(
+    return _obs_transition_get_source!(
       transition,
       target,
     );
   }
 
-  _dart_obs_transition_get_source _obs_transition_get_source;
+  _dart_obs_transition_get_source? _obs_transition_get_source;
 
   void obs_transition_clear(
     ffi.Pointer<obs_source> transition,
   ) {
     _obs_transition_clear ??= _dylib.lookupFunction<_c_obs_transition_clear,
         _dart_obs_transition_clear>('obs_transition_clear');
-    return _obs_transition_clear(
+    return _obs_transition_clear!(
       transition,
     );
   }
 
-  _dart_obs_transition_clear _obs_transition_clear;
+  _dart_obs_transition_clear? _obs_transition_clear;
 
   ffi.Pointer<obs_source> obs_transition_get_active_source(
     ffi.Pointer<obs_source> transition,
@@ -14403,12 +14403,12 @@ class DiveObslibFFI {
             _c_obs_transition_get_active_source,
             _dart_obs_transition_get_active_source>(
         'obs_transition_get_active_source');
-    return _obs_transition_get_active_source(
+    return _obs_transition_get_active_source!(
       transition,
     );
   }
 
-  _dart_obs_transition_get_active_source _obs_transition_get_active_source;
+  _dart_obs_transition_get_active_source? _obs_transition_get_active_source;
 
   int obs_transition_start(
     ffi.Pointer<obs_source> transition,
@@ -14418,7 +14418,7 @@ class DiveObslibFFI {
   ) {
     _obs_transition_start ??= _dylib.lookupFunction<_c_obs_transition_start,
         _dart_obs_transition_start>('obs_transition_start');
-    return _obs_transition_start(
+    return _obs_transition_start!(
       transition,
       mode,
       duration_ms,
@@ -14426,7 +14426,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_transition_start _obs_transition_start;
+  _dart_obs_transition_start? _obs_transition_start;
 
   void obs_transition_set(
     ffi.Pointer<obs_source> transition,
@@ -14435,13 +14435,13 @@ class DiveObslibFFI {
     _obs_transition_set ??=
         _dylib.lookupFunction<_c_obs_transition_set, _dart_obs_transition_set>(
             'obs_transition_set');
-    return _obs_transition_set(
+    return _obs_transition_set!(
       transition,
       source,
     );
   }
 
-  _dart_obs_transition_set _obs_transition_set;
+  _dart_obs_transition_set? _obs_transition_set;
 
   void obs_transition_set_manual_time(
     ffi.Pointer<obs_source> transition,
@@ -14450,13 +14450,13 @@ class DiveObslibFFI {
     _obs_transition_set_manual_time ??= _dylib.lookupFunction<
         _c_obs_transition_set_manual_time,
         _dart_obs_transition_set_manual_time>('obs_transition_set_manual_time');
-    return _obs_transition_set_manual_time(
+    return _obs_transition_set_manual_time!(
       transition,
       t,
     );
   }
 
-  _dart_obs_transition_set_manual_time _obs_transition_set_manual_time;
+  _dart_obs_transition_set_manual_time? _obs_transition_set_manual_time;
 
   void obs_transition_set_manual_torque(
     ffi.Pointer<obs_source> transition,
@@ -14467,14 +14467,14 @@ class DiveObslibFFI {
             _c_obs_transition_set_manual_torque,
             _dart_obs_transition_set_manual_torque>(
         'obs_transition_set_manual_torque');
-    return _obs_transition_set_manual_torque(
+    return _obs_transition_set_manual_torque!(
       transition,
       torque,
       clamp,
     );
   }
 
-  _dart_obs_transition_set_manual_torque _obs_transition_set_manual_torque;
+  _dart_obs_transition_set_manual_torque? _obs_transition_set_manual_torque;
 
   void obs_transition_set_scale_type(
     ffi.Pointer<obs_source> transition,
@@ -14483,13 +14483,13 @@ class DiveObslibFFI {
     _obs_transition_set_scale_type ??= _dylib.lookupFunction<
         _c_obs_transition_set_scale_type,
         _dart_obs_transition_set_scale_type>('obs_transition_set_scale_type');
-    return _obs_transition_set_scale_type(
+    return _obs_transition_set_scale_type!(
       transition,
       type,
     );
   }
 
-  _dart_obs_transition_set_scale_type _obs_transition_set_scale_type;
+  _dart_obs_transition_set_scale_type? _obs_transition_set_scale_type;
 
   int obs_transition_get_scale_type(
     ffi.Pointer<obs_source> transition,
@@ -14497,12 +14497,12 @@ class DiveObslibFFI {
     _obs_transition_get_scale_type ??= _dylib.lookupFunction<
         _c_obs_transition_get_scale_type,
         _dart_obs_transition_get_scale_type>('obs_transition_get_scale_type');
-    return _obs_transition_get_scale_type(
+    return _obs_transition_get_scale_type!(
       transition,
     );
   }
 
-  _dart_obs_transition_get_scale_type _obs_transition_get_scale_type;
+  _dart_obs_transition_get_scale_type? _obs_transition_get_scale_type;
 
   void obs_transition_set_alignment(
     ffi.Pointer<obs_source> transition,
@@ -14511,13 +14511,13 @@ class DiveObslibFFI {
     _obs_transition_set_alignment ??= _dylib.lookupFunction<
         _c_obs_transition_set_alignment,
         _dart_obs_transition_set_alignment>('obs_transition_set_alignment');
-    return _obs_transition_set_alignment(
+    return _obs_transition_set_alignment!(
       transition,
       alignment,
     );
   }
 
-  _dart_obs_transition_set_alignment _obs_transition_set_alignment;
+  _dart_obs_transition_set_alignment? _obs_transition_set_alignment;
 
   int obs_transition_get_alignment(
     ffi.Pointer<obs_source> transition,
@@ -14525,12 +14525,12 @@ class DiveObslibFFI {
     _obs_transition_get_alignment ??= _dylib.lookupFunction<
         _c_obs_transition_get_alignment,
         _dart_obs_transition_get_alignment>('obs_transition_get_alignment');
-    return _obs_transition_get_alignment(
+    return _obs_transition_get_alignment!(
       transition,
     );
   }
 
-  _dart_obs_transition_get_alignment _obs_transition_get_alignment;
+  _dart_obs_transition_get_alignment? _obs_transition_get_alignment;
 
   void obs_transition_set_size(
     ffi.Pointer<obs_source> transition,
@@ -14540,14 +14540,14 @@ class DiveObslibFFI {
     _obs_transition_set_size ??= _dylib.lookupFunction<
         _c_obs_transition_set_size,
         _dart_obs_transition_set_size>('obs_transition_set_size');
-    return _obs_transition_set_size(
+    return _obs_transition_set_size!(
       transition,
       cx,
       cy,
     );
   }
 
-  _dart_obs_transition_set_size _obs_transition_set_size;
+  _dart_obs_transition_set_size? _obs_transition_set_size;
 
   void obs_transition_get_size(
     ffi.Pointer<obs_source> transition,
@@ -14557,14 +14557,14 @@ class DiveObslibFFI {
     _obs_transition_get_size ??= _dylib.lookupFunction<
         _c_obs_transition_get_size,
         _dart_obs_transition_get_size>('obs_transition_get_size');
-    return _obs_transition_get_size(
+    return _obs_transition_get_size!(
       transition,
       cx,
       cy,
     );
   }
 
-  _dart_obs_transition_get_size _obs_transition_get_size;
+  _dart_obs_transition_get_size? _obs_transition_get_size;
 
   /// Enables fixed transitions (videos or specific types of transitions that
   /// are of fixed duration and linearly interpolated
@@ -14576,26 +14576,26 @@ class DiveObslibFFI {
     _obs_transition_enable_fixed ??= _dylib.lookupFunction<
         _c_obs_transition_enable_fixed,
         _dart_obs_transition_enable_fixed>('obs_transition_enable_fixed');
-    return _obs_transition_enable_fixed(
+    return _obs_transition_enable_fixed!(
       transition,
       enable,
       duration_ms,
     );
   }
 
-  _dart_obs_transition_enable_fixed _obs_transition_enable_fixed;
+  _dart_obs_transition_enable_fixed? _obs_transition_enable_fixed;
 
   int obs_transition_fixed(
     ffi.Pointer<obs_source> transition,
   ) {
     _obs_transition_fixed ??= _dylib.lookupFunction<_c_obs_transition_fixed,
         _dart_obs_transition_fixed>('obs_transition_fixed');
-    return _obs_transition_fixed(
+    return _obs_transition_fixed!(
       transition,
     );
   }
 
-  _dart_obs_transition_fixed _obs_transition_fixed;
+  _dart_obs_transition_fixed? _obs_transition_fixed;
 
   double obs_transition_get_time(
     ffi.Pointer<obs_source> transition,
@@ -14603,12 +14603,12 @@ class DiveObslibFFI {
     _obs_transition_get_time ??= _dylib.lookupFunction<
         _c_obs_transition_get_time,
         _dart_obs_transition_get_time>('obs_transition_get_time');
-    return _obs_transition_get_time(
+    return _obs_transition_get_time!(
       transition,
     );
   }
 
-  _dart_obs_transition_get_time _obs_transition_get_time;
+  _dart_obs_transition_get_time? _obs_transition_get_time;
 
   void obs_transition_force_stop(
     ffi.Pointer<obs_source> transition,
@@ -14616,12 +14616,12 @@ class DiveObslibFFI {
     _obs_transition_force_stop ??= _dylib.lookupFunction<
         _c_obs_transition_force_stop,
         _dart_obs_transition_force_stop>('obs_transition_force_stop');
-    return _obs_transition_force_stop(
+    return _obs_transition_force_stop!(
       transition,
     );
   }
 
-  _dart_obs_transition_force_stop _obs_transition_force_stop;
+  _dart_obs_transition_force_stop? _obs_transition_force_stop;
 
   void obs_transition_video_render(
     ffi.Pointer<obs_source> transition,
@@ -14631,13 +14631,13 @@ class DiveObslibFFI {
     _obs_transition_video_render ??= _dylib.lookupFunction<
         _c_obs_transition_video_render,
         _dart_obs_transition_video_render>('obs_transition_video_render');
-    return _obs_transition_video_render(
+    return _obs_transition_video_render!(
       transition,
       callback,
     );
   }
 
-  _dart_obs_transition_video_render _obs_transition_video_render;
+  _dart_obs_transition_video_render? _obs_transition_video_render;
 
   /// Directly renders its sub-source instead of to texture.  Returns false if no
   /// longer transitioning
@@ -14649,13 +14649,13 @@ class DiveObslibFFI {
             _c_obs_transition_video_render_direct,
             _dart_obs_transition_video_render_direct>(
         'obs_transition_video_render_direct');
-    return _obs_transition_video_render_direct(
+    return _obs_transition_video_render_direct!(
       transition,
       target,
     );
   }
 
-  _dart_obs_transition_video_render_direct _obs_transition_video_render_direct;
+  _dart_obs_transition_video_render_direct? _obs_transition_video_render_direct;
 
   int obs_transition_audio_render(
     ffi.Pointer<obs_source> transition,
@@ -14672,7 +14672,7 @@ class DiveObslibFFI {
     _obs_transition_audio_render ??= _dylib.lookupFunction<
         _c_obs_transition_audio_render,
         _dart_obs_transition_audio_render>('obs_transition_audio_render');
-    return _obs_transition_audio_render(
+    return _obs_transition_audio_render!(
       transition,
       ts_out,
       audio,
@@ -14684,7 +14684,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_transition_audio_render _obs_transition_audio_render;
+  _dart_obs_transition_audio_render? _obs_transition_audio_render;
 
   void obs_transition_swap_begin(
     ffi.Pointer<obs_source> tr_dest,
@@ -14693,13 +14693,13 @@ class DiveObslibFFI {
     _obs_transition_swap_begin ??= _dylib.lookupFunction<
         _c_obs_transition_swap_begin,
         _dart_obs_transition_swap_begin>('obs_transition_swap_begin');
-    return _obs_transition_swap_begin(
+    return _obs_transition_swap_begin!(
       tr_dest,
       tr_source,
     );
   }
 
-  _dart_obs_transition_swap_begin _obs_transition_swap_begin;
+  _dart_obs_transition_swap_begin? _obs_transition_swap_begin;
 
   void obs_transition_swap_end(
     ffi.Pointer<obs_source> tr_dest,
@@ -14708,13 +14708,13 @@ class DiveObslibFFI {
     _obs_transition_swap_end ??= _dylib.lookupFunction<
         _c_obs_transition_swap_end,
         _dart_obs_transition_swap_end>('obs_transition_swap_end');
-    return _obs_transition_swap_end(
+    return _obs_transition_swap_end!(
       tr_dest,
       tr_source,
     );
   }
 
-  _dart_obs_transition_swap_end _obs_transition_swap_end;
+  _dart_obs_transition_swap_end? _obs_transition_swap_end;
 
   /// Creates a scene.
   ///
@@ -14726,12 +14726,12 @@ class DiveObslibFFI {
     _obs_scene_create ??=
         _dylib.lookupFunction<_c_obs_scene_create, _dart_obs_scene_create>(
             'obs_scene_create');
-    return _obs_scene_create(
+    return _obs_scene_create!(
       name,
     );
   }
 
-  _dart_obs_scene_create _obs_scene_create;
+  _dart_obs_scene_create? _obs_scene_create;
 
   ffi.Pointer<obs_scene> obs_scene_create_private(
     ffi.Pointer<ffi.Int8> name,
@@ -14739,12 +14739,12 @@ class DiveObslibFFI {
     _obs_scene_create_private ??= _dylib.lookupFunction<
         _c_obs_scene_create_private,
         _dart_obs_scene_create_private>('obs_scene_create_private');
-    return _obs_scene_create_private(
+    return _obs_scene_create_private!(
       name,
     );
   }
 
-  _dart_obs_scene_create_private _obs_scene_create_private;
+  _dart_obs_scene_create_private? _obs_scene_create_private;
 
   /// Duplicates a scene.
   ffi.Pointer<obs_scene> obs_scene_duplicate(
@@ -14754,14 +14754,14 @@ class DiveObslibFFI {
   ) {
     _obs_scene_duplicate ??= _dylib.lookupFunction<_c_obs_scene_duplicate,
         _dart_obs_scene_duplicate>('obs_scene_duplicate');
-    return _obs_scene_duplicate(
+    return _obs_scene_duplicate!(
       scene,
       name,
       type,
     );
   }
 
-  _dart_obs_scene_duplicate _obs_scene_duplicate;
+  _dart_obs_scene_duplicate? _obs_scene_duplicate;
 
   void obs_scene_addref(
     ffi.Pointer<obs_scene> scene,
@@ -14769,25 +14769,25 @@ class DiveObslibFFI {
     _obs_scene_addref ??=
         _dylib.lookupFunction<_c_obs_scene_addref, _dart_obs_scene_addref>(
             'obs_scene_addref');
-    return _obs_scene_addref(
+    return _obs_scene_addref!(
       scene,
     );
   }
 
-  _dart_obs_scene_addref _obs_scene_addref;
+  _dart_obs_scene_addref? _obs_scene_addref;
 
   void obs_scene_release(
-    ffi.Pointer<obs_scene> scene,
+    ffi.Pointer<obs_scene>? scene,
   ) {
     _obs_scene_release ??=
         _dylib.lookupFunction<_c_obs_scene_release, _dart_obs_scene_release>(
             'obs_scene_release');
-    return _obs_scene_release(
+    return _obs_scene_release!(
       scene,
     );
   }
 
-  _dart_obs_scene_release _obs_scene_release;
+  _dart_obs_scene_release? _obs_scene_release;
 
   /// Gets the scene's source context
   ffi.Pointer<obs_source> obs_scene_get_source(
@@ -14795,12 +14795,12 @@ class DiveObslibFFI {
   ) {
     _obs_scene_get_source ??= _dylib.lookupFunction<_c_obs_scene_get_source,
         _dart_obs_scene_get_source>('obs_scene_get_source');
-    return _obs_scene_get_source(
+    return _obs_scene_get_source!(
       scene,
     );
   }
 
-  _dart_obs_scene_get_source _obs_scene_get_source;
+  _dart_obs_scene_get_source? _obs_scene_get_source;
 
   /// Gets the scene from its source, or NULL if not a scene
   ffi.Pointer<obs_scene> obs_scene_from_source(
@@ -14808,12 +14808,12 @@ class DiveObslibFFI {
   ) {
     _obs_scene_from_source ??= _dylib.lookupFunction<_c_obs_scene_from_source,
         _dart_obs_scene_from_source>('obs_scene_from_source');
-    return _obs_scene_from_source(
+    return _obs_scene_from_source!(
       source,
     );
   }
 
-  _dart_obs_scene_from_source _obs_scene_from_source;
+  _dart_obs_scene_from_source? _obs_scene_from_source;
 
   /// Determines whether a source is within a scene
   ffi.Pointer<obs_scene_item> obs_scene_find_source(
@@ -14822,13 +14822,13 @@ class DiveObslibFFI {
   ) {
     _obs_scene_find_source ??= _dylib.lookupFunction<_c_obs_scene_find_source,
         _dart_obs_scene_find_source>('obs_scene_find_source');
-    return _obs_scene_find_source(
+    return _obs_scene_find_source!(
       scene,
       name,
     );
   }
 
-  _dart_obs_scene_find_source _obs_scene_find_source;
+  _dart_obs_scene_find_source? _obs_scene_find_source;
 
   ffi.Pointer<obs_scene_item> obs_scene_find_source_recursive(
     ffi.Pointer<obs_scene> scene,
@@ -14838,13 +14838,13 @@ class DiveObslibFFI {
             _c_obs_scene_find_source_recursive,
             _dart_obs_scene_find_source_recursive>(
         'obs_scene_find_source_recursive');
-    return _obs_scene_find_source_recursive(
+    return _obs_scene_find_source_recursive!(
       scene,
       name,
     );
   }
 
-  _dart_obs_scene_find_source_recursive _obs_scene_find_source_recursive;
+  _dart_obs_scene_find_source_recursive? _obs_scene_find_source_recursive;
 
   ffi.Pointer<obs_scene_item> obs_scene_find_sceneitem_by_id(
     ffi.Pointer<obs_scene> scene,
@@ -14853,13 +14853,13 @@ class DiveObslibFFI {
     _obs_scene_find_sceneitem_by_id ??= _dylib.lookupFunction<
         _c_obs_scene_find_sceneitem_by_id,
         _dart_obs_scene_find_sceneitem_by_id>('obs_scene_find_sceneitem_by_id');
-    return _obs_scene_find_sceneitem_by_id(
+    return _obs_scene_find_sceneitem_by_id!(
       scene,
       id,
     );
   }
 
-  _dart_obs_scene_find_sceneitem_by_id _obs_scene_find_sceneitem_by_id;
+  _dart_obs_scene_find_sceneitem_by_id? _obs_scene_find_sceneitem_by_id;
 
   /// Enumerates sources within a scene
   void obs_scene_enum_items(
@@ -14869,14 +14869,14 @@ class DiveObslibFFI {
   ) {
     _obs_scene_enum_items ??= _dylib.lookupFunction<_c_obs_scene_enum_items,
         _dart_obs_scene_enum_items>('obs_scene_enum_items');
-    return _obs_scene_enum_items(
+    return _obs_scene_enum_items!(
       scene,
       callback,
       param,
     );
   }
 
-  _dart_obs_scene_enum_items _obs_scene_enum_items;
+  _dart_obs_scene_enum_items? _obs_scene_enum_items;
 
   int obs_scene_reorder_items(
     ffi.Pointer<obs_scene> scene,
@@ -14886,14 +14886,14 @@ class DiveObslibFFI {
     _obs_scene_reorder_items ??= _dylib.lookupFunction<
         _c_obs_scene_reorder_items,
         _dart_obs_scene_reorder_items>('obs_scene_reorder_items');
-    return _obs_scene_reorder_items(
+    return _obs_scene_reorder_items!(
       scene,
       item_order,
       item_order_size,
     );
   }
 
-  _dart_obs_scene_reorder_items _obs_scene_reorder_items;
+  _dart_obs_scene_reorder_items? _obs_scene_reorder_items;
 
   int obs_scene_reorder_items2(
     ffi.Pointer<obs_scene> scene,
@@ -14903,29 +14903,29 @@ class DiveObslibFFI {
     _obs_scene_reorder_items2 ??= _dylib.lookupFunction<
         _c_obs_scene_reorder_items2,
         _dart_obs_scene_reorder_items2>('obs_scene_reorder_items2');
-    return _obs_scene_reorder_items2(
+    return _obs_scene_reorder_items2!(
       scene,
       item_order,
       item_order_size,
     );
   }
 
-  _dart_obs_scene_reorder_items2 _obs_scene_reorder_items2;
+  _dart_obs_scene_reorder_items2? _obs_scene_reorder_items2;
 
   /// Adds/creates a new scene item for a source
   ffi.Pointer<obs_scene_item> obs_scene_add(
-    ffi.Pointer<obs_scene> scene,
-    ffi.Pointer<obs_source> source,
+    ffi.Pointer<obs_scene>? scene,
+    ffi.Pointer<obs_source>? source,
   ) {
     _obs_scene_add ??= _dylib
         .lookupFunction<_c_obs_scene_add, _dart_obs_scene_add>('obs_scene_add');
-    return _obs_scene_add(
+    return _obs_scene_add!(
       scene,
       source,
     );
   }
 
-  _dart_obs_scene_add _obs_scene_add;
+  _dart_obs_scene_add? _obs_scene_add;
 
   void obs_scene_atomic_update(
     ffi.Pointer<obs_scene> scene,
@@ -14935,51 +14935,51 @@ class DiveObslibFFI {
     _obs_scene_atomic_update ??= _dylib.lookupFunction<
         _c_obs_scene_atomic_update,
         _dart_obs_scene_atomic_update>('obs_scene_atomic_update');
-    return _obs_scene_atomic_update(
+    return _obs_scene_atomic_update!(
       scene,
       func,
       data,
     );
   }
 
-  _dart_obs_scene_atomic_update _obs_scene_atomic_update;
+  _dart_obs_scene_atomic_update? _obs_scene_atomic_update;
 
   void obs_sceneitem_addref(
     ffi.Pointer<obs_scene_item> item,
   ) {
     _obs_sceneitem_addref ??= _dylib.lookupFunction<_c_obs_sceneitem_addref,
         _dart_obs_sceneitem_addref>('obs_sceneitem_addref');
-    return _obs_sceneitem_addref(
+    return _obs_sceneitem_addref!(
       item,
     );
   }
 
-  _dart_obs_sceneitem_addref _obs_sceneitem_addref;
+  _dart_obs_sceneitem_addref? _obs_sceneitem_addref;
 
   void obs_sceneitem_release(
     ffi.Pointer<obs_scene_item> item,
   ) {
     _obs_sceneitem_release ??= _dylib.lookupFunction<_c_obs_sceneitem_release,
         _dart_obs_sceneitem_release>('obs_sceneitem_release');
-    return _obs_sceneitem_release(
+    return _obs_sceneitem_release!(
       item,
     );
   }
 
-  _dart_obs_sceneitem_release _obs_sceneitem_release;
+  _dart_obs_sceneitem_release? _obs_sceneitem_release;
 
   /// Removes a scene item.
   void obs_sceneitem_remove(
-    ffi.Pointer<obs_scene_item> item,
+    ffi.Pointer<obs_scene_item>? item,
   ) {
     _obs_sceneitem_remove ??= _dylib.lookupFunction<_c_obs_sceneitem_remove,
         _dart_obs_sceneitem_remove>('obs_sceneitem_remove');
-    return _obs_sceneitem_remove(
+    return _obs_sceneitem_remove!(
       item,
     );
   }
 
-  _dart_obs_sceneitem_remove _obs_sceneitem_remove;
+  _dart_obs_sceneitem_remove? _obs_sceneitem_remove;
 
   /// Gets the scene parent associated with the scene item.
   ffi.Pointer<obs_scene> obs_sceneitem_get_scene(
@@ -14988,12 +14988,12 @@ class DiveObslibFFI {
     _obs_sceneitem_get_scene ??= _dylib.lookupFunction<
         _c_obs_sceneitem_get_scene,
         _dart_obs_sceneitem_get_scene>('obs_sceneitem_get_scene');
-    return _obs_sceneitem_get_scene(
+    return _obs_sceneitem_get_scene!(
       item,
     );
   }
 
-  _dart_obs_sceneitem_get_scene _obs_sceneitem_get_scene;
+  _dart_obs_sceneitem_get_scene? _obs_sceneitem_get_scene;
 
   /// Gets the source of a scene item.
   ffi.Pointer<obs_source> obs_sceneitem_get_source(
@@ -15002,12 +15002,12 @@ class DiveObslibFFI {
     _obs_sceneitem_get_source ??= _dylib.lookupFunction<
         _c_obs_sceneitem_get_source,
         _dart_obs_sceneitem_get_source>('obs_sceneitem_get_source');
-    return _obs_sceneitem_get_source(
+    return _obs_sceneitem_get_source!(
       item,
     );
   }
 
-  _dart_obs_sceneitem_get_source _obs_sceneitem_get_source;
+  _dart_obs_sceneitem_get_source? _obs_sceneitem_get_source;
 
   void obs_sceneitem_select(
     ffi.Pointer<obs_scene_item> item,
@@ -15015,37 +15015,37 @@ class DiveObslibFFI {
   ) {
     _obs_sceneitem_select ??= _dylib.lookupFunction<_c_obs_sceneitem_select,
         _dart_obs_sceneitem_select>('obs_sceneitem_select');
-    return _obs_sceneitem_select(
+    return _obs_sceneitem_select!(
       item,
       select,
     );
   }
 
-  _dart_obs_sceneitem_select _obs_sceneitem_select;
+  _dart_obs_sceneitem_select? _obs_sceneitem_select;
 
   int obs_sceneitem_selected(
     ffi.Pointer<obs_scene_item> item,
   ) {
     _obs_sceneitem_selected ??= _dylib.lookupFunction<_c_obs_sceneitem_selected,
         _dart_obs_sceneitem_selected>('obs_sceneitem_selected');
-    return _obs_sceneitem_selected(
+    return _obs_sceneitem_selected!(
       item,
     );
   }
 
-  _dart_obs_sceneitem_selected _obs_sceneitem_selected;
+  _dart_obs_sceneitem_selected? _obs_sceneitem_selected;
 
   int obs_sceneitem_locked(
     ffi.Pointer<obs_scene_item> item,
   ) {
     _obs_sceneitem_locked ??= _dylib.lookupFunction<_c_obs_sceneitem_locked,
         _dart_obs_sceneitem_locked>('obs_sceneitem_locked');
-    return _obs_sceneitem_locked(
+    return _obs_sceneitem_locked!(
       item,
     );
   }
 
-  _dart_obs_sceneitem_locked _obs_sceneitem_locked;
+  _dart_obs_sceneitem_locked? _obs_sceneitem_locked;
 
   int obs_sceneitem_set_locked(
     ffi.Pointer<obs_scene_item> item,
@@ -15054,13 +15054,13 @@ class DiveObslibFFI {
     _obs_sceneitem_set_locked ??= _dylib.lookupFunction<
         _c_obs_sceneitem_set_locked,
         _dart_obs_sceneitem_set_locked>('obs_sceneitem_set_locked');
-    return _obs_sceneitem_set_locked(
+    return _obs_sceneitem_set_locked!(
       item,
       lock,
     );
   }
 
-  _dart_obs_sceneitem_set_locked _obs_sceneitem_set_locked;
+  _dart_obs_sceneitem_set_locked? _obs_sceneitem_set_locked;
 
   void obs_sceneitem_set_pos(
     ffi.Pointer<obs_scene_item> item,
@@ -15068,13 +15068,13 @@ class DiveObslibFFI {
   ) {
     _obs_sceneitem_set_pos ??= _dylib.lookupFunction<_c_obs_sceneitem_set_pos,
         _dart_obs_sceneitem_set_pos>('obs_sceneitem_set_pos');
-    return _obs_sceneitem_set_pos(
+    return _obs_sceneitem_set_pos!(
       item,
       pos,
     );
   }
 
-  _dart_obs_sceneitem_set_pos _obs_sceneitem_set_pos;
+  _dart_obs_sceneitem_set_pos? _obs_sceneitem_set_pos;
 
   void obs_sceneitem_set_rot(
     ffi.Pointer<obs_scene_item> item,
@@ -15082,13 +15082,13 @@ class DiveObslibFFI {
   ) {
     _obs_sceneitem_set_rot ??= _dylib.lookupFunction<_c_obs_sceneitem_set_rot,
         _dart_obs_sceneitem_set_rot>('obs_sceneitem_set_rot');
-    return _obs_sceneitem_set_rot(
+    return _obs_sceneitem_set_rot!(
       item,
       rot_deg,
     );
   }
 
-  _dart_obs_sceneitem_set_rot _obs_sceneitem_set_rot;
+  _dart_obs_sceneitem_set_rot? _obs_sceneitem_set_rot;
 
   void obs_sceneitem_set_scale(
     ffi.Pointer<obs_scene_item> item,
@@ -15097,13 +15097,13 @@ class DiveObslibFFI {
     _obs_sceneitem_set_scale ??= _dylib.lookupFunction<
         _c_obs_sceneitem_set_scale,
         _dart_obs_sceneitem_set_scale>('obs_sceneitem_set_scale');
-    return _obs_sceneitem_set_scale(
+    return _obs_sceneitem_set_scale!(
       item,
       scale,
     );
   }
 
-  _dart_obs_sceneitem_set_scale _obs_sceneitem_set_scale;
+  _dart_obs_sceneitem_set_scale? _obs_sceneitem_set_scale;
 
   void obs_sceneitem_set_alignment(
     ffi.Pointer<obs_scene_item> item,
@@ -15112,28 +15112,28 @@ class DiveObslibFFI {
     _obs_sceneitem_set_alignment ??= _dylib.lookupFunction<
         _c_obs_sceneitem_set_alignment,
         _dart_obs_sceneitem_set_alignment>('obs_sceneitem_set_alignment');
-    return _obs_sceneitem_set_alignment(
+    return _obs_sceneitem_set_alignment!(
       item,
       alignment,
     );
   }
 
-  _dart_obs_sceneitem_set_alignment _obs_sceneitem_set_alignment;
+  _dart_obs_sceneitem_set_alignment? _obs_sceneitem_set_alignment;
 
   void obs_sceneitem_set_order(
-    ffi.Pointer<obs_scene_item> item,
+    ffi.Pointer<obs_scene_item>? item,
     int movement,
   ) {
     _obs_sceneitem_set_order ??= _dylib.lookupFunction<
         _c_obs_sceneitem_set_order,
         _dart_obs_sceneitem_set_order>('obs_sceneitem_set_order');
-    return _obs_sceneitem_set_order(
+    return _obs_sceneitem_set_order!(
       item,
       movement,
     );
   }
 
-  _dart_obs_sceneitem_set_order _obs_sceneitem_set_order;
+  _dart_obs_sceneitem_set_order? _obs_sceneitem_set_order;
 
   void obs_sceneitem_set_order_position(
     ffi.Pointer<obs_scene_item> item,
@@ -15143,13 +15143,13 @@ class DiveObslibFFI {
             _c_obs_sceneitem_set_order_position,
             _dart_obs_sceneitem_set_order_position>(
         'obs_sceneitem_set_order_position');
-    return _obs_sceneitem_set_order_position(
+    return _obs_sceneitem_set_order_position!(
       item,
       position,
     );
   }
 
-  _dart_obs_sceneitem_set_order_position _obs_sceneitem_set_order_position;
+  _dart_obs_sceneitem_set_order_position? _obs_sceneitem_set_order_position;
 
   void obs_sceneitem_set_bounds_type(
     ffi.Pointer<obs_scene_item> item,
@@ -15158,13 +15158,13 @@ class DiveObslibFFI {
     _obs_sceneitem_set_bounds_type ??= _dylib.lookupFunction<
         _c_obs_sceneitem_set_bounds_type,
         _dart_obs_sceneitem_set_bounds_type>('obs_sceneitem_set_bounds_type');
-    return _obs_sceneitem_set_bounds_type(
+    return _obs_sceneitem_set_bounds_type!(
       item,
       type,
     );
   }
 
-  _dart_obs_sceneitem_set_bounds_type _obs_sceneitem_set_bounds_type;
+  _dart_obs_sceneitem_set_bounds_type? _obs_sceneitem_set_bounds_type;
 
   void obs_sceneitem_set_bounds_alignment(
     ffi.Pointer<obs_scene_item> item,
@@ -15174,13 +15174,13 @@ class DiveObslibFFI {
             _c_obs_sceneitem_set_bounds_alignment,
             _dart_obs_sceneitem_set_bounds_alignment>(
         'obs_sceneitem_set_bounds_alignment');
-    return _obs_sceneitem_set_bounds_alignment(
+    return _obs_sceneitem_set_bounds_alignment!(
       item,
       alignment,
     );
   }
 
-  _dart_obs_sceneitem_set_bounds_alignment _obs_sceneitem_set_bounds_alignment;
+  _dart_obs_sceneitem_set_bounds_alignment? _obs_sceneitem_set_bounds_alignment;
 
   void obs_sceneitem_set_bounds(
     ffi.Pointer<obs_scene_item> item,
@@ -15189,25 +15189,25 @@ class DiveObslibFFI {
     _obs_sceneitem_set_bounds ??= _dylib.lookupFunction<
         _c_obs_sceneitem_set_bounds,
         _dart_obs_sceneitem_set_bounds>('obs_sceneitem_set_bounds');
-    return _obs_sceneitem_set_bounds(
+    return _obs_sceneitem_set_bounds!(
       item,
       bounds,
     );
   }
 
-  _dart_obs_sceneitem_set_bounds _obs_sceneitem_set_bounds;
+  _dart_obs_sceneitem_set_bounds? _obs_sceneitem_set_bounds;
 
   int obs_sceneitem_get_id(
     ffi.Pointer<obs_scene_item> item,
   ) {
     _obs_sceneitem_get_id ??= _dylib.lookupFunction<_c_obs_sceneitem_get_id,
         _dart_obs_sceneitem_get_id>('obs_sceneitem_get_id');
-    return _obs_sceneitem_get_id(
+    return _obs_sceneitem_get_id!(
       item,
     );
   }
 
-  _dart_obs_sceneitem_get_id _obs_sceneitem_get_id;
+  _dart_obs_sceneitem_get_id? _obs_sceneitem_get_id;
 
   void obs_sceneitem_get_pos(
     ffi.Pointer<obs_scene_item> item,
@@ -15215,25 +15215,25 @@ class DiveObslibFFI {
   ) {
     _obs_sceneitem_get_pos ??= _dylib.lookupFunction<_c_obs_sceneitem_get_pos,
         _dart_obs_sceneitem_get_pos>('obs_sceneitem_get_pos');
-    return _obs_sceneitem_get_pos(
+    return _obs_sceneitem_get_pos!(
       item,
       pos,
     );
   }
 
-  _dart_obs_sceneitem_get_pos _obs_sceneitem_get_pos;
+  _dart_obs_sceneitem_get_pos? _obs_sceneitem_get_pos;
 
   double obs_sceneitem_get_rot(
     ffi.Pointer<obs_scene_item> item,
   ) {
     _obs_sceneitem_get_rot ??= _dylib.lookupFunction<_c_obs_sceneitem_get_rot,
         _dart_obs_sceneitem_get_rot>('obs_sceneitem_get_rot');
-    return _obs_sceneitem_get_rot(
+    return _obs_sceneitem_get_rot!(
       item,
     );
   }
 
-  _dart_obs_sceneitem_get_rot _obs_sceneitem_get_rot;
+  _dart_obs_sceneitem_get_rot? _obs_sceneitem_get_rot;
 
   void obs_sceneitem_get_scale(
     ffi.Pointer<obs_scene_item> item,
@@ -15242,13 +15242,13 @@ class DiveObslibFFI {
     _obs_sceneitem_get_scale ??= _dylib.lookupFunction<
         _c_obs_sceneitem_get_scale,
         _dart_obs_sceneitem_get_scale>('obs_sceneitem_get_scale');
-    return _obs_sceneitem_get_scale(
+    return _obs_sceneitem_get_scale!(
       item,
       scale,
     );
   }
 
-  _dart_obs_sceneitem_get_scale _obs_sceneitem_get_scale;
+  _dart_obs_sceneitem_get_scale? _obs_sceneitem_get_scale;
 
   int obs_sceneitem_get_alignment(
     ffi.Pointer<obs_scene_item> item,
@@ -15256,12 +15256,12 @@ class DiveObslibFFI {
     _obs_sceneitem_get_alignment ??= _dylib.lookupFunction<
         _c_obs_sceneitem_get_alignment,
         _dart_obs_sceneitem_get_alignment>('obs_sceneitem_get_alignment');
-    return _obs_sceneitem_get_alignment(
+    return _obs_sceneitem_get_alignment!(
       item,
     );
   }
 
-  _dart_obs_sceneitem_get_alignment _obs_sceneitem_get_alignment;
+  _dart_obs_sceneitem_get_alignment? _obs_sceneitem_get_alignment;
 
   int obs_sceneitem_get_bounds_type(
     ffi.Pointer<obs_scene_item> item,
@@ -15269,12 +15269,12 @@ class DiveObslibFFI {
     _obs_sceneitem_get_bounds_type ??= _dylib.lookupFunction<
         _c_obs_sceneitem_get_bounds_type,
         _dart_obs_sceneitem_get_bounds_type>('obs_sceneitem_get_bounds_type');
-    return _obs_sceneitem_get_bounds_type(
+    return _obs_sceneitem_get_bounds_type!(
       item,
     );
   }
 
-  _dart_obs_sceneitem_get_bounds_type _obs_sceneitem_get_bounds_type;
+  _dart_obs_sceneitem_get_bounds_type? _obs_sceneitem_get_bounds_type;
 
   int obs_sceneitem_get_bounds_alignment(
     ffi.Pointer<obs_scene_item> item,
@@ -15283,12 +15283,12 @@ class DiveObslibFFI {
             _c_obs_sceneitem_get_bounds_alignment,
             _dart_obs_sceneitem_get_bounds_alignment>(
         'obs_sceneitem_get_bounds_alignment');
-    return _obs_sceneitem_get_bounds_alignment(
+    return _obs_sceneitem_get_bounds_alignment!(
       item,
     );
   }
 
-  _dart_obs_sceneitem_get_bounds_alignment _obs_sceneitem_get_bounds_alignment;
+  _dart_obs_sceneitem_get_bounds_alignment? _obs_sceneitem_get_bounds_alignment;
 
   void obs_sceneitem_get_bounds(
     ffi.Pointer<obs_scene_item> item,
@@ -15297,13 +15297,13 @@ class DiveObslibFFI {
     _obs_sceneitem_get_bounds ??= _dylib.lookupFunction<
         _c_obs_sceneitem_get_bounds,
         _dart_obs_sceneitem_get_bounds>('obs_sceneitem_get_bounds');
-    return _obs_sceneitem_get_bounds(
+    return _obs_sceneitem_get_bounds!(
       item,
       bounds,
     );
   }
 
-  _dart_obs_sceneitem_get_bounds _obs_sceneitem_get_bounds;
+  _dart_obs_sceneitem_get_bounds? _obs_sceneitem_get_bounds;
 
   void obs_sceneitem_get_info(
     ffi.Pointer<obs_scene_item> item,
@@ -15311,13 +15311,13 @@ class DiveObslibFFI {
   ) {
     _obs_sceneitem_get_info ??= _dylib.lookupFunction<_c_obs_sceneitem_get_info,
         _dart_obs_sceneitem_get_info>('obs_sceneitem_get_info');
-    return _obs_sceneitem_get_info(
+    return _obs_sceneitem_get_info!(
       item,
       info,
     );
   }
 
-  _dart_obs_sceneitem_get_info _obs_sceneitem_get_info;
+  _dart_obs_sceneitem_get_info? _obs_sceneitem_get_info;
 
   void obs_sceneitem_set_info(
     ffi.Pointer<obs_scene_item> item,
@@ -15325,13 +15325,13 @@ class DiveObslibFFI {
   ) {
     _obs_sceneitem_set_info ??= _dylib.lookupFunction<_c_obs_sceneitem_set_info,
         _dart_obs_sceneitem_set_info>('obs_sceneitem_set_info');
-    return _obs_sceneitem_set_info(
+    return _obs_sceneitem_set_info!(
       item,
       info,
     );
   }
 
-  _dart_obs_sceneitem_set_info _obs_sceneitem_set_info;
+  _dart_obs_sceneitem_set_info? _obs_sceneitem_set_info;
 
   void obs_sceneitem_get_draw_transform(
     ffi.Pointer<obs_scene_item> item,
@@ -15341,13 +15341,13 @@ class DiveObslibFFI {
             _c_obs_sceneitem_get_draw_transform,
             _dart_obs_sceneitem_get_draw_transform>(
         'obs_sceneitem_get_draw_transform');
-    return _obs_sceneitem_get_draw_transform(
+    return _obs_sceneitem_get_draw_transform!(
       item,
       transform,
     );
   }
 
-  _dart_obs_sceneitem_get_draw_transform _obs_sceneitem_get_draw_transform;
+  _dart_obs_sceneitem_get_draw_transform? _obs_sceneitem_get_draw_transform;
 
   void obs_sceneitem_get_box_transform(
     ffi.Pointer<obs_scene_item> item,
@@ -15357,13 +15357,13 @@ class DiveObslibFFI {
             _c_obs_sceneitem_get_box_transform,
             _dart_obs_sceneitem_get_box_transform>(
         'obs_sceneitem_get_box_transform');
-    return _obs_sceneitem_get_box_transform(
+    return _obs_sceneitem_get_box_transform!(
       item,
       transform,
     );
   }
 
-  _dart_obs_sceneitem_get_box_transform _obs_sceneitem_get_box_transform;
+  _dart_obs_sceneitem_get_box_transform? _obs_sceneitem_get_box_transform;
 
   void obs_sceneitem_get_box_scale(
     ffi.Pointer<obs_scene_item> item,
@@ -15372,40 +15372,40 @@ class DiveObslibFFI {
     _obs_sceneitem_get_box_scale ??= _dylib.lookupFunction<
         _c_obs_sceneitem_get_box_scale,
         _dart_obs_sceneitem_get_box_scale>('obs_sceneitem_get_box_scale');
-    return _obs_sceneitem_get_box_scale(
+    return _obs_sceneitem_get_box_scale!(
       item,
       scale,
     );
   }
 
-  _dart_obs_sceneitem_get_box_scale _obs_sceneitem_get_box_scale;
+  _dart_obs_sceneitem_get_box_scale? _obs_sceneitem_get_box_scale;
 
   int obs_sceneitem_visible(
-    ffi.Pointer<obs_scene_item> item,
+    ffi.Pointer<obs_scene_item>? item,
   ) {
     _obs_sceneitem_visible ??= _dylib.lookupFunction<_c_obs_sceneitem_visible,
         _dart_obs_sceneitem_visible>('obs_sceneitem_visible');
-    return _obs_sceneitem_visible(
+    return _obs_sceneitem_visible!(
       item,
     );
   }
 
-  _dart_obs_sceneitem_visible _obs_sceneitem_visible;
+  _dart_obs_sceneitem_visible? _obs_sceneitem_visible;
 
   int obs_sceneitem_set_visible(
-    ffi.Pointer<obs_scene_item> item,
+    ffi.Pointer<obs_scene_item>? item,
     int visible,
   ) {
     _obs_sceneitem_set_visible ??= _dylib.lookupFunction<
         _c_obs_sceneitem_set_visible,
         _dart_obs_sceneitem_set_visible>('obs_sceneitem_set_visible');
-    return _obs_sceneitem_set_visible(
+    return _obs_sceneitem_set_visible!(
       item,
       visible,
     );
   }
 
-  _dart_obs_sceneitem_set_visible _obs_sceneitem_set_visible;
+  _dart_obs_sceneitem_set_visible? _obs_sceneitem_set_visible;
 
   void obs_sceneitem_set_crop(
     ffi.Pointer<obs_scene_item> item,
@@ -15413,13 +15413,13 @@ class DiveObslibFFI {
   ) {
     _obs_sceneitem_set_crop ??= _dylib.lookupFunction<_c_obs_sceneitem_set_crop,
         _dart_obs_sceneitem_set_crop>('obs_sceneitem_set_crop');
-    return _obs_sceneitem_set_crop(
+    return _obs_sceneitem_set_crop!(
       item,
       crop,
     );
   }
 
-  _dart_obs_sceneitem_set_crop _obs_sceneitem_set_crop;
+  _dart_obs_sceneitem_set_crop? _obs_sceneitem_set_crop;
 
   void obs_sceneitem_get_crop(
     ffi.Pointer<obs_scene_item> item,
@@ -15427,13 +15427,13 @@ class DiveObslibFFI {
   ) {
     _obs_sceneitem_get_crop ??= _dylib.lookupFunction<_c_obs_sceneitem_get_crop,
         _dart_obs_sceneitem_get_crop>('obs_sceneitem_get_crop');
-    return _obs_sceneitem_get_crop(
+    return _obs_sceneitem_get_crop!(
       item,
       crop,
     );
   }
 
-  _dart_obs_sceneitem_get_crop _obs_sceneitem_get_crop;
+  _dart_obs_sceneitem_get_crop? _obs_sceneitem_get_crop;
 
   void obs_sceneitem_set_scale_filter(
     ffi.Pointer<obs_scene_item> item,
@@ -15442,13 +15442,13 @@ class DiveObslibFFI {
     _obs_sceneitem_set_scale_filter ??= _dylib.lookupFunction<
         _c_obs_sceneitem_set_scale_filter,
         _dart_obs_sceneitem_set_scale_filter>('obs_sceneitem_set_scale_filter');
-    return _obs_sceneitem_set_scale_filter(
+    return _obs_sceneitem_set_scale_filter!(
       item,
       filter,
     );
   }
 
-  _dart_obs_sceneitem_set_scale_filter _obs_sceneitem_set_scale_filter;
+  _dart_obs_sceneitem_set_scale_filter? _obs_sceneitem_set_scale_filter;
 
   int obs_sceneitem_get_scale_filter(
     ffi.Pointer<obs_scene_item> item,
@@ -15456,12 +15456,12 @@ class DiveObslibFFI {
     _obs_sceneitem_get_scale_filter ??= _dylib.lookupFunction<
         _c_obs_sceneitem_get_scale_filter,
         _dart_obs_sceneitem_get_scale_filter>('obs_sceneitem_get_scale_filter');
-    return _obs_sceneitem_get_scale_filter(
+    return _obs_sceneitem_get_scale_filter!(
       item,
     );
   }
 
-  _dart_obs_sceneitem_get_scale_filter _obs_sceneitem_get_scale_filter;
+  _dart_obs_sceneitem_get_scale_filter? _obs_sceneitem_get_scale_filter;
 
   void obs_sceneitem_force_update_transform(
     ffi.Pointer<obs_scene_item> item,
@@ -15470,12 +15470,12 @@ class DiveObslibFFI {
             _c_obs_sceneitem_force_update_transform,
             _dart_obs_sceneitem_force_update_transform>(
         'obs_sceneitem_force_update_transform');
-    return _obs_sceneitem_force_update_transform(
+    return _obs_sceneitem_force_update_transform!(
       item,
     );
   }
 
-  _dart_obs_sceneitem_force_update_transform
+  _dart_obs_sceneitem_force_update_transform?
       _obs_sceneitem_force_update_transform;
 
   void obs_sceneitem_defer_update_begin(
@@ -15485,12 +15485,12 @@ class DiveObslibFFI {
             _c_obs_sceneitem_defer_update_begin,
             _dart_obs_sceneitem_defer_update_begin>(
         'obs_sceneitem_defer_update_begin');
-    return _obs_sceneitem_defer_update_begin(
+    return _obs_sceneitem_defer_update_begin!(
       item,
     );
   }
 
-  _dart_obs_sceneitem_defer_update_begin _obs_sceneitem_defer_update_begin;
+  _dart_obs_sceneitem_defer_update_begin? _obs_sceneitem_defer_update_begin;
 
   void obs_sceneitem_defer_update_end(
     ffi.Pointer<obs_scene_item> item,
@@ -15498,12 +15498,12 @@ class DiveObslibFFI {
     _obs_sceneitem_defer_update_end ??= _dylib.lookupFunction<
         _c_obs_sceneitem_defer_update_end,
         _dart_obs_sceneitem_defer_update_end>('obs_sceneitem_defer_update_end');
-    return _obs_sceneitem_defer_update_end(
+    return _obs_sceneitem_defer_update_end!(
       item,
     );
   }
 
-  _dart_obs_sceneitem_defer_update_end _obs_sceneitem_defer_update_end;
+  _dart_obs_sceneitem_defer_update_end? _obs_sceneitem_defer_update_end;
 
   /// Gets private front-end settings data.  This data is saved/loaded
   /// automatically.  Returns an incremented reference.
@@ -15514,12 +15514,12 @@ class DiveObslibFFI {
             _c_obs_sceneitem_get_private_settings,
             _dart_obs_sceneitem_get_private_settings>(
         'obs_sceneitem_get_private_settings');
-    return _obs_sceneitem_get_private_settings(
+    return _obs_sceneitem_get_private_settings!(
       item,
     );
   }
 
-  _dart_obs_sceneitem_get_private_settings _obs_sceneitem_get_private_settings;
+  _dart_obs_sceneitem_get_private_settings? _obs_sceneitem_get_private_settings;
 
   ffi.Pointer<obs_scene_item> obs_scene_add_group(
     ffi.Pointer<obs_scene> scene,
@@ -15527,13 +15527,13 @@ class DiveObslibFFI {
   ) {
     _obs_scene_add_group ??= _dylib.lookupFunction<_c_obs_scene_add_group,
         _dart_obs_scene_add_group>('obs_scene_add_group');
-    return _obs_scene_add_group(
+    return _obs_scene_add_group!(
       scene,
       name,
     );
   }
 
-  _dart_obs_scene_add_group _obs_scene_add_group;
+  _dart_obs_scene_add_group? _obs_scene_add_group;
 
   ffi.Pointer<obs_scene_item> obs_scene_insert_group(
     ffi.Pointer<obs_scene> scene,
@@ -15543,7 +15543,7 @@ class DiveObslibFFI {
   ) {
     _obs_scene_insert_group ??= _dylib.lookupFunction<_c_obs_scene_insert_group,
         _dart_obs_scene_insert_group>('obs_scene_insert_group');
-    return _obs_scene_insert_group(
+    return _obs_scene_insert_group!(
       scene,
       name,
       items,
@@ -15551,7 +15551,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_scene_insert_group _obs_scene_insert_group;
+  _dart_obs_scene_insert_group? _obs_scene_insert_group;
 
   ffi.Pointer<obs_scene_item> obs_scene_add_group2(
     ffi.Pointer<obs_scene> scene,
@@ -15560,14 +15560,14 @@ class DiveObslibFFI {
   ) {
     _obs_scene_add_group2 ??= _dylib.lookupFunction<_c_obs_scene_add_group2,
         _dart_obs_scene_add_group2>('obs_scene_add_group2');
-    return _obs_scene_add_group2(
+    return _obs_scene_add_group2!(
       scene,
       name,
       signal,
     );
   }
 
-  _dart_obs_scene_add_group2 _obs_scene_add_group2;
+  _dart_obs_scene_add_group2? _obs_scene_add_group2;
 
   ffi.Pointer<obs_scene_item> obs_scene_insert_group2(
     ffi.Pointer<obs_scene> scene,
@@ -15579,7 +15579,7 @@ class DiveObslibFFI {
     _obs_scene_insert_group2 ??= _dylib.lookupFunction<
         _c_obs_scene_insert_group2,
         _dart_obs_scene_insert_group2>('obs_scene_insert_group2');
-    return _obs_scene_insert_group2(
+    return _obs_scene_insert_group2!(
       scene,
       name,
       items,
@@ -15588,7 +15588,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_scene_insert_group2 _obs_scene_insert_group2;
+  _dart_obs_scene_insert_group2? _obs_scene_insert_group2;
 
   ffi.Pointer<obs_scene_item> obs_scene_get_group(
     ffi.Pointer<obs_scene> scene,
@@ -15596,25 +15596,25 @@ class DiveObslibFFI {
   ) {
     _obs_scene_get_group ??= _dylib.lookupFunction<_c_obs_scene_get_group,
         _dart_obs_scene_get_group>('obs_scene_get_group');
-    return _obs_scene_get_group(
+    return _obs_scene_get_group!(
       scene,
       name,
     );
   }
 
-  _dart_obs_scene_get_group _obs_scene_get_group;
+  _dart_obs_scene_get_group? _obs_scene_get_group;
 
   int obs_sceneitem_is_group(
     ffi.Pointer<obs_scene_item> item,
   ) {
     _obs_sceneitem_is_group ??= _dylib.lookupFunction<_c_obs_sceneitem_is_group,
         _dart_obs_sceneitem_is_group>('obs_sceneitem_is_group');
-    return _obs_sceneitem_is_group(
+    return _obs_sceneitem_is_group!(
       item,
     );
   }
 
-  _dart_obs_sceneitem_is_group _obs_sceneitem_is_group;
+  _dart_obs_sceneitem_is_group? _obs_sceneitem_is_group;
 
   ffi.Pointer<obs_scene> obs_sceneitem_group_get_scene(
     ffi.Pointer<obs_scene_item> group,
@@ -15622,12 +15622,12 @@ class DiveObslibFFI {
     _obs_sceneitem_group_get_scene ??= _dylib.lookupFunction<
         _c_obs_sceneitem_group_get_scene,
         _dart_obs_sceneitem_group_get_scene>('obs_sceneitem_group_get_scene');
-    return _obs_sceneitem_group_get_scene(
+    return _obs_sceneitem_group_get_scene!(
       group,
     );
   }
 
-  _dart_obs_sceneitem_group_get_scene _obs_sceneitem_group_get_scene;
+  _dart_obs_sceneitem_group_get_scene? _obs_sceneitem_group_get_scene;
 
   void obs_sceneitem_group_ungroup(
     ffi.Pointer<obs_scene_item> group,
@@ -15635,12 +15635,12 @@ class DiveObslibFFI {
     _obs_sceneitem_group_ungroup ??= _dylib.lookupFunction<
         _c_obs_sceneitem_group_ungroup,
         _dart_obs_sceneitem_group_ungroup>('obs_sceneitem_group_ungroup');
-    return _obs_sceneitem_group_ungroup(
+    return _obs_sceneitem_group_ungroup!(
       group,
     );
   }
 
-  _dart_obs_sceneitem_group_ungroup _obs_sceneitem_group_ungroup;
+  _dart_obs_sceneitem_group_ungroup? _obs_sceneitem_group_ungroup;
 
   void obs_sceneitem_group_ungroup2(
     ffi.Pointer<obs_scene_item> group,
@@ -15649,13 +15649,13 @@ class DiveObslibFFI {
     _obs_sceneitem_group_ungroup2 ??= _dylib.lookupFunction<
         _c_obs_sceneitem_group_ungroup2,
         _dart_obs_sceneitem_group_ungroup2>('obs_sceneitem_group_ungroup2');
-    return _obs_sceneitem_group_ungroup2(
+    return _obs_sceneitem_group_ungroup2!(
       group,
       signal,
     );
   }
 
-  _dart_obs_sceneitem_group_ungroup2 _obs_sceneitem_group_ungroup2;
+  _dart_obs_sceneitem_group_ungroup2? _obs_sceneitem_group_ungroup2;
 
   void obs_sceneitem_group_add_item(
     ffi.Pointer<obs_scene_item> group,
@@ -15664,13 +15664,13 @@ class DiveObslibFFI {
     _obs_sceneitem_group_add_item ??= _dylib.lookupFunction<
         _c_obs_sceneitem_group_add_item,
         _dart_obs_sceneitem_group_add_item>('obs_sceneitem_group_add_item');
-    return _obs_sceneitem_group_add_item(
+    return _obs_sceneitem_group_add_item!(
       group,
       item,
     );
   }
 
-  _dart_obs_sceneitem_group_add_item _obs_sceneitem_group_add_item;
+  _dart_obs_sceneitem_group_add_item? _obs_sceneitem_group_add_item;
 
   void obs_sceneitem_group_remove_item(
     ffi.Pointer<obs_scene_item> group,
@@ -15680,13 +15680,13 @@ class DiveObslibFFI {
             _c_obs_sceneitem_group_remove_item,
             _dart_obs_sceneitem_group_remove_item>(
         'obs_sceneitem_group_remove_item');
-    return _obs_sceneitem_group_remove_item(
+    return _obs_sceneitem_group_remove_item!(
       group,
       item,
     );
   }
 
-  _dart_obs_sceneitem_group_remove_item _obs_sceneitem_group_remove_item;
+  _dart_obs_sceneitem_group_remove_item? _obs_sceneitem_group_remove_item;
 
   ffi.Pointer<obs_scene_item> obs_sceneitem_get_group(
     ffi.Pointer<obs_scene> scene,
@@ -15695,25 +15695,25 @@ class DiveObslibFFI {
     _obs_sceneitem_get_group ??= _dylib.lookupFunction<
         _c_obs_sceneitem_get_group,
         _dart_obs_sceneitem_get_group>('obs_sceneitem_get_group');
-    return _obs_sceneitem_get_group(
+    return _obs_sceneitem_get_group!(
       scene,
       item,
     );
   }
 
-  _dart_obs_sceneitem_get_group _obs_sceneitem_get_group;
+  _dart_obs_sceneitem_get_group? _obs_sceneitem_get_group;
 
   int obs_source_is_group(
     ffi.Pointer<obs_source> source,
   ) {
     _obs_source_is_group ??= _dylib.lookupFunction<_c_obs_source_is_group,
         _dart_obs_source_is_group>('obs_source_is_group');
-    return _obs_source_is_group(
+    return _obs_source_is_group!(
       source,
     );
   }
 
-  _dart_obs_source_is_group _obs_source_is_group;
+  _dart_obs_source_is_group? _obs_source_is_group;
 
   int obs_scene_is_group(
     ffi.Pointer<obs_scene> scene,
@@ -15721,12 +15721,12 @@ class DiveObslibFFI {
     _obs_scene_is_group ??=
         _dylib.lookupFunction<_c_obs_scene_is_group, _dart_obs_scene_is_group>(
             'obs_scene_is_group');
-    return _obs_scene_is_group(
+    return _obs_scene_is_group!(
       scene,
     );
   }
 
-  _dart_obs_scene_is_group _obs_scene_is_group;
+  _dart_obs_scene_is_group? _obs_scene_is_group;
 
   void obs_sceneitem_group_enum_items(
     ffi.Pointer<obs_scene_item> group,
@@ -15736,14 +15736,14 @@ class DiveObslibFFI {
     _obs_sceneitem_group_enum_items ??= _dylib.lookupFunction<
         _c_obs_sceneitem_group_enum_items,
         _dart_obs_sceneitem_group_enum_items>('obs_sceneitem_group_enum_items');
-    return _obs_sceneitem_group_enum_items(
+    return _obs_sceneitem_group_enum_items!(
       group,
       callback,
       param,
     );
   }
 
-  _dart_obs_sceneitem_group_enum_items _obs_sceneitem_group_enum_items;
+  _dart_obs_sceneitem_group_enum_items? _obs_sceneitem_group_enum_items;
 
   /// Gets the group from its source, or NULL if not a group
   ffi.Pointer<obs_scene> obs_group_from_source(
@@ -15751,12 +15751,12 @@ class DiveObslibFFI {
   ) {
     _obs_group_from_source ??= _dylib.lookupFunction<_c_obs_group_from_source,
         _dart_obs_group_from_source>('obs_group_from_source');
-    return _obs_group_from_source(
+    return _obs_group_from_source!(
       source,
     );
   }
 
-  _dart_obs_group_from_source _obs_group_from_source;
+  _dart_obs_group_from_source? _obs_group_from_source;
 
   void obs_sceneitem_defer_group_resize_begin(
     ffi.Pointer<obs_scene_item> item,
@@ -15765,12 +15765,12 @@ class DiveObslibFFI {
             _c_obs_sceneitem_defer_group_resize_begin,
             _dart_obs_sceneitem_defer_group_resize_begin>(
         'obs_sceneitem_defer_group_resize_begin');
-    return _obs_sceneitem_defer_group_resize_begin(
+    return _obs_sceneitem_defer_group_resize_begin!(
       item,
     );
   }
 
-  _dart_obs_sceneitem_defer_group_resize_begin
+  _dart_obs_sceneitem_defer_group_resize_begin?
       _obs_sceneitem_defer_group_resize_begin;
 
   void obs_sceneitem_defer_group_resize_end(
@@ -15780,12 +15780,12 @@ class DiveObslibFFI {
             _c_obs_sceneitem_defer_group_resize_end,
             _dart_obs_sceneitem_defer_group_resize_end>(
         'obs_sceneitem_defer_group_resize_end');
-    return _obs_sceneitem_defer_group_resize_end(
+    return _obs_sceneitem_defer_group_resize_end!(
       item,
     );
   }
 
-  _dart_obs_sceneitem_defer_group_resize_end
+  _dart_obs_sceneitem_defer_group_resize_end?
       _obs_sceneitem_defer_group_resize_end;
 
   ffi.Pointer<ffi.Int8> obs_output_get_display_name(
@@ -15794,12 +15794,12 @@ class DiveObslibFFI {
     _obs_output_get_display_name ??= _dylib.lookupFunction<
         _c_obs_output_get_display_name,
         _dart_obs_output_get_display_name>('obs_output_get_display_name');
-    return _obs_output_get_display_name(
+    return _obs_output_get_display_name!(
       id,
     );
   }
 
-  _dart_obs_output_get_display_name _obs_output_get_display_name;
+  _dart_obs_output_get_display_name? _obs_output_get_display_name;
 
   /// Creates an output.
   ///
@@ -15814,7 +15814,7 @@ class DiveObslibFFI {
     _obs_output_create ??=
         _dylib.lookupFunction<_c_obs_output_create, _dart_obs_output_create>(
             'obs_output_create');
-    return _obs_output_create(
+    return _obs_output_create!(
       id,
       name,
       settings,
@@ -15822,7 +15822,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_output_create _obs_output_create;
+  _dart_obs_output_create? _obs_output_create;
 
   /// Adds/releases a reference to an output.  When the last reference is
   /// released, the output is destroyed.
@@ -15832,37 +15832,37 @@ class DiveObslibFFI {
     _obs_output_addref ??=
         _dylib.lookupFunction<_c_obs_output_addref, _dart_obs_output_addref>(
             'obs_output_addref');
-    return _obs_output_addref(
+    return _obs_output_addref!(
       output,
     );
   }
 
-  _dart_obs_output_addref _obs_output_addref;
+  _dart_obs_output_addref? _obs_output_addref;
 
   void obs_output_release(
-    ffi.Pointer<obs_output> output,
+    ffi.Pointer<obs_output>? output,
   ) {
     _obs_output_release ??=
         _dylib.lookupFunction<_c_obs_output_release, _dart_obs_output_release>(
             'obs_output_release');
-    return _obs_output_release(
+    return _obs_output_release!(
       output,
     );
   }
 
-  _dart_obs_output_release _obs_output_release;
+  _dart_obs_output_release? _obs_output_release;
 
   void obs_weak_output_addref(
     ffi.Pointer<obs_weak_output> weak,
   ) {
     _obs_weak_output_addref ??= _dylib.lookupFunction<_c_obs_weak_output_addref,
         _dart_obs_weak_output_addref>('obs_weak_output_addref');
-    return _obs_weak_output_addref(
+    return _obs_weak_output_addref!(
       weak,
     );
   }
 
-  _dart_obs_weak_output_addref _obs_weak_output_addref;
+  _dart_obs_weak_output_addref? _obs_weak_output_addref;
 
   void obs_weak_output_release(
     ffi.Pointer<obs_weak_output> weak,
@@ -15870,12 +15870,12 @@ class DiveObslibFFI {
     _obs_weak_output_release ??= _dylib.lookupFunction<
         _c_obs_weak_output_release,
         _dart_obs_weak_output_release>('obs_weak_output_release');
-    return _obs_weak_output_release(
+    return _obs_weak_output_release!(
       weak,
     );
   }
 
-  _dart_obs_weak_output_release _obs_weak_output_release;
+  _dart_obs_weak_output_release? _obs_weak_output_release;
 
   ffi.Pointer<obs_output> obs_output_get_ref(
     ffi.Pointer<obs_output> output,
@@ -15883,12 +15883,12 @@ class DiveObslibFFI {
     _obs_output_get_ref ??=
         _dylib.lookupFunction<_c_obs_output_get_ref, _dart_obs_output_get_ref>(
             'obs_output_get_ref');
-    return _obs_output_get_ref(
+    return _obs_output_get_ref!(
       output,
     );
   }
 
-  _dart_obs_output_get_ref _obs_output_get_ref;
+  _dart_obs_output_get_ref? _obs_output_get_ref;
 
   ffi.Pointer<obs_weak_output> obs_output_get_weak_output(
     ffi.Pointer<obs_output> output,
@@ -15896,12 +15896,12 @@ class DiveObslibFFI {
     _obs_output_get_weak_output ??= _dylib.lookupFunction<
         _c_obs_output_get_weak_output,
         _dart_obs_output_get_weak_output>('obs_output_get_weak_output');
-    return _obs_output_get_weak_output(
+    return _obs_output_get_weak_output!(
       output,
     );
   }
 
-  _dart_obs_output_get_weak_output _obs_output_get_weak_output;
+  _dart_obs_output_get_weak_output? _obs_output_get_weak_output;
 
   ffi.Pointer<obs_output> obs_weak_output_get_output(
     ffi.Pointer<obs_weak_output> weak,
@@ -15909,12 +15909,12 @@ class DiveObslibFFI {
     _obs_weak_output_get_output ??= _dylib.lookupFunction<
         _c_obs_weak_output_get_output,
         _dart_obs_weak_output_get_output>('obs_weak_output_get_output');
-    return _obs_weak_output_get_output(
+    return _obs_weak_output_get_output!(
       weak,
     );
   }
 
-  _dart_obs_weak_output_get_output _obs_weak_output_get_output;
+  _dart_obs_weak_output_get_output? _obs_weak_output_get_output;
 
   int obs_weak_output_references_output(
     ffi.Pointer<obs_weak_output> weak,
@@ -15924,53 +15924,53 @@ class DiveObslibFFI {
             _c_obs_weak_output_references_output,
             _dart_obs_weak_output_references_output>(
         'obs_weak_output_references_output');
-    return _obs_weak_output_references_output(
+    return _obs_weak_output_references_output!(
       weak,
       output,
     );
   }
 
-  _dart_obs_weak_output_references_output _obs_weak_output_references_output;
+  _dart_obs_weak_output_references_output? _obs_weak_output_references_output;
 
   ffi.Pointer<ffi.Int8> obs_output_get_name(
     ffi.Pointer<obs_output> output,
   ) {
     _obs_output_get_name ??= _dylib.lookupFunction<_c_obs_output_get_name,
         _dart_obs_output_get_name>('obs_output_get_name');
-    return _obs_output_get_name(
+    return _obs_output_get_name!(
       output,
     );
   }
 
-  _dart_obs_output_get_name _obs_output_get_name;
+  _dart_obs_output_get_name? _obs_output_get_name;
 
   /// Starts the output.
   int obs_output_start(
-    ffi.Pointer<obs_output> output,
+    ffi.Pointer<obs_output>? output,
   ) {
     _obs_output_start ??=
         _dylib.lookupFunction<_c_obs_output_start, _dart_obs_output_start>(
             'obs_output_start');
-    return _obs_output_start(
+    return _obs_output_start!(
       output,
     );
   }
 
-  _dart_obs_output_start _obs_output_start;
+  _dart_obs_output_start? _obs_output_start;
 
   /// Stops the output.
   void obs_output_stop(
-    ffi.Pointer<obs_output> output,
+    ffi.Pointer<obs_output>? output,
   ) {
     _obs_output_stop ??=
         _dylib.lookupFunction<_c_obs_output_stop, _dart_obs_output_stop>(
             'obs_output_stop');
-    return _obs_output_stop(
+    return _obs_output_stop!(
       output,
     );
   }
 
-  _dart_obs_output_stop _obs_output_stop;
+  _dart_obs_output_stop? _obs_output_stop;
 
   /// Sets the current output delay, in seconds (if the output supports delay).
   ///
@@ -15984,14 +15984,14 @@ class DiveObslibFFI {
   ) {
     _obs_output_set_delay ??= _dylib.lookupFunction<_c_obs_output_set_delay,
         _dart_obs_output_set_delay>('obs_output_set_delay');
-    return _obs_output_set_delay(
+    return _obs_output_set_delay!(
       output,
       delay_sec,
       flags,
     );
   }
 
-  _dart_obs_output_set_delay _obs_output_set_delay;
+  _dart_obs_output_set_delay? _obs_output_set_delay;
 
   /// Gets the currently set delay value, in seconds.
   int obs_output_get_delay(
@@ -15999,12 +15999,12 @@ class DiveObslibFFI {
   ) {
     _obs_output_get_delay ??= _dylib.lookupFunction<_c_obs_output_get_delay,
         _dart_obs_output_get_delay>('obs_output_get_delay');
-    return _obs_output_get_delay(
+    return _obs_output_get_delay!(
       output,
     );
   }
 
-  _dart_obs_output_get_delay _obs_output_get_delay;
+  _dart_obs_output_get_delay? _obs_output_get_delay;
 
   /// If delay is active, gets the currently active delay value, in seconds.
   int obs_output_get_active_delay(
@@ -16013,12 +16013,12 @@ class DiveObslibFFI {
     _obs_output_get_active_delay ??= _dylib.lookupFunction<
         _c_obs_output_get_active_delay,
         _dart_obs_output_get_active_delay>('obs_output_get_active_delay');
-    return _obs_output_get_active_delay(
+    return _obs_output_get_active_delay!(
       output,
     );
   }
 
-  _dart_obs_output_get_active_delay _obs_output_get_active_delay;
+  _dart_obs_output_get_active_delay? _obs_output_get_active_delay;
 
   /// Forces the output to stop.  Usually only used with delay.
   void obs_output_force_stop(
@@ -16026,26 +16026,26 @@ class DiveObslibFFI {
   ) {
     _obs_output_force_stop ??= _dylib.lookupFunction<_c_obs_output_force_stop,
         _dart_obs_output_force_stop>('obs_output_force_stop');
-    return _obs_output_force_stop(
+    return _obs_output_force_stop!(
       output,
     );
   }
 
-  _dart_obs_output_force_stop _obs_output_force_stop;
+  _dart_obs_output_force_stop? _obs_output_force_stop;
 
   /// Returns whether the output is active
   int obs_output_active(
-    ffi.Pointer<obs_output> output,
+    ffi.Pointer<obs_output>? output,
   ) {
     _obs_output_active ??=
         _dylib.lookupFunction<_c_obs_output_active, _dart_obs_output_active>(
             'obs_output_active');
-    return _obs_output_active(
+    return _obs_output_active!(
       output,
     );
   }
 
-  _dart_obs_output_active _obs_output_active;
+  _dart_obs_output_active? _obs_output_active;
 
   /// Returns output capability flags
   int obs_output_get_flags(
@@ -16053,12 +16053,12 @@ class DiveObslibFFI {
   ) {
     _obs_output_get_flags ??= _dylib.lookupFunction<_c_obs_output_get_flags,
         _dart_obs_output_get_flags>('obs_output_get_flags');
-    return _obs_output_get_flags(
+    return _obs_output_get_flags!(
       output,
     );
   }
 
-  _dart_obs_output_get_flags _obs_output_get_flags;
+  _dart_obs_output_get_flags? _obs_output_get_flags;
 
   /// Returns output capability flags
   int obs_get_output_flags(
@@ -16066,12 +16066,12 @@ class DiveObslibFFI {
   ) {
     _obs_get_output_flags ??= _dylib.lookupFunction<_c_obs_get_output_flags,
         _dart_obs_get_output_flags>('obs_get_output_flags');
-    return _obs_get_output_flags(
+    return _obs_get_output_flags!(
       id,
     );
   }
 
-  _dart_obs_get_output_flags _obs_get_output_flags;
+  _dart_obs_get_output_flags? _obs_get_output_flags;
 
   /// Gets the default settings for an output type
   ffi.Pointer<obs_data> obs_output_defaults(
@@ -16079,12 +16079,12 @@ class DiveObslibFFI {
   ) {
     _obs_output_defaults ??= _dylib.lookupFunction<_c_obs_output_defaults,
         _dart_obs_output_defaults>('obs_output_defaults');
-    return _obs_output_defaults(
+    return _obs_output_defaults!(
       id,
     );
   }
 
-  _dart_obs_output_defaults _obs_output_defaults;
+  _dart_obs_output_defaults? _obs_output_defaults;
 
   /// Returns the property list, if any.  Free with obs_properties_destroy
   ffi.Pointer<obs_properties> obs_get_output_properties(
@@ -16093,12 +16093,12 @@ class DiveObslibFFI {
     _obs_get_output_properties ??= _dylib.lookupFunction<
         _c_obs_get_output_properties,
         _dart_obs_get_output_properties>('obs_get_output_properties');
-    return _obs_get_output_properties(
+    return _obs_get_output_properties!(
       id,
     );
   }
 
-  _dart_obs_get_output_properties _obs_get_output_properties;
+  _dart_obs_get_output_properties? _obs_get_output_properties;
 
   /// Returns the property list of an existing output, if any.  Free with
   /// obs_properties_destroy
@@ -16107,28 +16107,28 @@ class DiveObslibFFI {
   ) {
     _obs_output_properties ??= _dylib.lookupFunction<_c_obs_output_properties,
         _dart_obs_output_properties>('obs_output_properties');
-    return _obs_output_properties(
+    return _obs_output_properties!(
       output,
     );
   }
 
-  _dart_obs_output_properties _obs_output_properties;
+  _dart_obs_output_properties? _obs_output_properties;
 
   /// Updates the settings for this output context
   void obs_output_update(
-    ffi.Pointer<obs_output> output,
-    ffi.Pointer<obs_data> settings,
+    ffi.Pointer<obs_output>? output,
+    ffi.Pointer<obs_data>? settings,
   ) {
     _obs_output_update ??=
         _dylib.lookupFunction<_c_obs_output_update, _dart_obs_output_update>(
             'obs_output_update');
-    return _obs_output_update(
+    return _obs_output_update!(
       output,
       settings,
     );
   }
 
-  _dart_obs_output_update _obs_output_update;
+  _dart_obs_output_update? _obs_output_update;
 
   /// Specifies whether the output can be paused
   int obs_output_can_pause(
@@ -16136,12 +16136,12 @@ class DiveObslibFFI {
   ) {
     _obs_output_can_pause ??= _dylib.lookupFunction<_c_obs_output_can_pause,
         _dart_obs_output_can_pause>('obs_output_can_pause');
-    return _obs_output_can_pause(
+    return _obs_output_can_pause!(
       output,
     );
   }
 
-  _dart_obs_output_can_pause _obs_output_can_pause;
+  _dart_obs_output_can_pause? _obs_output_can_pause;
 
   /// Pauses the output (if the functionality is allowed by the output
   int obs_output_pause(
@@ -16151,27 +16151,27 @@ class DiveObslibFFI {
     _obs_output_pause ??=
         _dylib.lookupFunction<_c_obs_output_pause, _dart_obs_output_pause>(
             'obs_output_pause');
-    return _obs_output_pause(
+    return _obs_output_pause!(
       output,
       pause,
     );
   }
 
-  _dart_obs_output_pause _obs_output_pause;
+  _dart_obs_output_pause? _obs_output_pause;
 
   /// Returns whether output is paused
   int obs_output_paused(
-    ffi.Pointer<obs_output> output,
+    ffi.Pointer<obs_output>? output,
   ) {
     _obs_output_paused ??=
         _dylib.lookupFunction<_c_obs_output_paused, _dart_obs_output_paused>(
             'obs_output_paused');
-    return _obs_output_paused(
+    return _obs_output_paused!(
       output,
     );
   }
 
-  _dart_obs_output_paused _obs_output_paused;
+  _dart_obs_output_paused? _obs_output_paused;
 
   ffi.Pointer<obs_data> obs_output_get_settings(
     ffi.Pointer<obs_output> output,
@@ -16179,12 +16179,12 @@ class DiveObslibFFI {
     _obs_output_get_settings ??= _dylib.lookupFunction<
         _c_obs_output_get_settings,
         _dart_obs_output_get_settings>('obs_output_get_settings');
-    return _obs_output_get_settings(
+    return _obs_output_get_settings!(
       output,
     );
   }
 
-  _dart_obs_output_get_settings _obs_output_get_settings;
+  _dart_obs_output_get_settings? _obs_output_get_settings;
 
   /// Returns the signal handler for an output
   ffi.Pointer<signal_handler> obs_output_get_signal_handler(
@@ -16193,12 +16193,12 @@ class DiveObslibFFI {
     _obs_output_get_signal_handler ??= _dylib.lookupFunction<
         _c_obs_output_get_signal_handler,
         _dart_obs_output_get_signal_handler>('obs_output_get_signal_handler');
-    return _obs_output_get_signal_handler(
+    return _obs_output_get_signal_handler!(
       output,
     );
   }
 
-  _dart_obs_output_get_signal_handler _obs_output_get_signal_handler;
+  _dart_obs_output_get_signal_handler? _obs_output_get_signal_handler;
 
   /// Returns the procedure handler for an output
   ffi.Pointer<proc_handler> obs_output_get_proc_handler(
@@ -16207,12 +16207,12 @@ class DiveObslibFFI {
     _obs_output_get_proc_handler ??= _dylib.lookupFunction<
         _c_obs_output_get_proc_handler,
         _dart_obs_output_get_proc_handler>('obs_output_get_proc_handler');
-    return _obs_output_get_proc_handler(
+    return _obs_output_get_proc_handler!(
       output,
     );
   }
 
-  _dart_obs_output_get_proc_handler _obs_output_get_proc_handler;
+  _dart_obs_output_get_proc_handler? _obs_output_get_proc_handler;
 
   /// Sets the current audio/video media contexts associated with this output,
   /// required for non-encoded outputs.  Can be null.
@@ -16223,14 +16223,14 @@ class DiveObslibFFI {
   ) {
     _obs_output_set_media ??= _dylib.lookupFunction<_c_obs_output_set_media,
         _dart_obs_output_set_media>('obs_output_set_media');
-    return _obs_output_set_media(
+    return _obs_output_set_media!(
       output,
       video,
       audio,
     );
   }
 
-  _dart_obs_output_set_media _obs_output_set_media;
+  _dart_obs_output_set_media? _obs_output_set_media;
 
   /// Returns the video media context associated with this output
   ffi.Pointer<video_output> obs_output_video(
@@ -16239,12 +16239,12 @@ class DiveObslibFFI {
     _obs_output_video ??=
         _dylib.lookupFunction<_c_obs_output_video, _dart_obs_output_video>(
             'obs_output_video');
-    return _obs_output_video(
+    return _obs_output_video!(
       output,
     );
   }
 
-  _dart_obs_output_video _obs_output_video;
+  _dart_obs_output_video? _obs_output_video;
 
   /// Returns the audio media context associated with this output
   ffi.Pointer<audio_output> obs_output_audio(
@@ -16253,12 +16253,12 @@ class DiveObslibFFI {
     _obs_output_audio ??=
         _dylib.lookupFunction<_c_obs_output_audio, _dart_obs_output_audio>(
             'obs_output_audio');
-    return _obs_output_audio(
+    return _obs_output_audio!(
       output,
     );
   }
 
-  _dart_obs_output_audio _obs_output_audio;
+  _dart_obs_output_audio? _obs_output_audio;
 
   /// Sets the current audio mixer for non-encoded outputs
   void obs_output_set_mixer(
@@ -16267,13 +16267,13 @@ class DiveObslibFFI {
   ) {
     _obs_output_set_mixer ??= _dylib.lookupFunction<_c_obs_output_set_mixer,
         _dart_obs_output_set_mixer>('obs_output_set_mixer');
-    return _obs_output_set_mixer(
+    return _obs_output_set_mixer!(
       output,
       mixer_idx,
     );
   }
 
-  _dart_obs_output_set_mixer _obs_output_set_mixer;
+  _dart_obs_output_set_mixer? _obs_output_set_mixer;
 
   /// Gets the current audio mixer for non-encoded outputs
   int obs_output_get_mixer(
@@ -16281,12 +16281,12 @@ class DiveObslibFFI {
   ) {
     _obs_output_get_mixer ??= _dylib.lookupFunction<_c_obs_output_get_mixer,
         _dart_obs_output_get_mixer>('obs_output_get_mixer');
-    return _obs_output_get_mixer(
+    return _obs_output_get_mixer!(
       output,
     );
   }
 
-  _dart_obs_output_get_mixer _obs_output_get_mixer;
+  _dart_obs_output_get_mixer? _obs_output_get_mixer;
 
   /// Sets the current audio mixes (mask) for a non-encoded multi-track output
   void obs_output_set_mixers(
@@ -16295,13 +16295,13 @@ class DiveObslibFFI {
   ) {
     _obs_output_set_mixers ??= _dylib.lookupFunction<_c_obs_output_set_mixers,
         _dart_obs_output_set_mixers>('obs_output_set_mixers');
-    return _obs_output_set_mixers(
+    return _obs_output_set_mixers!(
       output,
       mixers,
     );
   }
 
-  _dart_obs_output_set_mixers _obs_output_set_mixers;
+  _dart_obs_output_set_mixers? _obs_output_set_mixers;
 
   /// Gets the current audio mixes (mask) for a non-encoded multi-track output
   int obs_output_get_mixers(
@@ -16309,29 +16309,29 @@ class DiveObslibFFI {
   ) {
     _obs_output_get_mixers ??= _dylib.lookupFunction<_c_obs_output_get_mixers,
         _dart_obs_output_get_mixers>('obs_output_get_mixers');
-    return _obs_output_get_mixers(
+    return _obs_output_get_mixers!(
       output,
     );
   }
 
-  _dart_obs_output_get_mixers _obs_output_get_mixers;
+  _dart_obs_output_get_mixers? _obs_output_get_mixers;
 
   /// Sets the current video encoder associated with this output,
   /// required for encoded outputs
   void obs_output_set_video_encoder(
-    ffi.Pointer<obs_output> output,
+    ffi.Pointer<obs_output>? output,
     ffi.Pointer<obs_encoder> encoder,
   ) {
     _obs_output_set_video_encoder ??= _dylib.lookupFunction<
         _c_obs_output_set_video_encoder,
         _dart_obs_output_set_video_encoder>('obs_output_set_video_encoder');
-    return _obs_output_set_video_encoder(
+    return _obs_output_set_video_encoder!(
       output,
       encoder,
     );
   }
 
-  _dart_obs_output_set_video_encoder _obs_output_set_video_encoder;
+  _dart_obs_output_set_video_encoder? _obs_output_set_video_encoder;
 
   /// Sets the current audio encoder associated with this output,
   /// required for encoded outputs.
@@ -16340,21 +16340,21 @@ class DiveObslibFFI {
   /// Only used with outputs that have multiple audio outputs (RTMP typically),
   /// otherwise the parameter is ignored.
   void obs_output_set_audio_encoder(
-    ffi.Pointer<obs_output> output,
+    ffi.Pointer<obs_output>? output,
     ffi.Pointer<obs_encoder> encoder,
     int idx,
   ) {
     _obs_output_set_audio_encoder ??= _dylib.lookupFunction<
         _c_obs_output_set_audio_encoder,
         _dart_obs_output_set_audio_encoder>('obs_output_set_audio_encoder');
-    return _obs_output_set_audio_encoder(
+    return _obs_output_set_audio_encoder!(
       output,
       encoder,
       idx,
     );
   }
 
-  _dart_obs_output_set_audio_encoder _obs_output_set_audio_encoder;
+  _dart_obs_output_set_audio_encoder? _obs_output_set_audio_encoder;
 
   /// Returns the current video encoder associated with this output
   ffi.Pointer<obs_encoder> obs_output_get_video_encoder(
@@ -16363,12 +16363,12 @@ class DiveObslibFFI {
     _obs_output_get_video_encoder ??= _dylib.lookupFunction<
         _c_obs_output_get_video_encoder,
         _dart_obs_output_get_video_encoder>('obs_output_get_video_encoder');
-    return _obs_output_get_video_encoder(
+    return _obs_output_get_video_encoder!(
       output,
     );
   }
 
-  _dart_obs_output_get_video_encoder _obs_output_get_video_encoder;
+  _dart_obs_output_get_video_encoder? _obs_output_get_video_encoder;
 
   /// Returns the current audio encoder associated with this output
   ///
@@ -16382,28 +16382,28 @@ class DiveObslibFFI {
     _obs_output_get_audio_encoder ??= _dylib.lookupFunction<
         _c_obs_output_get_audio_encoder,
         _dart_obs_output_get_audio_encoder>('obs_output_get_audio_encoder');
-    return _obs_output_get_audio_encoder(
+    return _obs_output_get_audio_encoder!(
       output,
       idx,
     );
   }
 
-  _dart_obs_output_get_audio_encoder _obs_output_get_audio_encoder;
+  _dart_obs_output_get_audio_encoder? _obs_output_get_audio_encoder;
 
   /// Sets the current service associated with this output.
   void obs_output_set_service(
-    ffi.Pointer<obs_output> output,
+    ffi.Pointer<obs_output>? output,
     ffi.Pointer<obs_service> service,
   ) {
     _obs_output_set_service ??= _dylib.lookupFunction<_c_obs_output_set_service,
         _dart_obs_output_set_service>('obs_output_set_service');
-    return _obs_output_set_service(
+    return _obs_output_set_service!(
       output,
       service,
     );
   }
 
-  _dart_obs_output_set_service _obs_output_set_service;
+  _dart_obs_output_set_service? _obs_output_set_service;
 
   /// Gets the current service associated with this output.
   ffi.Pointer<obs_service> obs_output_get_service(
@@ -16411,12 +16411,12 @@ class DiveObslibFFI {
   ) {
     _obs_output_get_service ??= _dylib.lookupFunction<_c_obs_output_get_service,
         _dart_obs_output_get_service>('obs_output_get_service');
-    return _obs_output_get_service(
+    return _obs_output_get_service!(
       output,
     );
   }
 
-  _dart_obs_output_get_service _obs_output_get_service;
+  _dart_obs_output_get_service? _obs_output_get_service;
 
   /// Sets the reconnect settings.  Set retry_count to 0 to disable reconnecting.
   void obs_output_set_reconnect_settings(
@@ -16428,14 +16428,14 @@ class DiveObslibFFI {
             _c_obs_output_set_reconnect_settings,
             _dart_obs_output_set_reconnect_settings>(
         'obs_output_set_reconnect_settings');
-    return _obs_output_set_reconnect_settings(
+    return _obs_output_set_reconnect_settings!(
       output,
       retry_count,
       retry_sec,
     );
   }
 
-  _dart_obs_output_set_reconnect_settings _obs_output_set_reconnect_settings;
+  _dart_obs_output_set_reconnect_settings? _obs_output_set_reconnect_settings;
 
   int obs_output_get_total_bytes(
     ffi.Pointer<obs_output> output,
@@ -16443,12 +16443,12 @@ class DiveObslibFFI {
     _obs_output_get_total_bytes ??= _dylib.lookupFunction<
         _c_obs_output_get_total_bytes,
         _dart_obs_output_get_total_bytes>('obs_output_get_total_bytes');
-    return _obs_output_get_total_bytes(
+    return _obs_output_get_total_bytes!(
       output,
     );
   }
 
-  _dart_obs_output_get_total_bytes _obs_output_get_total_bytes;
+  _dart_obs_output_get_total_bytes? _obs_output_get_total_bytes;
 
   int obs_output_get_frames_dropped(
     ffi.Pointer<obs_output> output,
@@ -16456,12 +16456,12 @@ class DiveObslibFFI {
     _obs_output_get_frames_dropped ??= _dylib.lookupFunction<
         _c_obs_output_get_frames_dropped,
         _dart_obs_output_get_frames_dropped>('obs_output_get_frames_dropped');
-    return _obs_output_get_frames_dropped(
+    return _obs_output_get_frames_dropped!(
       output,
     );
   }
 
-  _dart_obs_output_get_frames_dropped _obs_output_get_frames_dropped;
+  _dart_obs_output_get_frames_dropped? _obs_output_get_frames_dropped;
 
   int obs_output_get_total_frames(
     ffi.Pointer<obs_output> output,
@@ -16469,12 +16469,12 @@ class DiveObslibFFI {
     _obs_output_get_total_frames ??= _dylib.lookupFunction<
         _c_obs_output_get_total_frames,
         _dart_obs_output_get_total_frames>('obs_output_get_total_frames');
-    return _obs_output_get_total_frames(
+    return _obs_output_get_total_frames!(
       output,
     );
   }
 
-  _dart_obs_output_get_total_frames _obs_output_get_total_frames;
+  _dart_obs_output_get_total_frames? _obs_output_get_total_frames;
 
   /// Sets the preferred scaled resolution for this output.  Set width and height
   /// to 0 to disable scaling.
@@ -16490,14 +16490,14 @@ class DiveObslibFFI {
     _obs_output_set_preferred_size ??= _dylib.lookupFunction<
         _c_obs_output_set_preferred_size,
         _dart_obs_output_set_preferred_size>('obs_output_set_preferred_size');
-    return _obs_output_set_preferred_size(
+    return _obs_output_set_preferred_size!(
       output,
       width,
       height,
     );
   }
 
-  _dart_obs_output_set_preferred_size _obs_output_set_preferred_size;
+  _dart_obs_output_set_preferred_size? _obs_output_set_preferred_size;
 
   /// For video outputs, returns the width of the encoded image
   int obs_output_get_width(
@@ -16505,12 +16505,12 @@ class DiveObslibFFI {
   ) {
     _obs_output_get_width ??= _dylib.lookupFunction<_c_obs_output_get_width,
         _dart_obs_output_get_width>('obs_output_get_width');
-    return _obs_output_get_width(
+    return _obs_output_get_width!(
       output,
     );
   }
 
-  _dart_obs_output_get_width _obs_output_get_width;
+  _dart_obs_output_get_width? _obs_output_get_width;
 
   /// For video outputs, returns the height of the encoded image
   int obs_output_get_height(
@@ -16518,12 +16518,12 @@ class DiveObslibFFI {
   ) {
     _obs_output_get_height ??= _dylib.lookupFunction<_c_obs_output_get_height,
         _dart_obs_output_get_height>('obs_output_get_height');
-    return _obs_output_get_height(
+    return _obs_output_get_height!(
       output,
     );
   }
 
-  _dart_obs_output_get_height _obs_output_get_height;
+  _dart_obs_output_get_height? _obs_output_get_height;
 
   ffi.Pointer<ffi.Int8> obs_output_get_id(
     ffi.Pointer<obs_output> output,
@@ -16531,12 +16531,12 @@ class DiveObslibFFI {
     _obs_output_get_id ??=
         _dylib.lookupFunction<_c_obs_output_get_id, _dart_obs_output_get_id>(
             'obs_output_get_id');
-    return _obs_output_get_id(
+    return _obs_output_get_id!(
       output,
     );
   }
 
-  _dart_obs_output_get_id _obs_output_get_id;
+  _dart_obs_output_get_id? _obs_output_get_id;
 
   double obs_output_get_congestion(
     ffi.Pointer<obs_output> output,
@@ -16544,12 +16544,12 @@ class DiveObslibFFI {
     _obs_output_get_congestion ??= _dylib.lookupFunction<
         _c_obs_output_get_congestion,
         _dart_obs_output_get_congestion>('obs_output_get_congestion');
-    return _obs_output_get_congestion(
+    return _obs_output_get_congestion!(
       output,
     );
   }
 
-  _dart_obs_output_get_congestion _obs_output_get_congestion;
+  _dart_obs_output_get_congestion? _obs_output_get_congestion;
 
   int obs_output_get_connect_time_ms(
     ffi.Pointer<obs_output> output,
@@ -16557,25 +16557,25 @@ class DiveObslibFFI {
     _obs_output_get_connect_time_ms ??= _dylib.lookupFunction<
         _c_obs_output_get_connect_time_ms,
         _dart_obs_output_get_connect_time_ms>('obs_output_get_connect_time_ms');
-    return _obs_output_get_connect_time_ms(
+    return _obs_output_get_connect_time_ms!(
       output,
     );
   }
 
-  _dart_obs_output_get_connect_time_ms _obs_output_get_connect_time_ms;
+  _dart_obs_output_get_connect_time_ms? _obs_output_get_connect_time_ms;
 
   int obs_output_reconnecting(
-    ffi.Pointer<obs_output> output,
+    ffi.Pointer<obs_output>? output,
   ) {
     _obs_output_reconnecting ??= _dylib.lookupFunction<
         _c_obs_output_reconnecting,
         _dart_obs_output_reconnecting>('obs_output_reconnecting');
-    return _obs_output_reconnecting(
+    return _obs_output_reconnecting!(
       output,
     );
   }
 
-  _dart_obs_output_reconnecting _obs_output_reconnecting;
+  _dart_obs_output_reconnecting? _obs_output_reconnecting;
 
   /// Pass a string of the last output error, for UI use
   void obs_output_set_last_error(
@@ -16585,13 +16585,13 @@ class DiveObslibFFI {
     _obs_output_set_last_error ??= _dylib.lookupFunction<
         _c_obs_output_set_last_error,
         _dart_obs_output_set_last_error>('obs_output_set_last_error');
-    return _obs_output_set_last_error(
+    return _obs_output_set_last_error!(
       output,
       message,
     );
   }
 
-  _dart_obs_output_set_last_error _obs_output_set_last_error;
+  _dart_obs_output_set_last_error? _obs_output_set_last_error;
 
   ffi.Pointer<ffi.Int8> obs_output_get_last_error(
     ffi.Pointer<obs_output> output,
@@ -16599,12 +16599,12 @@ class DiveObslibFFI {
     _obs_output_get_last_error ??= _dylib.lookupFunction<
         _c_obs_output_get_last_error,
         _dart_obs_output_get_last_error>('obs_output_get_last_error');
-    return _obs_output_get_last_error(
+    return _obs_output_get_last_error!(
       output,
     );
   }
 
-  _dart_obs_output_get_last_error _obs_output_get_last_error;
+  _dart_obs_output_get_last_error? _obs_output_get_last_error;
 
   ffi.Pointer<ffi.Int8> obs_output_get_supported_video_codecs(
     ffi.Pointer<obs_output> output,
@@ -16613,12 +16613,12 @@ class DiveObslibFFI {
             _c_obs_output_get_supported_video_codecs,
             _dart_obs_output_get_supported_video_codecs>(
         'obs_output_get_supported_video_codecs');
-    return _obs_output_get_supported_video_codecs(
+    return _obs_output_get_supported_video_codecs!(
       output,
     );
   }
 
-  _dart_obs_output_get_supported_video_codecs
+  _dart_obs_output_get_supported_video_codecs?
       _obs_output_get_supported_video_codecs;
 
   ffi.Pointer<ffi.Int8> obs_output_get_supported_audio_codecs(
@@ -16628,12 +16628,12 @@ class DiveObslibFFI {
             _c_obs_output_get_supported_audio_codecs,
             _dart_obs_output_get_supported_audio_codecs>(
         'obs_output_get_supported_audio_codecs');
-    return _obs_output_get_supported_audio_codecs(
+    return _obs_output_get_supported_audio_codecs!(
       output,
     );
   }
 
-  _dart_obs_output_get_supported_audio_codecs
+  _dart_obs_output_get_supported_audio_codecs?
       _obs_output_get_supported_audio_codecs;
 
   ffi.Pointer<ffi.Void> obs_output_get_type_data(
@@ -16642,12 +16642,12 @@ class DiveObslibFFI {
     _obs_output_get_type_data ??= _dylib.lookupFunction<
         _c_obs_output_get_type_data,
         _dart_obs_output_get_type_data>('obs_output_get_type_data');
-    return _obs_output_get_type_data(
+    return _obs_output_get_type_data!(
       output,
     );
   }
 
-  _dart_obs_output_get_type_data _obs_output_get_type_data;
+  _dart_obs_output_get_type_data? _obs_output_get_type_data;
 
   /// Optionally sets the video conversion info.  Used only for raw output
   void obs_output_set_video_conversion(
@@ -16658,13 +16658,13 @@ class DiveObslibFFI {
             _c_obs_output_set_video_conversion,
             _dart_obs_output_set_video_conversion>(
         'obs_output_set_video_conversion');
-    return _obs_output_set_video_conversion(
+    return _obs_output_set_video_conversion!(
       output,
       conversion,
     );
   }
 
-  _dart_obs_output_set_video_conversion _obs_output_set_video_conversion;
+  _dart_obs_output_set_video_conversion? _obs_output_set_video_conversion;
 
   /// Optionally sets the audio conversion info.  Used only for raw output
   void obs_output_set_audio_conversion(
@@ -16675,13 +16675,13 @@ class DiveObslibFFI {
             _c_obs_output_set_audio_conversion,
             _dart_obs_output_set_audio_conversion>(
         'obs_output_set_audio_conversion');
-    return _obs_output_set_audio_conversion(
+    return _obs_output_set_audio_conversion!(
       output,
       conversion,
     );
   }
 
-  _dart_obs_output_set_audio_conversion _obs_output_set_audio_conversion;
+  _dart_obs_output_set_audio_conversion? _obs_output_set_audio_conversion;
 
   /// Returns whether data capture can begin with the specified flags
   int obs_output_can_begin_data_capture(
@@ -16692,13 +16692,13 @@ class DiveObslibFFI {
             _c_obs_output_can_begin_data_capture,
             _dart_obs_output_can_begin_data_capture>(
         'obs_output_can_begin_data_capture');
-    return _obs_output_can_begin_data_capture(
+    return _obs_output_can_begin_data_capture!(
       output,
       flags,
     );
   }
 
-  _dart_obs_output_can_begin_data_capture _obs_output_can_begin_data_capture;
+  _dart_obs_output_can_begin_data_capture? _obs_output_can_begin_data_capture;
 
   /// Initializes encoders (if any)
   int obs_output_initialize_encoders(
@@ -16708,13 +16708,13 @@ class DiveObslibFFI {
     _obs_output_initialize_encoders ??= _dylib.lookupFunction<
         _c_obs_output_initialize_encoders,
         _dart_obs_output_initialize_encoders>('obs_output_initialize_encoders');
-    return _obs_output_initialize_encoders(
+    return _obs_output_initialize_encoders!(
       output,
       flags,
     );
   }
 
-  _dart_obs_output_initialize_encoders _obs_output_initialize_encoders;
+  _dart_obs_output_initialize_encoders? _obs_output_initialize_encoders;
 
   /// Begins data capture from media/encoders.
   ///
@@ -16733,13 +16733,13 @@ class DiveObslibFFI {
     _obs_output_begin_data_capture ??= _dylib.lookupFunction<
         _c_obs_output_begin_data_capture,
         _dart_obs_output_begin_data_capture>('obs_output_begin_data_capture');
-    return _obs_output_begin_data_capture(
+    return _obs_output_begin_data_capture!(
       output,
       flags,
     );
   }
 
-  _dart_obs_output_begin_data_capture _obs_output_begin_data_capture;
+  _dart_obs_output_begin_data_capture? _obs_output_begin_data_capture;
 
   /// Ends data capture from media/encoders
   void obs_output_end_data_capture(
@@ -16748,12 +16748,12 @@ class DiveObslibFFI {
     _obs_output_end_data_capture ??= _dylib.lookupFunction<
         _c_obs_output_end_data_capture,
         _dart_obs_output_end_data_capture>('obs_output_end_data_capture');
-    return _obs_output_end_data_capture(
+    return _obs_output_end_data_capture!(
       output,
     );
   }
 
-  _dart_obs_output_end_data_capture _obs_output_end_data_capture;
+  _dart_obs_output_end_data_capture? _obs_output_end_data_capture;
 
   /// Signals that the output has stopped itself.
   ///
@@ -16765,13 +16765,13 @@ class DiveObslibFFI {
   ) {
     _obs_output_signal_stop ??= _dylib.lookupFunction<_c_obs_output_signal_stop,
         _dart_obs_output_signal_stop>('obs_output_signal_stop');
-    return _obs_output_signal_stop(
+    return _obs_output_signal_stop!(
       output,
       code,
     );
   }
 
-  _dart_obs_output_signal_stop _obs_output_signal_stop;
+  _dart_obs_output_signal_stop? _obs_output_signal_stop;
 
   int obs_output_get_pause_offset(
     ffi.Pointer<obs_output> output,
@@ -16779,12 +16779,12 @@ class DiveObslibFFI {
     _obs_output_get_pause_offset ??= _dylib.lookupFunction<
         _c_obs_output_get_pause_offset,
         _dart_obs_output_get_pause_offset>('obs_output_get_pause_offset');
-    return _obs_output_get_pause_offset(
+    return _obs_output_get_pause_offset!(
       output,
     );
   }
 
-  _dart_obs_output_get_pause_offset _obs_output_get_pause_offset;
+  _dart_obs_output_get_pause_offset? _obs_output_get_pause_offset;
 
   ffi.Pointer<ffi.Int8> obs_encoder_get_display_name(
     ffi.Pointer<ffi.Int8> id,
@@ -16792,12 +16792,12 @@ class DiveObslibFFI {
     _obs_encoder_get_display_name ??= _dylib.lookupFunction<
         _c_obs_encoder_get_display_name,
         _dart_obs_encoder_get_display_name>('obs_encoder_get_display_name');
-    return _obs_encoder_get_display_name(
+    return _obs_encoder_get_display_name!(
       id,
     );
   }
 
-  _dart_obs_encoder_get_display_name _obs_encoder_get_display_name;
+  _dart_obs_encoder_get_display_name? _obs_encoder_get_display_name;
 
   /// Creates a video encoder context
   ///
@@ -16814,7 +16814,7 @@ class DiveObslibFFI {
     _obs_video_encoder_create ??= _dylib.lookupFunction<
         _c_obs_video_encoder_create,
         _dart_obs_video_encoder_create>('obs_video_encoder_create');
-    return _obs_video_encoder_create(
+    return _obs_video_encoder_create!(
       id,
       name,
       settings,
@@ -16822,7 +16822,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_video_encoder_create _obs_video_encoder_create;
+  _dart_obs_video_encoder_create? _obs_video_encoder_create;
 
   /// Creates an audio encoder context
   ///
@@ -16841,7 +16841,7 @@ class DiveObslibFFI {
     _obs_audio_encoder_create ??= _dylib.lookupFunction<
         _c_obs_audio_encoder_create,
         _dart_obs_audio_encoder_create>('obs_audio_encoder_create');
-    return _obs_audio_encoder_create(
+    return _obs_audio_encoder_create!(
       id,
       name,
       settings,
@@ -16850,7 +16850,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_audio_encoder_create _obs_audio_encoder_create;
+  _dart_obs_audio_encoder_create? _obs_audio_encoder_create;
 
   /// Adds/releases a reference to an encoder.  When the last reference is
   /// released, the encoder is destroyed.
@@ -16860,24 +16860,24 @@ class DiveObslibFFI {
     _obs_encoder_addref ??=
         _dylib.lookupFunction<_c_obs_encoder_addref, _dart_obs_encoder_addref>(
             'obs_encoder_addref');
-    return _obs_encoder_addref(
+    return _obs_encoder_addref!(
       encoder,
     );
   }
 
-  _dart_obs_encoder_addref _obs_encoder_addref;
+  _dart_obs_encoder_addref? _obs_encoder_addref;
 
   void obs_encoder_release(
     ffi.Pointer<obs_encoder> encoder,
   ) {
     _obs_encoder_release ??= _dylib.lookupFunction<_c_obs_encoder_release,
         _dart_obs_encoder_release>('obs_encoder_release');
-    return _obs_encoder_release(
+    return _obs_encoder_release!(
       encoder,
     );
   }
 
-  _dart_obs_encoder_release _obs_encoder_release;
+  _dart_obs_encoder_release? _obs_encoder_release;
 
   void obs_weak_encoder_addref(
     ffi.Pointer<obs_weak_encoder> weak,
@@ -16885,12 +16885,12 @@ class DiveObslibFFI {
     _obs_weak_encoder_addref ??= _dylib.lookupFunction<
         _c_obs_weak_encoder_addref,
         _dart_obs_weak_encoder_addref>('obs_weak_encoder_addref');
-    return _obs_weak_encoder_addref(
+    return _obs_weak_encoder_addref!(
       weak,
     );
   }
 
-  _dart_obs_weak_encoder_addref _obs_weak_encoder_addref;
+  _dart_obs_weak_encoder_addref? _obs_weak_encoder_addref;
 
   void obs_weak_encoder_release(
     ffi.Pointer<obs_weak_encoder> weak,
@@ -16898,24 +16898,24 @@ class DiveObslibFFI {
     _obs_weak_encoder_release ??= _dylib.lookupFunction<
         _c_obs_weak_encoder_release,
         _dart_obs_weak_encoder_release>('obs_weak_encoder_release');
-    return _obs_weak_encoder_release(
+    return _obs_weak_encoder_release!(
       weak,
     );
   }
 
-  _dart_obs_weak_encoder_release _obs_weak_encoder_release;
+  _dart_obs_weak_encoder_release? _obs_weak_encoder_release;
 
   ffi.Pointer<obs_encoder> obs_encoder_get_ref(
     ffi.Pointer<obs_encoder> encoder,
   ) {
     _obs_encoder_get_ref ??= _dylib.lookupFunction<_c_obs_encoder_get_ref,
         _dart_obs_encoder_get_ref>('obs_encoder_get_ref');
-    return _obs_encoder_get_ref(
+    return _obs_encoder_get_ref!(
       encoder,
     );
   }
 
-  _dart_obs_encoder_get_ref _obs_encoder_get_ref;
+  _dart_obs_encoder_get_ref? _obs_encoder_get_ref;
 
   ffi.Pointer<obs_weak_encoder> obs_encoder_get_weak_encoder(
     ffi.Pointer<obs_encoder> encoder,
@@ -16923,12 +16923,12 @@ class DiveObslibFFI {
     _obs_encoder_get_weak_encoder ??= _dylib.lookupFunction<
         _c_obs_encoder_get_weak_encoder,
         _dart_obs_encoder_get_weak_encoder>('obs_encoder_get_weak_encoder');
-    return _obs_encoder_get_weak_encoder(
+    return _obs_encoder_get_weak_encoder!(
       encoder,
     );
   }
 
-  _dart_obs_encoder_get_weak_encoder _obs_encoder_get_weak_encoder;
+  _dart_obs_encoder_get_weak_encoder? _obs_encoder_get_weak_encoder;
 
   ffi.Pointer<obs_encoder> obs_weak_encoder_get_encoder(
     ffi.Pointer<obs_weak_encoder> weak,
@@ -16936,12 +16936,12 @@ class DiveObslibFFI {
     _obs_weak_encoder_get_encoder ??= _dylib.lookupFunction<
         _c_obs_weak_encoder_get_encoder,
         _dart_obs_weak_encoder_get_encoder>('obs_weak_encoder_get_encoder');
-    return _obs_weak_encoder_get_encoder(
+    return _obs_weak_encoder_get_encoder!(
       weak,
     );
   }
 
-  _dart_obs_weak_encoder_get_encoder _obs_weak_encoder_get_encoder;
+  _dart_obs_weak_encoder_get_encoder? _obs_weak_encoder_get_encoder;
 
   int obs_weak_encoder_references_encoder(
     ffi.Pointer<obs_weak_encoder> weak,
@@ -16951,13 +16951,13 @@ class DiveObslibFFI {
             _c_obs_weak_encoder_references_encoder,
             _dart_obs_weak_encoder_references_encoder>(
         'obs_weak_encoder_references_encoder');
-    return _obs_weak_encoder_references_encoder(
+    return _obs_weak_encoder_references_encoder!(
       weak,
       encoder,
     );
   }
 
-  _dart_obs_weak_encoder_references_encoder
+  _dart_obs_weak_encoder_references_encoder?
       _obs_weak_encoder_references_encoder;
 
   void obs_encoder_set_name(
@@ -16966,25 +16966,25 @@ class DiveObslibFFI {
   ) {
     _obs_encoder_set_name ??= _dylib.lookupFunction<_c_obs_encoder_set_name,
         _dart_obs_encoder_set_name>('obs_encoder_set_name');
-    return _obs_encoder_set_name(
+    return _obs_encoder_set_name!(
       encoder,
       name,
     );
   }
 
-  _dart_obs_encoder_set_name _obs_encoder_set_name;
+  _dart_obs_encoder_set_name? _obs_encoder_set_name;
 
   ffi.Pointer<ffi.Int8> obs_encoder_get_name(
     ffi.Pointer<obs_encoder> encoder,
   ) {
     _obs_encoder_get_name ??= _dylib.lookupFunction<_c_obs_encoder_get_name,
         _dart_obs_encoder_get_name>('obs_encoder_get_name');
-    return _obs_encoder_get_name(
+    return _obs_encoder_get_name!(
       encoder,
     );
   }
 
-  _dart_obs_encoder_get_name _obs_encoder_get_name;
+  _dart_obs_encoder_get_name? _obs_encoder_get_name;
 
   /// Returns the codec of an encoder by the id
   ffi.Pointer<ffi.Int8> obs_get_encoder_codec(
@@ -16992,12 +16992,12 @@ class DiveObslibFFI {
   ) {
     _obs_get_encoder_codec ??= _dylib.lookupFunction<_c_obs_get_encoder_codec,
         _dart_obs_get_encoder_codec>('obs_get_encoder_codec');
-    return _obs_get_encoder_codec(
+    return _obs_get_encoder_codec!(
       id,
     );
   }
 
-  _dart_obs_get_encoder_codec _obs_get_encoder_codec;
+  _dart_obs_get_encoder_codec? _obs_get_encoder_codec;
 
   /// Returns the type of an encoder by the id
   int obs_get_encoder_type(
@@ -17005,12 +17005,12 @@ class DiveObslibFFI {
   ) {
     _obs_get_encoder_type ??= _dylib.lookupFunction<_c_obs_get_encoder_type,
         _dart_obs_get_encoder_type>('obs_get_encoder_type');
-    return _obs_get_encoder_type(
+    return _obs_get_encoder_type!(
       id,
     );
   }
 
-  _dart_obs_get_encoder_type _obs_get_encoder_type;
+  _dart_obs_get_encoder_type? _obs_get_encoder_type;
 
   /// Returns the codec of the encoder
   ffi.Pointer<ffi.Int8> obs_encoder_get_codec(
@@ -17018,12 +17018,12 @@ class DiveObslibFFI {
   ) {
     _obs_encoder_get_codec ??= _dylib.lookupFunction<_c_obs_encoder_get_codec,
         _dart_obs_encoder_get_codec>('obs_encoder_get_codec');
-    return _obs_encoder_get_codec(
+    return _obs_encoder_get_codec!(
       encoder,
     );
   }
 
-  _dart_obs_encoder_get_codec _obs_encoder_get_codec;
+  _dart_obs_encoder_get_codec? _obs_encoder_get_codec;
 
   /// Returns the type of an encoder
   int obs_encoder_get_type(
@@ -17031,12 +17031,12 @@ class DiveObslibFFI {
   ) {
     _obs_encoder_get_type ??= _dylib.lookupFunction<_c_obs_encoder_get_type,
         _dart_obs_encoder_get_type>('obs_encoder_get_type');
-    return _obs_encoder_get_type(
+    return _obs_encoder_get_type!(
       encoder,
     );
   }
 
-  _dart_obs_encoder_get_type _obs_encoder_get_type;
+  _dart_obs_encoder_get_type? _obs_encoder_get_type;
 
   /// Sets the scaled resolution for a video encoder.  Set width and height to 0
   /// to disable scaling.  If the encoder is active, this function will trigger
@@ -17049,14 +17049,14 @@ class DiveObslibFFI {
     _obs_encoder_set_scaled_size ??= _dylib.lookupFunction<
         _c_obs_encoder_set_scaled_size,
         _dart_obs_encoder_set_scaled_size>('obs_encoder_set_scaled_size');
-    return _obs_encoder_set_scaled_size(
+    return _obs_encoder_set_scaled_size!(
       encoder,
       width,
       height,
     );
   }
 
-  _dart_obs_encoder_set_scaled_size _obs_encoder_set_scaled_size;
+  _dart_obs_encoder_set_scaled_size? _obs_encoder_set_scaled_size;
 
   /// For video encoders, returns true if pre-encode scaling is enabled
   int obs_encoder_scaling_enabled(
@@ -17065,12 +17065,12 @@ class DiveObslibFFI {
     _obs_encoder_scaling_enabled ??= _dylib.lookupFunction<
         _c_obs_encoder_scaling_enabled,
         _dart_obs_encoder_scaling_enabled>('obs_encoder_scaling_enabled');
-    return _obs_encoder_scaling_enabled(
+    return _obs_encoder_scaling_enabled!(
       encoder,
     );
   }
 
-  _dart_obs_encoder_scaling_enabled _obs_encoder_scaling_enabled;
+  _dart_obs_encoder_scaling_enabled? _obs_encoder_scaling_enabled;
 
   /// For video encoders, returns the width of the encoded image
   int obs_encoder_get_width(
@@ -17078,12 +17078,12 @@ class DiveObslibFFI {
   ) {
     _obs_encoder_get_width ??= _dylib.lookupFunction<_c_obs_encoder_get_width,
         _dart_obs_encoder_get_width>('obs_encoder_get_width');
-    return _obs_encoder_get_width(
+    return _obs_encoder_get_width!(
       encoder,
     );
   }
 
-  _dart_obs_encoder_get_width _obs_encoder_get_width;
+  _dart_obs_encoder_get_width? _obs_encoder_get_width;
 
   /// For video encoders, returns the height of the encoded image
   int obs_encoder_get_height(
@@ -17091,12 +17091,12 @@ class DiveObslibFFI {
   ) {
     _obs_encoder_get_height ??= _dylib.lookupFunction<_c_obs_encoder_get_height,
         _dart_obs_encoder_get_height>('obs_encoder_get_height');
-    return _obs_encoder_get_height(
+    return _obs_encoder_get_height!(
       encoder,
     );
   }
 
-  _dart_obs_encoder_get_height _obs_encoder_get_height;
+  _dart_obs_encoder_get_height? _obs_encoder_get_height;
 
   /// For audio encoders, returns the sample rate of the audio
   int obs_encoder_get_sample_rate(
@@ -17105,12 +17105,12 @@ class DiveObslibFFI {
     _obs_encoder_get_sample_rate ??= _dylib.lookupFunction<
         _c_obs_encoder_get_sample_rate,
         _dart_obs_encoder_get_sample_rate>('obs_encoder_get_sample_rate');
-    return _obs_encoder_get_sample_rate(
+    return _obs_encoder_get_sample_rate!(
       encoder,
     );
   }
 
-  _dart_obs_encoder_get_sample_rate _obs_encoder_get_sample_rate;
+  _dart_obs_encoder_get_sample_rate? _obs_encoder_get_sample_rate;
 
   /// Sets the preferred video format for a video encoder.  If the encoder can use
   /// the format specified, it will force a conversion to that format if the
@@ -17126,13 +17126,13 @@ class DiveObslibFFI {
             _c_obs_encoder_set_preferred_video_format,
             _dart_obs_encoder_set_preferred_video_format>(
         'obs_encoder_set_preferred_video_format');
-    return _obs_encoder_set_preferred_video_format(
+    return _obs_encoder_set_preferred_video_format!(
       encoder,
       format,
     );
   }
 
-  _dart_obs_encoder_set_preferred_video_format
+  _dart_obs_encoder_set_preferred_video_format?
       _obs_encoder_set_preferred_video_format;
 
   int obs_encoder_get_preferred_video_format(
@@ -17142,12 +17142,12 @@ class DiveObslibFFI {
             _c_obs_encoder_get_preferred_video_format,
             _dart_obs_encoder_get_preferred_video_format>(
         'obs_encoder_get_preferred_video_format');
-    return _obs_encoder_get_preferred_video_format(
+    return _obs_encoder_get_preferred_video_format!(
       encoder,
     );
   }
 
-  _dart_obs_encoder_get_preferred_video_format
+  _dart_obs_encoder_get_preferred_video_format?
       _obs_encoder_get_preferred_video_format;
 
   /// Gets the default settings for an encoder type
@@ -17156,12 +17156,12 @@ class DiveObslibFFI {
   ) {
     _obs_encoder_defaults ??= _dylib.lookupFunction<_c_obs_encoder_defaults,
         _dart_obs_encoder_defaults>('obs_encoder_defaults');
-    return _obs_encoder_defaults(
+    return _obs_encoder_defaults!(
       id,
     );
   }
 
-  _dart_obs_encoder_defaults _obs_encoder_defaults;
+  _dart_obs_encoder_defaults? _obs_encoder_defaults;
 
   ffi.Pointer<obs_data> obs_encoder_get_defaults(
     ffi.Pointer<obs_encoder> encoder,
@@ -17169,12 +17169,12 @@ class DiveObslibFFI {
     _obs_encoder_get_defaults ??= _dylib.lookupFunction<
         _c_obs_encoder_get_defaults,
         _dart_obs_encoder_get_defaults>('obs_encoder_get_defaults');
-    return _obs_encoder_get_defaults(
+    return _obs_encoder_get_defaults!(
       encoder,
     );
   }
 
-  _dart_obs_encoder_get_defaults _obs_encoder_get_defaults;
+  _dart_obs_encoder_get_defaults? _obs_encoder_get_defaults;
 
   /// Returns the property list, if any.  Free with obs_properties_destroy
   ffi.Pointer<obs_properties> obs_get_encoder_properties(
@@ -17183,12 +17183,12 @@ class DiveObslibFFI {
     _obs_get_encoder_properties ??= _dylib.lookupFunction<
         _c_obs_get_encoder_properties,
         _dart_obs_get_encoder_properties>('obs_get_encoder_properties');
-    return _obs_get_encoder_properties(
+    return _obs_get_encoder_properties!(
       id,
     );
   }
 
-  _dart_obs_get_encoder_properties _obs_get_encoder_properties;
+  _dart_obs_get_encoder_properties? _obs_get_encoder_properties;
 
   /// Returns the property list of an existing encoder, if any.  Free with
   /// obs_properties_destroy
@@ -17197,12 +17197,12 @@ class DiveObslibFFI {
   ) {
     _obs_encoder_properties ??= _dylib.lookupFunction<_c_obs_encoder_properties,
         _dart_obs_encoder_properties>('obs_encoder_properties');
-    return _obs_encoder_properties(
+    return _obs_encoder_properties!(
       encoder,
     );
   }
 
-  _dart_obs_encoder_properties _obs_encoder_properties;
+  _dart_obs_encoder_properties? _obs_encoder_properties;
 
   /// Updates the settings of the encoder context.  Usually used for changing
   /// bitrate while active
@@ -17213,13 +17213,13 @@ class DiveObslibFFI {
     _obs_encoder_update ??=
         _dylib.lookupFunction<_c_obs_encoder_update, _dart_obs_encoder_update>(
             'obs_encoder_update');
-    return _obs_encoder_update(
+    return _obs_encoder_update!(
       encoder,
       settings,
     );
   }
 
-  _dart_obs_encoder_update _obs_encoder_update;
+  _dart_obs_encoder_update? _obs_encoder_update;
 
   /// Gets extra data (headers) associated with this context
   int obs_encoder_get_extra_data(
@@ -17230,14 +17230,14 @@ class DiveObslibFFI {
     _obs_encoder_get_extra_data ??= _dylib.lookupFunction<
         _c_obs_encoder_get_extra_data,
         _dart_obs_encoder_get_extra_data>('obs_encoder_get_extra_data');
-    return _obs_encoder_get_extra_data(
+    return _obs_encoder_get_extra_data!(
       encoder,
       extra_data,
       size,
     );
   }
 
-  _dart_obs_encoder_get_extra_data _obs_encoder_get_extra_data;
+  _dart_obs_encoder_get_extra_data? _obs_encoder_get_extra_data;
 
   /// Returns the current settings for this encoder
   ffi.Pointer<obs_data> obs_encoder_get_settings(
@@ -17246,12 +17246,12 @@ class DiveObslibFFI {
     _obs_encoder_get_settings ??= _dylib.lookupFunction<
         _c_obs_encoder_get_settings,
         _dart_obs_encoder_get_settings>('obs_encoder_get_settings');
-    return _obs_encoder_get_settings(
+    return _obs_encoder_get_settings!(
       encoder,
     );
   }
 
-  _dart_obs_encoder_get_settings _obs_encoder_get_settings;
+  _dart_obs_encoder_get_settings? _obs_encoder_get_settings;
 
   /// Sets the video output context to be used with this encoder
   void obs_encoder_set_video(
@@ -17260,13 +17260,13 @@ class DiveObslibFFI {
   ) {
     _obs_encoder_set_video ??= _dylib.lookupFunction<_c_obs_encoder_set_video,
         _dart_obs_encoder_set_video>('obs_encoder_set_video');
-    return _obs_encoder_set_video(
+    return _obs_encoder_set_video!(
       encoder,
       video,
     );
   }
 
-  _dart_obs_encoder_set_video _obs_encoder_set_video;
+  _dart_obs_encoder_set_video? _obs_encoder_set_video;
 
   /// Sets the audio output context to be used with this encoder
   void obs_encoder_set_audio(
@@ -17275,13 +17275,13 @@ class DiveObslibFFI {
   ) {
     _obs_encoder_set_audio ??= _dylib.lookupFunction<_c_obs_encoder_set_audio,
         _dart_obs_encoder_set_audio>('obs_encoder_set_audio');
-    return _obs_encoder_set_audio(
+    return _obs_encoder_set_audio!(
       encoder,
       audio,
     );
   }
 
-  _dart_obs_encoder_set_audio _obs_encoder_set_audio;
+  _dart_obs_encoder_set_audio? _obs_encoder_set_audio;
 
   /// Returns the video output context used with this encoder, or NULL if not
   /// a video context
@@ -17291,12 +17291,12 @@ class DiveObslibFFI {
     _obs_encoder_video ??=
         _dylib.lookupFunction<_c_obs_encoder_video, _dart_obs_encoder_video>(
             'obs_encoder_video');
-    return _obs_encoder_video(
+    return _obs_encoder_video!(
       encoder,
     );
   }
 
-  _dart_obs_encoder_video _obs_encoder_video;
+  _dart_obs_encoder_video? _obs_encoder_video;
 
   /// Returns the audio output context used with this encoder, or NULL if not
   /// a audio context
@@ -17306,12 +17306,12 @@ class DiveObslibFFI {
     _obs_encoder_audio ??=
         _dylib.lookupFunction<_c_obs_encoder_audio, _dart_obs_encoder_audio>(
             'obs_encoder_audio');
-    return _obs_encoder_audio(
+    return _obs_encoder_audio!(
       encoder,
     );
   }
 
-  _dart_obs_encoder_audio _obs_encoder_audio;
+  _dart_obs_encoder_audio? _obs_encoder_audio;
 
   /// Returns true if encoder is active, false otherwise
   int obs_encoder_active(
@@ -17320,12 +17320,12 @@ class DiveObslibFFI {
     _obs_encoder_active ??=
         _dylib.lookupFunction<_c_obs_encoder_active, _dart_obs_encoder_active>(
             'obs_encoder_active');
-    return _obs_encoder_active(
+    return _obs_encoder_active!(
       encoder,
     );
   }
 
-  _dart_obs_encoder_active _obs_encoder_active;
+  _dart_obs_encoder_active? _obs_encoder_active;
 
   ffi.Pointer<ffi.Void> obs_encoder_get_type_data(
     ffi.Pointer<obs_encoder> encoder,
@@ -17333,12 +17333,12 @@ class DiveObslibFFI {
     _obs_encoder_get_type_data ??= _dylib.lookupFunction<
         _c_obs_encoder_get_type_data,
         _dart_obs_encoder_get_type_data>('obs_encoder_get_type_data');
-    return _obs_encoder_get_type_data(
+    return _obs_encoder_get_type_data!(
       encoder,
     );
   }
 
-  _dart_obs_encoder_get_type_data _obs_encoder_get_type_data;
+  _dart_obs_encoder_get_type_data? _obs_encoder_get_type_data;
 
   ffi.Pointer<ffi.Int8> obs_encoder_get_id(
     ffi.Pointer<obs_encoder> encoder,
@@ -17346,36 +17346,36 @@ class DiveObslibFFI {
     _obs_encoder_get_id ??=
         _dylib.lookupFunction<_c_obs_encoder_get_id, _dart_obs_encoder_get_id>(
             'obs_encoder_get_id');
-    return _obs_encoder_get_id(
+    return _obs_encoder_get_id!(
       encoder,
     );
   }
 
-  _dart_obs_encoder_get_id _obs_encoder_get_id;
+  _dart_obs_encoder_get_id? _obs_encoder_get_id;
 
   int obs_get_encoder_caps(
     ffi.Pointer<ffi.Int8> encoder_id,
   ) {
     _obs_get_encoder_caps ??= _dylib.lookupFunction<_c_obs_get_encoder_caps,
         _dart_obs_get_encoder_caps>('obs_get_encoder_caps');
-    return _obs_get_encoder_caps(
+    return _obs_get_encoder_caps!(
       encoder_id,
     );
   }
 
-  _dart_obs_get_encoder_caps _obs_get_encoder_caps;
+  _dart_obs_get_encoder_caps? _obs_get_encoder_caps;
 
   int obs_encoder_get_caps(
     ffi.Pointer<obs_encoder> encoder,
   ) {
     _obs_encoder_get_caps ??= _dylib.lookupFunction<_c_obs_encoder_get_caps,
         _dart_obs_encoder_get_caps>('obs_encoder_get_caps');
-    return _obs_encoder_get_caps(
+    return _obs_encoder_get_caps!(
       encoder,
     );
   }
 
-  _dart_obs_encoder_get_caps _obs_encoder_get_caps;
+  _dart_obs_encoder_get_caps? _obs_encoder_get_caps;
 
   /// Duplicates an encoder packet
   void obs_duplicate_encoder_packet(
@@ -17385,13 +17385,13 @@ class DiveObslibFFI {
     _obs_duplicate_encoder_packet ??= _dylib.lookupFunction<
         _c_obs_duplicate_encoder_packet,
         _dart_obs_duplicate_encoder_packet>('obs_duplicate_encoder_packet');
-    return _obs_duplicate_encoder_packet(
+    return _obs_duplicate_encoder_packet!(
       dst,
       src,
     );
   }
 
-  _dart_obs_duplicate_encoder_packet _obs_duplicate_encoder_packet;
+  _dart_obs_duplicate_encoder_packet? _obs_duplicate_encoder_packet;
 
   void obs_free_encoder_packet(
     ffi.Pointer<encoder_packet> packet,
@@ -17399,12 +17399,12 @@ class DiveObslibFFI {
     _obs_free_encoder_packet ??= _dylib.lookupFunction<
         _c_obs_free_encoder_packet,
         _dart_obs_free_encoder_packet>('obs_free_encoder_packet');
-    return _obs_free_encoder_packet(
+    return _obs_free_encoder_packet!(
       packet,
     );
   }
 
-  _dart_obs_free_encoder_packet _obs_free_encoder_packet;
+  _dart_obs_free_encoder_packet? _obs_free_encoder_packet;
 
   void obs_encoder_packet_ref(
     ffi.Pointer<encoder_packet> dst,
@@ -17412,13 +17412,13 @@ class DiveObslibFFI {
   ) {
     _obs_encoder_packet_ref ??= _dylib.lookupFunction<_c_obs_encoder_packet_ref,
         _dart_obs_encoder_packet_ref>('obs_encoder_packet_ref');
-    return _obs_encoder_packet_ref(
+    return _obs_encoder_packet_ref!(
       dst,
       src,
     );
   }
 
-  _dart_obs_encoder_packet_ref _obs_encoder_packet_ref;
+  _dart_obs_encoder_packet_ref? _obs_encoder_packet_ref;
 
   void obs_encoder_packet_release(
     ffi.Pointer<encoder_packet> packet,
@@ -17426,12 +17426,12 @@ class DiveObslibFFI {
     _obs_encoder_packet_release ??= _dylib.lookupFunction<
         _c_obs_encoder_packet_release,
         _dart_obs_encoder_packet_release>('obs_encoder_packet_release');
-    return _obs_encoder_packet_release(
+    return _obs_encoder_packet_release!(
       packet,
     );
   }
 
-  _dart_obs_encoder_packet_release _obs_encoder_packet_release;
+  _dart_obs_encoder_packet_release? _obs_encoder_packet_release;
 
   ffi.Pointer<ffi.Void> obs_encoder_create_rerouted(
     ffi.Pointer<obs_encoder> encoder,
@@ -17440,13 +17440,13 @@ class DiveObslibFFI {
     _obs_encoder_create_rerouted ??= _dylib.lookupFunction<
         _c_obs_encoder_create_rerouted,
         _dart_obs_encoder_create_rerouted>('obs_encoder_create_rerouted');
-    return _obs_encoder_create_rerouted(
+    return _obs_encoder_create_rerouted!(
       encoder,
       reroute_id,
     );
   }
 
-  _dart_obs_encoder_create_rerouted _obs_encoder_create_rerouted;
+  _dart_obs_encoder_create_rerouted? _obs_encoder_create_rerouted;
 
   /// Returns whether encoder is paused
   int obs_encoder_paused(
@@ -17455,12 +17455,12 @@ class DiveObslibFFI {
     _obs_encoder_paused ??=
         _dylib.lookupFunction<_c_obs_encoder_paused, _dart_obs_encoder_paused>(
             'obs_encoder_paused');
-    return _obs_encoder_paused(
+    return _obs_encoder_paused!(
       output,
     );
   }
 
-  _dart_obs_encoder_paused _obs_encoder_paused;
+  _dart_obs_encoder_paused? _obs_encoder_paused;
 
   ffi.Pointer<ffi.Int8> obs_encoder_get_last_error(
     ffi.Pointer<obs_encoder> encoder,
@@ -17468,12 +17468,12 @@ class DiveObslibFFI {
     _obs_encoder_get_last_error ??= _dylib.lookupFunction<
         _c_obs_encoder_get_last_error,
         _dart_obs_encoder_get_last_error>('obs_encoder_get_last_error');
-    return _obs_encoder_get_last_error(
+    return _obs_encoder_get_last_error!(
       encoder,
     );
   }
 
-  _dart_obs_encoder_get_last_error _obs_encoder_get_last_error;
+  _dart_obs_encoder_get_last_error? _obs_encoder_get_last_error;
 
   void obs_encoder_set_last_error(
     ffi.Pointer<obs_encoder> encoder,
@@ -17482,13 +17482,13 @@ class DiveObslibFFI {
     _obs_encoder_set_last_error ??= _dylib.lookupFunction<
         _c_obs_encoder_set_last_error,
         _dart_obs_encoder_set_last_error>('obs_encoder_set_last_error');
-    return _obs_encoder_set_last_error(
+    return _obs_encoder_set_last_error!(
       encoder,
       message,
     );
   }
 
-  _dart_obs_encoder_set_last_error _obs_encoder_set_last_error;
+  _dart_obs_encoder_set_last_error? _obs_encoder_set_last_error;
 
   ffi.Pointer<ffi.Int8> obs_service_get_display_name(
     ffi.Pointer<ffi.Int8> id,
@@ -17496,23 +17496,23 @@ class DiveObslibFFI {
     _obs_service_get_display_name ??= _dylib.lookupFunction<
         _c_obs_service_get_display_name,
         _dart_obs_service_get_display_name>('obs_service_get_display_name');
-    return _obs_service_get_display_name(
+    return _obs_service_get_display_name!(
       id,
     );
   }
 
-  _dart_obs_service_get_display_name _obs_service_get_display_name;
+  _dart_obs_service_get_display_name? _obs_service_get_display_name;
 
   ffi.Pointer<obs_service> obs_service_create(
     ffi.Pointer<ffi.Int8> id,
     ffi.Pointer<ffi.Int8> name,
-    ffi.Pointer<obs_data> settings,
+    ffi.Pointer<obs_data>? settings,
     ffi.Pointer<obs_data> hotkey_data,
   ) {
     _obs_service_create ??=
         _dylib.lookupFunction<_c_obs_service_create, _dart_obs_service_create>(
             'obs_service_create');
-    return _obs_service_create(
+    return _obs_service_create!(
       id,
       name,
       settings,
@@ -17520,7 +17520,7 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_service_create _obs_service_create;
+  _dart_obs_service_create? _obs_service_create;
 
   ffi.Pointer<obs_service> obs_service_create_private(
     ffi.Pointer<ffi.Int8> id,
@@ -17530,14 +17530,14 @@ class DiveObslibFFI {
     _obs_service_create_private ??= _dylib.lookupFunction<
         _c_obs_service_create_private,
         _dart_obs_service_create_private>('obs_service_create_private');
-    return _obs_service_create_private(
+    return _obs_service_create_private!(
       id,
       name,
       settings,
     );
   }
 
-  _dart_obs_service_create_private _obs_service_create_private;
+  _dart_obs_service_create_private? _obs_service_create_private;
 
   /// Adds/releases a reference to a service.  When the last reference is
   /// released, the service is destroyed.
@@ -17547,24 +17547,24 @@ class DiveObslibFFI {
     _obs_service_addref ??=
         _dylib.lookupFunction<_c_obs_service_addref, _dart_obs_service_addref>(
             'obs_service_addref');
-    return _obs_service_addref(
+    return _obs_service_addref!(
       service,
     );
   }
 
-  _dart_obs_service_addref _obs_service_addref;
+  _dart_obs_service_addref? _obs_service_addref;
 
   void obs_service_release(
     ffi.Pointer<obs_service> service,
   ) {
     _obs_service_release ??= _dylib.lookupFunction<_c_obs_service_release,
         _dart_obs_service_release>('obs_service_release');
-    return _obs_service_release(
+    return _obs_service_release!(
       service,
     );
   }
 
-  _dart_obs_service_release _obs_service_release;
+  _dart_obs_service_release? _obs_service_release;
 
   void obs_weak_service_addref(
     ffi.Pointer<obs_weak_service> weak,
@@ -17572,12 +17572,12 @@ class DiveObslibFFI {
     _obs_weak_service_addref ??= _dylib.lookupFunction<
         _c_obs_weak_service_addref,
         _dart_obs_weak_service_addref>('obs_weak_service_addref');
-    return _obs_weak_service_addref(
+    return _obs_weak_service_addref!(
       weak,
     );
   }
 
-  _dart_obs_weak_service_addref _obs_weak_service_addref;
+  _dart_obs_weak_service_addref? _obs_weak_service_addref;
 
   void obs_weak_service_release(
     ffi.Pointer<obs_weak_service> weak,
@@ -17585,24 +17585,24 @@ class DiveObslibFFI {
     _obs_weak_service_release ??= _dylib.lookupFunction<
         _c_obs_weak_service_release,
         _dart_obs_weak_service_release>('obs_weak_service_release');
-    return _obs_weak_service_release(
+    return _obs_weak_service_release!(
       weak,
     );
   }
 
-  _dart_obs_weak_service_release _obs_weak_service_release;
+  _dart_obs_weak_service_release? _obs_weak_service_release;
 
   ffi.Pointer<obs_service> obs_service_get_ref(
     ffi.Pointer<obs_service> service,
   ) {
     _obs_service_get_ref ??= _dylib.lookupFunction<_c_obs_service_get_ref,
         _dart_obs_service_get_ref>('obs_service_get_ref');
-    return _obs_service_get_ref(
+    return _obs_service_get_ref!(
       service,
     );
   }
 
-  _dart_obs_service_get_ref _obs_service_get_ref;
+  _dart_obs_service_get_ref? _obs_service_get_ref;
 
   ffi.Pointer<obs_weak_service> obs_service_get_weak_service(
     ffi.Pointer<obs_service> service,
@@ -17610,12 +17610,12 @@ class DiveObslibFFI {
     _obs_service_get_weak_service ??= _dylib.lookupFunction<
         _c_obs_service_get_weak_service,
         _dart_obs_service_get_weak_service>('obs_service_get_weak_service');
-    return _obs_service_get_weak_service(
+    return _obs_service_get_weak_service!(
       service,
     );
   }
 
-  _dart_obs_service_get_weak_service _obs_service_get_weak_service;
+  _dart_obs_service_get_weak_service? _obs_service_get_weak_service;
 
   ffi.Pointer<obs_service> obs_weak_service_get_service(
     ffi.Pointer<obs_weak_service> weak,
@@ -17623,12 +17623,12 @@ class DiveObslibFFI {
     _obs_weak_service_get_service ??= _dylib.lookupFunction<
         _c_obs_weak_service_get_service,
         _dart_obs_weak_service_get_service>('obs_weak_service_get_service');
-    return _obs_weak_service_get_service(
+    return _obs_weak_service_get_service!(
       weak,
     );
   }
 
-  _dart_obs_weak_service_get_service _obs_weak_service_get_service;
+  _dart_obs_weak_service_get_service? _obs_weak_service_get_service;
 
   int obs_weak_service_references_service(
     ffi.Pointer<obs_weak_service> weak,
@@ -17638,13 +17638,13 @@ class DiveObslibFFI {
             _c_obs_weak_service_references_service,
             _dart_obs_weak_service_references_service>(
         'obs_weak_service_references_service');
-    return _obs_weak_service_references_service(
+    return _obs_weak_service_references_service!(
       weak,
       service,
     );
   }
 
-  _dart_obs_weak_service_references_service
+  _dart_obs_weak_service_references_service?
       _obs_weak_service_references_service;
 
   ffi.Pointer<ffi.Int8> obs_service_get_name(
@@ -17652,12 +17652,12 @@ class DiveObslibFFI {
   ) {
     _obs_service_get_name ??= _dylib.lookupFunction<_c_obs_service_get_name,
         _dart_obs_service_get_name>('obs_service_get_name');
-    return _obs_service_get_name(
+    return _obs_service_get_name!(
       service,
     );
   }
 
-  _dart_obs_service_get_name _obs_service_get_name;
+  _dart_obs_service_get_name? _obs_service_get_name;
 
   /// Gets the default settings for a service
   ffi.Pointer<obs_data> obs_service_defaults(
@@ -17665,12 +17665,12 @@ class DiveObslibFFI {
   ) {
     _obs_service_defaults ??= _dylib.lookupFunction<_c_obs_service_defaults,
         _dart_obs_service_defaults>('obs_service_defaults');
-    return _obs_service_defaults(
+    return _obs_service_defaults!(
       id,
     );
   }
 
-  _dart_obs_service_defaults _obs_service_defaults;
+  _dart_obs_service_defaults? _obs_service_defaults;
 
   /// Returns the property list, if any.  Free with obs_properties_destroy
   ffi.Pointer<obs_properties> obs_get_service_properties(
@@ -17679,12 +17679,12 @@ class DiveObslibFFI {
     _obs_get_service_properties ??= _dylib.lookupFunction<
         _c_obs_get_service_properties,
         _dart_obs_get_service_properties>('obs_get_service_properties');
-    return _obs_get_service_properties(
+    return _obs_get_service_properties!(
       id,
     );
   }
 
-  _dart_obs_get_service_properties _obs_get_service_properties;
+  _dart_obs_get_service_properties? _obs_get_service_properties;
 
   /// Returns the property list of an existing service context, if any.  Free with
   /// obs_properties_destroy
@@ -17693,12 +17693,12 @@ class DiveObslibFFI {
   ) {
     _obs_service_properties ??= _dylib.lookupFunction<_c_obs_service_properties,
         _dart_obs_service_properties>('obs_service_properties');
-    return _obs_service_properties(
+    return _obs_service_properties!(
       service,
     );
   }
 
-  _dart_obs_service_properties _obs_service_properties;
+  _dart_obs_service_properties? _obs_service_properties;
 
   /// Gets the service type
   ffi.Pointer<ffi.Int8> obs_service_get_type(
@@ -17706,12 +17706,12 @@ class DiveObslibFFI {
   ) {
     _obs_service_get_type ??= _dylib.lookupFunction<_c_obs_service_get_type,
         _dart_obs_service_get_type>('obs_service_get_type');
-    return _obs_service_get_type(
+    return _obs_service_get_type!(
       service,
     );
   }
 
-  _dart_obs_service_get_type _obs_service_get_type;
+  _dart_obs_service_get_type? _obs_service_get_type;
 
   /// Updates the settings of the service context
   void obs_service_update(
@@ -17721,13 +17721,13 @@ class DiveObslibFFI {
     _obs_service_update ??=
         _dylib.lookupFunction<_c_obs_service_update, _dart_obs_service_update>(
             'obs_service_update');
-    return _obs_service_update(
+    return _obs_service_update!(
       service,
       settings,
     );
   }
 
-  _dart_obs_service_update _obs_service_update;
+  _dart_obs_service_update? _obs_service_update;
 
   /// Returns the current settings for this service
   ffi.Pointer<obs_data> obs_service_get_settings(
@@ -17736,12 +17736,12 @@ class DiveObslibFFI {
     _obs_service_get_settings ??= _dylib.lookupFunction<
         _c_obs_service_get_settings,
         _dart_obs_service_get_settings>('obs_service_get_settings');
-    return _obs_service_get_settings(
+    return _obs_service_get_settings!(
       service,
     );
   }
 
-  _dart_obs_service_get_settings _obs_service_get_settings;
+  _dart_obs_service_get_settings? _obs_service_get_settings;
 
   /// Returns the URL for this service context
   ffi.Pointer<ffi.Int8> obs_service_get_url(
@@ -17749,12 +17749,12 @@ class DiveObslibFFI {
   ) {
     _obs_service_get_url ??= _dylib.lookupFunction<_c_obs_service_get_url,
         _dart_obs_service_get_url>('obs_service_get_url');
-    return _obs_service_get_url(
+    return _obs_service_get_url!(
       service,
     );
   }
 
-  _dart_obs_service_get_url _obs_service_get_url;
+  _dart_obs_service_get_url? _obs_service_get_url;
 
   /// Returns the stream key (if any) for this service context
   ffi.Pointer<ffi.Int8> obs_service_get_key(
@@ -17762,12 +17762,12 @@ class DiveObslibFFI {
   ) {
     _obs_service_get_key ??= _dylib.lookupFunction<_c_obs_service_get_key,
         _dart_obs_service_get_key>('obs_service_get_key');
-    return _obs_service_get_key(
+    return _obs_service_get_key!(
       service,
     );
   }
 
-  _dart_obs_service_get_key _obs_service_get_key;
+  _dart_obs_service_get_key? _obs_service_get_key;
 
   /// Returns the username (if any) for this service context
   ffi.Pointer<ffi.Int8> obs_service_get_username(
@@ -17776,12 +17776,12 @@ class DiveObslibFFI {
     _obs_service_get_username ??= _dylib.lookupFunction<
         _c_obs_service_get_username,
         _dart_obs_service_get_username>('obs_service_get_username');
-    return _obs_service_get_username(
+    return _obs_service_get_username!(
       service,
     );
   }
 
-  _dart_obs_service_get_username _obs_service_get_username;
+  _dart_obs_service_get_username? _obs_service_get_username;
 
   /// Returns the password (if any) for this service context
   ffi.Pointer<ffi.Int8> obs_service_get_password(
@@ -17790,12 +17790,12 @@ class DiveObslibFFI {
     _obs_service_get_password ??= _dylib.lookupFunction<
         _c_obs_service_get_password,
         _dart_obs_service_get_password>('obs_service_get_password');
-    return _obs_service_get_password(
+    return _obs_service_get_password!(
       service,
     );
   }
 
-  _dart_obs_service_get_password _obs_service_get_password;
+  _dart_obs_service_get_password? _obs_service_get_password;
 
   /// Applies service-specific video encoder settings.
   ///
@@ -17810,14 +17810,14 @@ class DiveObslibFFI {
             _c_obs_service_apply_encoder_settings,
             _dart_obs_service_apply_encoder_settings>(
         'obs_service_apply_encoder_settings');
-    return _obs_service_apply_encoder_settings(
+    return _obs_service_apply_encoder_settings!(
       service,
       video_encoder_settings,
       audio_encoder_settings,
     );
   }
 
-  _dart_obs_service_apply_encoder_settings _obs_service_apply_encoder_settings;
+  _dart_obs_service_apply_encoder_settings? _obs_service_apply_encoder_settings;
 
   ffi.Pointer<ffi.Void> obs_service_get_type_data(
     ffi.Pointer<obs_service> service,
@@ -17825,12 +17825,12 @@ class DiveObslibFFI {
     _obs_service_get_type_data ??= _dylib.lookupFunction<
         _c_obs_service_get_type_data,
         _dart_obs_service_get_type_data>('obs_service_get_type_data');
-    return _obs_service_get_type_data(
+    return _obs_service_get_type_data!(
       service,
     );
   }
 
-  _dart_obs_service_get_type_data _obs_service_get_type_data;
+  _dart_obs_service_get_type_data? _obs_service_get_type_data;
 
   ffi.Pointer<ffi.Int8> obs_service_get_id(
     ffi.Pointer<obs_service> service,
@@ -17838,12 +17838,12 @@ class DiveObslibFFI {
     _obs_service_get_id ??=
         _dylib.lookupFunction<_c_obs_service_get_id, _dart_obs_service_get_id>(
             'obs_service_get_id');
-    return _obs_service_get_id(
+    return _obs_service_get_id!(
       service,
     );
   }
 
-  _dart_obs_service_get_id _obs_service_get_id;
+  _dart_obs_service_get_id? _obs_service_get_id;
 
   ffi.Pointer<ffi.Int8> obs_service_get_output_type(
     ffi.Pointer<obs_service> service,
@@ -17851,12 +17851,12 @@ class DiveObslibFFI {
     _obs_service_get_output_type ??= _dylib.lookupFunction<
         _c_obs_service_get_output_type,
         _dart_obs_service_get_output_type>('obs_service_get_output_type');
-    return _obs_service_get_output_type(
+    return _obs_service_get_output_type!(
       service,
     );
   }
 
-  _dart_obs_service_get_output_type _obs_service_get_output_type;
+  _dart_obs_service_get_output_type? _obs_service_get_output_type;
 
   void obs_source_frame_init(
     ffi.Pointer<obs_source_frame> frame,
@@ -17866,7 +17866,7 @@ class DiveObslibFFI {
   ) {
     _obs_source_frame_init ??= _dylib.lookupFunction<_c_obs_source_frame_init,
         _dart_obs_source_frame_init>('obs_source_frame_init');
-    return _obs_source_frame_init(
+    return _obs_source_frame_init!(
       frame,
       format,
       width,
@@ -17874,19 +17874,19 @@ class DiveObslibFFI {
     );
   }
 
-  _dart_obs_source_frame_init _obs_source_frame_init;
+  _dart_obs_source_frame_init? _obs_source_frame_init;
 
   void obs_source_frame_free(
     ffi.Pointer<obs_source_frame> frame,
   ) {
     _obs_source_frame_free ??= _dylib.lookupFunction<_c_obs_source_frame_free,
         _dart_obs_source_frame_free>('obs_source_frame_free');
-    return _obs_source_frame_free(
+    return _obs_source_frame_free!(
       frame,
     );
   }
 
-  _dart_obs_source_frame_free _obs_source_frame_free;
+  _dart_obs_source_frame_free? _obs_source_frame_free;
 
   ffi.Pointer<obs_source_frame> obs_source_frame_create(
     int format,
@@ -17896,14 +17896,14 @@ class DiveObslibFFI {
     _obs_source_frame_create ??= _dylib.lookupFunction<
         _c_obs_source_frame_create,
         _dart_obs_source_frame_create>('obs_source_frame_create');
-    return _obs_source_frame_create(
+    return _obs_source_frame_create!(
       format,
       width,
       height,
     );
   }
 
-  _dart_obs_source_frame_create _obs_source_frame_create;
+  _dart_obs_source_frame_create? _obs_source_frame_create;
 
   void obs_source_frame_destroy(
     ffi.Pointer<obs_source_frame> frame,
@@ -17911,12 +17911,12 @@ class DiveObslibFFI {
     _obs_source_frame_destroy ??= _dylib.lookupFunction<
         _c_obs_source_frame_destroy,
         _dart_obs_source_frame_destroy>('obs_source_frame_destroy');
-    return _obs_source_frame_destroy(
+    return _obs_source_frame_destroy!(
       frame,
     );
   }
 
-  _dart_obs_source_frame_destroy _obs_source_frame_destroy;
+  _dart_obs_source_frame_destroy? _obs_source_frame_destroy;
 
   void obs_source_frame_copy(
     ffi.Pointer<obs_source_frame> dst,
@@ -17924,13 +17924,13 @@ class DiveObslibFFI {
   ) {
     _obs_source_frame_copy ??= _dylib.lookupFunction<_c_obs_source_frame_copy,
         _dart_obs_source_frame_copy>('obs_source_frame_copy');
-    return _obs_source_frame_copy(
+    return _obs_source_frame_copy!(
       dst,
       src,
     );
   }
 
-  _dart_obs_source_frame_copy _obs_source_frame_copy;
+  _dart_obs_source_frame_copy? _obs_source_frame_copy;
 
   /// Adds a frame callback for this source.
   ///
@@ -17946,14 +17946,14 @@ class DiveObslibFFI {
     _obs_source_add_frame_callback ??= _dylib.lookupFunction<
         _c_obs_source_add_frame_callback,
         _dart_obs_source_add_frame_callback>('obs_source_add_frame_callback');
-    return _obs_source_add_frame_callback(
+    return _obs_source_add_frame_callback!(
       source,
       frame,
       param,
     );
   }
 
-  _dart_obs_source_add_frame_callback _obs_source_add_frame_callback;
+  _dart_obs_source_add_frame_callback? _obs_source_add_frame_callback;
 
   /// Removes a frame callback for this source
   void obs_source_remove_frame_callback(
@@ -17965,14 +17965,14 @@ class DiveObslibFFI {
             _c_obs_source_remove_frame_callback,
             _dart_obs_source_remove_frame_callback>(
         'obs_source_remove_frame_callback');
-    return _obs_source_remove_frame_callback(
+    return _obs_source_remove_frame_callback!(
       source,
       frame,
       param,
     );
   }
 
-  _dart_obs_source_remove_frame_callback _obs_source_remove_frame_callback;
+  _dart_obs_source_remove_frame_callback? _obs_source_remove_frame_callback;
 
   int obs_source_get_icon_type(
     ffi.Pointer<ffi.Int8> id,
@@ -17980,88 +17980,88 @@ class DiveObslibFFI {
     _obs_source_get_icon_type ??= _dylib.lookupFunction<
         _c_obs_source_get_icon_type,
         _dart_obs_source_get_icon_type>('obs_source_get_icon_type');
-    return _obs_source_get_icon_type(
+    return _obs_source_get_icon_type!(
       id,
     );
   }
 
-  _dart_obs_source_get_icon_type _obs_source_get_icon_type;
+  _dart_obs_source_get_icon_type? _obs_source_get_icon_type;
 }
 
 class base_allocator extends ffi.Struct {
-  ffi.Pointer<ffi.NativeFunction<_typedefC_1>> malloc;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_1>>? malloc;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_2>> realloc;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_2>>? realloc;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_3>> free;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_3>>? free;
 }
 
 class profiler_snapshot extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class profiler_snapshot_entry extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class profiler_time_entry extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class profiler_name_store extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class text_lookup extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class vec2 extends ffi.Struct {
   @ffi.Double()
-  double x;
+  double? x;
 
   @ffi.Double()
-  double y;
+  double? y;
 }
 
 class vec3 extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class vec4 extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class quat extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class axisang extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class plane extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class matrix3 extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class matrix4 extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 abstract class gs_draw_mode {
@@ -18189,196 +18189,196 @@ abstract class gs_texture_type {
 }
 
 class gs_device_loss extends ffi.Struct {
-  ffi.Pointer<ffi.NativeFunction<_typedefC_4>> device_loss_release;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_4>>? device_loss_release;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_5>> device_loss_rebuild;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_5>>? device_loss_rebuild;
 
-  ffi.Pointer<ffi.Void> data;
+  ffi.Pointer<ffi.Void>? data;
 }
 
 class gs_monitor_info extends ffi.Struct {
   @ffi.Int32()
-  int rotation_degrees;
+  int? rotation_degrees;
 
   @ffi.Int64()
-  int x;
+  int? x;
 
   @ffi.Int64()
-  int y;
+  int? y;
 
   @ffi.Int64()
-  int cx;
+  int? cx;
 
   @ffi.Int64()
-  int cy;
+  int? cy;
 }
 
 class gs_tvertarray extends ffi.Struct {
   @ffi.Uint64()
-  int width;
+  int? width;
 
-  ffi.Pointer<ffi.Void> array;
+  ffi.Pointer<ffi.Void>? array;
 }
 
 class gs_vb_data extends ffi.Struct {
   @ffi.Uint64()
-  int num;
+  int? num;
 
-  ffi.Pointer<vec3> points;
+  ffi.Pointer<vec3>? points;
 
-  ffi.Pointer<vec3> normals;
+  ffi.Pointer<vec3>? normals;
 
-  ffi.Pointer<vec3> tangents;
+  ffi.Pointer<vec3>? tangents;
 
-  ffi.Pointer<ffi.Uint32> colors;
+  ffi.Pointer<ffi.Uint32>? colors;
 
   @ffi.Uint64()
-  int num_tex;
+  int? num_tex;
 
-  ffi.Pointer<gs_tvertarray> tvarray;
+  ffi.Pointer<gs_tvertarray>? tvarray;
 }
 
 class gs_sampler_info extends ffi.Struct {
   @ffi.Int32()
-  int filter;
+  int? filter;
 
   @ffi.Int32()
-  int address_u;
+  int? address_u;
 
   @ffi.Int32()
-  int address_v;
+  int? address_v;
 
   @ffi.Int32()
-  int address_w;
+  int? address_w;
 
   @ffi.Int32()
-  int max_anisotropy;
+  int? max_anisotropy;
 
   @ffi.Uint32()
-  int border_color;
+  int? border_color;
 }
 
 class gs_display_mode extends ffi.Struct {
   @ffi.Uint32()
-  int width;
+  int? width;
 
   @ffi.Uint32()
-  int height;
+  int? height;
 
   @ffi.Uint32()
-  int bits;
+  int? bits;
 
   @ffi.Uint32()
-  int freq;
+  int? freq;
 }
 
 class gs_rect extends ffi.Struct {
   @ffi.Int32()
-  int x;
+  int? x;
 
   @ffi.Int32()
-  int y;
+  int? y;
 
   @ffi.Int32()
-  int cx;
+  int? cx;
 
   @ffi.Int32()
-  int cy;
+  int? cy;
 }
 
 class gs_texture extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class gs_stage_surface extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class gs_zstencil_buffer extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class gs_vertex_buffer extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class gs_index_buffer extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class gs_sampler_state extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class gs_shader extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class gs_swap_chain extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class gs_timer extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class gs_texrender extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class gs_shader_param extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class gs_effect extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class gs_effect_technique extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class gs_effect_pass extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class gs_effect_param extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class gs_device extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class graphics_subsystem extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class gs_timer_range extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class gs_texture_render extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 abstract class gs_shader_param_type {
@@ -18399,9 +18399,9 @@ abstract class gs_shader_param_type {
 
 class gs_shader_param_info extends ffi.Struct {
   @ffi.Int32()
-  int type;
+  int? type;
 
-  ffi.Pointer<ffi.Int8> name;
+  ffi.Pointer<ffi.Int8>? name;
 }
 
 abstract class gs_shader_type {
@@ -18410,103 +18410,103 @@ abstract class gs_shader_type {
 }
 
 class gs_effect_param_info extends ffi.Struct {
-  ffi.Pointer<ffi.Int8> name;
+  ffi.Pointer<ffi.Int8>? name;
 
   @ffi.Int32()
-  int type;
+  int? type;
 }
 
 class objc_ivar extends ffi.Struct {
-  ffi.Pointer<ffi.Int8> ivar_name;
+  ffi.Pointer<ffi.Int8>? ivar_name;
 
-  ffi.Pointer<ffi.Int8> ivar_type;
-
-  @ffi.Int32()
-  int ivar_offset;
+  ffi.Pointer<ffi.Int8>? ivar_type;
 
   @ffi.Int32()
-  int space;
+  int? ivar_offset;
+
+  @ffi.Int32()
+  int? space;
 }
 
 class objc_ivar_list extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class SEL extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class objc_method extends ffi.Struct {
-  ffi.Pointer<SEL> method_name;
+  ffi.Pointer<SEL>? method_name;
 
-  ffi.Pointer<ffi.Int8> method_types;
+  ffi.Pointer<ffi.Int8>? method_types;
 
-  ffi.Pointer<ffi.NativeFunction<IMP>> method_imp;
+  ffi.Pointer<ffi.NativeFunction<IMP>>? method_imp;
 }
 
 class objc_method_list extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class objc_cache extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class objc_protocol_list extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class Class extends ffi.Struct {
-  ffi.Pointer<Class> isa;
+  ffi.Pointer<Class>? isa;
 
-  ffi.Pointer<Class> super_class;
+  ffi.Pointer<Class>? super_class;
 
-  ffi.Pointer<ffi.Int8> name;
-
-  @ffi.Int64()
-  int version;
+  ffi.Pointer<ffi.Int8>? name;
 
   @ffi.Int64()
-  int info;
+  int? version;
 
   @ffi.Int64()
-  int instance_size;
+  int? info;
 
-  ffi.Pointer<objc_ivar_list> ivars;
+  @ffi.Int64()
+  int? instance_size;
 
-  ffi.Pointer<ffi.Pointer<objc_method_list>> methodLists;
+  ffi.Pointer<objc_ivar_list>? ivars;
 
-  ffi.Pointer<objc_cache> cache;
+  ffi.Pointer<ffi.Pointer<objc_method_list>>? methodLists;
 
-  ffi.Pointer<objc_protocol_list> protocols;
+  ffi.Pointer<objc_cache>? cache;
+
+  ffi.Pointer<objc_protocol_list>? protocols;
 }
 
 class id extends ffi.Struct {
-  ffi.Pointer<Class> isa;
+  ffi.Pointer<Class>? isa;
 }
 
 class gs_window extends ffi.Struct {
-  ffi.Pointer<id> view;
+  ffi.Pointer<id>? view;
 }
 
 class gs_init_data extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class input_t extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class audio_output extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 abstract class audio_format {
@@ -18556,50 +18556,50 @@ abstract class speaker_layout {
 
 class audio_data extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class audio_output_data extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class audio_output_info extends ffi.Struct {
-  ffi.Pointer<ffi.Int8> name;
+  ffi.Pointer<ffi.Int8>? name;
 
   @ffi.Uint32()
-  int samples_per_sec;
+  int? samples_per_sec;
 
   @ffi.Int32()
-  int format;
+  int? format;
 
   @ffi.Int32()
-  int speakers;
+  int? speakers;
 
-  ffi.Pointer<ffi.NativeFunction<audio_input_callback_t>> input_callback;
+  ffi.Pointer<ffi.NativeFunction<audio_input_callback_t>>? input_callback;
 
-  ffi.Pointer<ffi.Void> input_param;
+  ffi.Pointer<ffi.Void>? input_param;
 }
 
 class audio_convert_info extends ffi.Struct {
   @ffi.Uint32()
-  int samples_per_sec;
+  int? samples_per_sec;
 
   @ffi.Int32()
-  int format;
+  int? format;
 
   @ffi.Int32()
-  int speakers;
+  int? speakers;
 }
 
 class video_frame extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class video_output extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 abstract class video_format {
@@ -18637,35 +18637,35 @@ abstract class video_range_type {
 
 class video_data extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class video_output_info extends ffi.Struct {
-  ffi.Pointer<ffi.Int8> name;
+  ffi.Pointer<ffi.Int8>? name;
 
   @ffi.Int32()
-  int format;
+  int? format;
 
   @ffi.Uint32()
-  int fps_num;
+  int? fps_num;
 
   @ffi.Uint32()
-  int fps_den;
+  int? fps_den;
 
   @ffi.Uint32()
-  int width;
+  int? width;
 
   @ffi.Uint32()
-  int height;
+  int? height;
 
   @ffi.Uint64()
-  int cache_size;
+  int? cache_size;
 
   @ffi.Int32()
-  int colorspace;
+  int? colorspace;
 
   @ffi.Int32()
-  int range;
+  int? range;
 }
 
 abstract class video_scale_type {
@@ -18678,57 +18678,57 @@ abstract class video_scale_type {
 
 class video_scale_info extends ffi.Struct {
   @ffi.Int32()
-  int format;
+  int? format;
 
   @ffi.Uint32()
-  int width;
+  int? width;
 
   @ffi.Uint32()
-  int height;
+  int? height;
 
   @ffi.Int32()
-  int range;
+  int? range;
 
   @ffi.Int32()
-  int colorspace;
+  int? colorspace;
 }
 
 class signal_handler extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class calldata_t extends ffi.Struct {
-  ffi.Pointer<ffi.Uint8> stack;
+  ffi.Pointer<ffi.Uint8>? stack;
 
   @ffi.Uint64()
-  int size;
+  int? size;
 
   @ffi.Uint64()
-  int capacity;
+  int? capacity;
 
   @ffi.Uint8()
-  int fixed;
+  int? fixed;
 }
 
 class proc_handler extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class obs_data extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class obs_data_item extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class obs_data_array extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 abstract class obs_data_type {
@@ -18748,22 +18748,22 @@ abstract class obs_data_number_type {
 
 class media_frames_per_second extends ffi.Struct {
   @ffi.Uint32()
-  int numerator;
+  int? numerator;
 
   @ffi.Uint32()
-  int denominator;
+  int? denominator;
 }
 
 /// Modal UI definition structure
 class obs_modal_ui extends ffi.Struct {
   /// < Identifier associated with this UI
-  ffi.Pointer<ffi.Int8> id;
+  ffi.Pointer<ffi.Int8>? id;
 
   /// < Task of the UI
-  ffi.Pointer<ffi.Int8> task;
+  ffi.Pointer<ffi.Int8>? task;
 
   /// < UI target (UI toolkit or program name)
-  ffi.Pointer<ffi.Int8> target;
+  ffi.Pointer<ffi.Int8>? target;
 
   /// Callback to execute modal interface.
   ///
@@ -18785,23 +18785,23 @@ class obs_modal_ui extends ffi.Struct {
   /// target, if any.
   /// @return          @b true if user completed the task, or
   /// @b false if user cancelled the task.
-  ffi.Pointer<ffi.NativeFunction<_typedefC_9>> exec;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_9>>? exec;
 
-  ffi.Pointer<ffi.Void> type_data;
+  ffi.Pointer<ffi.Void>? type_data;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_10>> free_type_data;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_10>>? free_type_data;
 }
 
 /// Modeless UI definition structure
 class obs_modeless_ui extends ffi.Struct {
   /// < Identifier associated with this UI
-  ffi.Pointer<ffi.Int8> id;
+  ffi.Pointer<ffi.Int8>? id;
 
   /// < Task of the UI
-  ffi.Pointer<ffi.Int8> task;
+  ffi.Pointer<ffi.Int8>? task;
 
   /// < UI target (UI toolkit or program name)
-  ffi.Pointer<ffi.Int8> target;
+  ffi.Pointer<ffi.Int8>? target;
 
   /// Callback to create modeless interface.
   ///
@@ -18818,11 +18818,11 @@ class obs_modeless_ui extends ffi.Struct {
   /// target, if any.
   /// @return          Pointer/handle to the modeless UI associated with
   /// the specific target.
-  ffi.Pointer<ffi.NativeFunction<_typedefC_11>> create;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_11>>? create;
 
-  ffi.Pointer<ffi.Void> type_data;
+  ffi.Pointer<ffi.Void>? type_data;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_12>> free_type_data;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_12>>? free_type_data;
 }
 
 abstract class obs_property_type {
@@ -18885,12 +18885,12 @@ abstract class obs_group_type {
 
 class obs_properties extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class obs_property extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 abstract class obs_interaction_flags {
@@ -18917,104 +18917,104 @@ abstract class obs_mouse_button_type {
 
 class obs_mouse_event extends ffi.Struct {
   @ffi.Uint32()
-  int modifiers;
+  int? modifiers;
 
   @ffi.Int32()
-  int x;
+  int? x;
 
   @ffi.Int32()
-  int y;
+  int? y;
 }
 
 class obs_key_event extends ffi.Struct {
   @ffi.Uint32()
-  int modifiers;
+  int? modifiers;
 
-  ffi.Pointer<ffi.Int8> text;
-
-  @ffi.Uint32()
-  int native_modifiers;
+  ffi.Pointer<ffi.Int8>? text;
 
   @ffi.Uint32()
-  int native_scancode;
+  int? native_modifiers;
 
   @ffi.Uint32()
-  int native_vkey;
+  int? native_scancode;
+
+  @ffi.Uint32()
+  int? native_vkey;
 }
 
 class obs_display extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class obs_view extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class obs_source extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class obs_scene extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class obs_scene_item extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class obs_output extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class obs_encoder extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class obs_service extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class obs_module extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class obs_fader extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class obs_volmeter extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class obs_weak_source extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class obs_weak_output extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class obs_weak_encoder extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class obs_weak_service extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 abstract class obs_source_type {
@@ -19060,7 +19060,7 @@ abstract class obs_media_state {
 
 class obs_source_audio_mix extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 /// Source asynchronous video output structure.  Used with
@@ -19076,20 +19076,20 @@ class obs_source_audio_mix extends ffi.Struct {
 /// instead if partial range support is desired for non-YUV video formats.
 class obs_source_frame extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 /// Sent to source filters via the filter_audio callback to allow filtering of
 /// audio data
 class obs_audio_data extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 /// Source definition structure
 class obs_source_info extends ffi.Struct {
   /// Unique string identifier for the source
-  ffi.Pointer<ffi.Int8> id;
+  ffi.Pointer<ffi.Int8>? id;
 
   /// Type of source.
   ///
@@ -19097,75 +19097,75 @@ class obs_source_info extends ffi.Struct {
   /// OBS_SOURCE_TYPE_FILTER for filter sources, and
   /// OBS_SOURCE_TYPE_TRANSITION for transition sources.
   @ffi.Int32()
-  int type;
+  int? type;
 
   /// Source output flags
   @ffi.Uint32()
-  int output_flags;
+  int? output_flags;
 
   /// Get the translated name of the source type
   ///
   /// @param  type_data  The type_data variable of this structure
   /// @return               The translated name of the source type
-  ffi.Pointer<ffi.NativeFunction<_typedefC_15>> get_name;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_15>>? get_name;
 
   /// Creates the source data for the source
   ///
   /// @param  settings  Settings to initialize the source with
   /// @param  source    Source that this data is associated with
   /// @return           The data associated with this source
-  ffi.Pointer<ffi.NativeFunction<_typedefC_16>> create;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_16>>? create;
 
   /// Destroys the private data for the source
   ///
   /// Async sources must not call obs_source_output_video after returning
   /// from destroy
-  ffi.Pointer<ffi.NativeFunction<_typedefC_17>> destroy;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_17>>? destroy;
 
   /// Returns the width of the source.  Required if this is an input
   /// source and has non-async video
-  ffi.Pointer<ffi.NativeFunction<_typedefC_18>> get_width;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_18>>? get_width;
 
   /// Returns the height of the source.  Required if this is an input
   /// source and has non-async video
-  ffi.Pointer<ffi.NativeFunction<_typedefC_19>> get_height;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_19>>? get_height;
 
   /// Gets the default settings for this source
   ///
   /// @param[out]  settings  Data to assign default settings to
   /// @deprecated            Use get_defaults2 if type_data is needed
-  ffi.Pointer<ffi.NativeFunction<_typedefC_20>> get_defaults;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_20>>? get_defaults;
 
   /// Gets the property information of this source
   ///
   /// @return         The properties data
   /// @deprecated     Use get_properties2 if type_data is needed
-  ffi.Pointer<ffi.NativeFunction<_typedefC_21>> get_properties;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_21>>? get_properties;
 
   /// Updates the settings for this source
   ///
   /// @param data      Source data
   /// @param settings  New settings for this source
-  ffi.Pointer<ffi.NativeFunction<_typedefC_22>> update;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_22>>? update;
 
   /// Called when the source has been activated in the main view
-  ffi.Pointer<ffi.NativeFunction<_typedefC_23>> activate;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_23>>? activate;
 
   /// Called when the source has been deactivated from the main view
   /// (no longer being played/displayed)
-  ffi.Pointer<ffi.NativeFunction<_typedefC_24>> deactivate;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_24>>? deactivate;
 
   /// Called when the source is visible
-  ffi.Pointer<ffi.NativeFunction<_typedefC_25>> show_1;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_25>>? show_1;
 
   /// Called when the source is no longer visible
-  ffi.Pointer<ffi.NativeFunction<_typedefC_26>> hide_1;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_26>>? hide_1;
 
   /// Called each video frame with the time elapsed
   ///
   /// @param  data     Source data
   /// @param  seconds  Seconds elapsed since the last frame
-  ffi.Pointer<ffi.NativeFunction<_typedefC_27>> video_tick;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_27>>? video_tick;
 
   /// Called when rendering the source with the graphics subsystem.
   ///
@@ -19192,7 +19192,7 @@ class obs_source_info extends ffi.Struct {
   /// output flags include SOURCE_CUSTOM_DRAW, this will
   /// be NULL, and the source is expected to process with
   /// an effect manually.
-  ffi.Pointer<ffi.NativeFunction<_typedefC_28>> video_render;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_28>>? video_render;
 
   /// Called to filter raw async video data.
   ///
@@ -19202,7 +19202,7 @@ class obs_source_info extends ffi.Struct {
   /// @param  frame  Video frame to filter
   /// @return        New video frame data.  This can defer video data to
   /// be drawn later if time is needed for processing
-  ffi.Pointer<ffi.NativeFunction<_typedefC_29>> filter_video;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_29>>? filter_video;
 
   /// Called to filter raw audio data.
   ///
@@ -19216,7 +19216,7 @@ class obs_source_info extends ffi.Struct {
   /// you are returning new data, that data must exist
   /// until the next call to the filter_audio callback or
   /// until the filter is removed/destroyed.
-  ffi.Pointer<ffi.NativeFunction<_typedefC_30>> filter_audio;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_30>>? filter_audio;
 
   /// Called to enumerate all active sources being used within this
   /// source.  If the source has children that render audio/video it must
@@ -19225,7 +19225,7 @@ class obs_source_info extends ffi.Struct {
   /// @param  data           Filter data
   /// @param  enum_callback  Enumeration callback
   /// @param  param          User data to pass to callback
-  ffi.Pointer<ffi.NativeFunction<_typedefC_31>> enum_active_sources;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_31>>? enum_active_sources;
 
   /// Called when saving a source.  This is a separate function because
   /// sometimes a source needs to know when it is being saved so it
@@ -19234,7 +19234,7 @@ class obs_source_info extends ffi.Struct {
   ///
   /// @param  data      Source data
   /// @param  settings  Settings
-  ffi.Pointer<ffi.NativeFunction<_typedefC_32>> save;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_32>>? save;
 
   /// Called when loading a source from saved data.  This should be called
   /// after all the loading sources have actually been created because
@@ -19242,7 +19242,7 @@ class obs_source_info extends ffi.Struct {
   ///
   /// @param  data      Source data
   /// @param  settings  Settings
-  ffi.Pointer<ffi.NativeFunction<_typedefC_33>> load;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_33>>? load;
 
   /// Called when interacting with a source and a mouse-down or mouse-up
   /// occurs.
@@ -19252,14 +19252,14 @@ class obs_source_info extends ffi.Struct {
   /// @param type         Mouse button pushed
   /// @param mouse_up     Mouse event type (true if mouse-up)
   /// @param click_count  Mouse click count (1 for single click, etc.)
-  ffi.Pointer<ffi.NativeFunction<_typedefC_34>> mouse_click;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_34>>? mouse_click;
 
   /// Called when interacting with a source and a mouse-move occurs.
   ///
   /// @param data         Source data
   /// @param event        Mouse event properties
   /// @param mouse_leave  Mouse leave state (true if mouse left source)
-  ffi.Pointer<ffi.NativeFunction<_typedefC_35>> mouse_move;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_35>>? mouse_move;
 
   /// Called when interacting with a source and a mouse-wheel occurs.
   ///
@@ -19267,14 +19267,14 @@ class obs_source_info extends ffi.Struct {
   /// @param event        Mouse event properties
   /// @param x_delta      Movement delta in the horizontal direction
   /// @param y_delta      Movement delta in the vertical direction
-  ffi.Pointer<ffi.NativeFunction<_typedefC_36>> mouse_wheel;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_36>>? mouse_wheel;
 
   /// Called when interacting with a source and gain focus/lost focus event
   /// occurs.
   ///
   /// @param data         Source data
   /// @param focus        Focus state (true if focus gained)
-  ffi.Pointer<ffi.NativeFunction<_typedefC_37>> focus;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_37>>? focus;
 
   /// Called when interacting with a source and a key-up or key-down
   /// occurs.
@@ -19282,21 +19282,21 @@ class obs_source_info extends ffi.Struct {
   /// @param data         Source data
   /// @param event        Key event properties
   /// @param focus        Key event type (true if mouse-up)
-  ffi.Pointer<ffi.NativeFunction<_typedefC_38>> key_click;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_38>>? key_click;
 
   /// Called when the filter is removed from a source
   ///
   /// @param  data    Filter data
   /// @param  source  Source that the filter being removed from
-  ffi.Pointer<ffi.NativeFunction<_typedefC_39>> filter_remove;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_39>>? filter_remove;
 
   /// Private data associated with this entry
-  ffi.Pointer<ffi.Void> type_data;
+  ffi.Pointer<ffi.Void>? type_data;
 
   /// If defined, called to free private data on shutdown
-  ffi.Pointer<ffi.NativeFunction<_typedefC_40>> free_type_data;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_40>>? free_type_data;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_41>> audio_render;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_41>>? audio_render;
 
   /// Called to enumerate all active and inactive sources being used
   /// within this source.  If this callback isn't implemented,
@@ -19307,11 +19307,11 @@ class obs_source_info extends ffi.Struct {
   /// @param  data           Filter data
   /// @param  enum_callback  Enumeration callback
   /// @param  param          User data to pass to callback
-  ffi.Pointer<ffi.NativeFunction<_typedefC_42>> enum_all_sources;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_42>>? enum_all_sources;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_43>> transition_start;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_43>>? transition_start;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_44>> transition_stop;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_44>>? transition_stop;
 
   /// Gets the default settings for this source
   ///
@@ -19320,44 +19320,44 @@ class obs_source_info extends ffi.Struct {
   ///
   /// @param       type_data The type_data variable of this structure
   /// @param[out]  settings  Data to assign default settings to
-  ffi.Pointer<ffi.NativeFunction<_typedefC_45>> get_defaults2;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_45>>? get_defaults2;
 
   /// Gets the property information of this source
   ///
   /// @param data      Source data
   /// @param type_data The type_data variable of this structure
   /// @return          The properties data
-  ffi.Pointer<ffi.NativeFunction<_typedefC_46>> get_properties2;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_46>>? get_properties2;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_47>> audio_mix;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_47>>? audio_mix;
 
   /// Icon type for the source
   @ffi.Int32()
-  int icon_type;
+  int? icon_type;
 
   /// Media controls
-  ffi.Pointer<ffi.NativeFunction<_typedefC_48>> media_play_pause;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_48>>? media_play_pause;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_49>> media_restart;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_49>>? media_restart;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_50>> media_stop;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_50>>? media_stop;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_51>> media_next;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_51>>? media_next;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_52>> media_previous;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_52>>? media_previous;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_53>> media_get_duration;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_53>>? media_get_duration;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_54>> media_get_time;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_54>>? media_get_time;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_55>> media_set_time;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_55>>? media_set_time;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_56>> media_get_state;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_56>>? media_get_state;
 
   @ffi.Uint32()
-  int version;
+  int? version;
 
-  ffi.Pointer<ffi.Int8> unversioned_id;
+  ffi.Pointer<ffi.Int8>? unversioned_id;
 }
 
 /// Specifies the encoder type
@@ -19372,68 +19372,68 @@ abstract class obs_encoder_type {
 /// Encoder output packet
 class encoder_packet extends ffi.Struct {
   /// < Packet data
-  ffi.Pointer<ffi.Uint8> data;
+  ffi.Pointer<ffi.Uint8>? data;
 
   /// < Packet size
   @ffi.Uint64()
-  int size;
+  int? size;
 
   /// < Presentation timestamp
   @ffi.Int64()
-  int pts;
+  int? pts;
 
   /// < Decode timestamp
   @ffi.Int64()
-  int dts;
+  int? dts;
 
   /// < Timebase numerator
   @ffi.Int32()
-  int timebase_num;
+  int? timebase_num;
 
   /// < Timebase denominator
   @ffi.Int32()
-  int timebase_den;
+  int? timebase_den;
 
   /// < Encoder type
   @ffi.Int32()
-  int type;
+  int? type;
 
   /// < Is a keyframe
   @ffi.Uint8()
-  int keyframe;
+  int? keyframe;
 
   @ffi.Int64()
-  int dts_usec;
+  int? dts_usec;
 
   @ffi.Int64()
-  int sys_dts_usec;
+  int? sys_dts_usec;
 
   /// Packet priority
   ///
   /// This is generally use by video encoders to specify the priority
   /// of the packet.
   @ffi.Int32()
-  int priority;
+  int? priority;
 
   /// Dropped packet priority
   ///
   /// If this packet needs to be dropped, the next packet must be of this
   /// priority or higher to continue transmission.
   @ffi.Int32()
-  int drop_priority;
+  int? drop_priority;
 
   /// Audio track index (used with outputs)
   @ffi.Uint64()
-  int track_idx;
+  int? track_idx;
 
   /// Encoder from which the track originated from
-  ffi.Pointer<obs_encoder> encoder;
+  ffi.Pointer<obs_encoder>? encoder;
 }
 
 /// Encoder input frame
 class encoder_frame extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 /// Encoder interface
@@ -19446,20 +19446,20 @@ class encoder_frame extends ffi.Struct {
 /// That being said, other encoders will be kept in mind for future use.
 class obs_encoder_info extends ffi.Struct {
   /// Specifies the named identifier of this encoder
-  ffi.Pointer<ffi.Int8> id;
+  ffi.Pointer<ffi.Int8>? id;
 
   /// Specifies the encoder type (video or audio)
   @ffi.Int32()
-  int type;
+  int? type;
 
   /// Specifies the codec
-  ffi.Pointer<ffi.Int8> codec;
+  ffi.Pointer<ffi.Int8>? codec;
 
   /// Gets the full translated name of this encoder
   ///
   /// @param  type_data  The type_data variable of this structure
   /// @return            Translated name of the encoder
-  ffi.Pointer<ffi.NativeFunction<_typedefC_57>> get_name;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_57>>? get_name;
 
   /// Creates the encoder with the specified settings
   ///
@@ -19467,12 +19467,12 @@ class obs_encoder_info extends ffi.Struct {
   /// @param  encoder   OBS encoder context
   /// @return           Data associated with this encoder context, or
   /// NULL if initialization failed.
-  ffi.Pointer<ffi.NativeFunction<_typedefC_58>> create;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_58>>? create;
 
   /// Destroys the encoder data
   ///
   /// @param  data  Data associated with this encoder context
-  ffi.Pointer<ffi.NativeFunction<_typedefC_59>> destroy;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_59>>? destroy;
 
   /// Encodes frame(s), and outputs encoded packets as they become
   /// available.
@@ -19484,20 +19484,20 @@ class obs_encoder_info extends ffi.Struct {
   /// @param[out]  received_packet  Set to true if a packet was received,
   /// false otherwise
   /// @return                       true if successful, false otherwise.
-  ffi.Pointer<ffi.NativeFunction<_typedefC_60>> encode;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_60>>? encode;
 
   /// Audio encoder only:  Returns the frame size for this encoder
-  ffi.Pointer<ffi.NativeFunction<_typedefC_61>> get_frame_size;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_61>>? get_frame_size;
 
   /// Gets the default settings for this encoder
   ///
   /// @param[out]  settings  Data to assign default settings to
-  ffi.Pointer<ffi.NativeFunction<_typedefC_62>> get_defaults;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_62>>? get_defaults;
 
   /// Gets the property information of this encoder
   ///
   /// @return         The properties data
-  ffi.Pointer<ffi.NativeFunction<_typedefC_63>> get_properties;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_63>>? get_properties;
 
   /// Updates the settings for this encoder (usually used for things like
   /// changing bitrate while active)
@@ -19505,7 +19505,7 @@ class obs_encoder_info extends ffi.Struct {
   /// @param  data      Data associated with this encoder context
   /// @param  settings  New settings for this encoder
   /// @return           true if successful, false otherwise
-  ffi.Pointer<ffi.NativeFunction<_typedefC_64>> update;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_64>>? update;
 
   /// Returns extra data associated with this encoder (usually header)
   ///
@@ -19515,7 +19515,7 @@ class obs_encoder_info extends ffi.Struct {
   /// data
   /// @return                  true if extra data available, false
   /// otherwise
-  ffi.Pointer<ffi.NativeFunction<_typedefC_65>> get_extra_data;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_65>>? get_extra_data;
 
   /// Gets the SEI data, if any
   ///
@@ -19523,26 +19523,26 @@ class obs_encoder_info extends ffi.Struct {
   /// @param[out]  sei_data  Pointer to receive the SEI data
   /// @param[out]  size      Pointer to receive the SEI data size
   /// @return                true if SEI data available, false otherwise
-  ffi.Pointer<ffi.NativeFunction<_typedefC_66>> get_sei_data;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_66>>? get_sei_data;
 
   /// Returns desired audio format and sample information
   ///
   /// @param          data  Data associated with this encoder context
   /// @param[in/out]  info  Audio format information
-  ffi.Pointer<ffi.NativeFunction<_typedefC_67>> get_audio_info;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_67>>? get_audio_info;
 
   /// Returns desired video format information
   ///
   /// @param          data  Data associated with this encoder context
   /// @param[in/out]  info  Video format information
-  ffi.Pointer<ffi.NativeFunction<_typedefC_68>> get_video_info;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_68>>? get_video_info;
 
-  ffi.Pointer<ffi.Void> type_data;
+  ffi.Pointer<ffi.Void>? type_data;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_69>> free_type_data;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_69>>? free_type_data;
 
   @ffi.Uint32()
-  int caps;
+  int? caps;
 
   /// Gets the default settings for this encoder
   ///
@@ -19551,85 +19551,85 @@ class obs_encoder_info extends ffi.Struct {
   ///
   /// @param[out]  settings  Data to assign default settings to
   /// @param[in]   typedata  Type Data
-  ffi.Pointer<ffi.NativeFunction<_typedefC_70>> get_defaults2;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_70>>? get_defaults2;
 
   /// Gets the property information of this encoder
   ///
   /// @param[in]   data      Pointer from create (or null)
   /// @param[in]   typedata  Type Data
   /// @return                The properties data
-  ffi.Pointer<ffi.NativeFunction<_typedefC_71>> get_properties2;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_71>>? get_properties2;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_72>> encode_texture;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_72>>? encode_texture;
 }
 
 class obs_output_info extends ffi.Struct {
-  ffi.Pointer<ffi.Int8> id;
+  ffi.Pointer<ffi.Int8>? id;
 
   @ffi.Uint32()
-  int flags;
+  int? flags;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_73>> get_name;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_73>>? get_name;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_74>> create;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_74>>? create;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_75>> destroy;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_75>>? destroy;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_76>> start;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_76>>? start;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_77>> stop;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_77>>? stop;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_78>> raw_video;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_78>>? raw_video;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_79>> raw_audio;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_79>>? raw_audio;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_80>> encoded_packet;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_80>>? encoded_packet;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_81>> update;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_81>>? update;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_82>> get_defaults;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_82>>? get_defaults;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_83>> get_properties;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_83>>? get_properties;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_84>> unused1;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_84>>? unused1;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_85>> get_total_bytes;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_85>>? get_total_bytes;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_86>> get_dropped_frames;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_86>>? get_dropped_frames;
 
-  ffi.Pointer<ffi.Void> type_data;
+  ffi.Pointer<ffi.Void>? type_data;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_87>> free_type_data;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_87>>? free_type_data;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_88>> get_congestion;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_88>>? get_congestion;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_89>> get_connect_time_ms;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_89>>? get_connect_time_ms;
 
-  ffi.Pointer<ffi.Int8> encoded_video_codecs;
+  ffi.Pointer<ffi.Int8>? encoded_video_codecs;
 
-  ffi.Pointer<ffi.Int8> encoded_audio_codecs;
+  ffi.Pointer<ffi.Int8>? encoded_audio_codecs;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_90>> raw_audio2;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_90>>? raw_audio2;
 }
 
 class obs_service_info extends ffi.Struct {
-  ffi.Pointer<ffi.Int8> id;
+  ffi.Pointer<ffi.Int8>? id;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_91>> get_name;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_91>>? get_name;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_92>> create;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_92>>? create;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_93>> destroy;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_93>>? destroy;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_94>> activate;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_94>>? activate;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_95>> deactivate;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_95>>? deactivate;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_96>> update;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_96>>? update;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_97>> get_defaults;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_97>>? get_defaults;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_98>> get_properties;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_98>>? get_properties;
 
   /// Called when getting ready to start up an output, before the encoders
   /// and output are initialized
@@ -19638,25 +19638,25 @@ class obs_service_info extends ffi.Struct {
   /// @param  output  Output context
   /// @return         true to allow the output to start up,
   /// false to prevent output from starting up
-  ffi.Pointer<ffi.NativeFunction<_typedefC_99>> initialize;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_99>>? initialize;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_100>> get_url;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_100>>? get_url;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_101>> get_key;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_101>>? get_key;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_102>> get_username;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_102>>? get_username;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_103>> get_password;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_103>>? get_password;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_104>> deprecated_1;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_104>>? deprecated_1;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_105>> apply_encoder_settings;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_105>>? apply_encoder_settings;
 
-  ffi.Pointer<ffi.Void> type_data;
+  ffi.Pointer<ffi.Void>? type_data;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_106>> free_type_data;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_106>>? free_type_data;
 
-  ffi.Pointer<ffi.NativeFunction<_typedefC_107>> get_output_type;
+  ffi.Pointer<ffi.NativeFunction<_typedefC_107>>? get_output_type;
 }
 
 /// @brief Fader types
@@ -20348,20 +20348,20 @@ abstract class obs_key {
 
 class obs_key_combination extends ffi.Struct {
   @ffi.Uint32()
-  int modifiers;
+  int? modifiers;
 
   @ffi.Int32()
-  int key;
+  int? key;
 }
 
 class obs_hotkey extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class obs_hotkey_binding extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 abstract class obs_hotkey_registerer_type {
@@ -20373,86 +20373,86 @@ abstract class obs_hotkey_registerer_type {
 }
 
 class obs_hotkeys_translations extends ffi.Struct {
-  ffi.Pointer<ffi.Int8> insert;
+  ffi.Pointer<ffi.Int8>? insert;
 
-  ffi.Pointer<ffi.Int8> del;
+  ffi.Pointer<ffi.Int8>? del;
 
-  ffi.Pointer<ffi.Int8> home;
+  ffi.Pointer<ffi.Int8>? home;
 
-  ffi.Pointer<ffi.Int8> end;
+  ffi.Pointer<ffi.Int8>? end;
 
-  ffi.Pointer<ffi.Int8> page_up;
+  ffi.Pointer<ffi.Int8>? page_up;
 
-  ffi.Pointer<ffi.Int8> page_down;
+  ffi.Pointer<ffi.Int8>? page_down;
 
-  ffi.Pointer<ffi.Int8> num_lock;
+  ffi.Pointer<ffi.Int8>? num_lock;
 
-  ffi.Pointer<ffi.Int8> scroll_lock;
+  ffi.Pointer<ffi.Int8>? scroll_lock;
 
-  ffi.Pointer<ffi.Int8> caps_lock;
+  ffi.Pointer<ffi.Int8>? caps_lock;
 
-  ffi.Pointer<ffi.Int8> backspace;
+  ffi.Pointer<ffi.Int8>? backspace;
 
-  ffi.Pointer<ffi.Int8> tab;
+  ffi.Pointer<ffi.Int8>? tab;
 
-  ffi.Pointer<ffi.Int8> print;
+  ffi.Pointer<ffi.Int8>? print;
 
-  ffi.Pointer<ffi.Int8> pause;
+  ffi.Pointer<ffi.Int8>? pause;
 
-  ffi.Pointer<ffi.Int8> left;
+  ffi.Pointer<ffi.Int8>? left;
 
-  ffi.Pointer<ffi.Int8> right;
+  ffi.Pointer<ffi.Int8>? right;
 
-  ffi.Pointer<ffi.Int8> up;
+  ffi.Pointer<ffi.Int8>? up;
 
-  ffi.Pointer<ffi.Int8> down;
+  ffi.Pointer<ffi.Int8>? down;
 
-  ffi.Pointer<ffi.Int8> shift;
+  ffi.Pointer<ffi.Int8>? shift;
 
-  ffi.Pointer<ffi.Int8> alt;
+  ffi.Pointer<ffi.Int8>? alt;
 
-  ffi.Pointer<ffi.Int8> control;
+  ffi.Pointer<ffi.Int8>? control;
 
-  ffi.Pointer<ffi.Int8> meta;
+  ffi.Pointer<ffi.Int8>? meta;
 
-  ffi.Pointer<ffi.Int8> menu;
+  ffi.Pointer<ffi.Int8>? menu;
 
-  ffi.Pointer<ffi.Int8> space;
+  ffi.Pointer<ffi.Int8>? space;
 
-  ffi.Pointer<ffi.Int8> numpad_num;
+  ffi.Pointer<ffi.Int8>? numpad_num;
 
-  ffi.Pointer<ffi.Int8> numpad_divide;
+  ffi.Pointer<ffi.Int8>? numpad_divide;
 
-  ffi.Pointer<ffi.Int8> numpad_multiply;
+  ffi.Pointer<ffi.Int8>? numpad_multiply;
 
-  ffi.Pointer<ffi.Int8> numpad_minus;
+  ffi.Pointer<ffi.Int8>? numpad_minus;
 
-  ffi.Pointer<ffi.Int8> numpad_plus;
+  ffi.Pointer<ffi.Int8>? numpad_plus;
 
-  ffi.Pointer<ffi.Int8> numpad_decimal;
+  ffi.Pointer<ffi.Int8>? numpad_decimal;
 
-  ffi.Pointer<ffi.Int8> apple_keypad_num;
+  ffi.Pointer<ffi.Int8>? apple_keypad_num;
 
-  ffi.Pointer<ffi.Int8> apple_keypad_divide;
+  ffi.Pointer<ffi.Int8>? apple_keypad_divide;
 
-  ffi.Pointer<ffi.Int8> apple_keypad_multiply;
+  ffi.Pointer<ffi.Int8>? apple_keypad_multiply;
 
-  ffi.Pointer<ffi.Int8> apple_keypad_minus;
+  ffi.Pointer<ffi.Int8>? apple_keypad_minus;
 
-  ffi.Pointer<ffi.Int8> apple_keypad_plus;
+  ffi.Pointer<ffi.Int8>? apple_keypad_plus;
 
-  ffi.Pointer<ffi.Int8> apple_keypad_decimal;
+  ffi.Pointer<ffi.Int8>? apple_keypad_decimal;
 
-  ffi.Pointer<ffi.Int8> apple_keypad_equal;
+  ffi.Pointer<ffi.Int8>? apple_keypad_equal;
 
-  ffi.Pointer<ffi.Int8> mouse_num;
+  ffi.Pointer<ffi.Int8>? mouse_num;
 
-  ffi.Pointer<ffi.Int8> escape;
+  ffi.Pointer<ffi.Int8>? escape;
 }
 
 class dstr extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 /// Used for changing the order of items (for example, filters in a source,
@@ -20509,96 +20509,96 @@ abstract class obs_bounds_type {
 
 class obs_transform_info extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 /// Video initialization structure
 class obs_video_info extends ffi.Struct {
   /// Graphics module to use (usually "libobs-opengl" or "libobs-d3d11")
-  ffi.Pointer<ffi.Int8> graphics_module;
+  late ffi.Pointer<ffi.Int8> graphics_module;
 
   /// < Output FPS numerator
   @ffi.Uint32()
-  int fps_num;
+  int? fps_num;
 
   /// < Output FPS denominator
   @ffi.Uint32()
-  int fps_den;
+  int? fps_den;
 
   /// < Base compositing width
   @ffi.Uint32()
-  int base_width;
+  int? base_width;
 
   /// < Base compositing height
   @ffi.Uint32()
-  int base_height;
+  int? base_height;
 
   /// < Output width
   @ffi.Uint32()
-  int output_width;
+  int? output_width;
 
   /// < Output height
   @ffi.Uint32()
-  int output_height;
+  int? output_height;
 
   /// < Output format
   @ffi.Int32()
-  int output_format;
+  int? output_format;
 
   /// Video adapter index to use (NOTE: avoid for optimus laptops)
   @ffi.Uint32()
-  int adapter;
+  int? adapter;
 
   /// Use shaders to convert to different color formats
   @ffi.Uint8()
-  int gpu_conversion;
+  int? gpu_conversion;
 
   /// < YUV type (if YUV)
   @ffi.Int32()
-  int colorspace;
+  int? colorspace;
 
   /// < YUV range (if YUV)
   @ffi.Int32()
-  int range;
+  int? range;
 
   /// < How to scale if scaling
   @ffi.Int32()
-  int scale_type;
+  int? scale_type;
 }
 
 /// Audio initialization structure
 class obs_audio_info extends ffi.Struct {
   @ffi.Uint32()
-  int samples_per_sec;
+  int? samples_per_sec;
 
   @ffi.Int32()
-  int speakers;
+  int? speakers;
 }
 
 /// Source audio output structure.  Used with obs_source_output_audio to output
 /// source audio.  Audio is automatically resampled and remixed as necessary.
 class obs_source_audio extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 class obs_source_frame2 extends ffi.Struct {
   @ffi.Int64()
-  int incomplete_struct;
+  int? incomplete_struct;
 }
 
 /// Access to the argc/argv used to start OBS. What you see is what you get.
 class obs_cmdline_args extends ffi.Struct {
   @ffi.Int32()
-  int argc;
+  int? argc;
 
-  ffi.Pointer<ffi.Pointer<ffi.Int8>> argv;
+  ffi.Pointer<ffi.Pointer<ffi.Int8>>? argv;
 }
 
 class obs_module_info extends ffi.Struct {
-  ffi.Pointer<ffi.Int8> bin_path;
+  ffi.Pointer<ffi.Int8>? bin_path;
 
-  ffi.Pointer<ffi.Int8> data_path;
+  ffi.Pointer<ffi.Int8>? data_path;
 }
 
 abstract class obs_base_effect {
@@ -20700,23 +20700,23 @@ abstract class obs_scene_duplicate_type {
 }
 
 class obs_sceneitem_order_info extends ffi.Struct {
-  ffi.Pointer<obs_scene_item> group;
+  ffi.Pointer<obs_scene_item>? group;
 
-  ffi.Pointer<obs_scene_item> item;
+  ffi.Pointer<obs_scene_item>? item;
 }
 
 class obs_sceneitem_crop extends ffi.Struct {
   @ffi.Int32()
-  int left;
+  int? left;
 
   @ffi.Int32()
-  int top;
+  int? top;
 
   @ffi.Int32()
-  int right;
+  int? right;
 
   @ffi.Int32()
-  int bottom;
+  int? bottom;
 }
 
 const int GS_MAX_TEXTURES = 8;
@@ -24713,7 +24713,7 @@ typedef _c_obs_data_release = ffi.Void Function(
 );
 
 typedef _dart_obs_data_release = void Function(
-  ffi.Pointer<obs_data> data,
+  ffi.Pointer<obs_data>? data,
 );
 
 typedef _c_obs_data_get_json = ffi.Pointer<ffi.Int8> Function(
@@ -24783,7 +24783,7 @@ typedef _c_obs_data_set_string = ffi.Void Function(
 );
 
 typedef _dart_obs_data_set_string = void Function(
-  ffi.Pointer<obs_data> data,
+  ffi.Pointer<obs_data>? data,
   ffi.Pointer<ffi.Int8> name,
   ffi.Pointer<ffi.Int8> val,
 );
@@ -24819,7 +24819,7 @@ typedef _c_obs_data_set_bool = ffi.Void Function(
 );
 
 typedef _dart_obs_data_set_bool = void Function(
-  ffi.Pointer<obs_data> data,
+  ffi.Pointer<obs_data>? data,
   ffi.Pointer<ffi.Int8> name,
   int val,
 );
@@ -27333,7 +27333,7 @@ typedef _c_obs_volmeter_destroy = ffi.Void Function(
 );
 
 typedef _dart_obs_volmeter_destroy = void Function(
-  ffi.Pointer<obs_volmeter> volmeter,
+  ffi.Pointer<obs_volmeter>? volmeter,
 );
 
 typedef _c_obs_volmeter_attach_source = ffi.Uint8 Function(
@@ -27342,8 +27342,8 @@ typedef _c_obs_volmeter_attach_source = ffi.Uint8 Function(
 );
 
 typedef _dart_obs_volmeter_attach_source = int Function(
-  ffi.Pointer<obs_volmeter> volmeter,
-  ffi.Pointer<obs_source> source,
+  ffi.Pointer<obs_volmeter>? volmeter,
+  ffi.Pointer<obs_source>? source,
 );
 
 typedef _c_obs_volmeter_detach_source = ffi.Void Function(
@@ -27360,7 +27360,7 @@ typedef _c_obs_volmeter_set_peak_meter_type = ffi.Void Function(
 );
 
 typedef _dart_obs_volmeter_set_peak_meter_type = void Function(
-  ffi.Pointer<obs_volmeter> volmeter,
+  ffi.Pointer<obs_volmeter>? volmeter,
   int peak_meter_type,
 );
 
@@ -27387,7 +27387,7 @@ typedef _c_obs_volmeter_get_nr_channels = ffi.Int32 Function(
 );
 
 typedef _dart_obs_volmeter_get_nr_channels = int Function(
-  ffi.Pointer<obs_volmeter> volmeter,
+  ffi.Pointer<obs_volmeter>? volmeter,
 );
 
 typedef obs_volmeter_updated_t = ffi.Void Function(
@@ -28391,8 +28391,8 @@ typedef _c_obs_enum_input_types2 = ffi.Uint8 Function(
 
 typedef _dart_obs_enum_input_types2 = int Function(
   int idx,
-  ffi.Pointer<ffi.Pointer<ffi.Int8>> id,
-  ffi.Pointer<ffi.Pointer<ffi.Int8>> unversioned_id,
+  ffi.Pointer<ffi.Pointer<ffi.Int8>>? id,
+  ffi.Pointer<ffi.Pointer<ffi.Int8>>? unversioned_id,
 );
 
 typedef _c_obs_get_latest_input_type_id = ffi.Pointer<ffi.Int8> Function(
@@ -29122,7 +29122,7 @@ typedef _c_obs_source_create = ffi.Pointer<obs_source> Function(
 typedef _dart_obs_source_create = ffi.Pointer<obs_source> Function(
   ffi.Pointer<ffi.Int8> id,
   ffi.Pointer<ffi.Int8> name,
-  ffi.Pointer<obs_data> settings,
+  ffi.Pointer<obs_data>? settings,
   ffi.Pointer<obs_data> hotkey_data,
 );
 
@@ -29163,7 +29163,7 @@ typedef _c_obs_source_release = ffi.Void Function(
 );
 
 typedef _dart_obs_source_release = void Function(
-  ffi.Pointer<obs_source> source,
+  ffi.Pointer<obs_source>? source,
 );
 
 typedef _c_obs_weak_source_addref = ffi.Void Function(
@@ -30271,7 +30271,7 @@ typedef _c_obs_source_media_play_pause = ffi.Void Function(
 );
 
 typedef _dart_obs_source_media_play_pause = void Function(
-  ffi.Pointer<obs_source> source,
+  ffi.Pointer<obs_source>? source,
   int pause,
 );
 
@@ -30280,7 +30280,7 @@ typedef _c_obs_source_media_restart = ffi.Void Function(
 );
 
 typedef _dart_obs_source_media_restart = void Function(
-  ffi.Pointer<obs_source> source,
+  ffi.Pointer<obs_source>? source,
 );
 
 typedef _c_obs_source_media_stop = ffi.Void Function(
@@ -30288,7 +30288,7 @@ typedef _c_obs_source_media_stop = ffi.Void Function(
 );
 
 typedef _dart_obs_source_media_stop = void Function(
-  ffi.Pointer<obs_source> source,
+  ffi.Pointer<obs_source>? source,
 );
 
 typedef _c_obs_source_media_next = ffi.Void Function(
@@ -30312,7 +30312,7 @@ typedef _c_obs_source_media_get_duration = ffi.Int64 Function(
 );
 
 typedef _dart_obs_source_media_get_duration = int Function(
-  ffi.Pointer<obs_source> source,
+  ffi.Pointer<obs_source>? source,
 );
 
 typedef _c_obs_source_media_get_time = ffi.Int64 Function(
@@ -30320,7 +30320,7 @@ typedef _c_obs_source_media_get_time = ffi.Int64 Function(
 );
 
 typedef _dart_obs_source_media_get_time = int Function(
-  ffi.Pointer<obs_source> source,
+  ffi.Pointer<obs_source>? source,
 );
 
 typedef _c_obs_source_media_set_time = ffi.Void Function(
@@ -30329,7 +30329,7 @@ typedef _c_obs_source_media_set_time = ffi.Void Function(
 );
 
 typedef _dart_obs_source_media_set_time = void Function(
-  ffi.Pointer<obs_source> source,
+  ffi.Pointer<obs_source>? source,
   int ms,
 );
 
@@ -30338,7 +30338,7 @@ typedef _c_obs_source_media_get_state = ffi.Int32 Function(
 );
 
 typedef _dart_obs_source_media_get_state = int Function(
-  ffi.Pointer<obs_source> source,
+  ffi.Pointer<obs_source>? source,
 );
 
 typedef _c_obs_source_media_started = ffi.Void Function(
@@ -30649,7 +30649,7 @@ typedef _c_obs_scene_release = ffi.Void Function(
 );
 
 typedef _dart_obs_scene_release = void Function(
-  ffi.Pointer<obs_scene> scene,
+  ffi.Pointer<obs_scene>? scene,
 );
 
 typedef _c_obs_scene_get_source = ffi.Pointer<obs_source> Function(
@@ -30750,8 +30750,8 @@ typedef _c_obs_scene_add = ffi.Pointer<obs_scene_item> Function(
 );
 
 typedef _dart_obs_scene_add = ffi.Pointer<obs_scene_item> Function(
-  ffi.Pointer<obs_scene> scene,
-  ffi.Pointer<obs_source> source,
+  ffi.Pointer<obs_scene>? scene,
+  ffi.Pointer<obs_source>? source,
 );
 
 typedef obs_scene_atomic_update_func = ffi.Void Function(
@@ -30792,7 +30792,7 @@ typedef _c_obs_sceneitem_remove = ffi.Void Function(
 );
 
 typedef _dart_obs_sceneitem_remove = void Function(
-  ffi.Pointer<obs_scene_item> item,
+  ffi.Pointer<obs_scene_item>? item,
 );
 
 typedef _c_obs_sceneitem_get_scene = ffi.Pointer<obs_scene> Function(
@@ -30893,7 +30893,7 @@ typedef _c_obs_sceneitem_set_order = ffi.Void Function(
 );
 
 typedef _dart_obs_sceneitem_set_order = void Function(
-  ffi.Pointer<obs_scene_item> item,
+  ffi.Pointer<obs_scene_item>? item,
   int movement,
 );
 
@@ -31062,7 +31062,7 @@ typedef _c_obs_sceneitem_visible = ffi.Uint8 Function(
 );
 
 typedef _dart_obs_sceneitem_visible = int Function(
-  ffi.Pointer<obs_scene_item> item,
+  ffi.Pointer<obs_scene_item>? item,
 );
 
 typedef _c_obs_sceneitem_set_visible = ffi.Uint8 Function(
@@ -31071,7 +31071,7 @@ typedef _c_obs_sceneitem_set_visible = ffi.Uint8 Function(
 );
 
 typedef _dart_obs_sceneitem_set_visible = int Function(
-  ffi.Pointer<obs_scene_item> item,
+  ffi.Pointer<obs_scene_item>? item,
   int visible,
 );
 
@@ -31365,7 +31365,7 @@ typedef _c_obs_output_release = ffi.Void Function(
 );
 
 typedef _dart_obs_output_release = void Function(
-  ffi.Pointer<obs_output> output,
+  ffi.Pointer<obs_output>? output,
 );
 
 typedef _c_obs_weak_output_addref = ffi.Void Function(
@@ -31432,7 +31432,7 @@ typedef _c_obs_output_start = ffi.Uint8 Function(
 );
 
 typedef _dart_obs_output_start = int Function(
-  ffi.Pointer<obs_output> output,
+  ffi.Pointer<obs_output>? output,
 );
 
 typedef _c_obs_output_stop = ffi.Void Function(
@@ -31440,7 +31440,7 @@ typedef _c_obs_output_stop = ffi.Void Function(
 );
 
 typedef _dart_obs_output_stop = void Function(
-  ffi.Pointer<obs_output> output,
+  ffi.Pointer<obs_output>? output,
 );
 
 typedef _c_obs_output_set_delay = ffi.Void Function(
@@ -31484,7 +31484,7 @@ typedef _c_obs_output_active = ffi.Uint8 Function(
 );
 
 typedef _dart_obs_output_active = int Function(
-  ffi.Pointer<obs_output> output,
+  ffi.Pointer<obs_output>? output,
 );
 
 typedef _c_obs_output_get_flags = ffi.Uint32 Function(
@@ -31533,8 +31533,8 @@ typedef _c_obs_output_update = ffi.Void Function(
 );
 
 typedef _dart_obs_output_update = void Function(
-  ffi.Pointer<obs_output> output,
-  ffi.Pointer<obs_data> settings,
+  ffi.Pointer<obs_output>? output,
+  ffi.Pointer<obs_data>? settings,
 );
 
 typedef _c_obs_output_can_pause = ffi.Uint8 Function(
@@ -31560,7 +31560,7 @@ typedef _c_obs_output_paused = ffi.Uint8 Function(
 );
 
 typedef _dart_obs_output_paused = int Function(
-  ffi.Pointer<obs_output> output,
+  ffi.Pointer<obs_output>? output,
 );
 
 typedef _c_obs_output_get_settings = ffi.Pointer<obs_data> Function(
@@ -31658,7 +31658,7 @@ typedef _c_obs_output_set_video_encoder = ffi.Void Function(
 );
 
 typedef _dart_obs_output_set_video_encoder = void Function(
-  ffi.Pointer<obs_output> output,
+  ffi.Pointer<obs_output>? output,
   ffi.Pointer<obs_encoder> encoder,
 );
 
@@ -31669,7 +31669,7 @@ typedef _c_obs_output_set_audio_encoder = ffi.Void Function(
 );
 
 typedef _dart_obs_output_set_audio_encoder = void Function(
-  ffi.Pointer<obs_output> output,
+  ffi.Pointer<obs_output>? output,
   ffi.Pointer<obs_encoder> encoder,
   int idx,
 );
@@ -31698,7 +31698,7 @@ typedef _c_obs_output_set_service = ffi.Void Function(
 );
 
 typedef _dart_obs_output_set_service = void Function(
-  ffi.Pointer<obs_output> output,
+  ffi.Pointer<obs_output>? output,
   ffi.Pointer<obs_service> service,
 );
 
@@ -31803,7 +31803,7 @@ typedef _c_obs_output_reconnecting = ffi.Uint8 Function(
 );
 
 typedef _dart_obs_output_reconnecting = int Function(
-  ffi.Pointer<obs_output> output,
+  ffi.Pointer<obs_output>? output,
 );
 
 typedef _c_obs_output_set_last_error = ffi.Void Function(
@@ -32374,7 +32374,7 @@ typedef _c_obs_service_create = ffi.Pointer<obs_service> Function(
 typedef _dart_obs_service_create = ffi.Pointer<obs_service> Function(
   ffi.Pointer<ffi.Int8> id,
   ffi.Pointer<ffi.Int8> name,
-  ffi.Pointer<obs_data> settings,
+  ffi.Pointer<obs_data>? settings,
   ffi.Pointer<obs_data> hotkey_data,
 );
 

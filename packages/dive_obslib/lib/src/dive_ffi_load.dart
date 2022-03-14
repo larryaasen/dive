@@ -8,7 +8,7 @@ import 'dive_obs_ffi.dart';
 List<ffi.Pointer<ffi.Int8>> _int8s = [];
 
 extension StringExtensions on String {
-  static String fromInt8(ffi.Pointer<ffi.Int8> pointer) {
+  static String? fromInt8(ffi.Pointer<ffi.Int8> pointer) {
     return pointer.address == 0 ? null : pointer.cast<Utf8>().toDartString();
   }
 

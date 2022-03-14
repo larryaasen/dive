@@ -5,10 +5,10 @@ import 'package:ffi/ffi.dart';
 class DivePointer {
   DivePointer(this.trackingUuid, this.pointer);
 
-  final String trackingUuid; // TODO: do we really need this trackingUuid?
+  final String? trackingUuid; // TODO: do we really need this trackingUuid?
   final dynamic pointer;
 
-  int toInt() {
+  int? toInt() {
     try {
       return pointer.address;
     } catch (e) {
