@@ -1,6 +1,6 @@
 name: dive
 description: The Dive core plugin. A toolkit for video recording and streaming.
-version: 0.1.0-alpha.2
+version: 0.1.0
 homepage: https://github.com/larryaasen/dive/tree/main/packages/dive
 
 environment:

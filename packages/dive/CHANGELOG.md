@@ -1,4 +1,4 @@
-## 0.1.0-alpha.2
+## 0.1.0
 
 * The first release incorporating the use of dive_obslib.
 
