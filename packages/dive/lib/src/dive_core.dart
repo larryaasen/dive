@@ -226,6 +226,9 @@ class DiveCore {
         fps.numerator,
         fps.denominator,
       );
+      if (rv) {
+        obslib.audioSetDefaultMonitoringDevice();
+      }
     }
     return rv;
   }

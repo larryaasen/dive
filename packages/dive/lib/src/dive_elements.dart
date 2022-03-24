@@ -62,8 +62,8 @@ class DiveCoreElements {
     });
   }
 
-  /// Add a video source.
-  void addVideoSource(final localFile) {
+  /// Add a media source to the current scene.
+  void addMediaSource(final localFile) {
     DiveMediaSource.create(localFile).then((source) {
       if (source != null) {
         DiveAudioMeterSource()
@@ -77,6 +77,18 @@ class DiveCoreElements {
         DiveCore.notifierFor(stateProvider).updateState(state);
       }
     });
+  }
+
+  /// Remove media source from the current scene.
+  void removeMediaSource(DiveMediaSource source) {
+    final item = state.currentScene.findSceneItem(source);
+    if (item != null) {
+      final state = DiveCore.notifierFor(stateProvider).stateModel;
+      state.currentScene.removeSceneItem(item);
+      state.mediaSources.remove(source);
+      source.dispose();
+      DiveCore.notifierFor(stateProvider).updateState(state);
+    }
   }
 
   /// The current state. Changes to this state do not get saved and are not

@@ -1,6 +1,5 @@
 library dive_ui;
 
-import 'dart:io';
 import 'dart:math';
 
 import 'package:dive/dive.dart';
@@ -8,7 +7,6 @@ import 'package:equatable/equatable.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart' as path;
 
 import 'blocs/dive_reference_panels.dart';
 import 'dive_audio_meter.dart';
@@ -17,6 +15,7 @@ import 'dive_side_sheet.dart';
 
 export 'blocs/dive_reference_panels.dart';
 export 'dive_audio_meter.dart';
+export 'dive_media_ui.dart';
 export 'dive_position_dialog.dart';
 export 'dive_side_sheet.dart';
 export 'dive_stream_settings_dialog.dart';
@@ -164,63 +163,10 @@ class _DiveSourceCardState extends State<DiveSourceCard> {
   }
 }
 
-@Deprecated('This was helpful for a while, but not needed anymore. keep around for a little while')
-class DiveSourcePreview extends StatelessWidget {
-  const DiveSourcePreview(this.controller, {Key key}) : super(key: key);
-
-  /// The controller for the texture that the preview is shown for.
-  final TextureController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    final preview = DivePreview(controller, aspectRatio: DiveCoreAspectRatio.HD.ratio);
-    return preview;
-  }
-}
-
-class DiveMediaPreview extends DivePreview {
-  DiveMediaPreview(this.mediaSource) : super(mediaSource == null ? null : mediaSource.controller);
-
-  final DiveMediaSource mediaSource;
-
-  @override
-  Widget build(BuildContext context) {
-    final superWidget = super.build(context);
-
-    if (mediaSource == null) return superWidget;
-
-    final meter = Positioned(
-        left: 5,
-        top: 5,
-        right: 5,
-        bottom: 5,
-        child: SizedBox.expand(child: DiveAudioMeter(volumeMeter: mediaSource.volumeMeter)));
-
-    final file = new File(mediaSource.localFile);
-    String filename = path.basename(file.path);
-    final camerasText = Center(child: Text(filename, style: TextStyle(color: Colors.grey, fontSize: 14)));
-
-    final buttons = Positioned(
-        right: 5, bottom: 5, child: DiveMediaButtonBar(mediaSource: mediaSource, iconColor: Colors.grey));
-
-    final stack = Stack(
-      children: <Widget>[
-        superWidget,
-        camerasText,
-        buttons,
-        meter,
-      ],
-    );
-    final content = Container(child: stack, color: Colors.white);
-
-    return content;
-  }
-}
-
 /// A [DivePreview] with a [DiveAudioMeter] overlay using a [DiveAudioMeterSource].
 class DiveMeterPreview extends DivePreview {
   DiveMeterPreview({
-    TextureController controller,
+    DiveTextureController controller,
     this.volumeMeter,
     Key key,
     double aspectRatio,
@@ -261,7 +207,7 @@ class DiveMeterPreview extends DivePreview {
   }
 }
 
-/// A widget showing a preview of a video/image frame using a [Texture] widget.
+/// A widget showing a preview of an image or video frames using a Flutter [Texture] widget.
 class DivePreview extends StatelessWidget {
   /// Creates a preview widget for the given texture preview controller.
   const DivePreview(this.controller, {Key key, this.aspectRatio}) : super(key: key);
@@ -272,149 +218,19 @@ class DivePreview extends StatelessWidget {
   /// a 16:9 width:height aspect ratio would have a value of 16.0/9.0.
   final double aspectRatio;
 
-  /// The controller for the texture that the preview is shown for.
-  final TextureController controller;
+  /// The controller for the texture that the preview is shown for. Dive uses
+  /// textures in Flutter to display raw image and video frames.
+  final DiveTextureController controller;
 
   @override
   Widget build(BuildContext context) {
-    var texture = controller != null && controller.value.isInitialized
+    var texture = controller != null && controller.isInitialized
         ? Texture(textureId: controller.textureId)
         : Container(color: Colors.blue);
 
     final widget = aspectRatio != null ? DiveAspectRatio(aspectRatio: aspectRatio, child: texture) : texture;
 
     return widget;
-  }
-}
-
-class DiveMediaPlayButton extends ConsumerWidget {
-  const DiveMediaPlayButton({Key key, @required DiveMediaSource mediaSource, this.iconColor = Colors.white})
-      : mediaSource = mediaSource,
-        super(key: key);
-
-  final DiveMediaSource mediaSource;
-  final Color iconColor;
-
-  @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    var mediaState;
-    if (mediaSource != null) {
-      final stateModel = watch(mediaSource.stateProvider.state);
-      mediaState = stateModel.mediaState;
-    } else {
-      mediaState = DiveMediaState.STOPPED;
-    }
-
-    return IconButton(
-      icon: Icon(
-        mediaState == DiveMediaState.PLAYING
-            ? DiveUI.iconSet.mediaPauseButton
-            : DiveUI.iconSet.mediaPlayButton,
-        color: iconColor,
-      ),
-      tooltip: mediaState == DiveMediaState.PLAYING ? 'Pause video' : 'Play video',
-      onPressed: () {
-        mediaSource.getState().then((newStateModel) async {
-          print("onPressed: state $newStateModel");
-          switch (newStateModel.mediaState) {
-            case DiveMediaState.STOPPED:
-            case DiveMediaState.ENDED:
-              await mediaSource.restart().then((value) {
-                print("restart completed");
-              });
-              break;
-            case DiveMediaState.PLAYING:
-              mediaSource.pause().then((value) {
-                print("pause completed");
-              });
-              break;
-            case DiveMediaState.PAUSED:
-              mediaSource.play().then((value) {
-                print("play completed");
-              });
-              break;
-            default:
-              break;
-          }
-        });
-      },
-    );
-  }
-}
-
-class DiveMediaStopButton extends StatelessWidget {
-  const DiveMediaStopButton({Key key, @required this.mediaSource, this.iconColor = Colors.white})
-      : super(key: key);
-
-  final DiveMediaSource mediaSource;
-  final Color iconColor;
-
-  @override
-  Widget build(BuildContext context) {
-    if (mediaSource == null) {
-      return Container();
-    }
-
-    return IconButton(
-      icon: Icon(DiveUI.iconSet.mediaStopButton, color: iconColor),
-      tooltip: 'Stop video',
-      onPressed: () async {
-        await mediaSource.stop().then((value) {
-          print("stop completed");
-        });
-      },
-    );
-  }
-}
-
-class DiveMediaDuration extends ConsumerWidget {
-  const DiveMediaDuration({Key key, @required this.mediaSource, this.textColor}) : super(key: key);
-
-  final DiveMediaSource mediaSource;
-  final Color textColor;
-
-  @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    if (mediaSource == null) {
-      return Container();
-    }
-
-    final stateModel = watch(mediaSource.stateProvider.state);
-    final cur = DiveFormat.formatDuration(Duration(milliseconds: stateModel.currentTime));
-    final dur = DiveFormat.formatDuration(Duration(milliseconds: stateModel.duration));
-    final curWide = cur.padLeft(dur.length - cur.length);
-    final msg = "$curWide / $dur";
-    return Text(
-      msg,
-      style: TextStyle(color: textColor),
-      textWidthBasis: TextWidthBasis.parent,
-    );
-  }
-}
-
-class DiveMediaButtonBar extends StatelessWidget {
-  const DiveMediaButtonBar({Key key, @required DiveMediaSource mediaSource, this.iconColor = Colors.white})
-      : mediaSource = mediaSource,
-        super(key: key);
-
-  final DiveMediaSource mediaSource;
-  final Color iconColor;
-
-  @override
-  Widget build(BuildContext context) {
-    if (mediaSource == null) {
-      return Container();
-    }
-
-    final row = Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        DiveMediaDuration(mediaSource: mediaSource, textColor: iconColor),
-        DiveMediaPlayButton(mediaSource: mediaSource, iconColor: iconColor),
-        DiveMediaStopButton(mediaSource: mediaSource, iconColor: iconColor),
-      ],
-    );
-    return row;
   }
 }
 
@@ -764,7 +580,7 @@ class DiveImagePickerButton extends StatelessWidget {
     ]);
     openFile(acceptedTypeGroups: [typeGroup]).then((file) {
       if (file == null) return;
-      print("file=${file.path}");
+      DiveSystemLog.message('DiveImagePickerButton: file=${file.path}', group: 'dive_ui');
       elements.addImageSource(file.path);
       // final info = DiveTransformInfo(
       //     pos: DiveVec2(140, 120),
@@ -793,8 +609,15 @@ class DiveVideoPickerButton extends StatelessWidget {
     final typeGroup = XTypeGroup(label: 'videos', extensions: ['mov', 'mp4']);
     openFile(acceptedTypeGroups: [typeGroup]).then((file) {
       if (file == null) return;
-      print("file=${file.path}");
-      elements.addVideoSource(file.path);
+      DiveSystemLog.message('DiveVideoPickerButton: file=${file.path}', group: 'dive_ui');
+
+      // Remove the first media source, assuming it was added here earlier.
+      if (elements.state.mediaSources.isNotEmpty) {
+        elements.removeMediaSource(elements.state.mediaSources.first);
+      }
+
+      // Add the media source.
+      elements.addMediaSource(file.path);
     });
   }
 }

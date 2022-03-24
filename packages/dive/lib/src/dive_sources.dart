@@ -1,30 +1,24 @@
 import 'dart:async';
 
+import 'package:dive/dive.dart';
 import 'package:dive_obslib/dive_obslib.dart';
 import 'package:flutter/foundation.dart';
 
-import 'dive_audio_meter_source.dart';
-import 'dive_input.dart';
-import 'dive_input_type.dart';
 import 'dive_plugin.dart';
-import 'dive_scene.dart';
-import 'dive_transform_info.dart';
-import 'dive_uuid.dart';
-import 'texture_controller.dart';
 
 // TODO: DiveSettings needs to be implemented
 class DiveSettings {}
 
-/// This is a texture controller for displaying video and image frames.
+/// A texture controller for displaying video and image frames.
 /// Use this class as a base class or a mixin.
-class DiveTextureController {
-  TextureController _controller;
-  TextureController get controller => _controller;
+class DiveTextureSetup {
+  DiveTextureController _controller;
+  DiveTextureController get controller => _controller;
 
   /// This must be called right after this class is instantiated and
   /// before doing anything else.
-  Future<void> setupController(String trackingUUID) async {
-    _controller = TextureController(trackingUUID: trackingUUID);
+  Future<void> setupTexture(String trackingUUID) async {
+    _controller = DiveTextureController(trackingUUID: trackingUUID);
     await _controller.initialize();
     return;
   }
@@ -36,6 +30,7 @@ class DiveTextureController {
   }
 }
 
+/// Provides a unique tracking ID.
 class DiveTracking {
   /// A RFC4122 V1 UUID (time-based)
   final String _trackingUUID;
@@ -46,12 +41,14 @@ class DiveTracking {
   DiveTracking() : _trackingUUID = DiveUuid.newId();
 }
 
-class DiveVideoMix extends DiveTracking with DiveTextureController {
+/// A video mix contains the raw video frames of the final video mix.
+/// It uses a texture controller for displaying the frames.
+class DiveVideoMix extends DiveTracking with DiveTextureSetup {
   DiveVideoMix();
 
   static Future<DiveVideoMix> create() async {
     final video = DiveVideoMix();
-    await video.setupController(video.trackingUUID);
+    await video.setupTexture(video.trackingUUID);
     if (!await obslib.createVideoMix(video.trackingUUID)) {
       return null;
     }
@@ -82,7 +79,9 @@ class DiveSource extends DiveTracking {
   }
 }
 
-class DiveTextureSource extends DiveSource with DiveTextureController {
+/// Combines a [DiveSource] with a [DiveTextureSetup] so that a source can
+/// display an image or video frame in a Flutter texture.
+abstract class DiveTextureSource extends DiveSource with DiveTextureSetup {
   DiveTextureSource({DiveInputType inputType, String name}) : super(inputType: inputType, name: name);
 
   /// Release the resources associated with this source.
@@ -131,15 +130,18 @@ class DiveAudioSource extends DiveSource {
   }
 }
 
-class DiveVideoSource extends DiveSource with DiveTextureController {
+// class DiveTextureSource extends DiveSource with DiveTextureSetup {
+
+/// A video source, such as a camera.
+class DiveVideoSource extends DiveSource with DiveTextureSetup {
   DiveAudioMeterSource volumeMeter;
 
   DiveVideoSource({String name}) : super(inputType: DiveInputType.videoCaptureDevice, name: name);
 
   static Future<DiveVideoSource> create(DiveInput videoInput) async {
     final source = DiveVideoSource(name: videoInput.name);
-    await source.setupController(source.trackingUUID);
     source.pointer = obslib.createVideoSource(source.trackingUUID, videoInput.name, videoInput.id);
+    await source.setupTexture(source.trackingUUID);
     await obslib.addSourceFrameCallback(source.trackingUUID, source.pointer.address);
     return source.pointer == null ? null : source;
   }
@@ -159,12 +161,13 @@ class DiveVideoSource extends DiveSource with DiveTextureController {
   }
 }
 
+/// The source for an image that is a texture source.
 class DiveImageSource extends DiveTextureSource {
   DiveImageSource({String name}) : super(inputType: DiveInputType.imageSource, name: name);
 
   static Future<DiveImageSource> create(String file) async {
     final source = DiveImageSource(name: 'my image');
-    await source.setupController(source.trackingUUID);
+    await source.setupTexture(source.trackingUUID);
     source.pointer = obslib.createImageSource(source.trackingUUID, file);
     // if (!await DivePlugin.createImageSource(source.trackingUUID, file)) {
     //   return null;
@@ -216,6 +219,7 @@ class DiveSceneItem {
 
   /// Remove the item from the scene.
   void remove() {
+    DiveSystemLog.message('DiveSceneItem.remove item=$this', group: 'dive');
     obslib.sceneItemRemove(item);
   }
 
@@ -230,6 +234,6 @@ class DiveSceneItem {
 
   @override
   String toString() {
-    return "source=${source.name} | scene=$scene";
+    return "DiveSceneItem item=${item.pointer}, source=${source.name}";
   }
 }

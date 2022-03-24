@@ -14,14 +14,16 @@ class DiveFormat {
   /// ```
   /// will return '0.042'
   static String formatDuration(Duration duration) {
-    final date = DateTime(0).add(duration);
+    var date = DateTime(0).add(duration);
 
     DateFormat formatter;
     if (duration.compareTo(Duration(seconds: 1)) < 0)
       formatter = formatterShortest;
-    else if (duration.compareTo(Duration(minutes: 1)) < 0)
+    else if (duration.compareTo(Duration(minutes: 1)) < 0) {
+      // Round the milliseconds up to the next second.
+      date = date.add(Duration(milliseconds: 500));
       formatter = formatterShort;
-    else if (duration.compareTo(Duration(hours: 1)) < 0)
+    } else if (duration.compareTo(Duration(hours: 1)) < 0)
       formatter = formatterMedium;
     else
       formatter = formatterLong;

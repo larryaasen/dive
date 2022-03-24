@@ -17,8 +17,9 @@ void main() {
     expect(fmt(Duration(milliseconds: 21)), '0.021');
     expect(fmt(Duration(milliseconds: 321)), '0.321');
     expect(fmt(Duration(milliseconds: 4321)), '00:04');
+    expect(fmt(Duration(milliseconds: 32747)), '00:33');
     expect(fmt(Duration(milliseconds: 54321)), '00:54');
-    expect(fmt(Duration(milliseconds: 654321)), '10:54');
+    expect(fmt(Duration(milliseconds: 654821)), '10:54');
     expect(fmt(Duration(seconds: 7654, milliseconds: 321)), '2:07:34');
     expect(fmt(Duration(seconds: 27654, milliseconds: 321)), '7:40:54');
     expect(fmt(Duration(seconds: 37654, milliseconds: 321)), '10:27:34');

@@ -1,6 +1,3 @@
-#include <stdio.h>
-#import <libkern/OSAtomic.h>
-#import <stdatomic.h>
 #import "TextureSource.h"
 
 @interface TextureSource ()
@@ -11,8 +8,10 @@
 
 @end
 
+/// TextureSource - Saves frames for use by the Flutter Texture Registry.
 @implementation TextureSource
 
+/// Initialize with a tracking UUID and a Flutter Texture Registry.
 - (instancetype)initWithUUID:(NSString *)trackingUUID registry:(NSObject<FlutterTextureRegistry> *)registry {
     self = [super init];
     NSAssert(self, @"super init cannot be nil");
@@ -49,6 +48,7 @@
     return pixelBuffer;
 }
 
+/// Save a frame (pixel buffer) and inform the Flutter Texture Registry.
 - (void)captureSample:(CVPixelBufferRef) newBuffer {
     if (self.textureId == 0) return;
 
@@ -61,6 +61,7 @@
         _latestPixelBuffer = newBuffer;
     }
 
+    /// Inform the Flutter Texture Registry that a texture frame is available to draw.
     [self.registry textureFrameAvailable:self.textureId];
 }
 

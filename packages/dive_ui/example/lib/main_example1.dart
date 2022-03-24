@@ -95,10 +95,15 @@ class MediaPlayer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
+    print("MediaPlayer.build started");
     final state = watch(elements.stateProvider.state);
+    print("MediaPlayer.build state=$state");
     if (state.mediaSources.length == 0 || state.videoMixes.length == 0) {
       return Container(color: Colors.purple);
     }
+    print("MediaPlayer.build usable state");
+    final source = state.mediaSources[0];
+    final videoMix = state.videoMixes[0];
 
     final mediaButtons = Container(
         height: 40,
@@ -106,18 +111,18 @@ class MediaPlayer extends ConsumerWidget {
         child: SizedBox.expand(
             child: Container(
                 alignment: Alignment.center,
-                child: DiveMediaButtonBar(iconColor: Colors.white54, mediaSource: state.mediaSources[0]))));
+                child: DiveMediaButtonBar(iconColor: Colors.white54, mediaSource: source))));
 
-    final videoMix = DiveMeterPreview(
-      volumeMeter: state.mediaSources[0].volumeMeter,
-      controller: state.videoMixes[0].controller,
+    final meterVideoMix = DiveMeterPreview(
+      volumeMeter: source.volumeMeter,
+      controller: videoMix.controller,
       aspectRatio: DiveCoreAspectRatio.HD.ratio,
     );
 
     final mainContent = Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        videoMix,
+        meterVideoMix,
         mediaButtons,
       ],
     );

@@ -65,20 +65,39 @@ class DiveMediaSource extends DiveTextureSource {
 
   static Future<DiveMediaSource> create(String localFile) async {
     final source = DiveMediaSource(name: 'my media', localFile: localFile);
-    await source.setupController(source.trackingUUID);
+    await source.setupTexture(source.trackingUUID);
     source.pointer = obslib.createMediaSource(source.trackingUUID, localFile);
-    // if (!await DivePlugin.createMediaSource(source.trackingUUID, localFile)) {
-    //   return null;
-    // }
     await source.syncState();
+
+    // TODO: try adding frame callback
+    // await obslib.addSourceFrameCallback(source.trackingUUID, source.pointer.address);
+
+    // Turn on the default audio monitoring device so we can hear the audio.
+    if (source.pointer != null) {
+      obslib.sourceSetMonitoringType(source.pointer);
+    }
+
     return source.pointer == null ? null : source;
   }
 
-  /// Remove this media source.
-  bool remove() {
-    // TODO: finish the remove() function.
-    _playbackTimer.cancel();
-    _playbackTimer = null;
+  /// Release the resources associated with this source.
+  @override
+  bool dispose() {
+    if (_playbackTimer != null) {
+      _playbackTimer.cancel();
+      _playbackTimer = null;
+    }
+
+    // obslib.removeSourceFrameCallback(trackingUUID, pointer.address);
+    obslib.releaseSource(pointer);
+    releaseController();
+
+    if (volumeMeter != null) {
+      volumeMeter.dispose();
+      volumeMeter = null;
+    }
+
+    super.dispose();
     return true;
   }
 
@@ -126,12 +145,8 @@ class DiveMediaSource extends DiveTextureSource {
   Future<bool> play() async {
     obslib.mediaSourcePlayPause(pointer, false);
     await syncState();
+
     return true;
-    // final rv = await DivePlugin.mediaPlayPause(trackingUUID, false);
-    // if (rv) {
-    //   await syncState();
-    // }
-    // return rv;
   }
 
   Future<bool> pause() async {

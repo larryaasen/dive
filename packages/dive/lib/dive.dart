@@ -20,4 +20,4 @@ export 'src/dive_system_log.dart';
 export 'src/dive_transform_info.dart';
 export 'src/dive_uuid.dart';
 export 'src/dive_video_info.dart';
-export 'src/texture_controller.dart';
+export 'src/dive_texture_controller.dart';

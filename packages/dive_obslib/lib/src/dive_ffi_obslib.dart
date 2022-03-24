@@ -231,9 +231,9 @@ extension DiveFFIObslib on DiveBaseObslib {
     return DivePointer(sourceUuid, source);
   }
 
-  /// Releases a reference to a source.  When the last reference is released,
-  /// the source is destroyed.
+  /// Releases a reference to a source.  When the last reference is released, the source is destroyed.
   void releaseSource(DivePointer source) {
+    _lib.obs_source_remove(source.pointer);
     _lib.obs_source_release(source.pointer);
   }
 
@@ -257,7 +257,7 @@ extension DiveFFIObslib on DiveBaseObslib {
     _lib.obs_sceneitem_set_order(item.pointer, movement);
   }
 
-  /// Remove an existing scene item from a source.
+  /// Remove an existing scene item from a scene.
   void sceneItemRemove(DivePointerSceneItem item) {
     _lib.obs_sceneitem_remove(item.pointer);
   }
@@ -527,6 +527,55 @@ extension DiveFFIObslib on DiveBaseObslib {
   /// Returns an array of maps with keys `id` and `name`.
   List<Map<String, String>> videoInputs() {
     return inputsFromType("av_capture_input");
+  }
+
+  /// Get a list of the audio monitoring devices.
+  /// Returns an array of maps with keys `id` and `name`.
+  List<Map<String, String>> audioMonitoringDevices() {
+    final List<Map<String, String>> list = [];
+
+    final cb = ffi.Pointer.fromFunction<
+        ffi.Uint8 Function(
+      ffi.Pointer<ffi.Void>,
+      ffi.Pointer<ffi.Int8>,
+      ffi.Pointer<ffi.Int8>,
+    )>(audioMonitoringCallback, 0);
+    _lib.obs_enum_audio_monitoring_devices(cb, list as dynamic);
+
+    list.add({'id': 'default', 'name': 'Default'});
+    return list;
+  }
+
+  static int audioMonitoringCallback(
+      ffi.Pointer<ffi.Void> param, ffi.Pointer<ffi.Int8> name, ffi.Pointer<ffi.Int8> id) {
+    final list = param as List;
+    list.add({'id': StringExtensions.fromInt8(id), 'name': StringExtensions.fromInt8(name)});
+    print('audio monitoring device: name=$name, id=$id');
+    return 1;
+  }
+
+  bool audioSetDefaultMonitoringDevice() {
+    return audioSetMonitoringDevice('Default', 'default');
+  }
+
+  /// Set the audio monitoring device.
+  bool audioSetMonitoringDevice(String name, String id) {
+    print('audioSetMonitoringDevice: name=$name');
+
+    final rv = _lib.obs_set_audio_monitoring_device(name.int8(), id.int8());
+    StringExtensions.freeInt8s();
+    return rv == 1;
+  }
+
+  void sourceSetMonitoringType(DivePointer source) {
+    print('sourceSetMonitoringType: monitor');
+    _lib.obs_source_set_monitoring_type(
+      source.pointer,
+      obs_monitoring_type.OBS_MONITORING_TYPE_MONITOR_AND_OUTPUT,
+    );
+
+    // Unmute the audio source - TODO: remove this
+    _lib.obs_source_set_muted(source.pointer, 0);
   }
 }
 

@@ -1,5 +1,4 @@
 import 'package:dive/dive.dart';
-import 'package:dive/dive.dart';
 import 'package:flutter/material.dart';
 import 'dive_ui.dart';
 
