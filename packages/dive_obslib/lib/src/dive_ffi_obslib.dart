@@ -14,9 +14,6 @@ DiveObslibFFI _lib;
 /// Tracks the first scene being created, and sets the output source if first
 bool _isFirstScene = true;
 
-/// The streaming service output.
-var _streamOutput;
-
 /// Connects to obslib using FFI. Will load the obslib library, load modules,
 /// reset video and audio, and create the streaming service.
 extension DiveFFIObslib on DiveBaseObslib {
@@ -140,6 +137,13 @@ extension DiveFFIObslib on DiveBaseObslib {
     }
     calloc.free(ovi);
     return info;
+  }
+
+  // Shutdown OBS.
+  void shutdown() {
+    _lib.obs_shutdown();
+    final totalMemLeaks = _lib.bnum_allocs();
+    print('Shutdown: number OBS of memory leaks: $totalMemLeaks');
   }
 
   DivePointer createScene(String trackingUUID, String sceneName) {
@@ -291,13 +295,13 @@ extension DiveFFIObslib on DiveBaseObslib {
   /// Stream Controls
 
   /// Create the stream output.
-  bool streamOutputCreate({
+  /// Returns a pointer or null.
+  DivePointerOutput streamOutputCreate({
     String serviceUrl,
     String serviceKey,
     String serviceId = 'rtmp_common',
     String outputType = 'rtmp_output',
   }) {
-    if (_streamOutput != null) return false;
     final serviceSettings = DiveObslibData();
     serviceSettings.setString("server", serviceUrl);
     serviceSettings.setString("key", serviceKey);
@@ -306,10 +310,11 @@ extension DiveFFIObslib on DiveBaseObslib {
         serviceId.int8(), "default_service".int8(), serviceSettings.pointer, ffi.nullptr);
     serviceSettings.dispose();
 
-    _streamOutput = _lib.obs_output_create(outputType.int8(), "adv_stream".int8(), ffi.nullptr, ffi.nullptr);
-    if (_streamOutput == null) {
+    final streamOutput =
+        _lib.obs_output_create(outputType.int8(), "adv_stream".int8(), ffi.nullptr, ffi.nullptr);
+    if (streamOutput == null) {
       print("creation of stream output type $outputType failed");
-      return false;
+      return null;
     }
 
     final vencoder =
@@ -318,54 +323,50 @@ extension DiveFFIObslib on DiveBaseObslib {
         _lib.obs_audio_encoder_create("ffmpeg_aac".int8(), "test_aac".int8(), ffi.nullptr, 0, ffi.nullptr);
     _lib.obs_encoder_set_video(vencoder, _lib.obs_get_video());
     _lib.obs_encoder_set_audio(aencoder, _lib.obs_get_audio());
-    _lib.obs_output_set_video_encoder(_streamOutput, vencoder);
-    _lib.obs_output_set_audio_encoder(_streamOutput, aencoder, 0);
+    _lib.obs_output_set_video_encoder(streamOutput, vencoder);
+    _lib.obs_output_set_audio_encoder(streamOutput, aencoder, 0);
 
     // _lib.obs_encoder_release(vencoder);
     // _lib.obs_encoder_release(aencoder);
 
-    _lib.obs_output_set_service(_streamOutput, serviceObj);
+    _lib.obs_output_set_service(streamOutput, serviceObj);
 
     final outputSettings = DiveObslibData();
     outputSettings.setString("bind_ip", "default");
     outputSettings.setBool("new_socket_loop_enabled", false);
     outputSettings.setBool("low_latency_mode_enabled", false);
     outputSettings.setBool("dyn_bitrate", false);
-    _lib.obs_output_update(_streamOutput, outputSettings.pointer);
+    _lib.obs_output_update(streamOutput, outputSettings.pointer);
     outputSettings.dispose();
 
-    return true;
+    return DivePointerOutput(streamOutput);
   }
 
   /// Release the stream output.
-  bool streamOutputRelease() {
-    if (_streamOutput == null) return false;
-    _lib.obs_output_release(_streamOutput);
-    _streamOutput = null;
+  bool streamOutputRelease(DivePointerOutput output) {
+    _lib.obs_output_release(output.pointer);
     return true;
   }
 
   /// Start the stream output.
-  bool streamOutputStart() {
-    final rv = _lib.obs_output_start(_streamOutput);
+  bool streamOutputStart(DivePointerOutput output) {
+    final rv = _lib.obs_output_start(output.pointer);
     if (rv != 1) {
-      print("stream not started");
+      print("streamOutputStart: stream not started");
     }
     return rv == 1;
   }
 
   /// Stop the stream output.
-  void streamOutputStop() {
-    if (_streamOutput == null) return;
-    _lib.obs_output_stop(_streamOutput);
+  void streamOutputStop(DivePointerOutput output) {
+    _lib.obs_output_stop(output.pointer);
   }
 
   /// Get the output state: 0 (stopped), 1 (active), 2 (paused), or 3 (reconnecting)
-  int outputGetState() {
-    if (_streamOutput == null) return 0;
-    final active = _lib.obs_output_active(_streamOutput);
-    final paused = _lib.obs_output_paused(_streamOutput);
-    final reconnecting = _lib.obs_output_reconnecting(_streamOutput);
+  int outputGetState(DivePointerOutput output) {
+    final active = _lib.obs_output_active(output.pointer);
+    final paused = _lib.obs_output_paused(output.pointer);
+    final reconnecting = _lib.obs_output_reconnecting(output.pointer);
     int state = 0;
     if (active == 1)
       state = 1;

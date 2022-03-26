@@ -49,6 +49,24 @@ class DiveCoreElements {
   final stateProvider =
       StateNotifierProvider<_DiveCoreElementsStateNotifier>((ref) => _DiveCoreElementsStateNotifier(null));
 
+  /// Remove a source.
+  void removeSource(DiveSource source, List<DiveSource> sources) {
+    final item = state.currentScene.findSceneItem(source);
+    if (item != null) {
+      final state = DiveCore.notifierFor(stateProvider).stateModel;
+      state.currentScene.removeSceneItem(item);
+      sources.remove(source);
+      source.dispose();
+      DiveCore.notifierFor(stateProvider).updateState(state);
+    }
+  }
+
+  /// Remove iamge source from the current scene.
+  void removeImageSource(DiveImageSource source) => removeSource(source, state.imageSources);
+
+  /// Remove media source from the current scene.
+  void removeMediaSource(DiveMediaSource source) => removeSource(source, state.mediaSources);
+
   /// Add an image source.
   void addImageSource(final localFile) {
     DiveImageSource.create(localFile).then((source) {
@@ -77,18 +95,6 @@ class DiveCoreElements {
         DiveCore.notifierFor(stateProvider).updateState(state);
       }
     });
-  }
-
-  /// Remove media source from the current scene.
-  void removeMediaSource(DiveMediaSource source) {
-    final item = state.currentScene.findSceneItem(source);
-    if (item != null) {
-      final state = DiveCore.notifierFor(stateProvider).stateModel;
-      state.currentScene.removeSceneItem(item);
-      state.mediaSources.remove(source);
-      source.dispose();
-      DiveCore.notifierFor(stateProvider).updateState(state);
-    }
   }
 
   /// The current state. Changes to this state do not get saved and are not

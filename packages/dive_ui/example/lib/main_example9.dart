@@ -1,20 +1,11 @@
 import 'package:dive_ui/dive_ui.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dive/dive.dart';
 
 /// Dive Example 9 - Resolutions
 void main() {
-  // We need the binding to be initialized before calling runApp.
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // Configure globally for all Equatable instances via EquatableConfig
-  EquatableConfig.stringify = true;
-
-  // Use [ProviderScope] so DiveCore and other modules use
-  // the same [ProviderContainer].
-  runApp(ProviderScope(child: DiveUIApp(child: AppWidget())));
+  runDiveUIApp(AppWidget());
 }
 
 class AppWidget extends StatelessWidget {
@@ -116,21 +107,8 @@ class MediaPlayer extends ConsumerWidget {
           aspectRatio: DiveCoreAspectRatio.HD.ratio,
         ));
 
-    final item = state.currentScene.sceneItems.isEmpty ? null : state.currentScene.sceneItems[0];
-
-    final camera = Container(
-        height: 200,
-        width: 200 * DiveCoreAspectRatio.HD.ratio,
-        child: DiveSourceCard(
-          item: item,
-          child: DivePreview(state.videoSources.length == 0 ? null : (state.videoSources[0]).controller,
-              aspectRatio: DiveCoreAspectRatio.HD.ratio),
-          elements: elements,
-        ));
-
     final mainContent = Row(
       children: [
-        camera,
         videoMix,
       ],
     );

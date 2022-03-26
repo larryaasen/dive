@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dive/dive.dart';
 
 /// Dive Example 4 - Streaming
@@ -5,6 +7,15 @@ void main() async {
   configDiveApp();
 
   print('Dive Example 4');
+
+  var n = 0;
+  ProcessSignal.sigint.watch().listen((signal) {
+    print(" caught ${++n} of 3");
+
+    if (n == 3) {
+      exit(0);
+    }
+  });
 
   await DiveExample()
     ..run();
@@ -49,8 +60,17 @@ class DiveExample {
 
       // Create the streaming output
       var output = DiveOutput();
-      output.serviceKey = '26qe-9gxw-9veb-kf2m-dhv3';
-      output.serviceUrl = 'rtmp://a.rtmp.youtube.com/live2';
+
+      // YouTube settings
+      // Replace this YouTube key with your own. This one is no longer valid.
+      // output.serviceKey = '26qe-9gxw-9veb-kf2m-dhv3';
+      // output.serviceUrl = 'rtmp://a.rtmp.youtube.com/live2';
+
+      // Twitch Settings
+      // Replace this Twitch key with your own. This one is no longer valid.
+      output.serviceKey = 'live_276488556_uIKncv1zAGQ3kz5aVzCvfshg8W4ENC';
+      output.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/${output.serviceKey}';
+
       _elements.updateState((state) => state.streamingOutput = output);
 
       // Start streaming
@@ -81,6 +101,8 @@ class DiveExample {
 
           // Delete the scene resources
           scene.dispose();
+
+          _diveCore.shutdown();
 
           _diveCore = null;
         });

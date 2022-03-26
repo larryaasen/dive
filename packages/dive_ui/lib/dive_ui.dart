@@ -581,6 +581,12 @@ class DiveImagePickerButton extends StatelessWidget {
     openFile(acceptedTypeGroups: [typeGroup]).then((file) {
       if (file == null) return;
       DiveSystemLog.message('DiveImagePickerButton: file=${file.path}', group: 'dive_ui');
+
+      // Remove the first image source, assuming it was added here earlier.
+      if (elements.state.imageSources.isNotEmpty) {
+        elements.removeImageSource(elements.state.imageSources.first);
+      }
+
       elements.addImageSource(file.path);
       // final info = DiveTransformInfo(
       //     pos: DiveVec2(140, 120),

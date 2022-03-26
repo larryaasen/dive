@@ -28,6 +28,10 @@ class DivePointerData extends DivePointer {
   DivePointerData(dynamic pointer) : super(null, pointer);
 }
 
+class DivePointerOutput extends DivePointer {
+  DivePointerOutput(dynamic pointer) : super(null, pointer);
+}
+
 class DivePointerSceneItem extends DivePointer {
   DivePointerSceneItem(dynamic pointer) : super(null, pointer);
 }

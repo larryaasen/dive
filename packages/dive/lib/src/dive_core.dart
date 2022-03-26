@@ -232,6 +232,10 @@ class DiveCore {
     }
     return rv;
   }
+
+  void shutdown() {
+    obslib.shutdown();
+  }
 }
 
 class DiveCoreProviderContainerException implements Exception {

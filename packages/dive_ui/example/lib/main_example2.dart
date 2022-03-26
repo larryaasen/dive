@@ -1,19 +1,11 @@
 import 'package:dive_ui/dive_ui.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dive/dive.dart';
 
 /// Dive Example 2 - Image Viewer
 void main() {
-  // We need the binding to be initialized before calling runApp.
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // Configure globally for all Equatable instances via EquatableConfig
-  EquatableConfig.stringify = true;
-
-  // Setup [ProviderContainer] so DiveCore and other modules use the same one
-  runApp(ProviderScope(child: AppWidget()));
+  runDiveUIApp(AppWidget());
 }
 
 class AppWidget extends StatelessWidget {
