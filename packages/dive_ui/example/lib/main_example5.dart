@@ -108,7 +108,7 @@ class _BodyWidgetState extends State<BodyWidget> {
     await _diveCore.setupOBS(DiveCoreResolution.HD);
 
     DiveScene.create('Scene 1').then((scene) {
-      _elements.updateState((state) => state.currentScene = scene);
+      _elements.updateState((state) => state.copyWith(currentScene: scene));
 
       DiveVideoMix.create().then((mix) {
         _elements.updateState((state) => state.videoMixes.add(mix));
@@ -140,9 +140,18 @@ class _BodyWidgetState extends State<BodyWidget> {
 
       // Create the streaming output
       final output = DiveOutput();
-      output.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/live_276488556_uIKncv1zAGQ3kz5aVzCvfshg8W4ENC';
+
+      // YouTube settings
+      // Replace this YouTube key with your own. This one is no longer valid.
+      // output.serviceKey = '26qe-9gxw-9veb-kf2m-dhv3';
+      // output.serviceUrl = 'rtmp://a.rtmp.youtube.com/live2';
+
+      // Twitch Settings
+      // Replace this Twitch key with your own. This one is no longer valid.
       output.serviceKey = 'live_276488556_uIKncv1zAGQ3kz5aVzCvfshg8W4ENC';
-      _elements.updateState((state) => state.streamingOutput = output);
+      output.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/${output.serviceKey}';
+
+      _elements.updateState((state) => state.copyWith(streamingOutput: output));
     });
   }
 

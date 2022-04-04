@@ -84,21 +84,21 @@ packages:
       path: "../../packages/dive"
       relative: true
     source: path
-    version: "0.1.0-alpha.2"
+    version: "0.1.0"
   dive_obslib:
     dependency: transitive
     description:
       path: "../../packages/dive_obslib"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.1.0"
   dive_ui:
     dependency: "direct main"
     description:
       path: "../../packages/dive_ui"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.1.0"
   equatable:
     dependency: transitive
     description:

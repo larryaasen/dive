@@ -38,12 +38,11 @@ class DiveStreamSettingsButton extends StatelessWidget {
   void onApply(String serviceUrl, String serviceKey) {
     if (elements == null) return;
 
-    elements.updateState((state) {
-      if (state.streamingOutput != null) {
-        state.streamingOutput.serviceUrl = serviceUrl;
-        state.streamingOutput.serviceKey = serviceKey;
-      }
-    });
+    final state = elements.state;
+    if (state.streamingOutput != null) {
+      state.streamingOutput.serviceUrl = serviceUrl;
+      state.streamingOutput.serviceKey = serviceKey;
+    }
   }
 }
 

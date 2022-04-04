@@ -39,7 +39,7 @@ class DiveExample {
 
     // Create the main scene
     DiveScene.create('Scene 1').then((scene) {
-      _elements.updateState((state) => state.currentScene = scene);
+      _elements.updateState((state) => state.copyWith(currentScene: scene));
 
       // Create the main audio source
       DiveAudioSource.create('main audio').then((source) {
@@ -71,7 +71,7 @@ class DiveExample {
       output.serviceKey = 'live_276488556_uIKncv1zAGQ3kz5aVzCvfshg8W4ENC';
       output.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/${output.serviceKey}';
 
-      _elements.updateState((state) => state.streamingOutput = output);
+      _elements.updateState((state) => state.copyWith(streamingOutput: output));
 
       // Start streaming
       print("Dive example 4: Starting stream.");

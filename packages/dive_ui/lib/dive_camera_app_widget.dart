@@ -3,30 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dive/dive.dart';
 
-/// Dive Example 2 - Image Viewer
-void main() {
-  runDiveUIApp(AppWidget());
-}
-
-class AppWidget extends StatelessWidget {
+class DiveCameraAppWidget extends StatelessWidget {
   final _elements = DiveCoreElements();
+
+  DiveCameraAppWidget({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Dive Example 2',
+        title: 'Dive Camera',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.purple,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: Scaffold(
-          appBar: AppBar(
-            title: const Text('Dive Image Viewer Example'),
-            actions: <Widget>[
-              DiveImagePickerButton(elements: _elements),
-            ],
-          ),
           body: BodyWidget(elements: _elements),
         ));
   }
@@ -46,31 +37,40 @@ class _BodyWidgetState extends State<BodyWidget> {
   DiveCoreElements _elements;
   bool _initialized = false;
 
-  void _initialize(BuildContext context) {
-    if (_initialized) return;
-
-    /// DiveCore and other modules must use the same [ProviderContainer], so
-    /// it needs to be passed to DiveCore at the start.
-    DiveUI.setup(context);
-
+  @override
+  void initState() {
+    super.initState();
     _elements = widget.elements;
     _diveCore = DiveCore();
-    _diveCore.setupOBS(DiveCoreResolution.HD);
+    _initialize();
+  }
+
+  void _initialize() async {
+    if (_initialized) return;
+    _initialized = true;
+
+    await _diveCore.setupOBS(DiveCoreResolution.HD);
 
     DiveScene.create('Scene 1').then((scene) {
       _elements.updateState((state) => state.copyWith(currentScene: scene));
 
       DiveVideoMix.create().then((mix) {
-        _elements.updateState((state) => state.videoMixes.add(mix));
+        _elements.updateState((state) => state..videoMixes.add(mix));
+      });
+
+      DiveInputs.video().forEach((videoInput) {
+        print(videoInput);
+        DiveVideoSource.create(videoInput).then((source) {
+          _elements.updateState((state) => state
+            ..videoSources.add(source)
+            ..currentScene.addSource(source));
+        });
       });
     });
-
-    _initialized = true;
   }
 
   @override
   Widget build(BuildContext context) {
-    _initialize(context);
     return MediaPlayer(context: context, elements: _elements);
   }
 }
@@ -97,13 +97,26 @@ class MediaPlayer extends ConsumerWidget {
       aspectRatio: DiveCoreAspectRatio.HD.ratio,
     );
 
-    final mainContent = Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+    final cameras = DiveCameraList(
+        elements: elements,
+        state: state,
+        onTap: (int currentIndex, int newIndex) {
+          final state = elements.state;
+          final source = state.videoSources[newIndex];
+          final sceneItem = state.currentScene.findSceneItem(source);
+          if (sceneItem != null) {
+            sceneItem.setOrder(DiveSceneItemMovement.MOVE_TOP);
+          }
+          return true;
+        });
+
+    final mainContent = Row(
       children: [
+        if (state.videoSources.length > 0) cameras,
         videoMix,
       ],
     );
 
-    return Container(color: Colors.white, child: mainContent);
+    return Container(color: Colors.black, child: mainContent);
   }
 }

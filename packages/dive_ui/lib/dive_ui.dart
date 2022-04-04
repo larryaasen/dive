@@ -15,6 +15,7 @@ import 'dive_side_sheet.dart';
 
 export 'blocs/dive_reference_panels.dart';
 export 'dive_audio_meter.dart';
+export 'dive_camera_app_widget.dart';
 export 'dive_media_ui.dart';
 export 'dive_position_dialog.dart';
 export 'dive_side_sheet.dart';
@@ -171,7 +172,7 @@ class DiveMeterPreview extends DivePreview {
     Key key,
     double aspectRatio,
     this.meterVertical = false,
-  }) : super(controller, key: key, aspectRatio: aspectRatio);
+  }) : super(controller: controller, key: key, aspectRatio: aspectRatio);
 
   /// The volume meter to display over the preview.
   final DiveAudioMeterSource volumeMeter;
@@ -210,7 +211,7 @@ class DiveMeterPreview extends DivePreview {
 /// A widget showing a preview of an image or video frames using a Flutter [Texture] widget.
 class DivePreview extends StatelessWidget {
   /// Creates a preview widget for the given texture preview controller.
-  const DivePreview(this.controller, {Key key, this.aspectRatio}) : super(key: key);
+  const DivePreview({this.controller, Key key, this.aspectRatio}) : super(key: key);
 
   /// The aspect ratio to attempt to use.
   ///
@@ -228,7 +229,9 @@ class DivePreview extends StatelessWidget {
         ? Texture(textureId: controller.textureId)
         : Container(color: Colors.blue);
 
-    final widget = aspectRatio != null ? DiveAspectRatio(aspectRatio: aspectRatio, child: texture) : texture;
+    final widget = aspectRatio != null
+        ? Flexible(child: DiveAspectRatio(aspectRatio: aspectRatio, child: texture))
+        : texture;
 
     return widget;
   }
@@ -309,13 +312,12 @@ class DiveAspectRatio extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // The aspect ratio must be greater than 0.
+    final ratio = aspectRatio > 0 ? aspectRatio : 1;
+
     // Wrap the AspectRatio inside an Align widget to make the AspectRatio
     // widget actually work.
-    return Align(
-        child: AspectRatio(
-      aspectRatio: aspectRatio,
-      child: child,
-    ));
+    return AspectRatio(aspectRatio: ratio, child: child);
   }
 }
 
@@ -662,9 +664,11 @@ class _DiveCameraListState extends State<DiveCameraList> {
                 ? Text("Camera:\n${widget.state.videoSources[index].name}")
                 : DiveAspectRatio(
                     aspectRatio: DiveCoreAspectRatio.HD.ratio,
-                    child: DivePreview(widget.state.videoSources[index].controller));
+                    child: DivePreview(controller: widget.state.videoSources[index].controller));
             return Card(
                 child: ListTile(
+              tileColor: Colors.grey.shade900,
+              selectedTileColor: Colors.grey.shade800,
               title: content,
               selected: index == _selectedIndex,
               onTap: () {

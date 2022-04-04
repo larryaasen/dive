@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
 
 import 'dive_audio_meter_source.dart';
@@ -26,13 +27,73 @@ class DiveVideoSettings {
 /// The state model for core elements.
 class DiveCoreElementsState {
   // TODO: Make the class DiveCoreElementsState immutable
-  final List<DiveAudioSource> audioSources = [];
-  final List<DiveImageSource> imageSources = [];
-  final List<DiveMediaSource> mediaSources = [];
-  final List<DiveVideoSource> videoSources = [];
-  final List<DiveVideoMix> videoMixes = [];
-  DiveOutput streamingOutput;
-  DiveScene currentScene;
+  final List<DiveAudioSource> audioSources;
+  final List<DiveImageSource> imageSources;
+  final List<DiveMediaSource> mediaSources;
+  final List<DiveVideoSource> videoSources;
+  final List<DiveVideoMix> videoMixes;
+  final DiveOutput streamingOutput;
+  final DiveScene currentScene;
+
+  DiveCoreElementsState(
+      {List<DiveAudioSource> audioSources,
+      List<DiveImageSource> imageSources,
+      List<DiveMediaSource> mediaSources,
+      List<DiveVideoSource> videoSources,
+      List<DiveVideoMix> videoMixes,
+      this.streamingOutput,
+      this.currentScene})
+      : audioSources = audioSources ?? [],
+        imageSources = imageSources ?? [],
+        mediaSources = mediaSources ?? [],
+        videoSources = videoSources ?? [],
+        videoMixes = videoMixes ?? [];
+
+  DiveCoreElementsState copyWith({
+    List<DiveAudioSource> audioSources,
+    List<DiveImageSource> imageSources,
+    List<DiveMediaSource> mediaSources,
+    List<DiveVideoSource> videoSources,
+    List<DiveVideoMix> videoMixes,
+    DiveOutput streamingOutput,
+    DiveScene currentScene,
+  }) {
+    return DiveCoreElementsState(
+      audioSources: audioSources ?? this.audioSources,
+      imageSources: imageSources ?? this.imageSources,
+      mediaSources: mediaSources ?? this.mediaSources,
+      videoSources: videoSources ?? this.videoSources,
+      videoMixes: videoMixes ?? this.videoMixes,
+      streamingOutput: streamingOutput ?? this.streamingOutput,
+      currentScene: currentScene ?? this.currentScene,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    final listEquals = const DeepCollectionEquality().equals;
+
+    return other is DiveCoreElementsState &&
+        listEquals(other.audioSources, audioSources) &&
+        listEquals(other.imageSources, imageSources) &&
+        listEquals(other.mediaSources, mediaSources) &&
+        listEquals(other.videoSources, videoSources) &&
+        listEquals(other.videoMixes, videoMixes) &&
+        other.streamingOutput == streamingOutput &&
+        other.currentScene == currentScene;
+  }
+
+  @override
+  int get hashCode {
+    return audioSources.hashCode ^
+        imageSources.hashCode ^
+        mediaSources.hashCode ^
+        videoSources.hashCode ^
+        videoMixes.hashCode ^
+        streamingOutput.hashCode ^
+        currentScene.hashCode;
+  }
 }
 
 class _DiveCoreElementsStateNotifier extends StateNotifier<DiveCoreElementsState> {
@@ -41,7 +102,9 @@ class _DiveCoreElementsStateNotifier extends StateNotifier<DiveCoreElementsState
   _DiveCoreElementsStateNotifier(DiveCoreElementsState stateModel)
       : super(stateModel ?? DiveCoreElementsState());
 
-  void updateState(DiveCoreElementsState stateModel) => state = stateModel;
+  void updateState(DiveCoreElementsState stateModel) {
+    state = identical(state, stateModel) ? stateModel.copyWith() : stateModel;
+  }
 }
 
 /// The core elements used in a Dive app.
@@ -69,6 +132,9 @@ class DiveCoreElements {
 
   /// Add an image source.
   void addImageSource(final localFile) {
+    if (state.currentScene == null) {
+      throw AssertionError('currentScene must not be null');
+    }
     DiveImageSource.create(localFile).then((source) {
       if (source != null) {
         final state = DiveCore.notifierFor(stateProvider).stateModel;
@@ -82,6 +148,9 @@ class DiveCoreElements {
 
   /// Add a media source to the current scene.
   void addMediaSource(final localFile) {
+    if (state.currentScene == null) {
+      throw AssertionError('currentScene must not be null');
+    }
     DiveMediaSource.create(localFile).then((source) {
       if (source != null) {
         DiveAudioMeterSource()
@@ -104,9 +173,9 @@ class DiveCoreElements {
   /// Update the current state. Changes to this state are saved and are
   /// sent to notifiers. This method is good for makeing many state
   /// changes, and then having only one change sent the notifiers.
-  void updateState(void changeState(DiveCoreElementsState state)) {
+  void updateState(DiveCoreElementsState changeState(DiveCoreElementsState state)) {
     final state = DiveCore.notifierFor(stateProvider).stateModel;
-    changeState(state);
-    DiveCore.notifierFor(stateProvider).updateState(state);
+    final newState = changeState(state);
+    DiveCore.notifierFor(stateProvider).updateState(newState);
   }
 }

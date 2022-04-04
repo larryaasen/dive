@@ -6,24 +6,23 @@ App Title: `Dive Camera and Audio`
 Bunlde identifier: `com.moonwink.divecamera`
 
 ## Running the app
-Run this from the command line:
+Running a dive app only works by running from Xcode. First, run this from the command line:
 ```
 flutter run lib/main.dart --no-sound-null-safety
 ```
-Then, run the app from Xcode.
-
-## Uploading the macOS app to App Store Connect and TestFlight
-When archiving the app in Xcode 13.2.1, it works fine. However, it fails the
-Validation stage after a long time and after the PKG file has been created:
+You will see this output:
 ```
-Distribution failed with errors:
-
-App Store Connect Operation Error
-
-Unable to process application at this time due to the following error: This
-bundle is invalid. The Info.plist file is missing or could not be parsed.
-Please check it for embedded control characters..
+Error waiting for a debug connection: The log reader stopped unexpectedly, or never started.
+Error launching application on macOS.
 ```
+That means that the deubber was not able to connect.
+
+Then, run the app from Xcode. It should work from there.
+
+# Known Issues
+When uploading the macOS app to App Store Connect and TestFlight, there was a verification
+error relate to the virtual camera plugin. The file data/obs-mac-virtualcam.plugin was
+removed from the obslib framework to ensure the upload would work.
 
 ## TODO
 1. Created an app icon, instead of using the Flutter icon.
@@ -34,7 +33,7 @@ Please check it for embedded control characters..
 1. This needs to be replaced: `pod 'obslib', :path => '/Users/larry/Projects/obslib-framework'`,
 with the publish pod version.
 
-## Creating a new Dive app for macOS
+## How to create a new Dive app for macOS
 
 1. $ flutter create dive_app --platforms=macos --template=skeleton
 1. $ cd dive_app

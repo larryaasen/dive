@@ -8,7 +8,7 @@ import 'package:path/path.dart' as path;
 import 'dive_ui.dart';
 
 class DiveMediaPreview extends DivePreview {
-  DiveMediaPreview(this.mediaSource) : super(mediaSource == null ? null : mediaSource.controller);
+  DiveMediaPreview(this.mediaSource) : super(controller: mediaSource == null ? null : mediaSource.controller);
 
   final DiveMediaSource mediaSource;
 

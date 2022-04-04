@@ -54,7 +54,7 @@ class _BodyWidgetState extends State<BodyWidget> {
     _diveCore.setupOBS(DiveCoreResolution.HD);
 
     DiveScene.create('Scene 1').then((scene) {
-      _elements.updateState((state) => state.currentScene = scene);
+      _elements.updateState((state) => state.copyWith(currentScene: scene));
 
       DiveVideoMix.create().then((mix) {
         _elements.updateState((state) => state.videoMixes.add(mix));
@@ -114,7 +114,8 @@ class MediaPlayer extends ConsumerWidget {
         width: 200 * DiveCoreAspectRatio.HD.ratio,
         child: DiveSourceCard(
           item: item,
-          child: DivePreview(state.videoSources.length == 0 ? null : (state.videoSources[0]).controller,
+          child: DivePreview(
+              controller: state.videoSources.length == 0 ? null : (state.videoSources[0]).controller,
               aspectRatio: DiveCoreAspectRatio.HD.ratio),
           elements: elements,
         ));
