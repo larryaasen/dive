@@ -58,14 +58,14 @@ class _BodyWidgetState extends State<BodyWidget> {
       _elements.updateState((state) => state.copyWith(currentScene: scene));
 
       DiveVideoMix.create().then((mix) {
-        _elements.updateState((state) => state.videoMixes.add(mix));
+        _elements.updateState((state) => state..videoMixes.add(mix));
       });
 
       DiveAudioSource.create('main audio').then((source) {
         setState(() {
-          _elements.updateState((state) => state.audioSources.add(source));
+          _elements.updateState((state) => state..audioSources.add(source));
         });
-        _elements.updateState((state) => state.currentScene.addSource(source));
+        _elements.updateState((state) => state..currentScene.addSource(source));
 
         DiveAudioMeterSource()
           ..create(source: source).then((volumeMeter) {
@@ -78,8 +78,8 @@ class _BodyWidgetState extends State<BodyWidget> {
       DiveInputs.video().forEach((videoInput) {
         print(videoInput);
         DiveVideoSource.create(videoInput).then((source) {
-          _elements.updateState((state) => state.videoSources.add(source));
-          _elements.updateState((state) => state.currentScene.addSource(source));
+          _elements.updateState((state) => state..videoSources.add(source));
+          _elements.updateState((state) => state..currentScene.addSource(source));
         });
       });
     });

@@ -67,14 +67,14 @@ class _BodyWidgetState extends State<BodyWidget> {
       _elements.updateState((state) => state.copyWith(currentScene: scene));
 
       DiveVideoMix.create().then((mix) {
-        _elements.updateState((state) => state.videoMixes.add(mix));
+        _elements.updateState((state) => state..videoMixes.add(mix));
       });
 
       DiveAudioSource.create('main audio').then((source) {
         setState(() {
-          _elements.updateState((state) => state.audioSources.add(source));
+          _elements.updateState((state) => state..audioSources.add(source));
         });
-        _elements.updateState((state) => state.currentScene.addSource(source));
+        _elements.updateState((state) => state..currentScene.addSource(source));
 
         DiveAudioMeterSource()
           ..create(source: source).then((volumeMeter) {
@@ -90,6 +90,7 @@ class _BodyWidgetState extends State<BodyWidget> {
           _elements.updateState((state) {
             state.videoSources.add(source);
             state.currentScene.addSource(source);
+            return state;
           });
         });
       });
@@ -145,6 +146,7 @@ class MediaPlayer extends ConsumerWidget {
             if (sceneItem != null) {
               sceneItem.setOrder(DiveSceneItemMovement.MOVE_TOP);
             }
+            return state;
           });
           return true;
         });

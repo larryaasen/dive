@@ -43,8 +43,8 @@ class DiveExample {
 
       // Create the main audio source
       DiveAudioSource.create('main audio').then((source) {
-        _elements.updateState((state) => state.audioSources.add(source));
-        _elements.updateState((state) => state.currentScene.addSource(source));
+        _elements.updateState((state) => state..audioSources.add(source));
+        _elements.updateState((state) => state..currentScene.addSource(source));
       });
 
       // Get the first video input
@@ -53,9 +53,9 @@ class DiveExample {
 
       // Create the last video source from the video input
       DiveVideoSource.create(videoInput).then((source) {
-        _elements.updateState((state) => state.videoSources.add(source));
+        _elements.updateState((state) => state..videoSources.add(source));
         // Add the video source to the scene
-        _elements.updateState((state) => state.currentScene.addSource(source));
+        _elements.updateState((state) => state..currentScene.addSource(source));
       });
 
       // Create the streaming output
@@ -85,27 +85,26 @@ class DiveExample {
         output.stop();
         output = null;
 
-        _elements.updateState((state) {
-          // Remove the video and audio sources from the scene
-          state.currentScene.removeAllSceneItems();
+        final state = _elements.state;
+        // Remove the video and audio sources from the scene
+        state.currentScene.removeAllSceneItems();
 
-          // Remove the video source from the state
-          final videoSource = state.videoSources.removeLast();
-          // Delete the source resources
-          videoSource.dispose();
+        // Remove the video source from the state
+        final videoSource = state.videoSources.removeLast();
+        // Delete the source resources
+        videoSource.dispose();
 
-          // Remove the video source from the state
-          final audioSource = state.audioSources.removeLast();
-          // Delete the source resources
-          audioSource.dispose();
+        // Remove the video source from the state
+        final audioSource = state.audioSources.removeLast();
+        // Delete the source resources
+        audioSource.dispose();
 
-          // Delete the scene resources
-          scene.dispose();
+        // Delete the scene resources
+        scene.dispose();
 
-          _diveCore.shutdown();
+        _diveCore.shutdown();
 
-          _diveCore = null;
-        });
+        _diveCore = null;
       });
     });
   }

@@ -5,22 +5,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:riverpod/riverpod.dart';
 
-/*
-  TODO: Review use of Riverpod.
-  
-  Notes:
-    HookWidget;
-    flutter_hooks;
-    useProvider(elements.stateProvider);
-    useMemoized();
-    Riverpod Discord.
+// TODO: Review use of Riverpod.
 
-    Flutter Snippets ad-on;
-    Dart Data Class Generator ad-on;
-    dart-import ad-on;
-*/
-
-/// Run a Dive app.
+/// Configure a Dive app.
 void configDiveApp() {
   // We need the binding to be initialized before calling runApp
   WidgetsFlutterBinding.ensureInitialized();
@@ -242,14 +229,14 @@ class DiveCoreProviderContainerException implements Exception {
   String toString() => 'DiveCore.providerContainer should not be null.';
 }
 
-extension DoubleRound on double {
-  double roundAsFixed(int places) {
-    double mod = pow(10.0, places);
-    return ((this * mod).round().toDouble() / mod);
-  }
+/// Extention methods on double.
+extension DiveDoubleRound on double {
+  /// Round a double to fixed places.
+  double roundAsFixed(int places) => _roundAsFixed(this, places);
 }
 
-double roundAsFixed(double value, int places) {
+/// Round a double to fixed places.
+double _roundAsFixed(double value, int places) {
   double mod = pow(10.0, places);
   return ((value * mod).round().toDouble() / mod);
 }

@@ -61,7 +61,7 @@ class _BodyWidgetState extends State<BodyWidget> {
       _elements.updateState((state) => state.copyWith(currentScene: scene));
 
       DiveVideoMix.create().then((mix) {
-        _elements.updateState((state) => state.videoMixes.add(mix));
+        _elements.updateState((state) => state..videoMixes.add(mix));
       });
     });
 

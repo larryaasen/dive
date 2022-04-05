@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dive/dive.dart';
 
+/// The Dive Camera App widget, that displays a list of live cameras.
 class DiveCameraAppWidget extends StatelessWidget {
   final _elements = DiveCoreElements();
 
@@ -18,21 +19,21 @@ class DiveCameraAppWidget extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: Scaffold(
-          body: BodyWidget(elements: _elements),
+          body: DiveCameraAppBody(elements: _elements),
         ));
   }
 }
 
-class BodyWidget extends StatefulWidget {
-  BodyWidget({Key key, this.elements}) : super(key: key);
+class DiveCameraAppBody extends StatefulWidget {
+  DiveCameraAppBody({Key key, this.elements}) : super(key: key);
 
   final DiveCoreElements elements;
 
   @override
-  _BodyWidgetState createState() => _BodyWidgetState();
+  _DiveCameraAppBodyState createState() => _DiveCameraAppBodyState();
 }
 
-class _BodyWidgetState extends State<BodyWidget> {
+class _DiveCameraAppBodyState extends State<DiveCameraAppBody> {
   DiveCore _diveCore;
   DiveCoreElements _elements;
   bool _initialized = false;
@@ -71,12 +72,12 @@ class _BodyWidgetState extends State<BodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return MediaPlayer(context: context, elements: _elements);
+    return DiveCameraAppMediaPlayer(context: context, elements: _elements);
   }
 }
 
-class MediaPlayer extends ConsumerWidget {
-  const MediaPlayer({
+class DiveCameraAppMediaPlayer extends ConsumerWidget {
+  const DiveCameraAppMediaPlayer({
     Key key,
     @required this.elements,
     @required this.context,

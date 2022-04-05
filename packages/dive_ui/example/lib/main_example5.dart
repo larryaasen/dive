@@ -56,20 +56,20 @@ class AppWidget extends StatelessWidget {
           item.updateTransformInfo(info);
         });
       });
+      return state;
     });
 
     // Set animation timer
     final ticks = 10;
     int tickCount = 0;
     Timer.periodic(Duration(milliseconds: 80), (timer) {
-      _elements.updateState((state) {
-        state.currentScene.sceneItems.forEach((item) {
-          final height = 350.0;
-          final x = (height * DiveCoreAspectRatio.HD.ratio) * (tickCount / ticks);
-          final y = height * (tickCount / ticks);
-          final info = DiveTransformInfo(bounds: DiveVec2(x, y));
-          item.updateTransformInfo(info);
-        });
+      final state = _elements.state;
+      state.currentScene.sceneItems.forEach((item) {
+        final height = 350.0;
+        final x = (height * DiveCoreAspectRatio.HD.ratio) * (tickCount / ticks);
+        final y = height * (tickCount / ticks);
+        final info = DiveTransformInfo(bounds: DiveVec2(x, y));
+        item.updateTransformInfo(info);
       });
       tickCount++;
       if (tickCount == ticks) {
@@ -111,14 +111,14 @@ class _BodyWidgetState extends State<BodyWidget> {
       _elements.updateState((state) => state.copyWith(currentScene: scene));
 
       DiveVideoMix.create().then((mix) {
-        _elements.updateState((state) => state.videoMixes.add(mix));
+        _elements.updateState((state) => state..videoMixes.add(mix));
       });
 
       DiveAudioSource.create('main audio').then((source) {
         setState(() {
-          _elements.updateState((state) => state.audioSources.add(source));
+          _elements.updateState((state) => state..audioSources.add(source));
         });
-        _elements.updateState((state) => state.currentScene.addSource(source));
+        _elements.updateState((state) => state..currentScene.addSource(source));
 
         DiveAudioMeterSource()
           ..create(source: source).then((volumeMeter) {
@@ -134,6 +134,7 @@ class _BodyWidgetState extends State<BodyWidget> {
           _elements.updateState((state) {
             state.videoSources.add(source);
             state.currentScene.addSource(source);
+            return state;
           });
         });
       });
@@ -194,13 +195,12 @@ class MediaPlayer extends ConsumerWidget {
         elements: elements,
         state: state,
         onTap: (int currentIndex, int newIndex) {
-          elements.updateState((state) {
-            final source = state.videoSources[newIndex];
-            final sceneItem = state.currentScene.findSceneItem(source);
-            if (sceneItem != null) {
-              sceneItem.setOrder(DiveSceneItemMovement.MOVE_TOP);
-            }
-          });
+          final state = elements.state;
+          final source = state.videoSources[newIndex];
+          final sceneItem = state.currentScene.findSceneItem(source);
+          if (sceneItem != null) {
+            sceneItem.setOrder(DiveSceneItemMovement.MOVE_TOP);
+          }
           return true;
         });
 

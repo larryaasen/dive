@@ -61,15 +61,15 @@ class _BodyWidgetState extends State<BodyWidget> {
       _elements.updateState((state) => state.copyWith(currentScene: scene));
 
       DiveVideoMix.create().then((mix) {
-        _elements.updateState((state) => state.videoMixes.add(mix));
+        _elements.updateState((state) => state..videoMixes.add(mix));
       });
 
       DiveInputs.video().forEach((videoInput) {
         if (videoInput.name.contains('C920')) {
           print(videoInput);
           DiveVideoSource.create(videoInput).then((source) {
-            _elements.updateState((state) => state.videoSources.add(source));
-            _elements.updateState((state) => state.currentScene.addSource(source));
+            _elements.updateState((state) => state..videoSources.add(source));
+            _elements.updateState((state) => state..currentScene.addSource(source));
           });
         }
       });

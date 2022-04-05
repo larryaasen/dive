@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
+import 'package:built_collection/built_collection.dart';
 import 'package:dive/dive.dart';
 import 'package:equatable/equatable.dart';
-import 'package:built_collection/built_collection.dart';
 
 class DiveReferencePanel extends Equatable {
   DiveReferencePanel({this.assignedSource, String id}) : this.id = id == null ? DiveUuid.newId() : id;

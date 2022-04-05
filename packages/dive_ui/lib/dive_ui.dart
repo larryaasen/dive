@@ -8,16 +8,16 @@ import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'blocs/dive_reference_panels.dart';
 import 'dive_audio_meter.dart';
 import 'dive_position_dialog.dart';
+import 'dive_reference_panels.dart';
 import 'dive_side_sheet.dart';
 
-export 'blocs/dive_reference_panels.dart';
 export 'dive_audio_meter.dart';
 export 'dive_camera_app_widget.dart';
 export 'dive_media_ui.dart';
 export 'dive_position_dialog.dart';
+export 'dive_reference_panels.dart';
 export 'dive_side_sheet.dart';
 export 'dive_stream_settings_dialog.dart';
 export 'dive_topic_card.dart';
