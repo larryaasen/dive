@@ -4,9 +4,8 @@ version: 0.1.0
 homepage: https://divekit.dev
 repository: https://github.com/larryaasen/dive/tree/main/packages/dive
 
-
 environment:
-  sdk: '>=2.7.0 <3.0.0'
+  sdk: '>=2.10.0 <3.0.0'
   flutter: '>=1.20.0'
 
 dependencies:

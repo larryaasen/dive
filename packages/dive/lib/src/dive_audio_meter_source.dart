@@ -45,7 +45,7 @@ class DiveAudioMeterState {
   final bool noSignal;
 
   DiveAudioMeterState({
-    this.channelCount,
+    this.channelCount = 0,
     this.inputPeak,
     this.inputPeakHold,
     this.magnitude,
@@ -91,7 +91,18 @@ class DiveAudioMeterState {
 
   @override
   String toString() {
-    return "DiveAudioMeterState: channelCount=$channelCount";
+    return "channelCount: $channelCount, "
+        "inputPeak: ${inputPeak == null ? 'null' : inputPeak.sublist(0, channelCount)}, "
+        "inputPeakHold: ${inputPeakHold == null ? 'null' : inputPeakHold.sublist(0, channelCount)}, "
+        "magnitude: ${magnitude == null ? 'null' : magnitude.sublist(0, channelCount)}, "
+        "magnitudeAttacked: ${magnitudeAttacked == null ? 'null' : magnitudeAttacked.sublist(0, channelCount)}, "
+        "peak: ${peak == null ? 'null' : peak.sublist(0, channelCount)}, "
+        "peakDecayed: ${peakDecayed == null ? 'null' : peakDecayed.sublist(0, channelCount)}, "
+        "peakHold: ${peakHold == null ? 'null' : peakHold.sublist(0, channelCount)}, "
+        "inputpPeakHoldLastUpdateTime: $inputpPeakHoldLastUpdateTime, "
+        "peakHoldLastUpdateTime: $peakHoldLastUpdateTime, "
+        "lastUpdateTime: $lastUpdateTime, "
+        "noSignal: $noSignal";
   }
 }
 
@@ -102,6 +113,7 @@ class DiveAudioMeterStateNotifier extends StateNotifier<DiveAudioMeterState> {
 
   void updateState(DiveAudioMeterState stateModel) {
     state = stateModel;
+    print("DiveAudioMeterState updated: $stateModel");
   }
 }
 

@@ -1,17 +1,12 @@
 name: dive_ui
-description: A new Flutter package project.
+description: The Dive UI widgets. A toolkit for video recording and streaming.
 version: 0.1.0
 homepage: https://divekit.dev
 repository: https://github.com/larryaasen/dive/tree/main/packages/dive_ui
 
-
-  # This package cannot be published until dive_core is published and this 
-# package no longer uses a path to dive_core.
-publish_to: none
-
 environment:
-  sdk: ">=2.7.0 <3.0.0"
-  flutter: ">=1.17.0 <2.0.0"
+  sdk: '>=2.10.0 <3.0.0'
+  flutter: '>=1.20.0'
 
 dependencies:
   flutter:

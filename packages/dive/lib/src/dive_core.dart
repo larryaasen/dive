@@ -194,7 +194,7 @@ class DiveCore {
     if (DiveCore.providerContainer == null) {
       throw DiveCoreProviderContainerException();
     }
-    return DiveCore.providerContainer != null ? DiveCore.providerContainer.read(provider) : null;
+    return DiveCore.providerContainer.read(provider);
   }
 
   Future<bool> setupOBS(

@@ -1,9 +1,9 @@
 # dive_ui
 
-A Flutter package containing Widgets for building Flutter apps for
+A Flutter package (part of the [Dive](https://pub.dev/packages/dive) toolkit) containing Widgets for building Flutter apps for
 video recording and streaming.
 
-[![pub package](https://img.shields.io/pub/v/dive.svg)](https://pub.dev/packages/dive)
+[![pub package](https://img.shields.io/pub/v/dive_ui.svg)](https://pub.dev/packages/dive_ui)
 <a href="https://www.buymeacoffee.com/larryaasen">
   <img alt="Gift me a coffee" src="https://img.shields.io/badge/Donate-Gift%20Me%20A%20Coffee-yellow.svg">
 </a>
@@ -12,8 +12,9 @@ video recording and streaming.
 
 Dive is a Flutter toolkit for video recording and streaming. The dive_ui
 package is part of the Dive toolkit and is a complete set of widgets to build
-the next generation of Flutter media apps. There are many widgets in this package
-and plent of examples.
+the next generation of Flutter media apps. This package relies heavily on the
+[dive](https://pub.dev/packages/dive) package but remains platform indepenent. There are many widgets in this package
+and plenty of examples.
 
 # Video Widgets
 * DiveSourceCard - stack, gear menu, child
@@ -21,7 +22,6 @@ and plent of examples.
 * DiveMeterPreview - A [DivePreview] with a [DiveAudioMeter] overlay using a [DiveAudioMeterSource].
 * DivePreview - A widget showing a preview of a video/image frame using a [Texture] widget.
 * DiveGrid - GridView
-* TexturePreview - A widget showing a texture.
 
 # Audio Widgets
 * DiveAudioMeter: A widget to display a multi-channel audio meter.

@@ -2,7 +2,7 @@ import 'package:dive/dive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// A widget to display a multi-channel audio meter. It can be displayed
+/// A widget to display a multi-channel audio meter and update the values. It can be displayed
 /// either horizonally or verically (default).
 class DiveAudioMeter extends ConsumerWidget {
   const DiveAudioMeter({Key key, @required this.volumeMeter, this.vertical = true}) : super(key: key);
@@ -12,12 +12,24 @@ class DiveAudioMeter extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    if (volumeMeter == null) {
-      return Container();
-    }
+    if (volumeMeter == null) return Container();
 
     final stateModel = watch(volumeMeter.stateProvider.state);
-    final painter = DiveAudioMeterPainter(state: stateModel, vertical: vertical);
+    return DiveAudioMeterPaint(key: key, state: stateModel, vertical: vertical);
+  }
+}
+
+/// A widget to display a multi-channel audio meter. It can be displayed
+/// either horizonally or verically (default).
+class DiveAudioMeterPaint extends StatelessWidget {
+  const DiveAudioMeterPaint({Key key, @required this.state, this.vertical = true}) : super(key: key);
+
+  final DiveAudioMeterState state;
+  final bool vertical;
+
+  @override
+  Widget build(BuildContext context) {
+    final painter = DiveAudioMeterPainter(state: state, vertical: vertical);
     final paint = CustomPaint(foregroundPainter: painter);
     return paint;
   }
@@ -37,7 +49,7 @@ class DiveAudioMeterPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // print("paint: $size, channelCount=${state.channelCount}, vert=$vertical");
+    if (state == null || state.channelCount == null) return;
 
     for (var channelIndex = 0; channelIndex < state.channelCount; channelIndex++) {
       if (vertical) {
