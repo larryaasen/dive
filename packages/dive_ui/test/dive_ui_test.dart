@@ -16,7 +16,7 @@ void main() {
     expect(find.byType(Container), findsOneWidget);
   });
 
-  testWidgets('DiveAudioMeterPaint', (WidgetTester tester) async {
+  testWidgets('DiveAudioMeterPaint vertical', (WidgetTester tester) async {
     final state = DiveAudioMeterState(
         channelCount: 2,
         inputPeak: [-32.2206916809082, -34.92798614501953],
@@ -41,7 +41,73 @@ void main() {
         .pumpWidget(wrap(SizedBox(width: 500, height: 500, child: DiveAudioMeterPaint(state: state))));
     await expectLater(
       find.byType(DiveAudioMeterPaint),
-      matchesGoldenFile('golden/DiveAudioMeterPaint.png'),
+      matchesGoldenFile('golden/DiveAudioMeterPaint-V.png'),
+    );
+  });
+  testWidgets('DiveAudioMeterPaint horizontal', (WidgetTester tester) async {
+    final state = DiveAudioMeterState(
+        channelCount: 2,
+        inputPeak: [-32.2206916809082, -34.92798614501953],
+        inputPeakHold: [-19.778120040893555, -22.0262508392334],
+        magnitude: [-40.155426025390625, -42.87294006347656],
+        magnitudeAttacked: [-38.39295041595973, -40.50778031717143],
+        peak: [-32.2206916809082, -34.92798614501953],
+        peakDecayed: [-22.771781382841212, -24.99095672158633],
+        peakHold: [-19.778120040893555, -22.0262508392334],
+        inputpPeakHoldLastUpdateTime: [
+          DateTime.parse("2022-04-05 08:20:09.047773"),
+          DateTime.parse("2022-04-05 08:20:09.271743")
+        ],
+        peakHoldLastUpdateTime: [
+          DateTime.parse("2022-04-05 08:20:09.047773"),
+          DateTime.parse("2022-04-05 08:20:09.271743")
+        ],
+        lastUpdateTime: DateTime.parse("2022-04-05 08:20:09.527938"),
+        noSignal: false);
+
+    await tester.pumpWidget(wrap(SizedBox(
+        width: 500,
+        height: 500,
+        child: DiveAudioMeterPaint(
+          state: state,
+          vertical: false,
+        ))));
+    await expectLater(
+      find.byType(DiveAudioMeterPaint),
+      matchesGoldenFile('golden/DiveAudioMeterPaint-H.png'),
+    );
+  });
+  testWidgets('DiveAudioMeterPaint noSignal', (WidgetTester tester) async {
+    final state = DiveAudioMeterState(
+        channelCount: 2,
+        inputPeak: [-32.2206916809082, -34.92798614501953],
+        inputPeakHold: [-19.778120040893555, -22.0262508392334],
+        magnitude: [-40.155426025390625, -42.87294006347656],
+        magnitudeAttacked: [-38.39295041595973, -40.50778031717143],
+        peak: [-32.2206916809082, -34.92798614501953],
+        peakDecayed: [-22.771781382841212, -24.99095672158633],
+        peakHold: [-19.778120040893555, -22.0262508392334],
+        inputpPeakHoldLastUpdateTime: [
+          DateTime.parse("2022-04-05 08:20:09.047773"),
+          DateTime.parse("2022-04-05 08:20:09.271743")
+        ],
+        peakHoldLastUpdateTime: [
+          DateTime.parse("2022-04-05 08:20:09.047773"),
+          DateTime.parse("2022-04-05 08:20:09.271743")
+        ],
+        lastUpdateTime: DateTime.parse("2022-04-05 08:20:09.527938"),
+        noSignal: true);
+
+    await tester.pumpWidget(wrap(SizedBox(
+        width: 500,
+        height: 500,
+        child: DiveAudioMeterPaint(
+          state: state,
+          vertical: false,
+        ))));
+    await expectLater(
+      find.byType(DiveAudioMeterPaint),
+      matchesGoldenFile('golden/DiveAudioMeterPaint-noSignal.png'),
     );
   });
 
