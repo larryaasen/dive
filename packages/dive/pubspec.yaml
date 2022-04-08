@@ -12,13 +12,15 @@ dependencies:
   flutter:
     sdk: flutter
 
+  collection: ^1.15.0
+
   dive_obslib: ^0.1.0
 
   # From fluttetcommunity.dev: Simplify Dart Equality Comparisons
   equatable: ^2.0.0
 
   # From Dart Team: provides internationalization and localization facilities, including message translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
-  intl: '>=0.16.0'
+  intl: '^0.16.0'
 
   # From darky12s@gmail.com: a state-manangement library
   riverpod: ^0.13.1
