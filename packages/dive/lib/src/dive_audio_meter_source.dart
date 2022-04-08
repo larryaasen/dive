@@ -113,7 +113,6 @@ class DiveAudioMeterStateNotifier extends StateNotifier<DiveAudioMeterState> {
 
   void updateState(DiveAudioMeterState stateModel) {
     state = stateModel;
-    print("DiveAudioMeterState updated: $stateModel");
   }
 }
 

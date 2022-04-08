@@ -21,19 +21,19 @@ void main() {
     expect(rv, isFalse);
   });
 
-  test('testing createScene', () async {
-    var pointer;
+  // test('testing createScene', () async {
+  //   var pointer;
 
-    pointer = obslib.createScene('trackingUUID', 'name');
-    expect(pointer, isNotNull);
-  });
+  //   pointer = obslib.createScene('trackingUUID', 'name');
+  //   expect(pointer, isNotNull);
+  // });
 
-  test('testing createMediaSource', () async {
-    var pointer;
+  // test('testing createMediaSource', () async {
+  //   var pointer;
 
-    pointer = obslib.createMediaSource('trackingUUID', 'name');
-    expect(pointer, isNotNull);
-  });
+  //   pointer = obslib.createMediaSource('trackingUUID', 'name');
+  //   expect(pointer, isNotNull);
+  // });
 
   // test('testing Plugin obslib', () async {
   //   var pointer;
