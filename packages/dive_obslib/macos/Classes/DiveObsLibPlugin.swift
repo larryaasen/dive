@@ -1,5 +1,3 @@
-// Copyright (c) 2021 Larry Aasen.
-
 import AVFoundation
 import Cocoa
 import FlutterMacOS

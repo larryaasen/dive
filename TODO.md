@@ -1,4 +1,6 @@
 1. Migrate to null safety.
+1. Add more widget tests.
+1. Add more unit tests.
 1. Search for memory leaks using Instruments.
 1. Resolve some of the TODOs.
 1. Prepare for release.

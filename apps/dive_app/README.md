@@ -28,7 +28,6 @@ removed from the obslib framework to ensure the upload would work.
 1. Created an app icon, instead of using the Flutter icon.
 1. Setup the new app icon.
 1. Change the app install name from DiveCamera.app to Dive Camera.app.
-1. Add copyright to bundle.
 1. Publish the pod obslib in a public repository.
 1. This needs to be replaced: `pod 'obslib', :path => '/Users/larry/Projects/obslib-framework'`,
 with the publish pod version.
