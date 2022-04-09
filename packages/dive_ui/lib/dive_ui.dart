@@ -202,7 +202,7 @@ class DiveMeterPreview extends DivePreview {
         meter,
       ],
     );
-    final content = stack; // Container(child: stack, color: Colors.white);
+    final content = Flexible(child: stack); // Container(child: stack, color: Colors.white);
 
     return content;
   }

@@ -182,14 +182,15 @@ class MediaPlayer extends ConsumerWidget {
     final volumeMeterSource = state.audioSources.firstWhere((source) => source.volumeMeter != null);
     final volumeMeter = volumeMeterSource != null ? volumeMeterSource.volumeMeter : null;
 
-    final videoMix = Container(
-        color: Colors.black,
-        padding: EdgeInsets.all(4),
-        child: DiveMeterPreview(
-          controller: state.videoMixes[0].controller,
-          volumeMeter: volumeMeter,
-          aspectRatio: DiveCoreAspectRatio.HD.ratio,
-        ));
+    final videoMix = Flexible(
+        child: Container(
+            color: Colors.black,
+            padding: EdgeInsets.all(4),
+            child: DiveMeterPreview(
+              controller: state.videoMixes[0].controller,
+              volumeMeter: volumeMeter,
+              aspectRatio: DiveCoreAspectRatio.HD.ratio,
+            )));
 
     final cameras = DiveCameraList(
         elements: elements,
