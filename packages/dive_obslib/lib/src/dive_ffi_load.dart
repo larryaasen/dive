@@ -7,14 +7,16 @@ import 'dive_obs_ffi.dart';
 
 List<ffi.Pointer<ffi.Int8>> _int8s = [];
 
+extension Int8Extensions on ffi.Pointer<ffi.Int8> {
+  String get string => StringExtensions.fromInt8(this);
+}
+
 extension StringExtensions on String {
   static String fromInt8(ffi.Pointer<ffi.Int8> pointer) {
     return pointer.address == 0 ? null : pointer.cast<Utf8>().toDartString();
   }
 
-  ffi.Pointer<ffi.Int8> toInt8() {
-    return this.toNativeUtf8().cast<ffi.Int8>();
-  }
+  ffi.Pointer<ffi.Int8> toInt8() => this.toNativeUtf8().cast<ffi.Int8>();
 
   /// Convert String to Int8, store in private list, and return Int8.
   ffi.Pointer<ffi.Int8> int8() {

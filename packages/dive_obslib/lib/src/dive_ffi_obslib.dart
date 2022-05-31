@@ -362,8 +362,62 @@ extension DiveFFIObslib on DiveBaseObslib {
     _lib.obs_output_stop(output.pointer);
   }
 
+  /// Get the list of the streaming service names.
+  /// When [commonNamesOnly] is true (default) it returns only the common services, and when
+  /// false it returns all services.
+  /// Returns a list of service names.
+  List<String> streamOutputGetServiceNames({String serviceId = "rtmp_common", bool commonNamesOnly = true}) {
+    var names = <String>[];
+    final props = _lib.obs_get_service_properties(serviceId.int8());
+
+    final settings = DiveObslibData();
+    settings.setBool("show_all", !commonNamesOnly);
+    final prop = _lib.obs_properties_get(props, "show_all".int8());
+    settings.modify(prop);
+    settings.dispose();
+
+    final services = _lib.obs_properties_get(props, "service".int8());
+    final services_count = _lib.obs_property_list_item_count(services);
+    for (var index = 0; index < services_count; index++) {
+      final name = _lib.obs_property_list_item_string(services, index);
+      if (StringExtensions.fromInt8(name).isNotEmpty) {
+        names.add(StringExtensions.fromInt8(name));
+      }
+    }
+    _lib.obs_properties_destroy(props);
+    StringExtensions.freeInt8s();
+
+    names.sort();
+    return names;
+  }
+
+  /// Get the list of the servers for a streaming service.
+  /// Returns a map with key as name and value as server url.
+  Map<String, String> streamOutputGetServiceServers({String serviceId = "rtmp_common", String serviceName}) {
+    var names = Map<String, String>();
+    final props = _lib.obs_get_service_properties(serviceId.int8());
+
+    final settings = DiveObslibData();
+    settings.setString("service", serviceName);
+    final prop = _lib.obs_properties_get(props, "service".int8());
+    settings.modify(prop);
+    settings.dispose();
+
+    final services = _lib.obs_properties_get(props, "server".int8());
+    final services_count = _lib.obs_property_list_item_count(services);
+    for (var index = 0; index < services_count; index++) {
+      final name = _lib.obs_property_list_item_name(services, index);
+      final server = _lib.obs_property_list_item_string(services, index);
+      if (name.string.isNotEmpty && server.string.isNotEmpty) names[name.string] = server.string;
+    }
+    _lib.obs_properties_destroy(props);
+    StringExtensions.freeInt8s();
+
+    return names;
+  }
+
   /// Get the output state: 0 (stopped), 1 (active), 2 (paused), or 3 (reconnecting)
-  int outputGetState(DivePointerOutput output) {
+  int streamOutputGetState(DivePointerOutput output) {
     final active = _lib.obs_output_active(output.pointer);
     final paused = _lib.obs_output_paused(output.pointer);
     final reconnecting = _lib.obs_output_reconnecting(output.pointer);
@@ -581,6 +635,12 @@ extension DiveFFIObslib on DiveBaseObslib {
 }
 
 /// A wrapper around [obs_data] and the [obs_data_*] functions.
+/// Example:
+///   void exampleUseData() {
+///     final data = DiveObslibData();
+///     data.setBool("is_local_file", true);
+///     data.dispose();
+///   }
 class DiveObslibData {
   DiveObslibData() {
     _data = _lib.obs_data_create();
@@ -594,13 +654,11 @@ class DiveObslibData {
     StringExtensions.freeInt8s();
   }
 
+  void modify(ffi.Pointer<obs_property> prop) {
+    _lib.obs_property_modified(prop, _data);
+  }
+
   void setBool(String name, bool value) => _lib.obs_data_set_bool(_data, name.int8(), value ? 1 : 0);
 
   void setString(String name, String value) => _lib.obs_data_set_string(_data, name.int8(), value.int8());
-}
-
-void exampleUseData() {
-  final data = DiveObslibData();
-  data.setBool("is_local_file", true);
-  data.dispose();
 }
