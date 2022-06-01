@@ -19,7 +19,10 @@ class DiveOutputStateNotifier extends StateNotifier<DiveOutputStreamingState> {
 /// Signature for the state syncer.
 typedef _DiveSyncer = Future<void> Function();
 
+/// Streaming output.
 class DiveOutput {
+  DiveRTMPService service;
+  DiveRTMPServer server;
   String serviceUrl = 'rtmp://live-iad05.twitch.tv/app/<your_stream_key>';
   String serviceKey = '<your_stream_key>';
   String serviceId = 'rtmp_common';
@@ -38,14 +41,51 @@ class DiveOutput {
     stop();
   }
 
+  bool start() {
+    if (_output != null) {
+      stop();
+    }
+    DiveSystemLog.message('DiveOutput.start');
+
+    // Create streaming service
+    _output = obslib.streamOutputCreate(
+      serviceUrl: serviceUrl,
+      serviceKey: serviceKey,
+      serviceId: serviceId,
+      outputType: outputType,
+    );
+    if (_output == null) {
+      DiveSystemLog.error('DiveOutput.start failed');
+      return false;
+    }
+
+    // Start streaming.
+    final rv = obslib.streamOutputStart(_output);
+    if (rv) {
+      _syncState(_updateState, repeating: true);
+    }
+    return rv;
+  }
+
+  // Always call this method `stop` to ensure the resources are cleaned up.
+  bool stop() {
+    if (_output == null) return false;
+    DiveSystemLog.message('DiveOutput.stop');
+    obslib.streamOutputStop(_output);
+    obslib.streamOutputRelease(_output);
+    _syncState(_updateState, repeating: true);
+    _output = null;
+    return true;
+  }
+
   /// Sync the media state from the media source to the state provider,
   /// delaying if necessary.
-  Future<void> syncState(_DiveSyncer syncer, {int delay = 100, bool repeating = false}) async {
+  Future<void> _syncState(_DiveSyncer syncer, {int delay = 100, bool repeating = false}) async {
     if (repeating) {
       // Poll the for 2 seconds
       if (_timer == null) {
         delay = delay == 0 ? 100 : delay;
-        _timer = Timer.periodic(Duration(milliseconds: delay), (timer) => _syncState());
+        _timer = Timer.periodic(Duration(milliseconds: delay), (timer) => _updateState());
         Timer(Duration(seconds: 2), () {
           _cancelTimer();
         });
@@ -67,46 +107,9 @@ class DiveOutput {
   }
 
   /// Sync the media state from the media source to the state provider.
-  Future<void> _syncState() async {
+  Future<void> _updateState() async {
     if (_output == null) return;
     DiveCore.notifierFor(stateProvider)
-        .updateOutputState(DiveOutputStreamingState.values[obslib.outputGetState(_output)]);
-  }
-
-  bool start() {
-    if (_output != null) {
-      stop();
-    }
-    DiveSystemLog.message('DiveOutput.start');
-
-    // Create streaming service
-    _output = obslib.streamOutputCreate(
-      serviceUrl: serviceUrl,
-      serviceKey: serviceKey,
-      serviceId: serviceId,
-      outputType: outputType,
-    );
-    if (_output == null) {
-      DiveSystemLog.message('DiveOutput.start failed');
-      return false;
-    }
-
-    // Start streaming.
-    final rv = obslib.streamOutputStart(_output);
-    if (rv) {
-      syncState(_syncState, repeating: true);
-    }
-    return rv;
-  }
-
-  // Always call this method `stop` to ensure the resources are cleaned up.
-  bool stop() {
-    if (_output == null) return false;
-    DiveSystemLog.message('DiveOutput.stop');
-    obslib.streamOutputStop(_output);
-    obslib.streamOutputRelease(_output);
-    syncState(_syncState, repeating: true);
-    _output = null;
-    return true;
+        .updateOutputState(DiveOutputStreamingState.values[obslib.streamOutputGetState(_output)]);
   }
 }

@@ -1,12 +1,6 @@
 import 'package:collection/collection.dart';
+import 'package:dive/dive.dart';
 import 'package:riverpod/riverpod.dart';
-
-import 'dive_audio_meter_source.dart';
-import 'dive_core.dart';
-import 'dive_media_source.dart';
-import 'dive_output.dart';
-import 'dive_scene.dart';
-import 'dive_sources.dart';
 
 class DiveVideoSettingsState {}
 
