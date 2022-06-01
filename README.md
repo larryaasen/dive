@@ -141,3 +141,9 @@ or NDI source.
 ### Encoders
 
 ### Services
+
+## VS Code Editor
+The Dart line length has been changed from 80 (default) to 110, a
+much wider and more readable width. Most developers are using displays
+that can easily display wider rows of text, making code easier to
+read when a simple method is so long.
