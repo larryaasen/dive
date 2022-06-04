@@ -23,7 +23,8 @@ class DiveStreamSettingsButton extends StatelessWidget {
   /// Returns [DiveStreamSettingsDialog].
   Widget dialog(BuildContext context) {
     return DiveStreamSettingsDialog(
-        serviceUrl: elements.state.streamingOutput == null ? null : elements.state.streamingOutput.serviceUrl,
+        service: elements.state.streamingOutput == null ? null : elements.state.streamingOutput.service,
+        server: elements.state.streamingOutput == null ? null : elements.state.streamingOutput.server,
         serviceKey: elements.state.streamingOutput == null ? null : elements.state.streamingOutput.serviceKey,
         onApplyCallback: onApply);
   }
@@ -35,30 +36,34 @@ class DiveStreamSettingsButton extends StatelessWidget {
   }
 
   /// Override this method to setup custom streaming output.
-  void onApply(String serviceUrl, String serviceKey) {
+  void onApply(DiveRTMPService service, DiveRTMPServer server, String serviceKey) {
     if (elements == null) return;
 
     final state = elements.state;
     if (state.streamingOutput != null) {
-      state.streamingOutput.serviceUrl = serviceUrl;
+      state.streamingOutput.stop();
+      state.streamingOutput.service = service;
+      state.streamingOutput.server = server;
+      state.streamingOutput.serviceUrl = server.url;
       state.streamingOutput.serviceKey = serviceKey;
     }
   }
 }
 
 /// Signature for when settings need to be applied.
-typedef DiveStreamSettingsApplyCallback = void Function(String serviceUrl, String serviceKey);
+typedef DiveStreamSettingsApplyCallback = void Function(
+    DiveRTMPService service, DiveRTMPServer server, String serviceKey);
 
 /// Update the video output settings.
 /// Stream service URL:
 /// Stream service key:
 class DiveStreamSettingsDialog extends StatefulWidget {
-  DiveStreamSettingsDialog({Key key, this.serviceUrl, this.serviceKey, this.onApplyCallback})
+  DiveStreamSettingsDialog({Key key, this.service, this.server, this.serviceKey, this.onApplyCallback})
       : super(key: key);
 
-  final String serviceUrl;
+  final DiveRTMPService service;
+  final DiveRTMPServer server;
   final String serviceKey;
-
   final DiveStreamSettingsApplyCallback onApplyCallback;
 
   @override
@@ -66,8 +71,12 @@ class DiveStreamSettingsDialog extends StatefulWidget {
 }
 
 class _DiveStreamSettingsDialogState extends State<DiveStreamSettingsDialog> {
+  final DiveRTMPServices _rtmpServices = DiveRTMPServices.standard(commonNamesOnly: false);
   TextEditingController _serviceUrl = TextEditingController();
   TextEditingController _serviceKey = TextEditingController();
+  String _serviceName;
+  String _serverName;
+  List<String> _serverNames;
 
   @override
   void initState() {
@@ -90,7 +99,7 @@ class _DiveStreamSettingsDialogState extends State<DiveStreamSettingsDialog> {
     );
   }
 
-  /// Frame rate - FPS.
+  /// RTMP Service
   Widget _buildConfig(BuildContext context) {
     final header = Text('RTMP Service', style: TextStyle(fontWeight: FontWeight.bold));
 
@@ -99,17 +108,40 @@ class _DiveStreamSettingsDialogState extends State<DiveStreamSettingsDialog> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-          // mainAxisSize: MainAxisSize.max,
           children: [
             header,
+            Padding(padding: EdgeInsets.only(top: 20), child: Text('Service:')),
+            DropdownButton<String>(
+              isExpanded: true,
+              value: _serviceName.isEmpty ? null : _serviceName,
+              itemHeight: null,
+              onChanged: (String name) {
+                setState(() {
+                  _serviceName = name;
+                  _serverNames = _getServerNames(_serviceName);
+                  _serverName = _serverNames[0];
+                  _serviceUrl.text = _getUrlForServer(_serviceName, _serverName);
+                });
+              },
+              items: _items(_rtmpServices.serviceNames),
+            ),
+            Padding(padding: EdgeInsets.only(top: 20), child: Text('Server:')),
+            DropdownButton<String>(
+              isExpanded: true,
+              value: _serverName.isEmpty ? null : _serverName,
+              itemHeight: null,
+              onChanged: (String name) {
+                setState(() {
+                  _serverName = name;
+                  _serviceUrl.text = _getUrlForServer(_serviceName, _serverName);
+                });
+              },
+              items: _items(_serverNames),
+            ),
             Padding(padding: EdgeInsets.only(top: 20), child: Text('URL:')),
-            TextField(
-              controller: _serviceUrl,
-            ),
+            TextField(controller: _serviceUrl, readOnly: true),
             Padding(padding: EdgeInsets.only(top: 20), child: Text('Key:')),
-            TextField(
-              controller: _serviceKey,
-            ),
+            TextField(controller: _serviceKey),
           ],
         ));
 
@@ -130,9 +162,29 @@ class _DiveStreamSettingsDialogState extends State<DiveStreamSettingsDialog> {
     return col;
   }
 
+  List<DropdownMenuItem> _items(List<String> names) {
+    final items = names
+        .map((name) => DropdownMenuItem(
+            child: Padding(padding: const EdgeInsets.all(8.0), child: Text(name)), value: name))
+        .toList();
+    return items;
+  }
+
   void _useInitialState() {
-    _serviceUrl.text = widget.serviceUrl;
+    // _serviceUrl.text = widget.serviceUrl;
     _serviceKey.text = widget.serviceKey;
+    _serviceName = widget.service == null ? 'Twitch' : widget.service.name;
+    _serverNames = _getServerNames(_serviceName);
+    _serverName = widget.server == null ? _serverNames[0] : widget.server.name;
+    _serviceUrl.text = _getUrlForServer(_serviceName, _serverName);
+  }
+
+  List<String> _getServerNames(String serviceName) => _rtmpServices.serviceServers(serviceName);
+
+  String _getUrlForServer(String serviceName, String serverName) {
+    final service = _rtmpServices.serviceForName(serviceName);
+    final server = service.serverForName(serverName);
+    return server.url;
   }
 
   void _onReset() {
@@ -147,7 +199,8 @@ class _DiveStreamSettingsDialogState extends State<DiveStreamSettingsDialog> {
 
   void _onApply() {
     if (widget.onApplyCallback == null) return;
-    widget.onApplyCallback(_serviceUrl.text, _serviceKey.text);
+    final service = _rtmpServices.serviceForName(_serviceName);
+    widget.onApplyCallback(service, service.serverForName(_serverName), _serviceKey.text);
 
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("Properties have been applied."),

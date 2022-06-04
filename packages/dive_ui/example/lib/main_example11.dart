@@ -61,7 +61,7 @@ class _BodyWidgetState extends State<BodyWidget> {
 
     _elements = widget.elements;
     _diveCore = DiveCore();
-    await _diveCore.setupOBS(DiveCoreResolution.HD);
+    await _diveCore.setupOBS(DiveCoreResolution.FULL_HD);
 
     DiveScene.create('Scene 1').then((scene) {
       _elements.updateState((state) => state.copyWith(currentScene: scene));
@@ -154,7 +154,7 @@ class MediaPlayer extends ConsumerWidget {
     final mainContent = Row(
       children: [
         if (state.videoSources.length > 0) cameras,
-        videoMix,
+        Expanded(child: videoMix),
       ],
     );
 

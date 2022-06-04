@@ -202,9 +202,8 @@ class DiveMeterPreview extends DivePreview {
         meter,
       ],
     );
-    final content = Flexible(child: stack); // Container(child: stack, color: Colors.white);
 
-    return content;
+    return stack;
   }
 }
 
@@ -229,9 +228,7 @@ class DivePreview extends StatelessWidget {
         ? Texture(textureId: controller.textureId)
         : Container(color: Colors.blue);
 
-    final widget = aspectRatio != null
-        ? Flexible(child: DiveAspectRatio(aspectRatio: aspectRatio, child: texture))
-        : texture;
+    final widget = aspectRatio != null ? DiveAspectRatio(aspectRatio: aspectRatio, child: texture) : texture;
 
     return widget;
   }
