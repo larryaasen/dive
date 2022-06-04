@@ -91,13 +91,13 @@ class DiveCoreResolution {
   /// 4K resolution
   static const r4K = UHD;
 
-  /// Full HD resolution
+  /// Full HD resolution: 1920x1080
   static const FULL_HD = r1920_1080;
 
-  /// Full HD resolution
+  /// Full HD resolution: 1920x1080
   static const r1080p = FULL_HD;
 
-  /// HD resolution
+  /// HD resolution: 1280x720
   static const HD = r1280_720;
 
   /// HD resolution

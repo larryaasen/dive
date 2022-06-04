@@ -14,3 +14,4 @@ flutter_export_environment.sh
 coverage
 .last_build_id
 lcov.info
+.flutter-plugins
