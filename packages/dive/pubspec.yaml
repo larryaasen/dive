@@ -21,10 +21,10 @@ dependencies:
   equatable: ^2.0.0
 
   # From Dart Team: provides internationalization and localization facilities, including message translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
-  intl: '^0.16.0'
+  intl: ">=0.16.0 <1.0.0"
 
   # From darky12s@gmail.com: a state-manangement library
-  riverpod: ^0.13.1
+  riverpod: ">=0.13.1 <1.0.0"
 
   # From: yuli.dev. Simple, fast generation of RFC4122 UUIDs
   uuid: ^2.2.2
