@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0]
+
 - Changed method `outputGetState` to `streamOutputGetState`.
 - Added methods `streamOutputGetServiceNames` and `streamOutputGetServiceServers` to DiveFFIObslib
 to get service properties for streaming services.

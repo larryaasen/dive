@@ -1,6 +1,6 @@
 name: dive_obslib
 description: A Flutter plugin package for Dive that provides low level access to obslib using FFI.
-version: 0.1.0
+version: 0.2.0
 homepage: https://divekit.dev
 repository: https://github.com/larryaasen/dive/tree/main/packages/dive_obslib
 
