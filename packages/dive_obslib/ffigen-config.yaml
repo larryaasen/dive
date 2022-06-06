@@ -9,10 +9,12 @@ compiler-opts: '-I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDef
 headers:
   entry-points:
     - '/Users/larry/Projects/obslib-framework/obslib.framework/Headers/obs.h'
+    - '/Users/larry/Projects/obslib-framework/obslib.framework/Headers/util/platform.h'
   include-directives:
     - '**obs.h'
     - '**/util/c99defs.h'
     - '**/util/bmem.h'
+    - '**/util/platform.h'
     - '**/util/profiler.h'
     - '**/util/text-lookup.h'
     - '**/graphics/graphics.h'
