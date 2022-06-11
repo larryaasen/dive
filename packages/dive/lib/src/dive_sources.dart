@@ -1,13 +1,11 @@
 import 'dart:async';
 
 import 'package:dive/dive.dart';
+import 'package:dive/src/dive_settings.dart';
 import 'package:dive_obslib/dive_obslib.dart';
 import 'package:flutter/foundation.dart';
 
 import 'dive_plugin.dart';
-
-// TODO: DiveSettings needs to be implemented
-class DiveSettings {}
 
 /// A texture controller for displaying video and image frames.
 /// Use this class as a base class or a mixin.
@@ -65,7 +63,19 @@ class DiveSource extends DiveTracking {
   DiveSource({this.inputType, this.name, this.settings});
 
   // TODO: DiveSource.create() needs to be implemented
-  static Future<DiveSource> create({DiveInputType inputType, String name, DiveSettings settings}) => null;
+  static DiveSource create({DiveInputType inputType, String name, DiveSettings settings}) {
+    final source = DiveSource(inputType: inputType, name: name, settings: settings);
+    final data = DiveSettingsData.settingsToData(settings);
+    source.pointer = obslib.createSource(
+      sourceUuid: source.trackingUUID,
+      inputTypeId: source.inputType.id,
+      name: source.name,
+      settings: data,
+    );
+
+    data.dispose();
+    return source.pointer == null ? null : source;
+  }
 
   @override
   String toString() {

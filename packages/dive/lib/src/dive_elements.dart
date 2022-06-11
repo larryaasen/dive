@@ -25,6 +25,7 @@ class DiveCoreElementsState {
   final List<DiveImageSource> imageSources;
   final List<DiveMediaSource> mediaSources;
   final List<DiveVideoSource> videoSources;
+  final List<DiveSource> sources;
   final List<DiveVideoMix> videoMixes;
   final DiveOutput streamingOutput;
   final DiveScene currentScene;
@@ -34,6 +35,7 @@ class DiveCoreElementsState {
       List<DiveImageSource> imageSources,
       List<DiveMediaSource> mediaSources,
       List<DiveVideoSource> videoSources,
+      List<DiveSource> sources,
       List<DiveVideoMix> videoMixes,
       this.streamingOutput,
       this.currentScene})
@@ -41,13 +43,16 @@ class DiveCoreElementsState {
         imageSources = imageSources ?? [],
         mediaSources = mediaSources ?? [],
         videoSources = videoSources ?? [],
+        sources = sources ?? [],
         videoMixes = videoMixes ?? [];
 
+  /// Updates the current state with only the arguments that are not null.
   DiveCoreElementsState copyWith({
     List<DiveAudioSource> audioSources,
     List<DiveImageSource> imageSources,
     List<DiveMediaSource> mediaSources,
     List<DiveVideoSource> videoSources,
+    List<DiveSource> sources,
     List<DiveVideoMix> videoMixes,
     DiveOutput streamingOutput,
     DiveScene currentScene,
@@ -57,6 +62,7 @@ class DiveCoreElementsState {
       imageSources: imageSources ?? this.imageSources,
       mediaSources: mediaSources ?? this.mediaSources,
       videoSources: videoSources ?? this.videoSources,
+      sources: sources ?? this.sources,
       videoMixes: videoMixes ?? this.videoMixes,
       streamingOutput: streamingOutput ?? this.streamingOutput,
       currentScene: currentScene ?? this.currentScene,
@@ -73,6 +79,7 @@ class DiveCoreElementsState {
         listEquals(other.imageSources, imageSources) &&
         listEquals(other.mediaSources, mediaSources) &&
         listEquals(other.videoSources, videoSources) &&
+        listEquals(other.sources, sources) &&
         listEquals(other.videoMixes, videoMixes) &&
         other.streamingOutput == streamingOutput &&
         other.currentScene == currentScene;
@@ -84,6 +91,7 @@ class DiveCoreElementsState {
         imageSources.hashCode ^
         mediaSources.hashCode ^
         videoSources.hashCode ^
+        sources.hashCode ^
         videoMixes.hashCode ^
         streamingOutput.hashCode ^
         currentScene.hashCode;

@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 - Updated dependency versions for intl and riverpod, to resolve static analysis warnings.
+- Added DiveSettings class.
+- Added a list of DiveSources to DiveCoreElementsState.
+- Added DiveSource create method for creating any source.
 
 ## [0.3.0]
 

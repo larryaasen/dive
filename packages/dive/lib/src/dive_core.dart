@@ -5,6 +5,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:riverpod/riverpod.dart';
 
+import 'dive_input_type.dart';
+
 // TODO: Review use of Riverpod.
 
 /// Configure a Dive app.
