@@ -140,9 +140,10 @@ configure the RTMP stream.
 
 ![image](example11-stream-settings.png)
 
-## Example 12 - All Widgets
+## Example 12 - Display Capture
 
-This example shows all of the Dive UI widgets.
+This example shows how to create a display capture input type which is used for
+streaming the computer screen.
 
 ## Writing an app with Dive UI
 

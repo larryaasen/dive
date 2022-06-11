@@ -1,10 +1,9 @@
 import 'package:dive_ui/dive_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dive/dive.dart';
 
-bool multiCamera = false;
-
-/// Dive Example 12 - All Widgets
+/// Dive Example 12 - Display capture
 void main() {
   runDiveUIApp(AppWidget());
 }
@@ -23,7 +22,7 @@ class AppWidget extends StatelessWidget {
         ),
         home: Scaffold(
           appBar: AppBar(
-            title: const Text('Dive All Widgets Example'),
+            title: const Text('Dive Display Capture Example'),
             actions: <Widget>[
               DiveStreamSettingsButton(elements: _elements),
               DiveOutputButton(elements: _elements),
@@ -44,56 +43,78 @@ class BodyWidget extends StatefulWidget {
 }
 
 class _BodyWidgetState extends State<BodyWidget> {
+  DiveCore _diveCore;
+  DiveCoreElements _elements;
+  bool _initialized = false;
+
   @override
   void initState() {
     super.initState();
     _initialize();
   }
 
-  void _initialize() async {}
+  void _initialize() async {
+    if (_initialized) return;
+    _initialized = true;
+
+    _elements = widget.elements;
+    _diveCore = DiveCore();
+    await _diveCore.setupOBS(DiveCoreResolution.FULL_HD);
+
+    DiveScene.create('Scene 1').then((scene) {
+      _elements.updateState((state) => state.copyWith(currentScene: scene));
+
+      final settings = DiveSettings();
+      settings.set('display', 0); // Display #0
+      settings.set('show_cursor', true); // Show the cursor
+      settings.set('crop_mode', 0); // Crop mode: none
+      final displayCaptureSource = DiveSource.create(
+        inputType: DiveInputType(id: 'display_capture', name: 'Display Capture'),
+        name: 'display capture 1',
+        settings: settings,
+      );
+      _elements.updateState((state) => state..sources.add(displayCaptureSource));
+      _elements.updateState((state) => state..currentScene.addSource(displayCaptureSource));
+
+      DiveVideoMix.create().then((mix) {
+        _elements.updateState((state) => state..videoMixes.add(mix));
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final topics = _widgetList.map((name) => DiveTopicCard(
-        richMedia: DiveMediaPlayButton(mediaSource: null, iconColor: Colors.black), headerText: name));
-    return SingleChildScrollView(
-        padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
-        scrollDirection: Axis.vertical,
-        child: Wrap(
-          spacing: 10.0,
-          runSpacing: 10.0,
-          children: topics.toList(),
-        ));
+    return MediaPlayer(context: context, elements: _elements);
   }
+}
 
-  final List<String> _widgetList = [
-    'DiveUIApp',
-    'DiveSourceCard',
-    'DiveMediaPreview',
-    'DiveMeterPreview',
-    'DivePreview',
-    'DiveMediaPlayButton',
-    'DiveMediaStopButton',
-    'DiveMediaDuration',
-    'DiveMediaButtonBar',
-    'DiveOutputButton',
-    'DiveStreamPlayButton',
-    'DiveAspectRatio',
-    'DiveGrid',
-    'DiveSourceMenu',
-    'DiveSubMenu',
-    'DiveImagePickerButton',
-    'DiveVideoPickerButton',
-    'DiveCameraList',
-    'DiveAudioList',
-    'DiveAudioMeter',
-    'DiveAudioMeterPainter',
-    'DivePositionDialog',
-    'DivePositionEdit',
-    'DiveMoveItemEdit',
-    'DiveSideSheet',
-    'DiveStreamSettingsButton',
-    'DiveStreamSettingsDialog',
-    'DiveTopicCard'
-  ];
+class MediaPlayer extends ConsumerWidget {
+  const MediaPlayer({Key key, @required this.elements, @required this.context}) : super(key: key);
+
+  final DiveCoreElements elements;
+  final BuildContext context;
+
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
+    final state = watch(elements.stateProvider.state);
+    if (state.videoMixes.length == 0) {
+      return Container(color: Colors.purple);
+    }
+
+    final videoMix = Container(
+        color: Colors.black,
+        padding: EdgeInsets.all(4),
+        child: DivePreview(
+          controller: state.videoMixes[0].controller,
+          aspectRatio: DiveCoreAspectRatio.HD.ratio,
+        ));
+
+    final mainContent = Row(
+      children: [
+        Expanded(child: videoMix),
+      ],
+    );
+
+    return Container(color: Colors.white, child: mainContent);
+  }
 }
