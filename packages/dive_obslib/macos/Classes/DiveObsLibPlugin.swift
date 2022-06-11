@@ -32,11 +32,6 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
         static let GetSceneItemInfo = "getSceneItemInfo"
         static let SetSceneItemInfo = "setSceneItemInfo"
 
-        static let GetInputTypes = "getInputTypes"
-        static let GetInputsFromType = "getInputsFromType"
-        static let GetAudioInputs = "getAudioInputs"
-        static let GetVideoInputs = "getVideoInputs"
-
         static let AddVolumeMeterCallback = "addVolumeMeterCallback"
     }
     
@@ -116,15 +111,6 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
 //            ffi ? nil : result(mediaSetTime(arguments))
 //        case Method.MediaGetState:
 //            ffi ? nil : result(mediaGetState(arguments))
-//
-//        case Method.GetInputTypes:
-//            ffi ? nil : result(getInputTypes())
-//        case Method.GetInputsFromType:
-//            ffi ? nil : result(getInputsFromType(arguments))
-//        case Method.GetAudioInputs:
-//            ffi ? nil : result(getAudioInputs())
-//        case Method.GetVideoInputs:
-//            ffi ? nil : result(getVideoInputs())
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -362,27 +348,6 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
                 return false
         }
         return bridge_sceneitem_set_info(sceneitem_pointer, info)
-    }
-    
-    private func getInputTypes() -> [[String: Any]] {
-        return bridge_input_types() as? [[String: Any]] ?? []
-    }
-    
-    private func getInputsFromType(_ arguments: [String: Any]?) -> [[String: Any]] {
-        guard let args = arguments,
-            let type_id = args["type_id"] as! String?
-            else {
-                return []
-        }
-        return bridge_inputs_from_type(type_id) as? [[String: Any]] ?? []
-    }
-
-    private func getAudioInputs() -> [[String: Any]] {
-        return bridge_audio_inputs() as? [[String: Any]] ?? []
-    }
-
-    private func getVideoInputs() -> [[String: Any]] {
-        return bridge_video_inputs() as? [[String: Any]] ?? []
     }
     
     // MARK: volumeMeter

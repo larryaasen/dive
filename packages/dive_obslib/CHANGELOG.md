@@ -6,7 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Changed DiveFFIObslib inputTypes() to get inputTypes.
 - Added example to dive_obslib.
+- Added sourceTypes() and sources() to DiveFFIObslib.
+- Added setDouble and setInt to DiveObslibData.
 
 ## [0.2.0]
 

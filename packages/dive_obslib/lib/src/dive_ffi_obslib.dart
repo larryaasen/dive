@@ -14,6 +14,8 @@ DiveObslibFFI _lib;
 /// Tracks the first scene being created, and sets the output source if first
 bool _isFirstScene = true;
 
+bool _debugVerbose = false;
+
 /// Connects to obslib using FFI. Will load the obslib library, load modules,
 /// reset video and audio, and create the streaming service.
 extension DiveFFIObslib on DiveBaseObslib {
@@ -26,10 +28,10 @@ extension DiveFFIObslib on DiveBaseObslib {
   }
 
   bool loadAllModules() {
-    print("dive_obslib: load_all_modules");
+    if (_debugVerbose) print("dive_obslib: load_all_modules");
     _lib.obs_load_all_modules();
     _lib.obs_post_load_modules();
-    print("dive_obslib: post_load_modules");
+    if (_debugVerbose) print("dive_obslib: post_load_modules");
     return true;
   }
 
@@ -501,7 +503,7 @@ extension DiveFFIObslib on DiveBaseObslib {
 
   /// Get a list of input types.
   /// Returns array of dictionaries with keys `id` and `name`.
-  List<Map<String, String>> inputTypes() {
+  List<Map<String, String>> get inputTypes {
     int idx = 0;
     final List<Map<String, String>> list = [];
 
@@ -525,6 +527,8 @@ extension DiveFFIObslib on DiveBaseObslib {
     }
     calloc.free(typeId);
     calloc.free(unversionedTypeId);
+
+    list.add({"id": "scene", "name": "Scene"});
     return list;
   }
 
@@ -594,18 +598,50 @@ extension DiveFFIObslib on DiveBaseObslib {
       ffi.Pointer<ffi.Void>,
       ffi.Pointer<ffi.Int8>,
       ffi.Pointer<ffi.Int8>,
-    )>(audioMonitoringCallback, 0);
+    )>(_audioCallback, 0);
     _lib.obs_enum_audio_monitoring_devices(cb, list as dynamic);
 
     list.add({'id': 'default', 'name': 'Default'});
     return list;
   }
 
-  static int audioMonitoringCallback(
+  /// Callback for [audioMonitoringDevices].
+  /// fromFunction expects a static function as parameter. dart:ffi only supports calling static Dart
+  /// functions from native code. Closures and tear-offs are not supported because they can capture context.
+  static int _audioCallback(
       ffi.Pointer<ffi.Void> param, ffi.Pointer<ffi.Int8> name, ffi.Pointer<ffi.Int8> id) {
     final list = param as List;
     list.add({'id': StringExtensions.fromInt8(id), 'name': StringExtensions.fromInt8(name)});
     print('audio monitoring device: name=$name, id=$id');
+    return 1;
+  }
+
+  List<Map<String, String>> sourceTypes() {
+    int idx = 0;
+    final List<Map<String, String>> list = [];
+
+    ffi.Pointer<ffi.Pointer<ffi.Int8>> id = calloc();
+    while (_lib.obs_enum_source_types(idx++, id) != 0) {
+      final sourceType = _lib.obs_source_get_display_name(id.value);
+      final type = StringExtensions.fromInt8(sourceType);
+      list.add({'id': StringExtensions.fromInt8(id.value), 'name': type});
+    }
+    calloc.free(id);
+    return list;
+  }
+
+  /// Print out a list of active sources.
+  void sources() {
+    final cb = ffi.Pointer.fromFunction<ffi.Uint8 Function(ffi.Pointer<ffi.Void>, ffi.Pointer<obs_source>)>(
+        _sourcesCallback, 0);
+    _lib.obs_enum_sources(cb, ffi.nullptr);
+  }
+
+  /// Callback for [sources].
+  /// fromFunction expects a static function as parameter. dart:ffi only supports calling static Dart
+  /// functions from native code. Closures and tear-offs are not supported because they can capture context.
+  static int _sourcesCallback(ffi.Pointer<ffi.Void> data, ffi.Pointer<obs_source> source) {
+    print("source=$source");
     return 1;
   }
 
@@ -659,6 +695,7 @@ class DiveObslibData {
   }
 
   void setBool(String name, bool value) => _lib.obs_data_set_bool(_data, name.int8(), value ? 1 : 0);
-
+  void setDouble(String name, double value) => _lib.obs_data_set_double(_data, name.int8(), value);
+  void setInt(String name, int value) => _lib.obs_data_set_int(_data, name.int8(), value);
   void setString(String name, String value) => _lib.obs_data_set_string(_data, name.int8(), value.int8());
 }
