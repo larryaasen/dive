@@ -3,7 +3,7 @@ import 'package:ffi/ffi.dart';
 
 /// Wrap an obslib pointer in a Dart class.
 class DivePointer {
-  DivePointer(this.trackingUuid, this.pointer);
+  const DivePointer(this.trackingUuid, this.pointer);
 
   final String trackingUuid; // TODO: do we really need this trackingUuid?
   final dynamic pointer;
@@ -17,6 +17,7 @@ class DivePointer {
     }
   }
 
+  /// Release, or free, the pointer.
   void releasePointer() {
     calloc.free(pointer as ffi.Pointer<ffi.Int8>);
   }

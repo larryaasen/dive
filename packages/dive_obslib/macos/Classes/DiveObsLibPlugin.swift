@@ -13,7 +13,6 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
 
         static let AddSource = "addSource"
         static let CreateImageSource = "createImageSource"
-        // static let CreateMediaSource = "createMediaSource"
         static let CreateVideoSource = "createVideoSource"
         static let CreateVideoMix = "createVideoMix"
         static let RemoveVideoMix = "removeVideoMix"
@@ -90,8 +89,6 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
 //            ffi ? nil : result(addSource(arguments))
 //        case Method.CreateImageSource:
 //            ffi ? nil : result(createImageSource(arguments))
-//        // case Method.CreateMediaSource:
-//            // ffi ? nil : result(createMediaSource(arguments))
 //        case Method.CreateVideoSource:
 //            ffi ? nil : result(createVideoSource(arguments))
 //        // case Method.CreateScene:
@@ -198,16 +195,6 @@ public class DiveObsLibPlugin: NSObject, FlutterPlugin {
         }
         return bridge_create_image_source(source_uuid, localFile)
     }
-
-    // private func createMediaSource(_ arguments: [String: Any]?) -> Bool {
-    //     guard let args = arguments,
-    //         let source_uuid = args["source_uuid"] as! String?,
-    //         let localFile = args["local_file"] as! String?
-    //         else {
-    //             return false
-    //     }
-    //     return bridge_create_media_source(source_uuid, localFile)
-    // }
 
     private func createVideoSource(_ arguments: [String: Any]?) -> Bool {
         guard let args = arguments,

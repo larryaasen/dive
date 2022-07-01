@@ -180,19 +180,12 @@ extension DiveFFIObslib on DiveBaseObslib {
     return _createSourceInternal(sourceUuid, "image_source", "image", settings);
   }
 
-  DivePointer createMediaSource(String sourceUuid, String localFile) {
-    // Load video file
-    final settings = _lib.obs_get_source_defaults("ffmpeg_source".int8());
-    _lib.obs_data_set_bool(settings, "is_local_file".int8(), 1);
-    _lib.obs_data_set_bool(settings, "looping".int8(), 0);
-    _lib.obs_data_set_bool(settings, "clear_on_media_end".int8(), 0);
-    _lib.obs_data_set_bool(settings, "close_when_inactive".int8(), 1);
-    _lib.obs_data_set_bool(settings, "restart_on_activate".int8(), 0);
-    _lib.obs_data_set_string(settings, "local_file".int8(), localFile.int8());
-
-    return _createSourceInternal(sourceUuid, "ffmpeg_source", "video file", settings);
+  /// Load media source
+  DivePointer createMediaSource({String sourceUuid, String name, DiveObslibData settings}) {
+    return _createSourceInternal(sourceUuid, "ffmpeg_source", name, settings.pointer);
   }
 
+  /// Use this convenience method to create a data object for settings.
   DiveObslibData createData() => DiveObslibData();
 
   DivePointer createVideoSource(String sourceUuid, String deviceName, String deviceUid) {
@@ -299,21 +292,23 @@ extension DiveFFIObslib on DiveBaseObslib {
   /// Create the stream output.
   /// Returns a pointer or null.
   DivePointerOutput streamOutputCreate({
+    @required String serviceName,
     String serviceUrl,
     String serviceKey,
     String serviceId = 'rtmp_common',
     String outputType = 'rtmp_output',
   }) {
     final serviceSettings = DiveObslibData();
+    serviceSettings.setString("service", serviceName);
     serviceSettings.setString("server", serviceUrl);
     serviceSettings.setString("key", serviceKey);
 
-    final serviceObj = _lib.obs_service_create(
-        serviceId.int8(), "default_service".int8(), serviceSettings.pointer, ffi.nullptr);
+    final serviceObj =
+        _lib.obs_service_create(serviceId.int8(), serviceName.int8(), serviceSettings.pointer, ffi.nullptr);
     serviceSettings.dispose();
 
     final streamOutput =
-        _lib.obs_output_create(outputType.int8(), "adv_stream".int8(), ffi.nullptr, ffi.nullptr);
+        _lib.obs_output_create(outputType.int8(), serviceName.int8(), ffi.nullptr, ffi.nullptr);
     if (streamOutput == null) {
       print("creation of stream output type $outputType failed");
       return null;
@@ -658,16 +653,37 @@ extension DiveFFIObslib on DiveBaseObslib {
     return rv == 1;
   }
 
-  void sourceSetMonitoringType(DivePointer source) {
-    print('sourceSetMonitoringType: monitor');
-    _lib.obs_source_set_monitoring_type(
-      source.pointer,
-      obs_monitoring_type.OBS_MONITORING_TYPE_MONITOR_AND_OUTPUT,
-    );
+  /// Set the monitoring type for a source.
+  void sourceSetMonitoringType(
+    DivePointer source, {
+    int type = obs_monitoring_type.OBS_MONITORING_TYPE_MONITOR_AND_OUTPUT,
+    bool muted = false,
+  }) {
+    _lib.obs_source_set_monitoring_type(source.pointer, type);
 
-    // Unmute the audio source - TODO: remove this
-    _lib.obs_source_set_muted(source.pointer, 0);
+    // Mute/Unmute the audio source
+    _lib.obs_source_set_muted(source.pointer, muted ? 1 : 0);
   }
+
+  /// Get the monitoring type for a source.
+  int sourceGetMonitoringType(DivePointer source) => _lib.obs_source_get_monitoring_type(source.pointer);
+
+  /// Set the volume level (dB) for a source.
+  void sourceSetVolume(DivePointer source, double levelDb) {
+    _lib.obs_source_set_volume(source.pointer, fromDb(levelDb));
+  }
+
+  /// Get the volume level (dB) for a source.
+  double sourceGetVolume(DivePointer source) {
+    double level = _lib.obs_source_get_volume(source.pointer);
+    return toDb(level);
+  }
+
+  /// Convert dB to value.
+  double fromDb(double value) => _lib.obs_db_to_mul(value);
+
+  /// Convert value to dB.
+  double toDb(double value) => _lib.obs_mul_to_db(value);
 }
 
 /// A wrapper around [obs_data] and the [obs_data_*] functions.
@@ -685,6 +701,7 @@ class DiveObslibData {
   ffi.Pointer<obs_data> _data;
   ffi.Pointer<obs_data> get pointer => _data;
 
+  /// Release the underlying data.
   void dispose() {
     _lib.obs_data_release(_data);
     StringExtensions.freeInt8s();

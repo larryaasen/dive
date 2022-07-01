@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added example to dive_obslib.
 - Added sourceTypes() and sources() to DiveFFIObslib.
 - Added setDouble and setInt to DiveObslibData.
+- Method `createMediaSource` now supports settings.
+- Added serviceName argument to method `streamOutputCreate`, and fixed the issue
+with services that use "auto" server URLs.
+- Added source set/get volume and monitoring type.
 
 ## [0.2.0]
 
