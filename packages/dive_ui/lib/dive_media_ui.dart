@@ -23,7 +23,7 @@ class DiveMediaPreview extends DivePreview {
         rect: meterPosition,
         child: SizedBox.expand(child: DiveAudioMeter(volumeMeter: mediaSource.volumeMeter)));
 
-    final file = new File(mediaSource.localFile);
+    final file = new File(mediaSource.settings.get('local_file'));
     String filename = path.basename(file.path);
     final filenameText = Center(child: Text(filename, style: TextStyle(color: Colors.grey, fontSize: 14)));
 

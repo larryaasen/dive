@@ -145,7 +145,12 @@ configure the RTMP stream.
 This example shows how to create a display capture input type which is used for
 streaming the computer screen.
 
-## Writing an app with Dive UI
+## Example 13 - Live streaming
+
+This example shows how to live stream with display capture, one camera overlay,
+a mic input, and background music.
+
+# Writing an app with Dive UI
 
 1. Add dive_ui to your pubspec.yaml file.
 2. In the macos/Podfile, in the target 'Runner' section, add: ```pod 'obslib', :path => '/Users/larry/Projects/obslib-framework'```
@@ -168,7 +173,7 @@ fail validation by Apple, so it has been removed for now.
 
 8. From command line: flutter run -d macos
 
-## TODO - Examples to be created
+# TODO - Examples to be created
 1. Example showing how to scrub a video forward and backward.
 1. Example of live streaming setup with multiple services using dropdown list.
 1. Example showing how to position an image in the mix.

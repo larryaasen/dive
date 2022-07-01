@@ -587,11 +587,6 @@ class DiveImagePickerButton extends StatelessWidget {
       }
 
       elements.addImageSource(file.path);
-      // final info = DiveTransformInfo(
-      //     pos: DiveVec2(140, 120),
-      //     bounds: DiveVec2(1000, 560),
-      //     boundsType: DiveBoundsType.SCALE_INNER);
-      // item.updateTransformInfo(info);
     });
   }
 }
@@ -622,7 +617,7 @@ class DiveVideoPickerButton extends StatelessWidget {
       }
 
       // Add the media source.
-      elements.addMediaSource(file.path);
+      elements.addLocalVideoMediaSource('video', file.path);
     });
   }
 }
