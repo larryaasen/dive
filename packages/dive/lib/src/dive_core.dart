@@ -5,8 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:riverpod/riverpod.dart';
 
-import 'dive_input_type.dart';
-
 // TODO: Review use of Riverpod.
 
 /// Configure a Dive app.
@@ -180,6 +178,33 @@ class DiveCoreAspectRatio {
 
   /// IMAX Digital aspect ratio
   static const IMAX_DIGITAL = r19_10;
+}
+
+class MonitoringType {
+  static const none = 0;
+  static const monitorOnly = 1;
+  static const monitorAndOutput = 2;
+}
+
+/// Monitoring Types
+enum DiveCoreMonitoringType { none, monitorOnly, monitorAndOutput }
+
+/// An audio level.
+class DiveCoreLevel {
+  final double _level;
+
+  /// Get the level in dB.
+  double get dB => obslib.toDb(_level);
+
+  /// Get the level.
+  void get level => _level;
+
+  /// Creates an instance of [DiveCoreLevel].
+  /// To create an instance using dB, use [DiveCoreLevel.dB].
+  DiveCoreLevel(double level) : _level = level;
+
+  /// Creates an instance of [DiveCoreLevel] using a level in dB.
+  factory DiveCoreLevel.dB(double levelDb) => DiveCoreLevel(obslib.fromDb(levelDb));
 }
 
 /// Usage:

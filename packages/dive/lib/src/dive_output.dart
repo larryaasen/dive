@@ -23,14 +23,14 @@ typedef _DiveSyncer = Future<void> Function();
 class DiveOutput {
   DiveRTMPService service;
   DiveRTMPServer server;
-  String serviceUrl = 'rtmp://live-iad05.twitch.tv/app/<your_stream_key>';
-  String serviceKey = '<your_stream_key>';
+  String serviceUrl = '';
+  String serviceKey = '';
   String serviceId = 'rtmp_common';
   String outputType = 'rtmp_output';
 
   final stateProvider = StateNotifierProvider<DiveOutputStateNotifier>((ref) {
     return DiveOutputStateNotifier(DiveOutputStreamingState.stopped);
-  }, name: 'name-DiveMediaSource');
+  }, name: 'output-provider');
 
   DivePointerOutput _output;
   Timer _timer;
@@ -49,6 +49,7 @@ class DiveOutput {
 
     // Create streaming service
     _output = obslib.streamOutputCreate(
+      serviceName: service.name,
       serviceUrl: serviceUrl,
       serviceKey: serviceKey,
       serviceId: serviceId,
@@ -73,8 +74,14 @@ class DiveOutput {
     DiveSystemLog.message('DiveOutput.stop');
     obslib.streamOutputStop(_output);
     obslib.streamOutputRelease(_output);
-    _syncState(_updateState, repeating: true);
     _output = null;
+
+    // Assume the state is now stopped. However, this is making an assumption. It takes a short
+    // amount of time for the output to actually be fully stopped.
+    // TODO: This should be improved to use signals and other techniques to determine when the output
+    // has stopped.
+    DiveCore.notifierFor(stateProvider).updateOutputState(DiveOutputStreamingState.stopped);
+
     return true;
   }
 
@@ -109,7 +116,8 @@ class DiveOutput {
   /// Sync the media state from the media source to the state provider.
   Future<void> _updateState() async {
     if (_output == null) return;
-    DiveCore.notifierFor(stateProvider)
-        .updateOutputState(DiveOutputStreamingState.values[obslib.streamOutputGetState(_output)]);
+    final state = DiveOutputStreamingState.values[obslib.streamOutputGetState(_output)];
+    DiveCore.notifierFor(stateProvider).updateOutputState(state);
+    if (state == DiveOutputStreamingState.stopped) {}
   }
 }

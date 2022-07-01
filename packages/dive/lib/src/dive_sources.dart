@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:dive/dive.dart';
-import 'package:dive/src/dive_settings.dart';
 import 'package:dive_obslib/dive_obslib.dart';
 import 'package:flutter/foundation.dart';
 
 import 'dive_plugin.dart';
+import 'dive_settings_data.dart';
 
 /// A texture controller for displaying video and image frames.
 /// Use this class as a base class or a mixin.
@@ -62,10 +62,9 @@ class DiveSource extends DiveTracking {
 
   DiveSource({this.inputType, this.name, this.settings});
 
-  // TODO: DiveSource.create() needs to be implemented
   static DiveSource create({DiveInputType inputType, String name, DiveSettings settings}) {
     final source = DiveSource(inputType: inputType, name: name, settings: settings);
-    final data = DiveSettingsData.settingsToData(settings);
+    final data = settings.toData();
     source.pointer = obslib.createSource(
       sourceUuid: source.trackingUUID,
       inputTypeId: source.inputType.id,
@@ -77,6 +76,48 @@ class DiveSource extends DiveTracking {
     return source.pointer == null ? null : source;
   }
 
+  DiveSettings sourceDefaults() {
+    return inputSourceDefaults(inputType);
+  }
+
+  static DiveSettings inputSourceDefaults(DiveInputType inputType) {
+    // TODO: finish this
+    // final DiveObslibData defaults = obslib.obs_get_source_defaults();
+    return DiveSettings();
+  }
+
+  /// Set the monitoring type.
+  void set monitoringType(DiveCoreMonitoringType type) {
+    if (pointer != null) {
+      obslib.sourceSetMonitoringType(pointer, type: type.index);
+    }
+  }
+
+  /// Get the monitoring type.
+  DiveCoreMonitoringType get monitoringType {
+    int type = 0;
+    if (pointer != null) {
+      type = obslib.sourceGetMonitoringType(pointer);
+    }
+    return DiveCoreMonitoringType.values[type];
+  }
+
+  /// Set the volume level.
+  void set volume(DiveCoreLevel level) {
+    if (pointer != null) {
+      obslib.sourceSetVolume(pointer, level.dB);
+    }
+  }
+
+  /// Get the volume level (dB).
+  DiveCoreLevel get volume {
+    double levelDb = 0;
+    if (pointer != null) {
+      levelDb = obslib.sourceGetVolume(pointer);
+    }
+    return DiveCoreLevel.dB(levelDb);
+  }
+
   @override
   String toString() {
     return "${this.runtimeType}(${this.hashCode}, $name)";
@@ -84,6 +125,7 @@ class DiveSource extends DiveTracking {
 
   @mustCallSuper
   bool dispose() {
+    pointer.releasePointer();
     pointer = null;
     return true;
   }
@@ -112,11 +154,11 @@ class DiveAudioSource extends DiveSource {
   static Future<DiveAudioSource> create(String name, {DiveInput input}) async {
     final source = DiveAudioSource(name: name, input: input, inputType: DiveInputType.audioSource);
 
-    final data = obslib.createData();
     final deviceId = source.input == null ? "default" : source.input.id;
-    data.setString("device_id", deviceId);
+    final settings = DiveSettings();
+    settings.set("device_id", deviceId);
 
-    print("DiveAudioSource.create: device_id=$deviceId");
+    final data = settings.toData();
     source.pointer = obslib.createSource(
       sourceUuid: source.trackingUUID,
       inputTypeId: source.inputType.id,

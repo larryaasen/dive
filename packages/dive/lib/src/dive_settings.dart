@@ -1,5 +1,3 @@
-import 'package:dive_obslib/dive_obslib.dart';
-
 /// Settings that can be passed around.
 class DiveSettings {
   Map<String, dynamic> _settings = {};
@@ -13,6 +11,8 @@ class DiveSettings {
     _settings[name] = value;
   }
 
+  T get<T>(String name) => _settings[name];
+
   bool _validType(dynamic value) {
     return value is String ||
         value is int ||
@@ -23,35 +23,11 @@ class DiveSettings {
   }
 }
 
-/// This private class should not be included in dive.dart and should not be exported for public use.
-/// It is private because it includes references to obslib, which should remain private to the
-/// dive package.
-class DiveSettingsData {
-  static DiveObslibData settingsToData(DiveSettings settings) {
-    final data = obslib.createData();
-    settings.settings.forEach((key, value) {
-      switch (value.runtimeType) {
-        case bool:
-          data.setBool(key, value as bool);
-          print("setBool: $value");
-          break;
-        case double:
-          data.setDouble(key, value as double);
-          print("setDouble: $value");
-          break;
-        case int:
-          data.setInt(key, value as int);
-          print("setInt: $value");
-          break;
-        case String:
-          data.setString(key, value as String);
-          print("setString: $value");
-          break;
-        default:
-          throw UnsupportedError('invalid settings type');
-      }
-    });
-
-    return data;
-  }
-}
+// class DiveSetting<T> {
+//   final String name;
+//   final T value;
+//   const DiveSetting(this.name, this.value);
+// }
+// var local_file = DiveSetting<String>('local_file', localFile);
+// var clear_on_media_end = DiveSetting<bool>('clear_on_media_end', true);
+// var reconnect_delay_sec = DiveSetting<int>('reconnect_delay_sec', 10);

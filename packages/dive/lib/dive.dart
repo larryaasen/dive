@@ -10,7 +10,7 @@ export 'src/dive_media_source.dart';
 export 'src/dive_output.dart';
 export 'src/dive_rtmp.dart';
 export 'src/dive_scene.dart';
-export 'src/dive_settings.dart' hide DiveSettingsData show DiveSettings;
+export 'src/dive_settings.dart';
 export 'src/dive_sources.dart';
 export 'src/dive_system_log.dart';
 export 'src/dive_system_log.dart';

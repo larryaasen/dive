@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added DiveSettings class.
 - Added a list of DiveSources to DiveCoreElementsState.
 - Added DiveSource create method for creating any source.
+- Added monitoring types and audio level.
+- Added DiveMediaSourceSettings.
+- Changed name of addMediaSource to addLocalVideoMediaSource and use DiveMediaSourceSettings
+when creating the source.
+- Fixed issues with DiveOutput and streaming to the auto server of Twitch.
 
 ## [0.3.0]
 

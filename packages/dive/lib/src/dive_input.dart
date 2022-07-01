@@ -1,7 +1,5 @@
 import 'package:dive_obslib/dive_obslib.dart';
 
-import 'dive_plugin.dart';
-
 class DiveInput {
   /// The input name, such as `FaceTime HD Camera (Built-in)`.
   final String name;

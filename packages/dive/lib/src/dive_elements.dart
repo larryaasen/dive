@@ -148,22 +148,23 @@ class DiveCoreElements {
     });
   }
 
-  /// Add a media source to the current scene.
-  void addMediaSource(final localFile) {
+  /// Add a local video media source to the current scene.
+  void addLocalVideoMediaSource(String name, String localFile) {
     if (state.currentScene == null) {
       throw AssertionError('currentScene must not be null');
     }
-    DiveMediaSource.create(localFile).then((source) {
+    final settings = DiveMediaSourceSettings(localFile: localFile, isLocalFile: true);
+    DiveMediaSource.create(settings: settings).then((source) {
       if (source != null) {
+        source.monitoringType = DiveCoreMonitoringType.monitorAndOutput;
         DiveAudioMeterSource()
           ..create(source: source).then((volumeMeter) {
             source.volumeMeter = volumeMeter;
           });
 
-        final state = DiveCore.notifierFor(stateProvider).stateModel;
-        state.mediaSources.add(source);
-        state.currentScene.addSource(source);
-        DiveCore.notifierFor(stateProvider).updateState(state);
+        updateState((state) => state
+          ..mediaSources.add(source)
+          ..currentScene.addSource(source));
       }
     });
   }
