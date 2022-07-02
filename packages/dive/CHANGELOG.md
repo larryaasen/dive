@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0]
+
+- Updated dive package to use flutter_lints 1.0.4 and updated code to conform to the lints.
+
 ## [0.4.0]
 
 - Updated dependency versions for intl and riverpod, to resolve static analysis warnings.
