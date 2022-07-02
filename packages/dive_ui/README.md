@@ -1,6 +1,6 @@
 # dive_ui
 
-A Flutter package (part of the [Dive](https://pub.dev/packages/dive) toolkit) containing Widgets for building Flutter apps for
+A Flutter package (part of the [Dive](https://pub.dev/packages/dive) toolkit) containing widgets for building Flutter apps for
 video recording and streaming.
 
 [![pub package](https://img.shields.io/pub/v/dive_ui.svg)](https://pub.dev/packages/dive_ui)
@@ -28,6 +28,7 @@ As of now, Dive only supports macOS Flutter desktop apps and Dart command line a
 read more about [Desktop support for Flutter](https://docs.flutter.dev/development/platform-integration/desktop)
 if you are not familiar with those.
 
+Example code is the best way to explore and learn Dive.
 There are many small example apps included in the `dive_ui` package. You should run those examples
 first to get familiar with the widgets and classes that are part of Dive.
 
@@ -67,7 +68,7 @@ a video file is opened.
 ![image](screenshots/example-1-controls.png)
 
 15. Now that you have successfully run the first `dive_ui` example, you can run the
-others located in the same folder as `lib/main_example1.dart`.
+other examples located in the same folder as `dive_ui/sexample/lib/main_example1.dart`.
 
 If you run into any issues with these steps, please create a Dive GitHub
 issue [here](https://github.com/larryaasen/dive/issues).
