@@ -1,12 +1,12 @@
 class DiveAlign {
-  static const CENTER = 0;
-  static const LEFT = (1 << 0);
-  static const RIGHT = (1 << 1);
-  static const TOP = (1 << 2);
-  static const BOTTOM = (1 << 3);
+  static const center = 0;
+  static const left = (1 << 0);
+  static const right = (1 << 1);
+  static const top = (1 << 2);
+  static const bottom = (1 << 3);
 
   final int alignment;
-  DiveAlign({this.alignment = CENTER});
+  DiveAlign({this.alignment = center});
 }
 
 class DiveVec2 {
@@ -27,25 +27,25 @@ class DiveVec2 {
 
 enum DiveBoundsType {
   /// no bounds
-  NONE,
+  none,
 
   /// stretch (ignores base scale) */
-  STRETCH,
+  stretch,
 
   /// scales to inner rectangle */
-  SCALE_INNER,
+  scaleInner,
 
   /// scales to outer rectangle */
-  SCALE_OUTER,
+  scaleOuter,
 
   /// scales to the width  */
-  SCALE_TO_WIDTH,
+  scaleToWidth,
 
   /// scales to the height */
-  SCALE_TO_HEIGHT,
+  scaletoHeight,
 
   /// no scaling, maximum size only */
-  MAX_ONLY,
+  maxOnly,
 }
 
 class DiveTransformInfo {
@@ -58,13 +58,7 @@ class DiveTransformInfo {
   final DiveVec2 bounds;
 
   DiveTransformInfo(
-      {this.pos,
-      this.rot,
-      this.scale,
-      this.alignment,
-      this.boundsType,
-      this.boundsAlignment,
-      this.bounds});
+      {this.pos, this.rot, this.scale, this.alignment, this.boundsType, this.boundsAlignment, this.bounds});
 
   DiveTransformInfo copyWith({
     pos,
@@ -87,7 +81,7 @@ class DiveTransformInfo {
   }
 
   DiveTransformInfo copyFrom(DiveTransformInfo info) {
-    return this.copyWith(
+    return copyWith(
       pos: info.pos,
       rot: info.rot,
       scale: info.scale,

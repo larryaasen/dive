@@ -157,10 +157,9 @@ class DiveCoreElements {
     DiveMediaSource.create(settings: settings).then((source) {
       if (source != null) {
         source.monitoringType = DiveCoreMonitoringType.monitorAndOutput;
-        DiveAudioMeterSource()
-          ..create(source: source).then((volumeMeter) {
-            source.volumeMeter = volumeMeter;
-          });
+        DiveAudioMeterSource().create(source: source).then((volumeMeter) {
+          source.volumeMeter = volumeMeter;
+        });
 
         updateState((state) => state
           ..mediaSources.add(source)
@@ -176,7 +175,7 @@ class DiveCoreElements {
   /// Update the current state. Changes to this state are saved and are
   /// sent to notifiers. This method is good for makeing many state
   /// changes, and then having only one change sent the notifiers.
-  void updateState(DiveCoreElementsState changeState(DiveCoreElementsState state)) {
+  void updateState(DiveCoreElementsState Function(DiveCoreElementsState state) changeState) {
     final state = DiveCore.notifierFor(stateProvider).stateModel;
     final newState = changeState(state);
     DiveCore.notifierFor(stateProvider).updateState(newState);

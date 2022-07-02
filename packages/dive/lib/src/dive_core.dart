@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:math';
 
 import 'package:dive_obslib/dive_obslib.dart';
@@ -123,11 +125,11 @@ class DiveCoreResolution {
 
   /// Find the name of the resolution with this [width] and [height].
   static String nameOf(int width, int height) {
-    DiveCoreResolution.all.forEach((resolution) {
+    for (var resolution in DiveCoreResolution.all) {
       if (width == resolution.width && height == resolution.height) {
         return resolution.name;
       }
-    });
+    }
     return null;
   }
 }
@@ -253,6 +255,7 @@ class DiveCore {
 }
 
 class DiveCoreProviderContainerException implements Exception {
+  @override
   String toString() => 'DiveCore.providerContainer should not be null.';
 }
 

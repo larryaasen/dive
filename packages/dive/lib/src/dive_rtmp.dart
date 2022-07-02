@@ -27,7 +27,7 @@ class DiveRTMPServices {
 
   /// Returns a service for the [serviceName] or null.
   DiveRTMPService serviceForName(String serviceName) =>
-      services.firstWhere((service) => service.name == serviceName, orElse: null);
+      services.firstWhere((service) => service.name == serviceName, orElse: () => null);
 
   /// Returns the server list for a service.
   List<String> serviceServers(String serviceName) {
@@ -52,7 +52,7 @@ class DiveRTMPService {
   List<String> get serverNames => servers.map((server) => server.name).toList();
 
   DiveRTMPServer serverForName(String serverName) =>
-      servers.firstWhere((server) => server.name == serverName, orElse: null);
+      servers.firstWhere((server) => server.name == serverName, orElse: () => null);
 
   @override
   String toString() {

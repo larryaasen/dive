@@ -6,8 +6,6 @@ import 'dive_sources.dart';
 int _sceneCount = 0;
 
 class DiveScene extends DiveTracking {
-  static const MAX_CHANNELS = 64;
-
   // TODO: needs to be immutable state
   final List<DiveSceneItem> _sceneItems = [];
   List<DiveSceneItem> get sceneItems => _sceneItems;

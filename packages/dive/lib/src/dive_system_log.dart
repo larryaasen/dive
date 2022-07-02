@@ -12,7 +12,7 @@ class DiveSystemLog {
   }
 
   static void _output(String message, String group) {
-    final groupMsg = group == null || group.length == 0 ? '' : " [$group]";
+    final groupMsg = group == null || group.isEmpty ? '' : " [$group]";
     // final timeMsg = "11222020 11:01:49.371";
     final timeMsg = DiveFormat.formatSystemLog();
     print("$timeMsg$groupMsg $message");

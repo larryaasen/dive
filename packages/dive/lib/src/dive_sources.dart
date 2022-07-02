@@ -87,7 +87,7 @@ class DiveSource extends DiveTracking {
   }
 
   /// Set the monitoring type.
-  void set monitoringType(DiveCoreMonitoringType type) {
+  set monitoringType(DiveCoreMonitoringType type) {
     if (pointer != null) {
       obslib.sourceSetMonitoringType(pointer, type: type.index);
     }
@@ -103,7 +103,7 @@ class DiveSource extends DiveTracking {
   }
 
   /// Set the volume level.
-  void set volume(DiveCoreLevel level) {
+  set volume(DiveCoreLevel level) {
     if (pointer != null) {
       obslib.sourceSetVolume(pointer, level.dB);
     }
@@ -120,7 +120,7 @@ class DiveSource extends DiveTracking {
 
   @override
   String toString() {
-    return "${this.runtimeType}(${this.hashCode}, $name)";
+    return "$runtimeType($hashCode, $name)";
   }
 
   @mustCallSuper
@@ -134,7 +134,8 @@ class DiveSource extends DiveTracking {
 /// Combines a [DiveSource] with a [DiveTextureSetup] so that a source can
 /// display an image or video frame in a Flutter texture.
 abstract class DiveTextureSource extends DiveSource with DiveTextureSetup {
-  DiveTextureSource({DiveInputType inputType, String name}) : super(inputType: inputType, name: name);
+  DiveTextureSource({DiveInputType inputType, String name, DiveSettings settings})
+      : super(inputType: inputType, name: name, settings: settings);
 
   /// Release the resources associated with this source.
   @override
@@ -238,10 +239,10 @@ class DiveImageSource extends DiveTextureSource {
 /// Used for changing the order of items (for example, filters in a source,
 /// or items in a scene)
 enum DiveSceneItemMovement {
-  MOVE_UP,
-  MOVE_DOWN,
-  MOVE_TOP,
-  MOVE_BOTTOM,
+  moveUp,
+  moveDown,
+  moveTop,
+  moveBottom,
 }
 
 class DiveSceneItem {

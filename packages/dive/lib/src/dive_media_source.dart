@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:async';
 import 'package:dive_obslib/dive_obslib.dart';
 import 'package:equatable/equatable.dart';
@@ -49,7 +51,7 @@ class _DiveMediaSourceStateNotifier extends StateNotifier<DiveMediaSourceState> 
   DiveMediaSourceState get stateModel => state;
 
   _DiveMediaSourceStateNotifier(DiveMediaSourceState stateModel)
-      : super(stateModel ?? DiveMediaSourceState());
+      : super(stateModel ?? const DiveMediaSourceState());
 
   void updateMediaState(DiveMediaSourceState stateModel) => state = stateModel;
 }
@@ -95,18 +97,15 @@ class DiveMediaSource extends DiveTextureSource {
   final stateProvider =
       StateNotifierProvider<_DiveMediaSourceStateNotifier>((ref) => _DiveMediaSourceStateNotifier(null));
 
-  // final String localFile;
-  final DiveMediaSourceSettings settings;
-
   DiveAudioMeterSource volumeMeter;
 
   /// The state syncing interval (msec).
-  final stateSyncInterval;
+  final int stateSyncInterval;
 
   Timer _syncStateTimer;
 
-  DiveMediaSource(String name, {this.settings, this.stateSyncInterval = 500})
-      : super(inputType: DiveInputType.mediaSource, name: name) {
+  DiveMediaSource(String name, {DiveMediaSourceSettings settings, this.stateSyncInterval = 500})
+      : super(inputType: DiveInputType.mediaSource, name: name, settings: settings) {
     if (stateSyncInterval > 0) {
       _syncStateTimer = Timer.periodic(Duration(milliseconds: stateSyncInterval), _timerCallback);
     }

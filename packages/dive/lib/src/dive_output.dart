@@ -93,7 +93,7 @@ class DiveOutput {
       if (_timer == null) {
         delay = delay == 0 ? 100 : delay;
         _timer = Timer.periodic(Duration(milliseconds: delay), (timer) => _updateState());
-        Timer(Duration(seconds: 2), () {
+        Timer(const Duration(seconds: 2), () {
           _cancelTimer();
         });
       }

@@ -1,6 +1,6 @@
 /// Settings that can be passed around.
 class DiveSettings {
-  Map<String, dynamic> _settings = {};
+  final Map<String, dynamic> _settings = {};
   Map<String, dynamic> get settings => _settings;
 
   /// Sets a value for a settings name.

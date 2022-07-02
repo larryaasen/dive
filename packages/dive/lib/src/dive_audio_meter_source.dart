@@ -170,7 +170,7 @@ class DiveAudioMeterSource {
       elapsedTime = 0.0;
     } else {
       elapsedTime = _stopwatch.elapsedMilliseconds / 1000.0;
-      _stopwatch..reset();
+      _stopwatch.reset();
     }
 
     final now = DateTime.now();
@@ -179,11 +179,11 @@ class DiveAudioMeterSource {
     var currentState = DiveCore.notifierFor(stateProvider).stateModel;
 
     // Determine the attack of audio since last update (seconds).
-    final attackRate = 0.99;
-    final attack = (elapsedTime / 0.3) * attackRate;
+    double attackRate = 0.99;
+    double attack = (elapsedTime / 0.3) * attackRate;
 
     // Determine decay of audio since last update (seconds).
-    const double peakDecayRate = 20.0 / 1.7;
+    double peakDecayRate = 20.0 / 1.7;
     final peakDecay = peakDecayRate * elapsedTime;
 
     final inputPeakHold = currentState.inputPeakHold;
@@ -283,7 +283,7 @@ class DiveAudioMeterSource {
     if (_noSignalTimer != null) {
       _noSignalTimer.cancel();
     }
-    _noSignalTimer = Timer(Duration(milliseconds: 500), _noSignalTimeout);
+    _noSignalTimer = Timer(const Duration(milliseconds: 500), _noSignalTimeout);
   }
 
   void _noSignalTimeout() {
