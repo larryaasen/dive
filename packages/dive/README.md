@@ -15,13 +15,13 @@ Flutter with native extensions on macOS. It is a group of Flutter packages for
 building media apps. In the future, support for multiple
 platforms will be added.
 
-**dive** - A Flutter package that provides video capabilities.
+| Package         | Version | Description |
+| -- | -- | -- |
+| **dive**        | [![pub package](https://img.shields.io/pub/v/dive.svg)](https://pub.dev/packages/dive) | A Flutter package that provides video capabilities. |
+| **dive_ui**     | [![pub package](https://img.shields.io/pub/v/dive_ui.svg)](https://pub.dev/packages/dive_ui) | (COMING SOON) A Flutter package for Dive containing Widgets for building Flutter apps for video recording and streaming. |
+| **dive_obslib** | [![pub package](https://img.shields.io/pub/v/dive_obslib.svg)](https://pub.dev/packages/dive_obslib) | A Flutter plugin package for Dive that provides low level access to obslib using FFI. |
 
-**dive_ui** - A Flutter package for Dive containing Widgets for building Flutter
-apps for video recording and streaming. (COMING SOON)
-
-**dive_obslib** - A Flutter plugin package for Dive that provides low level access
-to obslib using FFI.
+# Packages
 
 ## dive
 
@@ -53,33 +53,20 @@ It includes inputs, sources, outputs, encoders, services, and more.
 dive_obslib contains the DiveObsLibPlugin and the dive_obslib CocoaPods library. The
 dive_obslib pod has a dependency on the obslib CocoaPods library.
 
+# Dependencies
+
 ## obslib CocoaPods library
 
-The obslib CocoaPods library is a wrapper around the obslib Framework that can
+The [obslib](https://github.com/larryaasen/obslib-framework) CocoaPods library is a wrapper around the obslib Framework that can
 be consumed by the DiveApp macOS platform Podfile.
 
 ## obslib Framework
 
-The obslib framework (obslib-framework) is the core of OBS Studio,
+The [obslib framework (obslib-framework)](https://github.com/larryaasen/obslib-framework) is the core of OBS Studio,
 and is the non-UI code and resources compiled into a reusable framework. The framework
 is built by an Xcode project.
 
 The framework folder contains an example macOS application that consumes the
 obslib framework without using CocoaPods and is used to test the framework.
 
-## Concepts
-
-### Input Source
-
-An input source is a camera, microphone, virtual camera, screen capture,
-or NDI source.
-
-### Sources
-
-### channel
-
-### output
-
-### Encoders
-
-### Services
+# Getting Started

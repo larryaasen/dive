@@ -172,11 +172,3 @@ Note: The folder obs-mac-virtualcam.plugin is in the wrong folder, data, and wil
 fail validation by Apple, so it has been removed for now.
 
 8. From command line: flutter run -d macos
-
-# TODO - Examples to be created
-1. Example showing how to scrub a video forward and backward.
-1. Example of live streaming setup with multiple services using dropdown list.
-1. Example showing how to position an image in the mix.
-1. Example showing how to change the volume of an audio source.
-1. Example showing how to save settings.
-1. Create example with all widgets displayed.

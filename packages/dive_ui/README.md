@@ -10,11 +10,67 @@ video recording and streaming.
 
 ## Introduction
 
-Dive is a Flutter toolkit for video recording and streaming. The dive_ui
+Dive is a Flutter toolkit for video recording and streaming. The `dive_ui`
 package is part of the Dive toolkit and is a complete set of widgets to build
 the next generation of Flutter media apps. This package relies heavily on the
 [dive](https://pub.dev/packages/dive) package but remains platform indepenent. There are many widgets in this package
 and plenty of examples.
+
+## Beta
+
+_This version of Dive is in beta and is not intended for production use. This beta gives you
+early access before the official release is available. If you run into any issues with Dive, please create a Dive GitHub
+issue [here](https://github.com/larryaasen/dive/issues)._
+
+# Getting Started (macOS only)
+
+As of now, Dive only supports macOS Flutter desktop apps and Dart command line apps. You should probably
+read more about [Desktop support for Flutter](https://docs.flutter.dev/development/platform-integration/desktop)
+if you are not familiar with those.
+
+There are many small example apps included in the `dive_ui` package. You should run those examples
+first to get familiar with the widgets and classes that are part of Dive.
+
+
+1. To download the examples, follow [this GitHub link](https://github.com/larryaasen/dive), click the green Code
+button, click Download ZIP.
+1. Once the repo has been downloaded, open the zip file. It should create the folder `dive-main`.
+1. Open the path `dive-main/packages/dive_ui/example` in an IDE such as [Visual Studio Code](https://code.visualstudio.com/) or Android Studio.
+1. Open a TERMINAL window in your IDE.
+1. Make sure the current working directory (pwd) is `dive-main/packages/dive_ui/example`.
+1. Since this example will not run using the IDE run command, you need to run it from the command line.
+7. In the TERMINAL run this command: `flutter run lib/main_example1.dart -d macos`. You should see output
+like this:
+```
+Launching lib/main_example1.dart on macOS in debug mode...
+Building macOS application...                                           
+Error waiting for a debug connection: The log reader stopped unexpectedly, or never started.
+Error launching application on macOS.
+```
+That command was successful in building the app, but not connecting to the log reader, so it terminated. This
+[issue was recorded with Flutter](https://github.com/flutter/flutter/issues/82630) on May 15, 2021
+and is still open. That is ok because we can run it from Xcode. 
+
+8. Open the workspace in Xcode by loading this workspace: `dive-main/packages/dive_ui/example/macos/Runner.xcworkspace`
+9. Once the workspace is loaded, run the app with ⌘R (Run).
+10. The app should run and appear like this:
+
+![image](screenshots/example-1.png)
+
+11. Click the camera icon in the top right corner of the app window.
+12. Select a video file from your local drive, such as an MP4 file, and click Open.
+13. The video file should start playing immediately.
+14. You should be able to see the player controls at the bottom of the screen. If you don't,
+just resize the window until they appear. The player controls will not be displayed until
+a video file is opened.
+
+![image](screenshots/example-1-controls.png)
+
+15. Now that you have successfully run the first `dive_ui` example, you can run the
+others located in the same folder as `lib/main_example1.dart`.
+
+If you run into any issues with these steps, please create a Dive GitHub
+issue [here](https://github.com/larryaasen/dive/issues).
 
 # Video Widgets
 * DiveSourceCard - stack, gear menu, child
@@ -35,7 +91,7 @@ and plenty of examples.
 * DiveStreamSettingsButton - An icon button that presents the stream settings dialog.
 * DiveStreamSettingsDialog - A dialog to update the video output settings.
 * DiveTopicCard - A material design widget that creates a [Card] widget that contains content and actions about a single subject.
-* DiveIconSet - The default icons for dive_ui widgets. Override these methods to provide custom icons.
+* DiveIconSet - The default icons for `dive_ui` widgets. Override these methods to provide custom icons.
 * DiveUIApp - Setup DiveUI before the first [build] is called.
 * DiveUI - Contains the key setup method.
 * DiveMediaPlayButton - Play media button.
@@ -55,3 +111,8 @@ and DiveMediaStopButton.
 * DiveAudioList - A widget that displays a vertical list of the audio sources.
 * DiveSettingsButton - An icon button that presents the settings dialog.
 * DiveVideoSettingsDialog - A dialog to update the video output settings.
+
+# Support
+
+If you run into any issues with Dive, please create a Dive GitHub
+issue [here](https://github.com/larryaasen/dive/issues).
