@@ -13,8 +13,8 @@ typedef _DiveSyncer = Future<void> Function();
 class DiveOutput {
   DiveOutput();
 
-  DiveRTMPService service;
-  DiveRTMPServer server;
+  DiveRTMPService? service;
+  DiveRTMPServer? server;
   String serviceUrl = '';
   String serviceKey = '';
   String serviceId = 'rtmp_common';
@@ -24,8 +24,8 @@ class DiveOutput {
     return DiveOutputStreamingState.stopped;
   }, name: 'output-provider');
 
-  DivePointerOutput _output;
-  Timer _timer;
+  DivePointerOutput? _output;
+  Timer? _timer;
 
   @mustCallSuper
   void dispose() {
@@ -53,7 +53,7 @@ class DiveOutput {
     }
 
     // Start streaming.
-    final rv = obslib.streamOutputStart(_output);
+    final rv = obslib.streamOutputStart(_output!);
     if (rv) {
       _syncState(_updateState, repeating: true);
     }
@@ -64,22 +64,22 @@ class DiveOutput {
   bool stop() {
     if (_output == null) return false;
     DiveSystemLog.message('DiveOutput.stop');
-    obslib.streamOutputStop(_output);
-    obslib.streamOutputRelease(_output);
+    obslib.streamOutputStop(_output!);
+    obslib.streamOutputRelease(_output!);
     _output = null;
 
     // Assume the state is now stopped. However, this is making an assumption. It takes a short
     // amount of time for the output to actually be fully stopped.
     // TODO: This should be improved to use signals and other techniques to determine when the output
     // has stopped.
-    DiveCore.container.read(provider.notifier).state = DiveOutputStreamingState.stopped;
+    DiveCore.container!.read(provider.notifier).state = DiveOutputStreamingState.stopped;
 
     return true;
   }
 
   /// Sync the media state from the media source to the state provider,
   /// delaying if necessary.
-  Future<void> _syncState(_DiveSyncer syncer, {int delay = 100, bool repeating = false}) async {
+  Future<void> _syncState(_DiveSyncer? syncer, {int delay = 100, bool repeating = false}) async {
     if (repeating) {
       // Poll the for 2 seconds
       if (_timer == null) {
@@ -101,15 +101,15 @@ class DiveOutput {
 
   void _cancelTimer() {
     if (_timer == null) return;
-    _timer.cancel();
+    _timer!.cancel();
     _timer = null;
   }
 
   /// Sync the media state from the media source to the state provider.
   Future<void> _updateState() async {
     if (_output == null) return;
-    final state = DiveOutputStreamingState.values[obslib.streamOutputGetState(_output)];
-    DiveCore.container.read(provider.notifier).state = state;
+    final state = DiveOutputStreamingState.values[obslib.streamOutputGetState(_output!)];
+    DiveCore.container!.read(provider.notifier).state = state;
     if (state == DiveOutputStreamingState.stopped) {}
   }
 }

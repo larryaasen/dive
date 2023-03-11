@@ -2,14 +2,14 @@ import 'package:dive_obslib/dive_obslib.dart';
 
 class DiveInput {
   /// The input name, such as `FaceTime HD Camera (Built-in)`.
-  final String name;
+  final String? name;
 
   /// The input id, such as `0x8020000005ac8514`.
-  final String id;
+  final String? id;
 
   /// The input type id, such as `image_source` or `av_capture_input`.
   /// TODO: Should eventually be changed to [DiveInputType].
-  final String typeId;
+  final String? typeId;
 
   DiveInput({this.name, this.id, this.typeId});
 

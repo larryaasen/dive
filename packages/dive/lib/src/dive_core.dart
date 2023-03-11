@@ -66,12 +66,12 @@ class DiveCoreFPS {
 class DiveCoreResolution {
   const DiveCoreResolution(this.name, this.width, this.height);
 
-  final String name;
-  final int width;
-  final int height;
+  final String? name;
+  final int? width;
+  final int? height;
 
   String get resolution => "${width}x$height ($name)";
-  double get aspectRatio => width / height;
+  double get aspectRatio => width! / height!;
 
   static const r7680_4320 = DiveCoreResolution('8K', 7680, 4320);
 
@@ -124,7 +124,7 @@ class DiveCoreResolution {
   }
 
   /// Find the name of the resolution with this [width] and [height].
-  static String nameOf(int width, int height) {
+  static String? nameOf(int? width, int? height) {
     for (var resolution in DiveCoreResolution.all) {
       if (width == resolution.width && height == resolution.height) {
         return resolution.name;
@@ -216,8 +216,8 @@ class DiveCoreLevel {
 ///
 class DiveCore {
   /// For use with Riverpod
-  static ProviderContainer providerContainer;
-  static ProviderContainer get container {
+  static ProviderContainer? providerContainer;
+  static ProviderContainer? get container {
     if (providerContainer == null) throw DiveCoreProviderContainerException();
     return providerContainer;
   }
@@ -226,17 +226,17 @@ class DiveCore {
 
   Future<bool> setupOBS(
     DiveCoreResolution baseResolution, {
-    DiveCoreResolution outResolution,
+    DiveCoreResolution? outResolution,
     DiveCoreFPS fps = DiveCoreFPS.fps29_97,
   }) async {
     bool rv = await obslib.obsStartup();
     if (rv) {
       outResolution = outResolution ?? baseResolution;
       rv = obslib.startObs(
-        baseResolution.width,
-        baseResolution.height,
-        outResolution.width,
-        outResolution.height,
+        baseResolution.width!,
+        baseResolution.height!,
+        outResolution.width!,
+        outResolution.height!,
         fps.numerator,
         fps.denominator,
       );
@@ -265,6 +265,6 @@ extension DiveDoubleRound on double {
 
 /// Round a double to fixed places.
 double _roundAsFixed(double value, int places) {
-  double mod = pow(10.0, places);
+  double mod = pow(10.0, places) as double;
   return ((value * mod).round().toDouble() / mod);
 }

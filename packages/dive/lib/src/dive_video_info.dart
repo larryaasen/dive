@@ -51,34 +51,34 @@ enum DiveVideoFormat {
 
 class DiveVideoInfo {
   /// Graphics module to use (usually "libobs-opengl" or "libobs-d3d11")
-  final String graphicsModule;
+  final String? graphicsModule;
 
   /// < Output FPS
-  final DiveCoreFPS fps;
+  final DiveCoreFPS? fps;
 
   /// < Base compositing resolution
-  final DiveCoreResolution baseResolution;
+  final DiveCoreResolution? baseResolution;
 
   /// < Output resolution
-  final DiveCoreResolution outputResolution;
+  final DiveCoreResolution? outputResolution;
 
   /// < Output format
-  final DiveVideoFormat outputFormat;
+  final DiveVideoFormat? outputFormat;
 
   /// Video adapter index to use (NOTE: avoid for optimus laptops)
-  final int adapter;
+  final int? adapter;
 
   /// Use shaders to convert to different color formats
-  final bool gpuConversion;
+  final bool? gpuConversion;
 
   /// < YUV type (if YUV)
-  final int colorspace; // TODO: Use enum
+  final int? colorspace; // TODO: Use enum
 
   /// < YUV range (if YUV)
-  final int range; // TODO: Use enum
+  final int? range; // TODO: Use enum
 
   /// < How to scale if scaling
-  final int scaleType; // TODO: Use enum
+  final int? scaleType; // TODO: Use enum
 
   DiveVideoInfo({
     this.graphicsModule,
@@ -94,22 +94,22 @@ class DiveVideoInfo {
   });
 
   DiveVideoInfo copyWith({
-    String graphicsModule,
-    int fps,
-    int baseResolution,
-    int outputResolution,
-    DiveVideoFormat outputFormat,
-    int adapter,
-    bool gpuConversion,
-    int colorspace,
-    int range,
-    int scaleType,
+    String? graphicsModule,
+    int? fps,
+    int? baseResolution,
+    int? outputResolution,
+    DiveVideoFormat? outputFormat,
+    int? adapter,
+    bool? gpuConversion,
+    int? colorspace,
+    int? range,
+    int? scaleType,
   }) {
     return DiveVideoInfo(
       graphicsModule: graphicsModule ?? this.graphicsModule,
-      fps: fps ?? this.fps,
-      baseResolution: baseResolution ?? this.baseResolution,
-      outputResolution: outputResolution ?? this.outputResolution,
+      fps: fps as DiveCoreFPS? ?? this.fps,
+      baseResolution: baseResolution as DiveCoreResolution? ?? this.baseResolution,
+      outputResolution: outputResolution as DiveCoreResolution? ?? this.outputResolution,
       outputFormat: outputFormat ?? this.outputFormat,
       adapter: adapter ?? this.adapter,
       gpuConversion: gpuConversion ?? this.gpuConversion,
@@ -190,7 +190,7 @@ class DiveVideoInfo {
   }
 
   /// Get the video info.
-  factory DiveVideoInfo.get() {
+  static DiveVideoInfo? get() {
     final videoInfo = obslib.videoGetInfo();
     if (videoInfo == null) return null;
 
@@ -227,7 +227,7 @@ class DiveVideoInfo {
 
   /// Change the base and output resolution of the output video.
   static Future<bool> changeResolution(DiveCoreResolution base, DiveCoreResolution output) async {
-    final rv = await obslib.changeResolution(base.width, base.height, output.width, output.height);
+    final rv = await obslib.changeResolution(base.width!, base.height!, output.width!, output.height!);
     return rv;
   }
 }

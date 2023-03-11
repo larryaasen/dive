@@ -2,8 +2,8 @@ import 'package:dive_obslib/dive_obslib.dart';
 
 /// An input type, such as display_capture or image_source.
 class DiveInputType {
-  final String id;
-  final String name;
+  final String? id;
+  final String? name;
 
   DiveInputType({this.id, this.name});
 
@@ -18,7 +18,7 @@ class DiveInputType {
   static Future<List<DiveInputType>> all({sortedByName = true}) async {
     var list = obslib.inputTypes.map(DiveInputType.fromJson).toList();
     if (sortedByName) {
-      list.sort(((a, b) => a.name.compareTo(b.name)));
+      list.sort(((a, b) => a.name!.compareTo(b.name!)));
     }
     return list;
   }

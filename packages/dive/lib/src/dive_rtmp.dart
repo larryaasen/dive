@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:dive_obslib/dive_obslib.dart';
 
 class DiveRTMPServices {
@@ -23,14 +24,14 @@ class DiveRTMPServices {
   }
 
   /// Returns the list of the streaming service names.
-  List<String> get serviceNames => services.map((service) => service.name).toList();
+  List<String?> get serviceNames => services.map((service) => service.name).toList();
 
   /// Returns a service for the [serviceName] or null.
-  DiveRTMPService serviceForName(String serviceName) =>
-      services.firstWhere((service) => service.name == serviceName, orElse: () => null);
+  DiveRTMPService? serviceForName(String serviceName) =>
+      services.firstWhereOrNull((service) => service.name == serviceName);
 
   /// Returns the server list for a service.
-  List<String> serviceServers(String serviceName) {
+  List<String?>? serviceServers(String serviceName) {
     final service = serviceForName(serviceName);
     if (service == null) return null;
     return service.serverNames;
@@ -43,16 +44,16 @@ class DiveRTMPServices {
 }
 
 class DiveRTMPService {
-  final String name;
-  final List<DiveRTMPServer> servers;
+  final String? name;
+  final List<DiveRTMPServer>? servers;
 
   DiveRTMPService({this.name, this.servers});
 
   /// Returns the list of the service server names.
-  List<String> get serverNames => servers.map((server) => server.name).toList();
+  List<String?> get serverNames => servers!.map((server) => server.name).toList();
 
-  DiveRTMPServer serverForName(String serverName) =>
-      servers.firstWhere((server) => server.name == serverName, orElse: () => null);
+  DiveRTMPServer? serverForName(String serverName) =>
+      servers!.firstWhereOrNull((server) => server.name == serverName);
 
   @override
   String toString() {
@@ -61,8 +62,8 @@ class DiveRTMPService {
 }
 
 class DiveRTMPServer {
-  final String name;
-  final String url;
+  final String? name;
+  final String? url;
 
   DiveRTMPServer({this.name, this.url});
 

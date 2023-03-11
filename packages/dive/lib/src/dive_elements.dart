@@ -11,11 +11,11 @@ class DiveVideoSettings {
   final provider = StateProvider<DiveVideoSettingsState>((ref) => const DiveVideoSettingsState());
 
   /// The state.
-  DiveVideoSettingsState get state => DiveCore.providerContainer.read(provider.notifier).state;
+  DiveVideoSettingsState get state => DiveCore.providerContainer!.read(provider.notifier).state;
 
   /// Update the state.
   void updateState(DiveVideoSettingsState newState) {
-    final notifier = DiveCore.providerContainer.read(provider.notifier);
+    final notifier = DiveCore.providerContainer!.read(provider.notifier);
     if (notifier.state != newState) {
       notifier.state = newState;
     }
@@ -34,16 +34,16 @@ class DiveCoreElementsState {
   final List<DiveVideoSource> videoSources;
   final List<DiveSource> sources;
   final List<DiveVideoMix> videoMixes;
-  final DiveOutput streamingOutput;
-  final DiveScene currentScene;
+  final DiveOutput? streamingOutput;
+  final DiveScene? currentScene;
 
   DiveCoreElementsState(
-      {List<DiveAudioSource> audioSources,
-      List<DiveImageSource> imageSources,
-      List<DiveMediaSource> mediaSources,
-      List<DiveVideoSource> videoSources,
-      List<DiveSource> sources,
-      List<DiveVideoMix> videoMixes,
+      {List<DiveAudioSource>? audioSources,
+      List<DiveImageSource>? imageSources,
+      List<DiveMediaSource>? mediaSources,
+      List<DiveVideoSource>? videoSources,
+      List<DiveSource>? sources,
+      List<DiveVideoMix>? videoMixes,
       this.streamingOutput,
       this.currentScene})
       : audioSources = audioSources ?? [],
@@ -55,14 +55,14 @@ class DiveCoreElementsState {
 
   /// Updates the current state with only the arguments that are not null.
   DiveCoreElementsState copyWith({
-    List<DiveAudioSource> audioSources,
-    List<DiveImageSource> imageSources,
-    List<DiveMediaSource> mediaSources,
-    List<DiveVideoSource> videoSources,
-    List<DiveSource> sources,
-    List<DiveVideoMix> videoMixes,
-    DiveOutput streamingOutput,
-    DiveScene currentScene,
+    List<DiveAudioSource>? audioSources,
+    List<DiveImageSource>? imageSources,
+    List<DiveMediaSource>? mediaSources,
+    List<DiveVideoSource>? videoSources,
+    List<DiveSource>? sources,
+    List<DiveVideoMix>? videoMixes,
+    DiveOutput? streamingOutput,
+    DiveScene? currentScene,
   }) {
     return DiveCoreElementsState(
       audioSources: audioSources ?? this.audioSources,
@@ -112,13 +112,13 @@ class DiveCoreElements {
 
   /// Remove a source.
   void removeSource(DiveSource source, List<DiveSource> sources) {
-    final item = state.currentScene.findSceneItem(source);
+    final item = state.currentScene!.findSceneItem(source);
     if (item != null) {
-      final state = DiveCore.container.read(provider.notifier).state;
-      state.currentScene.removeSceneItem(item);
+      final state = DiveCore.container!.read(provider.notifier).state;
+      state.currentScene!.removeSceneItem(item);
       sources.remove(source);
       source.dispose();
-      DiveCore.container.read(provider.notifier).state = state;
+      DiveCore.container!.read(provider.notifier).state = state;
     }
   }
 
@@ -135,10 +135,10 @@ class DiveCoreElements {
     }
     DiveImageSource.create(localFile).then((source) {
       if (source != null) {
-        final state = DiveCore.container.read(provider.notifier).state;
+        final state = DiveCore.container!.read(provider.notifier).state;
         state.imageSources.add(source);
-        state.currentScene.addSource(source).then((item) {
-          DiveCore.container.read(provider.notifier).state = state;
+        state.currentScene!.addSource(source).then((item) {
+          DiveCore.container!.read(provider.notifier).state = state;
         });
       }
     });
@@ -159,20 +159,20 @@ class DiveCoreElements {
 
         updateState((state) => state
           ..mediaSources.add(source)
-          ..currentScene.addSource(source));
+          ..currentScene!.addSource(source));
       }
     });
   }
 
   /// The current state. Changes to this state do not get saved and are not
   /// sent to notifiers. To change the state, use [updateState].
-  DiveCoreElementsState get state => DiveCore.container.read(provider.notifier).state;
+  DiveCoreElementsState get state => DiveCore.container!.read(provider.notifier).state;
 
   /// Update the current state. Changes to this state are saved and are
   /// sent to notifiers. This method is good for making many state
   /// changes, and then having only one change sent the notifiers.
   void updateState(DiveCoreElementsState Function(DiveCoreElementsState state) onChangeState) {
-    final controller = DiveCore.container.read(provider.notifier);
+    final controller = DiveCore.container!.read(provider.notifier);
     controller.state = onChangeState(controller.state);
   }
 }

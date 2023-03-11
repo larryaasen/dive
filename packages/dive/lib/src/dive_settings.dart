@@ -11,7 +11,7 @@ class DiveSettings {
     _settings[name] = value;
   }
 
-  T get<T>(String name) => _settings[name];
+  T? get<T>(String name) => _settings[name];
 
   bool _validType(dynamic value) {
     return value is String ||

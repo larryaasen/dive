@@ -5,8 +5,8 @@ homepage: https://divekit.dev
 repository: https://github.com/larryaasen/dive/tree/main/packages/dive
 
 environment:
-  sdk: '>=2.10.0 <3.0.0'
-  flutter: '>=1.20.0'
+  sdk: '>=2.19.0 <3.0.0'
+  flutter: '>=3.7.0'
 
 dependencies:
   flutter:
@@ -14,8 +14,8 @@ dependencies:
 
   collection: ^1.17.0
 
-  dive_obslib: ^0.3.0
-    # path: ../dive_obslib
+  dive_obslib:
+    path: ../dive_obslib
 
   # From fluttetcommunity.dev: Simplify Dart Equality Comparisons
   equatable: ^2.0.5

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:dive_obslib/dive_obslib.dart';
 
 import 'dive_sources.dart';
@@ -10,9 +11,9 @@ class DiveScene extends DiveTracking {
   final List<DiveSceneItem> _sceneItems = [];
   List<DiveSceneItem> get sceneItems => _sceneItems;
 
-  DivePointer pointer;
+  DivePointer? pointer;
 
-  static DiveScene create([String name]) {
+  static DiveScene create([String? name]) {
     if (_sceneCount > 0) throw UnsupportedError('multiple scenes are not supported.');
 
     _sceneCount++;
@@ -27,15 +28,15 @@ class DiveScene extends DiveTracking {
   /// Add a source to a scene.
   /// Returns a new scene item.
   Future<DiveSceneItem> addSource(DiveSource source) async {
-    final item = obslib.sceneAddSource(pointer, source.pointer);
+    final item = obslib.sceneAddSource(pointer!, source.pointer!);
     final sceneItem = DiveSceneItem(item: item, source: source, scene: this);
     _sceneItems.add(sceneItem);
     return sceneItem;
   }
 
   /// Finds the scene item for source in this scene.
-  DiveSceneItem findSceneItem(DiveSource source) {
-    return _sceneItems.firstWhere((sceneItem) => sceneItem.source == source, orElse: () => null);
+  DiveSceneItem? findSceneItem(DiveSource source) {
+    return _sceneItems.firstWhereOrNull((sceneItem) => sceneItem.source == source);
   }
 
   void makeSourceVisible(DiveSource source, bool visible) {
@@ -61,7 +62,7 @@ class DiveScene extends DiveTracking {
 
   /// Release the resources associated with this source.
   bool dispose() {
-    obslib.deleteScene(pointer);
+    obslib.deleteScene(pointer!);
     removeAllSceneItems();
     pointer = null;
     _sceneCount--;

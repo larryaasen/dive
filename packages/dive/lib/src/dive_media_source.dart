@@ -57,20 +57,20 @@ class DiveMediaSourceState extends Equatable {
 // }
 
 class DiveMediaSourceSettings extends DiveSettings {
-  String get localFile => get('local_file');
-  bool get isLocalFile => get('is_local_file');
-  bool get looping => get('looping');
+  String? get localFile => get('local_file');
+  bool? get isLocalFile => get('is_local_file');
+  bool? get looping => get('looping');
 
-  bool get clearOnMediaEnd => get('clear_on_media_end');
-  bool get restartOnActivate => get('restart_on_activate');
-  bool get linearAlpha => get('linear_alpha');
+  bool? get clearOnMediaEnd => get('clear_on_media_end');
+  bool? get restartOnActivate => get('restart_on_activate');
+  bool? get linearAlpha => get('linear_alpha');
 
-  int get reconnectDelaySec => get('reconnect_delay_sec');
-  int get bufferingMb => get('buffering_mb');
-  int get speedPercent => get('speed_percent');
+  int? get reconnectDelaySec => get('reconnect_delay_sec');
+  int? get bufferingMb => get('buffering_mb');
+  int? get speedPercent => get('speed_percent');
 
   DiveMediaSourceSettings({
-    String localFile,
+    String? localFile,
     bool isLocalFile = true,
     bool looping = false,
     bool clearOnMediaEnd = true,
@@ -96,22 +96,22 @@ class DiveMediaSourceSettings extends DiveSettings {
 class DiveMediaSource extends DiveTextureSource {
   final provider = StateProvider<DiveMediaSourceState>((ref) => const DiveMediaSourceState());
 
-  DiveAudioMeterSource volumeMeter;
+  DiveAudioMeterSource? volumeMeter;
 
   /// The state syncing interval (msec).
   final int stateSyncInterval;
 
-  Timer _syncStateTimer;
+  Timer? _syncStateTimer;
 
-  DiveMediaSource(String name, {DiveMediaSourceSettings settings, this.stateSyncInterval = 500})
+  DiveMediaSource(String name, {DiveMediaSourceSettings? settings, this.stateSyncInterval = 500})
       : super(inputType: DiveInputType.mediaSource, name: name, settings: settings) {
     if (stateSyncInterval > 0) {
       _syncStateTimer = Timer.periodic(Duration(milliseconds: stateSyncInterval), _timerCallback);
     }
   }
-  static Future<DiveMediaSource> create({
+  static Future<DiveMediaSource?> create({
     String name = 'my media',
-    DiveMediaSourceSettings settings,
+    required DiveMediaSourceSettings settings,
     bool requiresVideoMonitor = true,
   }) async {
     final source = DiveMediaSource(name, settings: settings);
@@ -133,7 +133,7 @@ class DiveMediaSource extends DiveTextureSource {
     // Turn on the default audio monitoring device so we can hear the audio.
     // TODO: is this really needed here?
     if (source.pointer != null) {
-      obslib.sourceSetMonitoringType(source.pointer);
+      obslib.sourceSetMonitoringType(source.pointer!);
     }
 
     return source.pointer == null ? null : source;
@@ -143,16 +143,16 @@ class DiveMediaSource extends DiveTextureSource {
   @override
   bool dispose() {
     if (_syncStateTimer != null) {
-      _syncStateTimer.cancel();
+      _syncStateTimer!.cancel();
       _syncStateTimer = null;
     }
 
     // obslib.removeSourceFrameCallback(trackingUUID, pointer.address);
-    obslib.releaseSource(pointer);
+    obslib.releaseSource(pointer!);
     releaseController();
 
     if (volumeMeter != null) {
-      volumeMeter.dispose();
+      volumeMeter!.dispose();
       volumeMeter = null;
     }
 
@@ -178,58 +178,58 @@ class DiveMediaSource extends DiveTextureSource {
 
   /// Sync the media state from the media source to the state provider.
   Future<void> _syncState() async {
-    final currentStateModel = DiveCore.container.read(provider.notifier).state;
+    final currentStateModel = DiveCore.container!.read(provider.notifier).state;
     final newStateModel = await getState();
     if (currentStateModel != newStateModel) {
-      DiveCore.container.read(provider.notifier).state = newStateModel;
+      DiveCore.container!.read(provider.notifier).state = newStateModel;
     }
     return;
   }
 
   /// Get the media source state for this media source.
   Future<DiveMediaSourceState> getState() async {
-    final mediaState = obslib.mediaSourceGetState(pointer);
-    final duration = obslib.mediaSourceGetDuration(pointer);
-    final ms = obslib.mediaSourceGetTime(pointer);
+    final mediaState = obslib.mediaSourceGetState(pointer!);
+    final duration = obslib.mediaSourceGetDuration(pointer!);
+    final ms = obslib.mediaSourceGetTime(pointer!);
     return DiveMediaSourceState(
         currentTime: ms, duration: duration, mediaState: DiveMediaState.values[mediaState]);
   }
 
   Future<bool> play() async {
-    obslib.mediaSourcePlayPause(pointer, false);
+    obslib.mediaSourcePlayPause(pointer!, false);
     await syncState();
 
     return true;
   }
 
   Future<bool> pause() async {
-    obslib.mediaSourcePlayPause(pointer, true);
+    obslib.mediaSourcePlayPause(pointer!, true);
     await syncState();
     return true;
   }
 
   Future<bool> restart() async {
-    obslib.mediaSourceRestart(pointer);
+    obslib.mediaSourceRestart(pointer!);
     await syncState();
     return true;
   }
 
   Future<bool> stop() async {
-    obslib.mediaSourceStop(pointer);
+    obslib.mediaSourceStop(pointer!);
     await syncState();
     return true;
   }
 
   Future<int> getDuration() async {
-    return obslib.mediaSourceGetDuration(pointer);
+    return obslib.mediaSourceGetDuration(pointer!);
   }
 
   Future<int> getTime() async {
-    return obslib.mediaSourceGetTime(pointer);
+    return obslib.mediaSourceGetTime(pointer!);
   }
 
   Future<bool> setTime(int ms) async {
-    obslib.mediaSourceSetTime(pointer, ms);
+    obslib.mediaSourceSetTime(pointer!, ms);
     return true;
   }
 }

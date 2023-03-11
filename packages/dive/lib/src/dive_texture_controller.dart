@@ -12,7 +12,7 @@ class DiveTextureException implements Exception {
   String code;
 
   /// Textual description of the error.
-  String description;
+  String? description;
 
   @override
   String toString() => '$runtimeType($code, $description)';
@@ -22,7 +22,7 @@ class DiveTextureException implements Exception {
 ///
 /// Before using a [DiveTextureController] a call to [initialize] must complete.
 class DiveTextureController {
-  final String trackingUUID;
+  final String? trackingUUID;
 
   /// Creates a new controller in an uninitialized state.
   DiveTextureController({this.trackingUUID});
@@ -34,12 +34,12 @@ class DiveTextureController {
   bool get isInitialized => _isInitialized;
 
   /// The texture ID provided after initialization.
-  int get textureId => _textureId;
+  int? get textureId => _textureId;
 
-  int _textureId;
+  int? _textureId;
   bool _isInitialized = false;
   bool _isDisposed = false;
-  Completer<void> _creatingCompleter;
+  Completer<void>? _creatingCompleter;
 
   /// Initializes the texture.
   ///
@@ -52,14 +52,14 @@ class DiveTextureController {
     try {
       _creatingCompleter = Completer<void>();
 
-      final int textureId = await obslib.initializeTexture(trackingUUID: trackingUUID);
+      final int textureId = await obslib.initializeTexture(trackingUUID: trackingUUID!);
       _textureId = textureId;
       _isInitialized = true;
     } on PlatformException catch (e) {
       throw DiveTextureException(e.code, e.message);
     }
-    _creatingCompleter.complete();
-    return _creatingCompleter.future;
+    _creatingCompleter!.complete();
+    return _creatingCompleter!.future;
   }
 
   /// Releases the resources held by this controller.
@@ -68,8 +68,8 @@ class DiveTextureController {
 
     _isDisposed = true;
     if (_creatingCompleter != null) {
-      await _creatingCompleter.future;
-      await obslib.disposeTexture(_textureId);
+      await _creatingCompleter!.future;
+      await obslib.disposeTexture(_textureId!);
     }
   }
 }

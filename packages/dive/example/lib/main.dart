@@ -4,23 +4,23 @@ import 'package:dive/dive.dart';
 void main() async {
   configDiveApp();
 
-  await DiveExample().run();
+  await DiveExample()
+    ..run();
 }
 
 class DiveExample {
   final _elements = DiveCoreElements();
-  DiveCore _diveCore;
+  final _diveCore = DiveCore();
   bool _initialized = false;
 
   void run() async {
-    await _initialize();
+    _initialize();
   }
 
   void _initialize() async {
     if (_initialized) return;
     _initialized = true;
 
-    _diveCore = DiveCore();
     await _diveCore.setupOBS(DiveCoreResolution.HD);
 
     // Create the main scene
@@ -29,8 +29,10 @@ class DiveExample {
 
     // Create the main audio source
     DiveAudioSource.create('main audio').then((source) {
-      _elements.updateState((state) => state..audioSources.add(source));
-      _elements.updateState((state) => state..currentScene.addSource(source));
+      if (source != null) {
+        _elements.updateState((state) => state..audioSources.add(source));
+        _elements.updateState((state) => state..currentScene!.addSource(source));
+      }
     });
 
     // Get the first video input
@@ -39,9 +41,11 @@ class DiveExample {
 
     // Create the last video source from the video input
     DiveVideoSource.create(videoInput).then((source) {
-      _elements.updateState((state) => state..videoSources.add(source));
-      // Add the video source to the scene
-      _elements.updateState((state) => state..currentScene.addSource(source));
+      if (source != null) {
+        _elements.updateState((state) => state..videoSources.add(source));
+        // Add the video source to the scene
+        _elements.updateState((state) => state..currentScene!.addSource(source));
+      }
     });
 
     // Create the streaming output
@@ -70,11 +74,10 @@ class DiveExample {
     Future.delayed(Duration(seconds: streamDuration), () {
       print('Dive Example 1: Stopping stream.');
       output.stop();
-      output = null;
 
       final state = _elements.state;
       // Remove the video and audio sources from the scene
-      state.currentScene.removeAllSceneItems();
+      state.currentScene?.removeAllSceneItems();
 
       // Remove the video source from the state
       final videoSource = state.videoSources.removeLast();
@@ -88,8 +91,6 @@ class DiveExample {
 
       // Delete the scene resources
       scene.dispose();
-
-      _diveCore = null;
     });
   }
 }

@@ -5,17 +5,16 @@ class DiveAlign {
   static const top = (1 << 2);
   static const bottom = (1 << 3);
 
-  final int alignment;
+  final int? alignment;
   DiveAlign({this.alignment = center});
 }
 
 class DiveVec2 {
-  final double x, y;
+  final double? x, y;
 
   DiveVec2(this.x, this.y);
 
   static DiveVec2 fromMap(Map map) {
-    assert(map != null);
     return DiveVec2(map['x'], map['y']);
   }
 
@@ -49,13 +48,13 @@ enum DiveBoundsType {
 }
 
 class DiveTransformInfo {
-  final DiveVec2 pos;
-  final double rot;
-  final DiveVec2 scale;
-  final DiveAlign alignment;
-  final DiveBoundsType boundsType;
-  final DiveAlign boundsAlignment;
-  final DiveVec2 bounds;
+  final DiveVec2? pos;
+  final double? rot;
+  final DiveVec2? scale;
+  final DiveAlign? alignment;
+  final DiveBoundsType? boundsType;
+  final DiveAlign? boundsAlignment;
+  final DiveVec2? bounds;
 
   DiveTransformInfo(
       {this.pos, this.rot, this.scale, this.alignment, this.boundsType, this.boundsAlignment, this.bounds});
@@ -106,13 +105,13 @@ class DiveTransformInfo {
 
   Map toMap() {
     return {
-      'pos': {'x': pos.x, 'y': pos.y},
+      'pos': {'x': pos!.x, 'y': pos!.y},
       'rot': rot,
-      'scale': {'x': scale.x, 'y': scale.y},
-      'alignment': alignment.alignment,
-      'bounds_type': boundsType.index,
-      'bounds_alignment': boundsAlignment.alignment,
-      'bounds': {'x': bounds.x, 'y': bounds.y},
+      'scale': {'x': scale!.x, 'y': scale!.y},
+      'alignment': alignment!.alignment,
+      'bounds_type': boundsType!.index,
+      'bounds_alignment': boundsAlignment!.alignment,
+      'bounds': {'x': bounds!.x, 'y': bounds!.y},
     };
   }
 
