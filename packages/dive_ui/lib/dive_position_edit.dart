@@ -165,19 +165,19 @@ class _DiveMoveItemEditState extends State<DiveMoveItemEdit> {
         padding: EdgeInsets.only(top: 20),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
           ElevatedButton(
-              child: Text('Move Up'), onPressed: () => _onMovePressed(DiveSceneItemMovement.MOVE_UP)),
+              child: Text('Move Up'), onPressed: () => _onMovePressed(DiveSceneItemMovement.moveUp)),
           Container(width: 15),
           ElevatedButton(
-              child: Text('Move Top'), onPressed: () => _onMovePressed(DiveSceneItemMovement.MOVE_TOP)),
+              child: Text('Move Top'), onPressed: () => _onMovePressed(DiveSceneItemMovement.moveTop)),
         ]));
     final buttons2 = Padding(
         padding: EdgeInsets.only(top: 20),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
           ElevatedButton(
-              child: Text('Move Down'), onPressed: () => _onMovePressed(DiveSceneItemMovement.MOVE_DOWN)),
+              child: Text('Move Down'), onPressed: () => _onMovePressed(DiveSceneItemMovement.moveDown)),
           Container(width: 15),
           ElevatedButton(
-              child: Text('Move Bottom'), onPressed: () => _onMovePressed(DiveSceneItemMovement.MOVE_BOTTOM)),
+              child: Text('Move Bottom'), onPressed: () => _onMovePressed(DiveSceneItemMovement.moveBottom)),
         ]));
     final col = Column(children: [
       header,

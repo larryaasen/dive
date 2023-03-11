@@ -243,10 +243,10 @@ class DiveOutputButton extends ConsumerWidget {
   final DiveCoreElements elements;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     if (elements == null) return Container();
 
-    final state = watch(elements.stateProvider.state);
+    final state = ref.watch(elements.provider);
     if (state.streamingOutput == null) return Container();
 
     return DiveStreamPlayButton(streamingOutput: elements.state.streamingOutput);
@@ -262,12 +262,12 @@ class DiveStreamPlayButton extends ConsumerWidget {
   final Color iconColor;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     if (streamingOutput == null) {
       return Container();
     }
 
-    final state = watch(streamingOutput.stateProvider.state);
+    final state = ref.watch(streamingOutput.provider);
 
     return IconButton(
       icon: state == DiveOutputStreamingState.active
@@ -423,7 +423,7 @@ class _DiveSourceMenuState extends State<DiveSourceMenu> {
     return Padding(
         padding: EdgeInsets.only(left: 0.0, right: 0.0),
         child: PopupMenuButton<int>(
-          child: Icon(DiveUI.iconSet.sourceSettingsButton, color: Theme.of(context).buttonColor),
+          child: Icon(DiveUI.iconSet.sourceSettingsButton, color: Colors.grey),
           tooltip: 'Source menu',
           padding: EdgeInsets.only(right: 0.0),
           offset: Offset(0.0, 0.0),

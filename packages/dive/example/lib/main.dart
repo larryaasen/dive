@@ -24,73 +24,72 @@ class DiveExample {
     await _diveCore.setupOBS(DiveCoreResolution.HD);
 
     // Create the main scene
-    DiveScene.create('Scene 1').then((scene) {
-      _elements.updateState((state) => state.copyWith(currentScene: scene));
+    final scene = DiveScene.create();
+    _elements.updateState((state) => state.copyWith(currentScene: scene));
 
-      // Create the main audio source
-      DiveAudioSource.create('main audio').then((source) {
-        _elements.updateState((state) => state..audioSources.add(source));
-        _elements.updateState((state) => state..currentScene.addSource(source));
-      });
+    // Create the main audio source
+    DiveAudioSource.create('main audio').then((source) {
+      _elements.updateState((state) => state..audioSources.add(source));
+      _elements.updateState((state) => state..currentScene.addSource(source));
+    });
 
-      // Get the first video input
-      final videoInput = DiveInputs.video().last;
-      print(videoInput);
+    // Get the first video input
+    final videoInput = DiveInputs.video().last;
+    print(videoInput);
 
-      // Create the last video source from the video input
-      DiveVideoSource.create(videoInput).then((source) {
-        _elements.updateState((state) => state..videoSources.add(source));
-        // Add the video source to the scene
-        _elements.updateState((state) => state..currentScene.addSource(source));
-      });
+    // Create the last video source from the video input
+    DiveVideoSource.create(videoInput).then((source) {
+      _elements.updateState((state) => state..videoSources.add(source));
+      // Add the video source to the scene
+      _elements.updateState((state) => state..currentScene.addSource(source));
+    });
 
-      // Create the streaming output
-      var output = DiveOutput();
+    // Create the streaming output
+    var output = DiveOutput();
 
-      // YouTube settings
-      // Replace this YouTube key with your own. This one is no longer valid.
-      // output.serviceKey = '26qe-9gxw-9veb-kf2m-dhv3';
-      // output.serviceUrl = 'rtmp://a.rtmp.youtube.com/live2';
+    // YouTube settings
+    // Replace this YouTube key with your own. This one is no longer valid.
+    // output.serviceKey = '26qe-9gxw-9veb-kf2m-dhv3';
+    // output.serviceUrl = 'rtmp://a.rtmp.youtube.com/live2';
 
-      // Twitch Settings
-      // Replace this Twitch key with your own. This one is no longer valid.
-      output.serviceKey = 'live_276488556_uIKncv1zAGQ3kz5aVzCvfshg8W4ENC';
-      output.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/${output.serviceKey}';
+    // Twitch Settings
+    // Replace this Twitch key with your own. This one is no longer valid.
+    output.serviceKey = 'live_276488556_uIKncv1zAGQ3kz5aVzCvfshg8W4ENC';
+    output.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/${output.serviceKey}';
 
-      // Update the streaming state object
-      _elements.updateState((state) => state.copyWith(streamingOutput: output));
+    // Update the streaming state object
+    _elements.updateState((state) => state.copyWith(streamingOutput: output));
 
-      // Start streaming
-      print("Dive Example 1: Starting stream.");
-      output.start();
+    // Start streaming
+    print("Dive Example 1: Starting stream.");
+    output.start();
 
-      const streamDuration = 30;
-      print('Dive Example 1: Waiting $streamDuration seconds.');
+    const streamDuration = 30;
+    print('Dive Example 1: Waiting $streamDuration seconds.');
 
-      Future.delayed(Duration(seconds: streamDuration), () {
-        print('Dive Example 1: Stopping stream.');
-        output.stop();
-        output = null;
+    Future.delayed(Duration(seconds: streamDuration), () {
+      print('Dive Example 1: Stopping stream.');
+      output.stop();
+      output = null;
 
-        final state = _elements.state;
-        // Remove the video and audio sources from the scene
-        state.currentScene.removeAllSceneItems();
+      final state = _elements.state;
+      // Remove the video and audio sources from the scene
+      state.currentScene.removeAllSceneItems();
 
-        // Remove the video source from the state
-        final videoSource = state.videoSources.removeLast();
-        // Delete the source resources
-        videoSource.dispose();
+      // Remove the video source from the state
+      final videoSource = state.videoSources.removeLast();
+      // Delete the source resources
+      videoSource.dispose();
 
-        // Remove the video source from the state
-        final audioSource = state.audioSources.removeLast();
-        // Delete the source resources
-        audioSource.dispose();
+      // Remove the video source from the state
+      final audioSource = state.audioSources.removeLast();
+      // Delete the source resources
+      audioSource.dispose();
 
-        // Delete the scene resources
-        scene.dispose();
+      // Delete the scene resources
+      scene.dispose();
 
-        _diveCore = null;
-      });
+      _diveCore = null;
     });
   }
 }

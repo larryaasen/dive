@@ -71,7 +71,9 @@ class DiveSource extends DiveTracking {
       name: source.name,
       settings: data,
     );
-
+    if (source.pointer == null) {
+      DiveSystemLog.message('DiveSource.create failed', group: 'dive');
+    }
     data.dispose();
     return source.pointer == null ? null : source;
   }

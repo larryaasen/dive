@@ -63,42 +63,41 @@ class _BodyWidgetState extends State<BodyWidget> {
     _diveCore = DiveCore();
     await _diveCore.setupOBS(DiveCoreResolution.FULL_HD);
 
-    DiveScene.create('Scene 1').then((scene) {
-      _elements.updateState((state) => state.copyWith(currentScene: scene));
+    final scene = DiveScene.create();
+    _elements.updateState((state) => state.copyWith(currentScene: scene));
 
-      DiveVideoMix.create().then((mix) {
-        _elements.updateState((state) => state..videoMixes.add(mix));
-      });
-
-      DiveAudioSource.create('main audio').then((source) {
-        setState(() {
-          _elements.updateState((state) => state..audioSources.add(source));
-        });
-        _elements.updateState((state) => state..currentScene.addSource(source));
-
-        DiveAudioMeterSource()
-          ..create(source: source).then((volumeMeter) {
-            setState(() {
-              source.volumeMeter = volumeMeter;
-            });
-          });
-      });
-
-      DiveInputs.video().forEach((videoInput) {
-        print(videoInput);
-        DiveVideoSource.create(videoInput).then((source) {
-          _elements.updateState((state) {
-            state.videoSources.add(source);
-            state.currentScene.addSource(source);
-            return state;
-          });
-        });
-      });
-
-      // Create the streaming output
-      final output = DiveOutput();
-      _elements.updateState((state) => state.copyWith(streamingOutput: output));
+    DiveVideoMix.create().then((mix) {
+      _elements.updateState((state) => state..videoMixes.add(mix));
     });
+
+    DiveAudioSource.create('main audio').then((source) {
+      setState(() {
+        _elements.updateState((state) => state..audioSources.add(source));
+      });
+      _elements.updateState((state) => state..currentScene.addSource(source));
+
+      DiveAudioMeterSource()
+        ..create(source: source).then((volumeMeter) {
+          setState(() {
+            source.volumeMeter = volumeMeter;
+          });
+        });
+    });
+
+    DiveInputs.video().forEach((videoInput) {
+      print(videoInput);
+      DiveVideoSource.create(videoInput).then((source) {
+        _elements.updateState((state) {
+          state.videoSources.add(source);
+          state.currentScene.addSource(source);
+          return state;
+        });
+      });
+    });
+
+    // Create the streaming output
+    final output = DiveOutput();
+    _elements.updateState((state) => state.copyWith(streamingOutput: output));
   }
 
   @override
@@ -118,8 +117,8 @@ class MediaPlayer extends ConsumerWidget {
   final BuildContext context;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final state = watch(elements.stateProvider.state);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(elements.provider);
     if (state.videoMixes.length == 0) {
       return Container(color: Colors.purple);
     }
@@ -144,7 +143,7 @@ class MediaPlayer extends ConsumerWidget {
             final source = state.videoSources[newIndex];
             final sceneItem = state.currentScene.findSceneItem(source);
             if (sceneItem != null) {
-              sceneItem.setOrder(DiveSceneItemMovement.MOVE_TOP);
+              sceneItem.setOrder(DiveSceneItemMovement.moveTop);
             }
             return state;
           });

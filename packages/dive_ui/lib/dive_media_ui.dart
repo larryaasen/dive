@@ -53,10 +53,10 @@ class DiveMediaPlayButton extends ConsumerWidget {
   final Color iconColor;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     var mediaState;
     if (mediaSource != null) {
-      final stateModel = watch(mediaSource.stateProvider.state);
+      final stateModel = ref.watch(mediaSource.provider);
       mediaState = stateModel.mediaState;
     } else {
       mediaState = DiveMediaState.STOPPED;
@@ -129,12 +129,12 @@ class DiveMediaDuration extends ConsumerWidget {
   final Color textColor;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     if (mediaSource == null) {
       return Container();
     }
 
-    final stateModel = watch(mediaSource.stateProvider.state);
+    final stateModel = ref.watch(mediaSource.provider);
     final cur = DiveFormat.formatDuration(Duration(milliseconds: stateModel.currentTime));
     final dur = DiveFormat.formatDuration(Duration(milliseconds: stateModel.duration));
     final curWide = cur.padLeft(dur.length - cur.length);

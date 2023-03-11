@@ -12,13 +12,13 @@ class DiveScene extends DiveTracking {
 
   DivePointer pointer;
 
-  static Future<DiveScene> create(String name) async {
-    if (_sceneCount > 0) {
-      throw UnsupportedError('multiple scenes are not supported.');
-    }
+  static DiveScene create([String name]) {
+    if (_sceneCount > 0) throw UnsupportedError('multiple scenes are not supported.');
+
     _sceneCount++;
 
     final scene = DiveScene();
+    name = name ?? 'Scene $_sceneCount';
     scene.pointer = obslib.createScene(scene.trackingUUID, name);
 
     return scene;
@@ -64,6 +64,7 @@ class DiveScene extends DiveTracking {
     obslib.deleteScene(pointer);
     removeAllSceneItems();
     pointer = null;
+    _sceneCount--;
     return true;
   }
 }

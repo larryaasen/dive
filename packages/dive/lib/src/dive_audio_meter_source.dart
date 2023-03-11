@@ -130,8 +130,7 @@ class DiveAudioMeterSource {
   Timer _noSignalTimer;
   Stopwatch _stopwatch;
 
-  final stateProvider =
-      StateNotifierProvider<DiveAudioMeterStateNotifier>((ref) => DiveAudioMeterStateNotifier(null));
+  final provider = StateProvider<DiveAudioMeterState>((ref) => DiveAudioMeterState());
 
   void dispose() {
     obslib.volumeMeterDestroy(_pointer);
@@ -152,8 +151,8 @@ class DiveAudioMeterSource {
 
     int channelCount = await obslib.addVolumeMeterCallback(_pointer.address, _onMeterUpdated);
 
-    DiveCore.notifierFor(stateProvider)
-        .updateState(_clearDerived(DiveAudioMeterState(channelCount: channelCount)));
+    DiveCore.container.read(provider.notifier).state =
+        _clearDerived(DiveAudioMeterState(channelCount: channelCount));
     return this;
   }
 
@@ -176,7 +175,7 @@ class DiveAudioMeterSource {
     final now = DateTime.now();
 
     // Get the current state
-    var currentState = DiveCore.notifierFor(stateProvider).stateModel;
+    var currentState = DiveCore.container.read(provider.notifier).state;
 
     // Determine the attack of audio since last update (seconds).
     double attackRate = 0.99;
@@ -266,7 +265,7 @@ class DiveAudioMeterSource {
       lastUpdateTime: now,
       noSignal: false,
     );
-    DiveCore.notifierFor(stateProvider).updateState(newState);
+    DiveCore.container.read(provider.notifier).state = newState;
 
     _startNoSignalTimer();
   }
@@ -290,11 +289,11 @@ class DiveAudioMeterSource {
     _noSignalTimer.cancel();
     _noSignalTimer = null;
 
-    var currentState = DiveCore.notifierFor(stateProvider).stateModel;
+    var currentState = DiveCore.container.read(provider.notifier).state;
 
     // Update the state and notify
     final newState = _clearDerived(currentState);
-    DiveCore.notifierFor(stateProvider).updateState(newState);
+    DiveCore.container.read(provider.notifier).state = newState;
   }
 
   DiveAudioMeterState _clearDerived(DiveAudioMeterState state) => state.copyWith(

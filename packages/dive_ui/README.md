@@ -35,7 +35,7 @@ first to get familiar with the widgets and classes that are part of Dive.
 
 1. To download the examples, follow [this GitHub link](https://github.com/larryaasen/dive), click the green Code
 button, click Download ZIP.
-1. Once the repo has been downloaded, open the zip file. It should create the folder `dive-main`.
+1. Once the repo has been downloaded, open/uncompress the zip file. It should create the folder `dive-main`.
 1. Open the path `dive-main/packages/dive_ui/example` in an IDE such as [Visual Studio Code](https://code.visualstudio.com/) or Android Studio.
 1. Open a TERMINAL window in your IDE.
 1. Make sure the current working directory (pwd) is `dive-main/packages/dive_ui/example`.
@@ -44,6 +44,7 @@ button, click Download ZIP.
 like this:
 ```
 Launching lib/main_example1.dart on macOS in debug mode...
+...
 Building macOS application...                                           
 Error waiting for a debug connection: The log reader stopped unexpectedly, or never started.
 Error launching application on macOS.

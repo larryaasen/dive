@@ -18,10 +18,11 @@
             "type": "dart"
         },
         {
-            "name": "dive_ui",
-            "cwd": "dive_ui",
+            "name": "dive_ui example",
+            "cwd": "packages/dive_ui/example",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "program": "lib/main_example4.dart"
         },
         {
             "name": "example",

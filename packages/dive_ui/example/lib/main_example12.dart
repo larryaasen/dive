@@ -61,24 +61,23 @@ class _BodyWidgetState extends State<BodyWidget> {
     _diveCore = DiveCore();
     await _diveCore.setupOBS(DiveCoreResolution.FULL_HD);
 
-    DiveScene.create('Scene 1').then((scene) {
-      _elements.updateState((state) => state.copyWith(currentScene: scene));
+    final scene = DiveScene.create();
+    _elements.updateState((state) => state.copyWith(currentScene: scene));
 
-      final settings = DiveSettings();
-      settings.set('display', 0); // Display #0
-      settings.set('show_cursor', true); // Show the cursor
-      settings.set('crop_mode', 0); // Crop mode: none
-      final displayCaptureSource = DiveSource.create(
-        inputType: DiveInputType(id: 'display_capture', name: 'Display Capture'),
-        name: 'display capture 1',
-        settings: settings,
-      );
-      _elements.updateState((state) => state..sources.add(displayCaptureSource));
-      _elements.updateState((state) => state..currentScene.addSource(displayCaptureSource));
+    final settings = DiveSettings();
+    settings.set('display', 0); // Display #0
+    settings.set('show_cursor', true); // Show the cursor
+    settings.set('crop_mode', 0); // Crop mode: none
+    final displayCaptureSource = DiveSource.create(
+      inputType: DiveInputType(id: 'display_capture', name: 'Display Capture'),
+      name: 'display capture 1',
+      settings: settings,
+    );
+    _elements.updateState((state) => state..sources.add(displayCaptureSource));
+    _elements.updateState((state) => state..currentScene.addSource(displayCaptureSource));
 
-      DiveVideoMix.create().then((mix) {
-        _elements.updateState((state) => state..videoMixes.add(mix));
-      });
+    DiveVideoMix.create().then((mix) {
+      _elements.updateState((state) => state..videoMixes.add(mix));
     });
   }
 
@@ -95,8 +94,8 @@ class MediaPlayer extends ConsumerWidget {
   final BuildContext context;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final state = watch(elements.stateProvider.state);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(elements.provider);
     if (state.videoMixes.length == 0) {
       return Container(color: Colors.purple);
     }

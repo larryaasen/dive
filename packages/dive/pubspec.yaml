@@ -24,7 +24,7 @@ dependencies:
   intl: ">=0.16.0 <1.0.0"
 
   # From darky12s@gmail.com: a state-manangement library
-  riverpod: ">=0.13.1 <1.0.0"
+  riverpod: ^1.0.3
 
   # From: yuli.dev. Simple, fast generation of RFC4122 UUIDs
   uuid: ^2.2.2

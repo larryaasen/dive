@@ -11,10 +11,10 @@ class DiveAudioMeter extends ConsumerWidget {
   final bool vertical;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     if (volumeMeter == null) return Container();
 
-    final stateModel = watch(volumeMeter.stateProvider.state);
+    final stateModel = ref.watch(volumeMeter.provider);
     return DiveAudioMeterPaint(key: key, state: stateModel, vertical: vertical);
   }
 }

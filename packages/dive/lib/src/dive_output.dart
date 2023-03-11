@@ -6,21 +6,13 @@ import 'package:riverpod/riverpod.dart';
 
 enum DiveOutputStreamingState { stopped, active, paused, reconnecting }
 
-class DiveOutputStateNotifier extends StateNotifier<DiveOutputStreamingState> {
-  DiveOutputStreamingState get outputState => state;
-
-  DiveOutputStateNotifier(outputState) : super(outputState ?? DiveOutputStreamingState.stopped);
-
-  void updateOutputState(DiveOutputStreamingState outputState) {
-    state = outputState;
-  }
-}
-
 /// Signature for the state syncer.
 typedef _DiveSyncer = Future<void> Function();
 
 /// Streaming output.
 class DiveOutput {
+  DiveOutput();
+
   DiveRTMPService service;
   DiveRTMPServer server;
   String serviceUrl = '';
@@ -28,8 +20,8 @@ class DiveOutput {
   String serviceId = 'rtmp_common';
   String outputType = 'rtmp_output';
 
-  final stateProvider = StateNotifierProvider<DiveOutputStateNotifier>((ref) {
-    return DiveOutputStateNotifier(DiveOutputStreamingState.stopped);
+  final provider = StateProvider<DiveOutputStreamingState>((ref) {
+    return DiveOutputStreamingState.stopped;
   }, name: 'output-provider');
 
   DivePointerOutput _output;
@@ -49,7 +41,7 @@ class DiveOutput {
 
     // Create streaming service
     _output = obslib.streamOutputCreate(
-      serviceName: service.name,
+      serviceName: service?.name ?? 'tbd',
       serviceUrl: serviceUrl,
       serviceKey: serviceKey,
       serviceId: serviceId,
@@ -80,7 +72,7 @@ class DiveOutput {
     // amount of time for the output to actually be fully stopped.
     // TODO: This should be improved to use signals and other techniques to determine when the output
     // has stopped.
-    DiveCore.notifierFor(stateProvider).updateOutputState(DiveOutputStreamingState.stopped);
+    DiveCore.container.read(provider.notifier).state = DiveOutputStreamingState.stopped;
 
     return true;
   }
@@ -117,7 +109,7 @@ class DiveOutput {
   Future<void> _updateState() async {
     if (_output == null) return;
     final state = DiveOutputStreamingState.values[obslib.streamOutputGetState(_output)];
-    DiveCore.notifierFor(stateProvider).updateOutputState(state);
+    DiveCore.container.read(provider.notifier).state = state;
     if (state == DiveOutputStreamingState.stopped) {}
   }
 }

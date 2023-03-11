@@ -57,12 +57,11 @@ class _BodyWidgetState extends State<BodyWidget> {
     _diveCore = DiveCore();
     _diveCore.setupOBS(DiveCoreResolution.HD);
 
-    DiveScene.create('Scene 1').then((scene) {
-      _elements.updateState((state) => state.copyWith(currentScene: scene));
+    final scene = DiveScene.create();
+    _elements.updateState((state) => state.copyWith(currentScene: scene));
 
-      DiveVideoMix.create().then((mix) {
-        _elements.updateState((state) => state..videoMixes.add(mix));
-      });
+    DiveVideoMix.create().then((mix) {
+      _elements.updateState((state) => state..videoMixes.add(mix));
     });
 
     _initialized = true;
@@ -86,16 +85,14 @@ class MediaPlayer extends ConsumerWidget {
   final BuildContext context;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final state = watch(elements.stateProvider.state);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(elements.provider);
     if (state.videoMixes.length == 0) {
       return Container(color: Colors.purple);
     }
 
-    final videoMix = DivePreview(
-      controller: state.videoMixes[0].controller,
-      aspectRatio: DiveCoreAspectRatio.HD.ratio,
-    );
+    final videoMix =
+        DivePreview(controller: state.videoMixes[0].controller, aspectRatio: DiveCoreAspectRatio.HD.ratio);
 
     final mainContent = Column(
       crossAxisAlignment: CrossAxisAlignment.center,

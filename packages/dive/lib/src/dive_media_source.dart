@@ -47,14 +47,14 @@ class DiveMediaSourceState extends Equatable {
   List<Object> get props => [currentTime, duration, mediaState];
 }
 
-class _DiveMediaSourceStateNotifier extends StateNotifier<DiveMediaSourceState> {
-  DiveMediaSourceState get stateModel => state;
+// class _DiveMediaSourceStateNotifier extends StateNotifier<DiveMediaSourceState> {
+//   DiveMediaSourceState get stateModel => state;
 
-  _DiveMediaSourceStateNotifier(DiveMediaSourceState stateModel)
-      : super(stateModel ?? const DiveMediaSourceState());
+//   _DiveMediaSourceStateNotifier(DiveMediaSourceState stateModel)
+//       : super(stateModel ?? const DiveMediaSourceState());
 
-  void updateMediaState(DiveMediaSourceState stateModel) => state = stateModel;
-}
+//   void updateMediaState(DiveMediaSourceState stateModel) => state = stateModel;
+// }
 
 class DiveMediaSourceSettings extends DiveSettings {
   String get localFile => get('local_file');
@@ -94,8 +94,7 @@ class DiveMediaSourceSettings extends DiveSettings {
 
 /// Represents a ffmpeg_source media source.
 class DiveMediaSource extends DiveTextureSource {
-  final stateProvider =
-      StateNotifierProvider<_DiveMediaSourceStateNotifier>((ref) => _DiveMediaSourceStateNotifier(null));
+  final provider = StateProvider<DiveMediaSourceState>((ref) => const DiveMediaSourceState());
 
   DiveAudioMeterSource volumeMeter;
 
@@ -179,10 +178,10 @@ class DiveMediaSource extends DiveTextureSource {
 
   /// Sync the media state from the media source to the state provider.
   Future<void> _syncState() async {
-    final currentStateModel = DiveCore.notifierFor(stateProvider).stateModel;
+    final currentStateModel = DiveCore.container.read(provider.notifier).state;
     final newStateModel = await getState();
     if (currentStateModel != newStateModel) {
-      DiveCore.notifierFor(stateProvider).updateMediaState(newStateModel);
+      DiveCore.container.read(provider.notifier).state = newStateModel;
     }
     return;
   }

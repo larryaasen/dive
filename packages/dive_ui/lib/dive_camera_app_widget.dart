@@ -52,20 +52,19 @@ class _DiveCameraAppBodyState extends State<DiveCameraAppBody> {
 
     await _diveCore.setupOBS(DiveCoreResolution.HD);
 
-    DiveScene.create('Scene 1').then((scene) {
-      _elements.updateState((state) => state.copyWith(currentScene: scene));
+    final scene = DiveScene.create();
+    _elements.updateState((state) => state.copyWith(currentScene: scene));
 
-      DiveVideoMix.create().then((mix) {
-        _elements.updateState((state) => state..videoMixes.add(mix));
-      });
+    DiveVideoMix.create().then((mix) {
+      _elements.updateState((state) => state..videoMixes.add(mix));
+    });
 
-      DiveInputs.video().forEach((videoInput) {
-        print(videoInput);
-        DiveVideoSource.create(videoInput).then((source) {
-          _elements.updateState((state) => state
-            ..videoSources.add(source)
-            ..currentScene.addSource(source));
-        });
+    DiveInputs.video().forEach((videoInput) {
+      print(videoInput);
+      DiveVideoSource.create(videoInput).then((source) {
+        _elements.updateState((state) => state
+          ..videoSources.add(source)
+          ..currentScene.addSource(source));
       });
     });
   }
@@ -87,8 +86,8 @@ class DiveCameraAppMediaPlayer extends ConsumerWidget {
   final BuildContext context;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final state = watch(elements.stateProvider.state);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(elements.provider);
     if (state.videoMixes.length == 0) {
       return Container(color: Colors.purple);
     }
@@ -106,7 +105,7 @@ class DiveCameraAppMediaPlayer extends ConsumerWidget {
           final source = state.videoSources[newIndex];
           final sceneItem = state.currentScene.findSceneItem(source);
           if (sceneItem != null) {
-            sceneItem.setOrder(DiveSceneItemMovement.MOVE_TOP);
+            sceneItem.setOrder(DiveSceneItemMovement.moveTop);
           }
           return true;
         });

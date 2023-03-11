@@ -2,20 +2,27 @@ import 'package:collection/collection.dart';
 import 'package:dive/dive.dart';
 import 'package:riverpod/riverpod.dart';
 
-class DiveVideoSettingsState {}
-
-class _DiveVideoSettingsStateNotifier extends StateNotifier<DiveVideoSettingsState> {
-  DiveVideoSettingsState get stateModel => state;
-
-  _DiveVideoSettingsStateNotifier(DiveCoreElementsState stateModel)
-      : super(stateModel ?? DiveVideoSettingsState());
-
-  void updateState(DiveVideoSettingsState stateModel) => state = stateModel;
+class DiveVideoSettingsState {
+  const DiveVideoSettingsState();
 }
 
 class DiveVideoSettings {
-  final stateProvider =
-      StateNotifierProvider<_DiveVideoSettingsStateNotifier>((ref) => _DiveVideoSettingsStateNotifier(null));
+  /// Create a Riverpod provider to maintain the state.
+  final provider = StateProvider<DiveVideoSettingsState>((ref) => const DiveVideoSettingsState());
+
+  /// The state.
+  DiveVideoSettingsState get state => DiveCore.providerContainer.read(provider.notifier).state;
+
+  /// Update the state.
+  void updateState(DiveVideoSettingsState newState) {
+    final notifier = DiveCore.providerContainer.read(provider.notifier);
+    if (notifier.state != newState) {
+      notifier.state = newState;
+    }
+  }
+
+  /// Initialize this service.
+  void initialize() async {}
 }
 
 /// The state model for core elements.
@@ -98,31 +105,20 @@ class DiveCoreElementsState {
   }
 }
 
-class _DiveCoreElementsStateNotifier extends StateNotifier<DiveCoreElementsState> {
-  DiveCoreElementsState get stateModel => state;
-
-  _DiveCoreElementsStateNotifier(DiveCoreElementsState stateModel)
-      : super(stateModel ?? DiveCoreElementsState());
-
-  void updateState(DiveCoreElementsState stateModel) {
-    state = identical(state, stateModel) ? stateModel.copyWith() : stateModel;
-  }
-}
-
 /// The core elements used in a Dive app.
 class DiveCoreElements {
-  final stateProvider =
-      StateNotifierProvider<_DiveCoreElementsStateNotifier>((ref) => _DiveCoreElementsStateNotifier(null));
+  /// Create a Riverpod provider to maintain the state.
+  final provider = StateProvider<DiveCoreElementsState>((ref) => DiveCoreElementsState());
 
   /// Remove a source.
   void removeSource(DiveSource source, List<DiveSource> sources) {
     final item = state.currentScene.findSceneItem(source);
     if (item != null) {
-      final state = DiveCore.notifierFor(stateProvider).stateModel;
+      final state = DiveCore.container.read(provider.notifier).state;
       state.currentScene.removeSceneItem(item);
       sources.remove(source);
       source.dispose();
-      DiveCore.notifierFor(stateProvider).updateState(state);
+      DiveCore.container.read(provider.notifier).state = state;
     }
   }
 
@@ -139,10 +135,10 @@ class DiveCoreElements {
     }
     DiveImageSource.create(localFile).then((source) {
       if (source != null) {
-        final state = DiveCore.notifierFor(stateProvider).stateModel;
+        final state = DiveCore.container.read(provider.notifier).state;
         state.imageSources.add(source);
         state.currentScene.addSource(source).then((item) {
-          DiveCore.notifierFor(stateProvider).updateState(state);
+          DiveCore.container.read(provider.notifier).state = state;
         });
       }
     });
@@ -170,14 +166,13 @@ class DiveCoreElements {
 
   /// The current state. Changes to this state do not get saved and are not
   /// sent to notifiers. To change the state, use [updateState].
-  DiveCoreElementsState get state => DiveCore.notifierFor(stateProvider).stateModel;
+  DiveCoreElementsState get state => DiveCore.container.read(provider.notifier).state;
 
   /// Update the current state. Changes to this state are saved and are
-  /// sent to notifiers. This method is good for makeing many state
+  /// sent to notifiers. This method is good for making many state
   /// changes, and then having only one change sent the notifiers.
-  void updateState(DiveCoreElementsState Function(DiveCoreElementsState state) changeState) {
-    final state = DiveCore.notifierFor(stateProvider).stateModel;
-    final newState = changeState(state);
-    DiveCore.notifierFor(stateProvider).updateState(newState);
+  void updateState(DiveCoreElementsState Function(DiveCoreElementsState state) onChangeState) {
+    final controller = DiveCore.container.read(provider.notifier);
+    controller.state = onChangeState(controller.state);
   }
 }

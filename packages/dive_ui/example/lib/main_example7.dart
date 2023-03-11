@@ -50,37 +50,36 @@ class _BodyWidgetState extends State<BodyWidget> {
     _diveCore = DiveCore();
     await _diveCore.setupOBS(DiveCoreResolution.HD);
 
-    DiveScene.create('Scene 1').then((scene) {
-      _elements.updateState((state) => state.copyWith(currentScene: scene));
+    final scene = DiveScene.create();
+    _elements.updateState((state) => state.copyWith(currentScene: scene));
 
-      DiveVideoMix.create().then((mix) {
-        _elements.updateState((state) => state..videoMixes.add(mix));
-      });
+    DiveVideoMix.create().then((mix) {
+      _elements.updateState((state) => state..videoMixes.add(mix));
+    });
 
-      DiveInputs.audio().forEach((audioInput) {
-        DiveAudioSource.create("audio", input: audioInput).then((source) {
-          print("created audio source: ${audioInput.id}");
-          _elements.updateState((state) {
-            state.audioSources.add(source);
-            state.currentScene.addSource(source);
-            DiveAudioMeterSource()
-              ..create(source: source).then((volumeMeter) {
-                source.volumeMeter = volumeMeter;
-              });
-            return state;
-          });
+    DiveInputs.audio().forEach((audioInput) {
+      DiveAudioSource.create("audio", input: audioInput).then((source) {
+        print("created audio source: ${audioInput.id}");
+        _elements.updateState((state) {
+          state.audioSources.add(source);
+          state.currentScene.addSource(source);
+          DiveAudioMeterSource()
+            ..create(source: source).then((volumeMeter) {
+              source.volumeMeter = volumeMeter;
+            });
+          return state;
         });
       });
+    });
 
-      DiveInputs.video().forEach((videoInput) {
-        if (videoInput.name.contains('C920')) {
-          print(videoInput);
-          DiveVideoSource.create(videoInput).then((source) {
-            _elements.updateState((state) => state..videoSources.add(source));
-            _elements.updateState((state) => state..currentScene.addSource(source));
-          });
-        }
-      });
+    DiveInputs.video().forEach((videoInput) {
+      if (videoInput.name.contains('C920')) {
+        print(videoInput);
+        DiveVideoSource.create(videoInput).then((source) {
+          _elements.updateState((state) => state..videoSources.add(source));
+          _elements.updateState((state) => state..currentScene.addSource(source));
+        });
+      }
     });
 
     _initialized = true;
@@ -104,8 +103,8 @@ class MediaPlayer extends ConsumerWidget {
   final BuildContext context;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final state = watch(elements.stateProvider.state);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(elements.provider);
     if (state.videoMixes.length == 0) {
       return Container(color: Colors.purple);
     }

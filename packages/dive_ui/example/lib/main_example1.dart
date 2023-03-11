@@ -57,12 +57,11 @@ class _BodyWidgetState extends State<BodyWidget> {
     _diveCore = DiveCore();
     _diveCore.setupOBS(DiveCoreResolution.HD);
 
-    DiveScene.create('Scene 1').then((scene) {
-      _elements.updateState((state) => state.copyWith(currentScene: scene));
+    final scene = DiveScene.create();
+    _elements.updateState((state) => state.copyWith(currentScene: scene));
 
-      DiveVideoMix.create().then((mix) {
-        _elements.updateState((state) => state..videoMixes.add(mix));
-      });
+    DiveVideoMix.create().then((mix) {
+      _elements.updateState((state) => state..videoMixes.add(mix));
     });
 
     _initialized = true;
@@ -86,9 +85,9 @@ class MediaPlayer extends ConsumerWidget {
   final BuildContext context;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     print("MediaPlayer.build started");
-    final state = watch(elements.stateProvider.state);
+    final state = ref.watch(elements.provider);
     print("MediaPlayer.build state=$state");
     if (state.mediaSources.length == 0 || state.videoMixes.length == 0) {
       return Container(color: Colors.purple);

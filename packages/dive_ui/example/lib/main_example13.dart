@@ -62,86 +62,85 @@ class _BodyWidgetState extends State<BodyWidget> {
     _diveCore = DiveCore();
     await _diveCore.setupOBS(DiveCoreResolution.FULL_HD);
 
-    DiveScene.create('Scene 1').then((scene) {
-      _elements.updateState((state) => state.copyWith(currentScene: scene));
+    final scene = DiveScene.create();
+    _elements.updateState((state) => state.copyWith(currentScene: scene));
 
-      final settings = DiveSettings();
-      settings.set('display', 1); // Display #0
-      settings.set('show_cursor', true); // Show the cursor
-      settings.set('crop_mode', 0); // Crop mode: none
-      final displayCaptureSource = DiveSource.create(
-        inputType: DiveInputType(id: 'display_capture', name: 'Display Capture'),
-        name: 'display capture 1',
-        settings: settings,
-      );
-      _elements.updateState((state) {
-        state.sources.add(displayCaptureSource);
-        state.currentScene.addSource(displayCaptureSource).then((item) {
-          // Scale the dispaly down to 50% to make it fit.
-          final info = DiveTransformInfo(scale: DiveVec2(0.5, 0.5));
-          item.updateTransformInfo(info);
-        });
-        return state;
+    final settings = DiveSettings();
+    settings.set('display', 0); // Display #1
+    settings.set('show_cursor', true); // Show the cursor
+    settings.set('crop_mode', 0); // Crop mode: none
+    final displayCaptureSource = DiveSource.create(
+      inputType: DiveInputType(id: 'display_capture', name: 'Display Capture'),
+      name: 'display capture 1',
+      settings: settings,
+    );
+    _elements.updateState((state) {
+      state.sources.add(displayCaptureSource);
+      state.currentScene.addSource(displayCaptureSource).then((item) {
+        // Scale the dispaly down to 50% to make it fit.
+        final info = DiveTransformInfo(scale: DiveVec2(0.5, 0.5));
+        item.updateTransformInfo(info);
       });
-
-      DiveVideoMix.create().then((mix) {
-        _elements.updateState((state) => state..videoMixes.add(mix));
-      });
-
-      DiveAudioSource.create('main audio').then((source) {
-        setState(() {
-          _elements.updateState((state) => state..audioSources.add(source));
-        });
-        _elements.updateState((state) => state..currentScene.addSource(source));
-
-        DiveAudioMeterSource()
-          ..create(source: source).then((volumeMeter) {
-            setState(() {
-              source.volumeMeter = volumeMeter;
-            });
-          });
-      });
-
-      DiveInputs.video().forEach((videoInput) {
-        if (videoInput.name.contains('Built-in')) {
-          DiveVideoSource.create(videoInput).then((source) {
-            _elements.updateState((state) {
-              state.videoSources.add(source);
-              state.currentScene.addSource(source).then((item) {
-                final info = DiveTransformInfo(
-                  pos: DiveVec2(1350, 760),
-                  bounds: DiveVec2(533, 300),
-                  boundsType: DiveBoundsType.SCALE_INNER,
-                );
-                item.updateTransformInfo(info);
-              });
-              return state;
-            });
-          });
-        }
-      });
-
-      final file =
-          '/Users/larry/Downloads/Amped - AmpassBeats by Murray Frost and Elgato/2. Skyline - Amped - AmpassBeats by Murray Frost.mp3';
-      final mediaSettings = DiveMediaSourceSettings(localFile: file, isLocalFile: true, looping: true);
-      // Add the local MP3 media source.
-      DiveMediaSource.create(
-              name: 'Background Music (MP3)', settings: mediaSettings, requiresVideoMonitor: false)
-          .then((source) {
-        if (source != null) {
-          source.monitoringType = DiveCoreMonitoringType.none;
-          source.volume = DiveCoreLevel.dB(-30.0);
-          _elements.updateState((state) => state
-            ..mediaSources.add(source)
-            ..currentScene.addSource(source));
-          source.play();
-        }
-      });
-
-      // Create the streaming output
-      final output = DiveOutput();
-      _elements.updateState((state) => state.copyWith(streamingOutput: output));
+      return state;
     });
+
+    DiveVideoMix.create().then((mix) {
+      _elements.updateState((state) => state..videoMixes.add(mix));
+    });
+
+    DiveAudioSource.create('main audio').then((source) {
+      setState(() {
+        _elements.updateState((state) => state..audioSources.add(source));
+      });
+      _elements.updateState((state) => state..currentScene.addSource(source));
+
+      DiveAudioMeterSource()
+        ..create(source: source).then((volumeMeter) {
+          setState(() {
+            source.volumeMeter = volumeMeter;
+          });
+        });
+    });
+
+    DiveInputs.video().forEach((videoInput) {
+      if (videoInput.name.contains('Built-in')) {
+        DiveVideoSource.create(videoInput).then((source) {
+          _elements.updateState((state) {
+            state.videoSources.add(source);
+            state.currentScene.addSource(source).then((item) {
+              final info = DiveTransformInfo(
+                pos: DiveVec2(1350, 760),
+                bounds: DiveVec2(533, 300),
+                boundsType: DiveBoundsType.scaleInner,
+              );
+              item.updateTransformInfo(info);
+            });
+            return state;
+          });
+        });
+      }
+    });
+
+    final file =
+        '/Users/larry/Downloads/Amped - AmpassBeats by Murray Frost and Elgato/2. Skyline - Amped - AmpassBeats by Murray Frost.mp3';
+    final mediaSettings = DiveMediaSourceSettings(localFile: file, isLocalFile: true, looping: true);
+    // Add the local MP3 media source.
+    DiveMediaSource.create(
+            name: 'Background Music (MP3)', settings: mediaSettings, requiresVideoMonitor: false)
+        .then((source) {
+      if (source != null) {
+        source.monitoringType = DiveCoreMonitoringType.none;
+        source.volume = DiveCoreLevel.dB(-30.0);
+        _elements.updateState((state) => state
+          ..mediaSources.add(source)
+          ..currentScene.addSource(source));
+        source.play();
+      }
+    });
+
+    // Create the streaming output
+    final output = DiveOutput();
+    _elements.updateState((state) => state.copyWith(streamingOutput: output));
   }
 
   @override
@@ -157,8 +156,8 @@ class MediaPlayer extends ConsumerWidget {
   final BuildContext context;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final state = watch(elements.stateProvider.state);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(elements.provider);
     if (state.videoMixes.length == 0) {
       return Container(color: Colors.purple);
     }

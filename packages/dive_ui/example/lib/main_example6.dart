@@ -43,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text('You have pushed the button this many times:'),
-            Text('$_counter', style: Theme.of(context).textTheme.headline4),
+            Text('$_counter', style: Theme.of(context).textTheme.headlineMedium),
             SourceMenu(),
           ],
         ),
@@ -63,8 +63,7 @@ class SourceMenu extends StatelessWidget {
     return Padding(
         padding: EdgeInsets.only(left: 0.0, right: 0.0),
         child: PopupMenuButton<int>(
-          child: Icon(Icons.settings_outlined,
-              color: Theme.of(context).buttonColor),
+          child: Icon(Icons.settings_outlined, color: Colors.grey),
           tooltip: 'Source menu',
           padding: EdgeInsets.only(right: 0.0),
           offset: Offset(0.0, 0.0),
@@ -76,9 +75,7 @@ class SourceMenu extends StatelessWidget {
                 child: Row(
                   children: <Widget>[
                     Icon(Icons.clear, color: Colors.grey),
-                    Padding(
-                        padding: EdgeInsets.only(left: 6.0),
-                        child: Text('Clear')),
+                    Padding(padding: EdgeInsets.only(left: 6.0), child: Text('Clear')),
                   ],
                 ),
               ),
@@ -162,8 +159,7 @@ class DiveSubMenu extends StatelessWidget {
                     Padding(
                         padding: EdgeInsets.only(left: 6.0),
                         child: Text(
-                          item['title'].toString().substring(
-                              0, min(14, item['title'].toString().length)),
+                          item['title'].toString().substring(0, min(14, item['title'].toString().length)),
                           softWrap: false,
                           overflow: TextOverflow.ellipsis,
                         )),

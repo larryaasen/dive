@@ -1,14 +1,12 @@
-# pod lib lint dive_obslib.podspec
+# pod lib lint dive_obslib.podspec --sources=https://github.com/larryaasen/obslib-framework, https://cocoapods.org/pods/FlutterMacOS
 Pod::Spec.new do |s|
   s.name             = 'dive_obslib'
   s.version          = '0.0.1'
   s.summary          = 'A Flutter plugin that provides low level services for video.'
-  s.description      = <<-DESC
-A new flutter plugin project.
-                       DESC
-  s.homepage         = 'http://example.com'
-  s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.homepage         = 'https://divekit.dev'
+  s.license          = { :type => 'MIT', :file => '../LICENSE' }
+  s.authors          = 'Larry Aasen'
+  # s.source           = { :http => 'file://.' }
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*.{swift,h,m,mm}'
   s.frameworks  = 'AVFoundation', 'Accelerate'

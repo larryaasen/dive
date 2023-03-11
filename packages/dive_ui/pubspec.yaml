@@ -37,7 +37,7 @@ dependencies:
   # camera: ^0.5.8+10
 
   # From darky12s@gmail.com: a state-manangement library
-  flutter_riverpod: ^0.13.1
+  flutter_riverpod: ^1.0.3
 
   # From Dart Team: provides internationalization and localization facilities, including message translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
   intl: '>=0.16.0'

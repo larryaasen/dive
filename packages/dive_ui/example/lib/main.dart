@@ -1,12 +1,14 @@
+// Copyright (c) 2023 Larry Aasen. All rights reserved.
+
 import 'dart:io';
 
 import 'package:dive/dive.dart';
 
-/// Dive Example 4 - Streaming
+/// Dive Example
 void main() async {
   configDiveApp();
 
-  print('Dive Example 4');
+  print('Dive Example');
 
   var n = 0;
   ProcessSignal.sigint.watch().listen((signal) {
@@ -58,33 +60,10 @@ class DiveExample {
       _elements.updateState((state) => state..currentScene.addSource(source));
     });
 
-    // Create the streaming output
-    var output = DiveOutput();
-
-    // YouTube settings
-    // Replace this YouTube key with your own. This one is no longer valid.
-    // output.serviceKey = '26qe-9gxw-9veb-kf2m-dhv3';
-    // output.serviceUrl = 'rtmp://a.rtmp.youtube.com/live2';
-
-    // Twitch Settings
-    // Replace this Twitch key with your own. This one is no longer valid.
-    output.serviceKey = 'live_276488556_uIKncv1zAGQ3kz5aVzCvfshg8W4ENC';
-    output.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/${output.serviceKey}';
-
-    _elements.updateState((state) => state.copyWith(streamingOutput: output));
-
-    // Start streaming
-    print("Dive example 4: Starting stream.");
-    output.start();
-
-    const streamDuration = 30;
-    print('Dive example 4: Waiting $streamDuration seconds.');
+    const streamDuration = 5;
+    print('Dive example: Waiting $streamDuration seconds.');
 
     Future.delayed(Duration(seconds: streamDuration), () {
-      print('Dive example 4: Stopping stream.');
-      output.stop();
-      output = null;
-
       final state = _elements.state;
       // Remove the video and audio sources from the scene
       state.currentScene.removeAllSceneItems();

@@ -31,10 +31,10 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   dive_obslib: a7da6b7135ca8aca33d5ba614fc5a0a9cbd2b8e9
   file_selector_macos: ff6dc948d4ddd34e8602a1f60b7d0b4cc6051a47
-  FlutterMacOS: 57701585bf7de1b3fc2bb61f6378d73bbdea8424
-  obslib: 5fb12f5406e00069d27de6264f09fdca2c51aacb
+  FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
+  obslib: 4386ee80f17f565c35828dc62ff0903ede645faa
   path_provider_macos: a0a3fd666cb7cd0448e936fb4abad4052961002b
 
-PODFILE CHECKSUM: da4f98f9eb81dac062b874e144ff3571961482a8
+PODFILE CHECKSUM: bed24f389d2416fafa809a339decdc6492dc6b88
 
 COCOAPODS: 1.11.2

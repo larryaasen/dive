@@ -16,6 +16,6 @@ from [OBS Studio](https://obsproject.com/) and
 utilizes [Dart FFI](https://dart.dev/guides/libraries/c-interop) to call the native
 C APIs in libobs.
 
-This package is used by the
-[dive](https://pub.dev/packages/dive) package, and is not intended to be used
+This package is designed to be used by the
+[dive](https://pub.dev/packages/dive) package, and can also be used
 separately.

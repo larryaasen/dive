@@ -210,21 +210,19 @@ class DiveCoreLevel {
 }
 
 /// Usage:
+///   configDiveApp();
 ///   final core = DiveCore();
 ///   core.setupOBS(DiveCoreResolution.HD);
 ///
 class DiveCore {
   /// For use with Riverpod
   static ProviderContainer providerContainer;
+  static ProviderContainer get container {
+    if (providerContainer == null) throw DiveCoreProviderContainerException();
+    return providerContainer;
+  }
 
   static bool get initialized => DiveCore.providerContainer != null;
-
-  static Result notifierFor<Result>(ProviderBase<Object, Result> provider) {
-    if (DiveCore.providerContainer == null) {
-      throw DiveCoreProviderContainerException();
-    }
-    return DiveCore.providerContainer.read(provider);
-  }
 
   Future<bool> setupOBS(
     DiveCoreResolution baseResolution, {

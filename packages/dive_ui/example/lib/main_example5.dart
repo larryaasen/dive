@@ -51,7 +51,7 @@ class AppWidget extends StatelessWidget {
           final info = DiveTransformInfo(
             pos: DiveVec2(point.x, point.y),
             bounds: DiveVec2(350 * DiveCoreAspectRatio.HD.ratio, 0),
-            boundsType: DiveBoundsType.SCALE_INNER,
+            boundsType: DiveBoundsType.scaleInner,
           );
           item.updateTransformInfo(info);
         });
@@ -107,53 +107,52 @@ class _BodyWidgetState extends State<BodyWidget> {
     _diveCore = DiveCore();
     await _diveCore.setupOBS(DiveCoreResolution.HD);
 
-    DiveScene.create('Scene 1').then((scene) {
-      _elements.updateState((state) => state.copyWith(currentScene: scene));
+    final scene = DiveScene.create();
+    _elements.updateState((state) => state.copyWith(currentScene: scene));
 
-      DiveVideoMix.create().then((mix) {
-        _elements.updateState((state) => state..videoMixes.add(mix));
-      });
-
-      DiveAudioSource.create('main audio').then((source) {
-        setState(() {
-          _elements.updateState((state) => state..audioSources.add(source));
-        });
-        _elements.updateState((state) => state..currentScene.addSource(source));
-
-        DiveAudioMeterSource()
-          ..create(source: source).then((volumeMeter) {
-            setState(() {
-              source.volumeMeter = volumeMeter;
-            });
-          });
-      });
-
-      DiveInputs.video().forEach((videoInput) {
-        print(videoInput);
-        DiveVideoSource.create(videoInput).then((source) {
-          _elements.updateState((state) {
-            state.videoSources.add(source);
-            state.currentScene.addSource(source);
-            return state;
-          });
-        });
-      });
-
-      // Create the streaming output
-      final output = DiveOutput();
-
-      // YouTube settings
-      // Replace this YouTube key with your own. This one is no longer valid.
-      // output.serviceKey = '26qe-9gxw-9veb-kf2m-dhv3';
-      // output.serviceUrl = 'rtmp://a.rtmp.youtube.com/live2';
-
-      // Twitch Settings
-      // Replace this Twitch key with your own. This one is no longer valid.
-      output.serviceKey = 'live_276488556_uIKncv1zAGQ3kz5aVzCvfshg8W4ENC';
-      output.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/${output.serviceKey}';
-
-      _elements.updateState((state) => state.copyWith(streamingOutput: output));
+    DiveVideoMix.create().then((mix) {
+      _elements.updateState((state) => state..videoMixes.add(mix));
     });
+
+    DiveAudioSource.create('main audio').then((source) {
+      setState(() {
+        _elements.updateState((state) => state..audioSources.add(source));
+      });
+      _elements.updateState((state) => state..currentScene.addSource(source));
+
+      DiveAudioMeterSource()
+        ..create(source: source).then((volumeMeter) {
+          setState(() {
+            source.volumeMeter = volumeMeter;
+          });
+        });
+    });
+
+    DiveInputs.video().forEach((videoInput) {
+      print(videoInput);
+      DiveVideoSource.create(videoInput).then((source) {
+        _elements.updateState((state) {
+          state.videoSources.add(source);
+          state.currentScene.addSource(source);
+          return state;
+        });
+      });
+    });
+
+    // Create the streaming output
+    final output = DiveOutput();
+
+    // YouTube settings
+    // Replace this YouTube key with your own. This one is no longer valid.
+    // output.serviceKey = '26qe-9gxw-9veb-kf2m-dhv3';
+    // output.serviceUrl = 'rtmp://a.rtmp.youtube.com/live2';
+
+    // Twitch Settings
+    // Replace this Twitch key with your own. This one is no longer valid.
+    output.serviceKey = 'live_276488556_uIKncv1zAGQ3kz5aVzCvfshg8W4ENC';
+    output.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/${output.serviceKey}';
+
+    _elements.updateState((state) => state.copyWith(streamingOutput: output));
   }
 
   @override
@@ -173,8 +172,8 @@ class MediaPlayer extends ConsumerWidget {
   final BuildContext context;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final state = watch(elements.stateProvider.state);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(elements.provider);
     if (state.videoMixes.length == 0) {
       return Container(color: Colors.purple);
     }
@@ -200,7 +199,7 @@ class MediaPlayer extends ConsumerWidget {
           final source = state.videoSources[newIndex];
           final sceneItem = state.currentScene.findSceneItem(source);
           if (sceneItem != null) {
-            sceneItem.setOrder(DiveSceneItemMovement.MOVE_TOP);
+            sceneItem.setOrder(DiveSceneItemMovement.moveTop);
           }
           return true;
         });
