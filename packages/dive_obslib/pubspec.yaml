@@ -5,8 +5,8 @@ homepage: https://divekit.dev
 repository: https://github.com/larryaasen/dive/tree/main/packages/dive_obslib
 
 environment:
-  sdk: '>=2.10.0 <3.0.0'
-  flutter: '>=1.20.0'
+  sdk: '>=2.19.0 <3.0.0'
+  flutter: '>=3.7.0'
 
 dependencies:
   flutter:

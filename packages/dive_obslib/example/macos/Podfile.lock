@@ -8,7 +8,7 @@ PODS:
 DEPENDENCIES:
   - dive_obslib (from `Flutter/ephemeral/.symlinks/plugins/dive_obslib/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
-  - obslib (from `https://github.com/larryaasen/obslib-framework.git`)
+  - obslib (from `/Users/larry/Projects/obslib-framework`)
 
 EXTERNAL SOURCES:
   dive_obslib:
@@ -16,18 +16,13 @@ EXTERNAL SOURCES:
   FlutterMacOS:
     :path: Flutter/ephemeral
   obslib:
-    :git: https://github.com/larryaasen/obslib-framework.git
-
-CHECKOUT OPTIONS:
-  obslib:
-    :commit: 1c7d2d45a9a6e960055bc8e1fc7895d9a632c99d
-    :git: https://github.com/larryaasen/obslib-framework.git
+    :path: "/Users/larry/Projects/obslib-framework"
 
 SPEC CHECKSUMS:
-  dive_obslib: d65c0ecd99d480023696832456b53ece7adce928
-  FlutterMacOS: ae6af50a8ea7d6103d888583d46bd8328a7e9811
-  obslib: f3aff38475994bfe71f0789454c5bc4738767706
+  dive_obslib: cab926fd057929181b2fe597e89013f06b683c74
+  FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
+  obslib: 4386ee80f17f565c35828dc62ff0903ede645faa
 
-PODFILE CHECKSUM: 26629c7c0252e4b11939437fa5673091aee9bcd3
+PODFILE CHECKSUM: bed24f389d2416fafa809a339decdc6492dc6b88
 
 COCOAPODS: 1.11.2

@@ -105,21 +105,23 @@ extension DivePluginObslib on DiveBaseObslib {
     return await _channel.invokeMethod(_methodDisposeTexture, {"texture_id": textureId});
   }
 
-  Future<Map> getSceneItemInfoMap(int itemPointer) {
-    return _channel.invokeMethod(_methodGetSceneItemInfo, {'sceneitem_pointer': itemPointer});
+  Future<Map> getSceneItemInfoMap(int itemPointer) async {
+    return await _channel.invokeMethod(_methodGetSceneItemInfo, {'sceneitem_pointer': itemPointer});
   }
 
-  Future<int> initializeTexture({String trackingUUID}) async {
+  Future<int> initializeTexture({required String trackingUUID}) async {
     return await _channel.invokeMethod(_methodInitializeTexture, {'tracking_uuid': trackingUUID});
   }
 
-  Future<bool> setSceneItemInfo(int itemPointer, Map info) {
-    return _channel.invokeMethod(_methodSetSceneItemInfo, {'sceneitem_pointer': itemPointer, 'info': info});
+  Future<bool> setSceneItemInfo(int itemPointer, Map info) async {
+    return await _channel
+        .invokeMethod(_methodSetSceneItemInfo, {'sceneitem_pointer': itemPointer, 'info': info});
   }
 
-  Future<int> addVolumeMeterCallback(int volumeMeterPointer, DiveVolumeMeterCallback callback) {
+  Future<int> addVolumeMeterCallback(int volumeMeterPointer, DiveVolumeMeterCallback callback) async {
     _volumeMeterCallbacks[volumeMeterPointer] = callback;
-    return _channel.invokeMethod(_methodAddVolumeMeterCallback, {'volmeter_pointer': volumeMeterPointer});
+    return await _channel
+        .invokeMethod(_methodAddVolumeMeterCallback, {'volmeter_pointer': volumeMeterPointer});
   }
 
   Future<bool> removeVolumeMeterCallback(int volumeMeterPointer, DiveVolumeMeterCallback callback) async {

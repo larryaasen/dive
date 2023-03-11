@@ -5,7 +5,7 @@ import 'package:ffi/ffi.dart';
 class DivePointer {
   const DivePointer(this.trackingUuid, this.pointer);
 
-  final String trackingUuid; // TODO: do we really need this trackingUuid?
+  final String? trackingUuid; // TODO: do we really need this trackingUuid?
   final dynamic pointer;
 
   int toInt() {

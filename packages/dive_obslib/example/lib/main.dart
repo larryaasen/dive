@@ -1,7 +1,9 @@
 import 'package:dive_obslib/dive_obslib.dart';
+import 'package:flutter/widgets.dart';
 
 /// dive_obslib Example
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await setupOBS();
 }
 

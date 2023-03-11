@@ -8,11 +8,11 @@ import 'dive_obs_ffi.dart';
 List<ffi.Pointer<ffi.Int8>> _int8s = [];
 
 extension Int8Extensions on ffi.Pointer<ffi.Int8> {
-  String get string => StringExtensions.fromInt8(this);
+  String? get string => StringExtensions.fromInt8(this);
 }
 
 extension StringExtensions on String {
-  static String fromInt8(ffi.Pointer<ffi.Int8> pointer) {
+  static String? fromInt8(ffi.Pointer<ffi.Int8> pointer) {
     return pointer.address == 0 ? null : pointer.cast<Utf8>().toDartString();
   }
 
@@ -46,9 +46,8 @@ extension PointerExtensions<T extends ffi.NativeType> on ffi.Pointer<T> {
 class DiveObslibFFILoad {
   /// Load the libobs library using FFI.
   static DiveObslibFFI loadLib() {
-    final _lib =
-        Platform.isAndroid ? ffi.DynamicLibrary.open("libobs.0.dylib") : ffi.DynamicLibrary.process();
-    print("libobs library loaded: ${_lib.toString()}");
-    return DiveObslibFFI(_lib);
+    final lib = Platform.isAndroid ? ffi.DynamicLibrary.open("libobs.0.dylib") : ffi.DynamicLibrary.process();
+    print("libobs library loaded: ${lib.toString()}");
+    return DiveObslibFFI(lib);
   }
 }

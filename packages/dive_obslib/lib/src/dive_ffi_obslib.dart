@@ -9,7 +9,9 @@ import 'dive_obs_ffi.dart';
 import 'dive_pointer.dart';
 
 /// The FFI loaded libobs library.
-DiveObslibFFI _lib;
+late DiveObslibFFI _lib;
+
+bool _initialized = false;
 
 /// Tracks the first scene being created, and sets the output source if first
 bool _isFirstScene = true;
@@ -22,9 +24,14 @@ extension DiveFFIObslib on DiveBaseObslib {
   // FYI: Don't call obs_startup because it must run on the main thread
   // and FFI does not run on the main thread.
 
+  void _assertInitialized() {
+    assert(_initialized, 'call initialize() before calling this method.');
+  }
+
   static void initialize() {
-    assert(_lib == null, 'initialize() has already been called once.');
+    assert(!_initialized, 'initialize() has already been called once.');
     _lib = DiveObslibFFILoad.loadLib();
+    _initialized = true;
   }
 
   bool loadAllModules() {
@@ -116,8 +123,8 @@ extension DiveFFIObslib on DiveBaseObslib {
   }
 
   /// Gets the current video settings, returns null if no video.
-  Map<String, dynamic> videoGetInfo() {
-    Map<String, dynamic> info;
+  Map<String, dynamic>? videoGetInfo() {
+    Map<String, dynamic>? info;
     final ovi = calloc<obs_video_info>();
     final rv = _lib.obs_get_video_info(ovi);
     if (rv == 1) {
@@ -148,12 +155,12 @@ extension DiveFFIObslib on DiveBaseObslib {
     print('Shutdown: number OBS of memory leaks: $totalMemLeaks');
   }
 
-  DivePointer createScene(String trackingUUID, String sceneName) {
-    assert(_lib != null, 'call initialize() before calling this method.');
+  DivePointer? createScene(String trackingUUID, String sceneName) {
+    _assertInitialized();
 
     final scene = _lib.obs_scene_create(sceneName.int8());
     StringExtensions.freeInt8s();
-    if (scene == null) {
+    if (scene == ffi.nullptr) {
       print("Couldn't create scene: $sceneName");
       return null;
     }
@@ -173,7 +180,7 @@ extension DiveFFIObslib on DiveBaseObslib {
     _lib.obs_scene_release(scene.pointer);
   }
 
-  DivePointer createImageSource(String sourceUuid, String file) {
+  DivePointer? createImageSource(String sourceUuid, String file) {
     final settings = _lib.obs_data_create();
     _lib.obs_data_set_string(settings, "file".int8(), file.int8());
 
@@ -181,14 +188,15 @@ extension DiveFFIObslib on DiveBaseObslib {
   }
 
   /// Load media source
-  DivePointer createMediaSource({String sourceUuid, String name, DiveObslibData settings}) {
+  DivePointer? createMediaSource(
+      {required String sourceUuid, required String name, required DiveObslibData settings}) {
     return _createSourceInternal(sourceUuid, "ffmpeg_source", name, settings.pointer);
   }
 
   /// Use this convenience method to create a data object for settings.
   DiveObslibData createData() => DiveObslibData();
 
-  DivePointer createVideoSource(String sourceUuid, String deviceName, String deviceUid) {
+  DivePointer? createVideoSource(String sourceUuid, String deviceName, String deviceUid) {
     final data = DiveObslibData();
     data.setString("device_name", deviceName);
     data.setString("device", deviceUid);
@@ -200,11 +208,11 @@ extension DiveFFIObslib on DiveBaseObslib {
   }
 
   /// Creates a source of the specified type with the specified settings.
-  DivePointer createSource({
-    String sourceUuid,
-    String inputTypeId,
-    String name,
-    DiveObslibData settings,
+  DivePointer? createSource({
+    required String sourceUuid,
+    required String inputTypeId,
+    required String name,
+    required DiveObslibData settings,
   }) =>
       _createSourceInternal(sourceUuid, inputTypeId, name, settings.pointer);
 
@@ -214,7 +222,7 @@ extension DiveFFIObslib on DiveBaseObslib {
   /// make sure to use nullptr instead of null.
   /// https://github.com/dart-lang/sdk/issues/39804#
 
-  DivePointer _createSourceInternal(
+  DivePointer? _createSourceInternal(
     String sourceUuid, // TODO: do we really need this sourceUuid?
     String sourceId,
     String name,
@@ -222,7 +230,7 @@ extension DiveFFIObslib on DiveBaseObslib {
   ) {
     final source = _lib.obs_source_create(sourceId.int8(), name.int8(), settings, ffi.nullptr);
     StringExtensions.freeInt8s();
-    if (source.address == 0) {
+    if (source == ffi.nullptr) {
       debugPrint("_createSourceInternal: Could not create source");
       return null;
     }
@@ -268,7 +276,7 @@ extension DiveFFIObslib on DiveBaseObslib {
     // obs_transform_info info;
     // _lib.obs_sceneitem_get_info(item, info);
     // TODO: finish this
-    return null; // _convert_transform_info_to_dict(info);
+    return {}; // _convert_transform_info_to_dict(info);
   }
 
   // Map _convert_transform_vec2_to_dict(vec2 vec) {
@@ -291,10 +299,10 @@ extension DiveFFIObslib on DiveBaseObslib {
 
   /// Create the stream output.
   /// Returns a pointer or null.
-  DivePointerOutput streamOutputCreate({
-    @required String serviceName,
-    String serviceUrl,
-    String serviceKey,
+  DivePointerOutput? streamOutputCreate({
+    required String serviceName,
+    required String serviceUrl,
+    required String serviceKey,
     String serviceId = 'rtmp_common',
     String outputType = 'rtmp_output',
   }) {
@@ -309,7 +317,7 @@ extension DiveFFIObslib on DiveBaseObslib {
 
     final streamOutput =
         _lib.obs_output_create(outputType.int8(), serviceName.int8(), ffi.nullptr, ffi.nullptr);
-    if (streamOutput == null) {
+    if (streamOutput == ffi.nullptr) {
       print("creation of stream output type $outputType failed");
       return null;
     }
@@ -377,8 +385,9 @@ extension DiveFFIObslib on DiveBaseObslib {
     final services_count = _lib.obs_property_list_item_count(services);
     for (var index = 0; index < services_count; index++) {
       final name = _lib.obs_property_list_item_string(services, index);
-      if (StringExtensions.fromInt8(name).isNotEmpty) {
-        names.add(StringExtensions.fromInt8(name));
+      final nameStr = StringExtensions.fromInt8(name);
+      if (nameStr != null && nameStr.isNotEmpty) {
+        names.add(nameStr);
       }
     }
     _lib.obs_properties_destroy(props);
@@ -390,7 +399,8 @@ extension DiveFFIObslib on DiveBaseObslib {
 
   /// Get the list of the servers for a streaming service.
   /// Returns a map with key as name and value as server url.
-  Map<String, String> streamOutputGetServiceServers({String serviceId = "rtmp_common", String serviceName}) {
+  Map<String, String> streamOutputGetServiceServers(
+      {String serviceId = "rtmp_common", required String serviceName}) {
     var names = Map<String, String>();
     final props = _lib.obs_get_service_properties(serviceId.int8());
 
@@ -403,9 +413,9 @@ extension DiveFFIObslib on DiveBaseObslib {
     final services = _lib.obs_properties_get(props, "server".int8());
     final services_count = _lib.obs_property_list_item_count(services);
     for (var index = 0; index < services_count; index++) {
-      final name = _lib.obs_property_list_item_name(services, index);
-      final server = _lib.obs_property_list_item_string(services, index);
-      if (name.string.isNotEmpty && server.string.isNotEmpty) names[name.string] = server.string;
+      final name = _lib.obs_property_list_item_name(services, index).string;
+      final server = _lib.obs_property_list_item_string(services, index).string;
+      if (name != null && name.isNotEmpty && server != null && server.isNotEmpty) names[name] = server;
     }
     _lib.obs_properties_destroy(props);
     StringExtensions.freeInt8s();
@@ -516,8 +526,8 @@ extension DiveFFIObslib on DiveBaseObslib {
       } else {}
 
       list.add({
-        "id": StringExtensions.fromInt8(unversionedTypeId.value),
-        "name": StringExtensions.fromInt8(name)
+        "id": StringExtensions.fromInt8(unversionedTypeId.value) ?? '',
+        "name": StringExtensions.fromInt8(name) ?? ''
       });
     }
     calloc.free(typeId);
@@ -534,34 +544,26 @@ extension DiveFFIObslib on DiveBaseObslib {
 
     final sourceProps = _lib.obs_get_source_properties(inputTypeId.int8());
 
-    if (sourceProps != null) {
+    if (sourceProps != ffi.nullptr) {
       ffi.Pointer<ffi.Pointer<obs_property>> propertyOut = calloc();
 
       var property = _lib.obs_properties_first(sourceProps);
-      while (property != null) {
+      while (property != ffi.nullptr) {
         final type = _lib.obs_property_get_type(property);
         if (type == obs_property_type.OBS_PROPERTY_LIST) {
           final count = _lib.obs_property_list_item_count(property);
           for (int index = 0; index < count; index++) {
             final disabled = _lib.obs_property_list_item_disabled(property, index);
-            final name = _lib.obs_property_list_item_name(property, index);
-            final uid = _lib.obs_property_list_item_string(property, index);
-            if (disabled == 0 &&
-                name.address != 0 &&
-                uid.address != 0 &&
-                StringExtensions.fromInt8(name).isNotEmpty &&
-                StringExtensions.fromInt8(uid).isNotEmpty) {
-              list.add({
-                "id": StringExtensions.fromInt8(uid),
-                "name": StringExtensions.fromInt8(name),
-                "type_id": inputTypeId
-              });
+            final name = _lib.obs_property_list_item_name(property, index).string;
+            final uid = _lib.obs_property_list_item_string(property, index).string;
+            if (disabled == 0 && name != null && uid != null && name.isNotEmpty && uid.isNotEmpty) {
+              list.add({"id": uid, "name": name, "type_id": inputTypeId});
             }
           }
         }
         propertyOut.value = property;
         final rv = _lib.obs_property_next(propertyOut);
-        property = rv == 1 ? propertyOut.value : null;
+        property = rv == 1 ? propertyOut.value : ffi.nullptr;
       }
       _lib.obs_properties_destroy(sourceProps);
       calloc.free(propertyOut);
@@ -617,9 +619,10 @@ extension DiveFFIObslib on DiveBaseObslib {
 
     ffi.Pointer<ffi.Pointer<ffi.Int8>> id = calloc();
     while (_lib.obs_enum_source_types(idx++, id) != 0) {
-      final sourceType = _lib.obs_source_get_display_name(id.value);
-      final type = StringExtensions.fromInt8(sourceType);
-      list.add({'id': StringExtensions.fromInt8(id.value), 'name': type});
+      final sourceType = _lib.obs_source_get_display_name(id.value).string;
+      if (id.value.string != null && sourceType != null) {
+        list.add({'id': id.value.string!, 'name': sourceType});
+      }
     }
     calloc.free(id);
     return list;
@@ -694,11 +697,7 @@ extension DiveFFIObslib on DiveBaseObslib {
 ///     data.dispose();
 ///   }
 class DiveObslibData {
-  DiveObslibData() {
-    _data = _lib.obs_data_create();
-  }
-
-  ffi.Pointer<obs_data> _data;
+  ffi.Pointer<obs_data> _data = _lib.obs_data_create();
   ffi.Pointer<obs_data> get pointer => _data;
 
   /// Release the underlying data.
