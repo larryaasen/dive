@@ -107,7 +107,8 @@ void main() {
   });
 
   testWidgets('DiveImagePickerButton', (WidgetTester tester) async {
-    await tester.pumpWidget(wrap(ProviderScope(child: DiveImagePickerButton())));
+    final elements = DiveCoreElements();
+    await tester.pumpWidget(wrap(ProviderScope(child: DiveImagePickerButton(elements: elements))));
     await expectLater(
       find.byType(DiveImagePickerButton),
       matchesGoldenFile('golden/DiveImagePickerButton.png'),

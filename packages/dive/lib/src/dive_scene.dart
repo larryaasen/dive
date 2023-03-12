@@ -3,7 +3,7 @@ import 'package:dive_obslib/dive_obslib.dart';
 
 import 'dive_sources.dart';
 
-/// Count of scenes created
+/// Count of scenes in use.
 int _sceneCount = 0;
 
 class DiveScene extends DiveTracking {
@@ -14,8 +14,6 @@ class DiveScene extends DiveTracking {
   DivePointer? pointer;
 
   static DiveScene create([String? name]) {
-    if (_sceneCount > 0) throw UnsupportedError('multiple scenes are not supported.');
-
     _sceneCount++;
 
     final scene = DiveScene();
@@ -43,6 +41,11 @@ class DiveScene extends DiveTracking {
     // Make the old source not visible
     final sceneItem = findSceneItem(source);
     if (sceneItem != null) sceneItem.visible = visible;
+  }
+
+  /// Make this scene the primary scene.
+  void makeCurrentScene() {
+    obslib.changeScene(pointer!);
   }
 
   /// Remove the item from the scene.

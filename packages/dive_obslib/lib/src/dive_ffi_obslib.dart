@@ -164,19 +164,27 @@ extension DiveFFIObslib on DiveBaseObslib {
       print("Couldn't create scene: $sceneName");
       return null;
     }
+
+    final diveScene = DivePointer(trackingUUID, scene);
+
     if (_isFirstScene) {
       _isFirstScene = false;
 
-      // set the scene as the primary draw source and go
-      final channel = 0;
-      _lib.obs_set_output_source(channel, _lib.obs_scene_get_source(scene));
+      changeScene(diveScene);
     }
 
-    return DivePointer(trackingUUID, scene);
+    return diveScene;
+  }
+
+  /// Set the scene as the primary draw source.
+  void changeScene(DivePointer scene) {
+    final channel = 0;
+    _lib.obs_set_output_source(channel, _lib.obs_scene_get_source(scene.pointer));
   }
 
   void deleteScene(DivePointer scene) {
-    _lib.obs_set_output_source(0, ffi.nullptr);
+    final channel = 0;
+    _lib.obs_set_output_source(channel, ffi.nullptr);
     _lib.obs_scene_release(scene.pointer);
   }
 

@@ -52,8 +52,8 @@ class _DiveCameraAppBodyState extends State<DiveCameraAppBody> {
 
     await _diveCore.setupOBS(DiveCoreResolution.HD);
 
-    final scene = DiveScene.create();
-    _elements!.updateState((state) => state.copyWith(currentScene: scene));
+    // Create the main scene.
+    _elements!.addScene(DiveScene.create());
 
     DiveVideoMix.create().then((mix) {
       if (mix != null) {

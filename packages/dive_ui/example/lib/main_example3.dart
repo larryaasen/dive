@@ -1,10 +1,10 @@
+import 'package:dive/dive.dart';
 import 'package:dive_ui/dive_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dive/dive.dart';
 
-/// Dive Example 3 - Video Camera
-void main() {
+/// Dive Example 3 - Video Cameras
+void main() async {
   runDiveUIApp(AppWidget());
 }
 
@@ -14,18 +14,14 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Dive Example 3',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text('Dive Video Camera Example'),
-          ),
-          body: BodyWidget(elements: _elements),
-        ));
+      title: 'Dive Example 3',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.blue, visualDensity: VisualDensity.adaptivePlatformDensity),
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Dive Video Cameras Example')),
+        body: BodyWidget(elements: _elements),
+      ),
+    );
   }
 }
 
@@ -42,17 +38,19 @@ class _BodyWidgetState extends State<BodyWidget> {
   final _diveCore = DiveCore();
   bool _initialized = false;
 
-  void _initialize(BuildContext context) async {
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () => _initialize());
+    super.initState();
+  }
+
+  void _initialize() async {
     if (_initialized) return;
-
-    // /// DiveCore and other modules must use the same [ProviderContainer], so
-    // /// it needs to be passed to DiveCore at the start.
-    // DiveUI.setup(context);
-
+    _initialized = true;
     await _diveCore.setupOBS(DiveCoreResolution.HD);
 
-    final scene = DiveScene.create();
-    widget.elements.updateState((state) => state.copyWith(currentScene: scene));
+    // Create the main scene.
+    widget.elements.addScene(DiveScene.create());
 
     DiveVideoMix.create().then((mix) {
       if (mix != null) widget.elements.updateState((state) => state..videoMixes.add(mix));
@@ -82,23 +80,16 @@ class _BodyWidgetState extends State<BodyWidget> {
         }
       });
     });
-
-    _initialized = true;
   }
 
   @override
   Widget build(BuildContext context) {
-    _initialize(context);
     return MediaPlayer(context: context, elements: widget.elements);
   }
 }
 
 class MediaPlayer extends ConsumerWidget {
-  const MediaPlayer({
-    super.key,
-    required this.elements,
-    required this.context,
-  });
+  const MediaPlayer({super.key, required this.elements, required this.context});
 
   final DiveCoreElements elements;
   final BuildContext context;

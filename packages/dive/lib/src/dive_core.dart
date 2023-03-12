@@ -216,6 +216,7 @@ class DiveCore {
   static final providerContainer = ProviderContainer();
   static ProviderContainer get container => providerContainer;
 
+  /// Setup and start OBS lib.
   Future<bool> setupOBS(
     DiveCoreResolution baseResolution, {
     DiveCoreResolution? outResolution,

@@ -23,9 +23,8 @@ class DiveExample {
 
     await _diveCore.setupOBS(DiveCoreResolution.HD);
 
-    // Create the main scene
-    final scene = DiveScene.create();
-    _elements.updateState((state) => state.copyWith(currentScene: scene));
+    // Create the main scene.
+    _elements.addScene(DiveScene.create());
 
     // Create the main audio source
     DiveAudioSource.create('main audio').then((source) {
@@ -90,7 +89,7 @@ class DiveExample {
       audioSource.dispose();
 
       // Delete the scene resources
-      scene.dispose();
+      _elements.removeAllScenes();
     });
   }
 }

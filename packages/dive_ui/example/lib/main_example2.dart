@@ -75,8 +75,8 @@ class _BodyWidgetState extends State<BodyWidget> {
 
     _diveCore.setupOBS(DiveCoreResolution.HD);
 
-    final scene = DiveScene.create();
-    widget.elements.updateState((state) => state.copyWith(currentScene: scene));
+    // Create the main scene.
+    widget.elements.addScene(DiveScene.create());
 
     DiveVideoMix.create().then((mix) {
       if (mix != null) widget.elements.updateState((state) => state..videoMixes.add(mix));

@@ -94,7 +94,6 @@ issue [here](https://github.com/larryaasen/dive/issues).
 * DiveStreamSettingsDialog - A dialog to update the video output settings.
 * DiveTopicCard - A material design widget that creates a [Card] widget that contains content and actions about a single subject.
 * DiveIconSet - The default icons for `dive_ui` widgets. Override these methods to provide custom icons.
-* DiveUIApp - Setup DiveUI before the first [build] is called.
 * DiveUI - Contains the key setup method.
 * DiveMediaPlayButton - Play media button.
 * DiveMediaStopButton - Stop media button.

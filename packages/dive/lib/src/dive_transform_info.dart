@@ -60,13 +60,13 @@ class DiveTransformInfo {
       {this.pos, this.rot, this.scale, this.alignment, this.boundsType, this.boundsAlignment, this.bounds});
 
   DiveTransformInfo copyWith({
-    pos,
-    rot,
-    scale,
-    alignment,
-    boundsType,
-    boundsAlignment,
-    bounds,
+    DiveVec2? pos,
+    double? rot,
+    DiveVec2? scale,
+    DiveAlign? alignment,
+    DiveBoundsType? boundsType,
+    DiveAlign? boundsAlignment,
+    DiveVec2? bounds,
   }) {
     return DiveTransformInfo(
       pos: pos ?? this.pos,

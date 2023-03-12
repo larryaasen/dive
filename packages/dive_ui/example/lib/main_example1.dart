@@ -43,6 +43,7 @@ class BodyWidget extends StatefulWidget {
 
 class _BodyWidgetState extends State<BodyWidget> {
   final _diveCore = DiveCore();
+  bool _initialized = false;
 
   @override
   void initState() {
@@ -53,8 +54,8 @@ class _BodyWidgetState extends State<BodyWidget> {
   void _initialize() {
     _diveCore.setupOBS(DiveCoreResolution.HD);
 
-    final scene = DiveScene.create();
-    widget.elements.updateState((state) => state.copyWith(currentScene: scene));
+    // Create the main scene.
+    widget.elements.addScene(DiveScene.create());
 
     DiveVideoMix.create().then((mix) {
       if (mix != null) {

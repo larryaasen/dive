@@ -150,6 +150,10 @@ streaming the computer screen.
 This example shows how to live stream with display capture, one camera overlay,
 a mic input, and background music.
 
+## Example 14 - Multiple Scenes
+
+This example shows how to use multiple scenes.
+
 # Writing an app with Dive UI
 
 1. Add dive_ui to your pubspec.yaml file.

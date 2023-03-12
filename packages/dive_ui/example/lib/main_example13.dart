@@ -60,8 +60,8 @@ class _BodyWidgetState extends State<BodyWidget> {
     _diveCore;
     await _diveCore.setupOBS(DiveCoreResolution.FULL_HD);
 
-    final scene = DiveScene.create();
-    widget.elements.updateState((state) => state.copyWith(currentScene: scene));
+    // Create the main scene.
+    widget.elements.addScene(DiveScene.create());
 
     final settings = DiveSettings();
     settings.set('display', 0); // Display #1

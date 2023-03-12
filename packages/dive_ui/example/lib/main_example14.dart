@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dive/dive.dart';
 
-/// Dive Example 8 - Positioning
+/// Dive Example 14 - Multiple Scenes
 void main() {
   runDiveUIApp(AppWidget());
 }
@@ -14,15 +14,12 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Dive Example 8',
+        title: 'Dive Example 14',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.blue, visualDensity: VisualDensity.adaptivePlatformDensity),
         home: Scaffold(
           appBar: AppBar(
-            title: const Text('Dive Positioning Example'),
-            actions: <Widget>[
-              DiveImagePickerButton(elements: _elements),
-            ],
+            title: const Text('Dive Multiple Scenes Example'),
           ),
           body: BodyWidget(elements: _elements),
         ));
@@ -56,6 +53,9 @@ class _BodyWidgetState extends State<BodyWidget> {
     // Create the main scene.
     widget.elements.addScene(DiveScene.create());
 
+    // Create a second scene.
+    final scene2 = widget.elements.addScene(DiveScene.create());
+
     DiveVideoMix.create().then((mix) {
       if (mix != null)
         widget.elements
@@ -64,15 +64,37 @@ class _BodyWidgetState extends State<BodyWidget> {
 
     DiveInputs.video().forEach((videoInput) {
       if (videoInput.name != null && videoInput.name!.contains('FaceTime')) {
-        print(videoInput);
-        DiveVideoSource.create(videoInput).then((source) {
+        // Create a video source.
+        DiveVideoSource.create(videoInput).then((source) async {
           if (source != null) {
+            // Save the video source.
             widget.elements.updateState(
                 (state) => state.copyWith(videoSources: state.videoSources.toList()..add(source)));
-            widget.elements.state.currentScene?.addSource(source);
+
+            // Add the video source to scene 1 (the current scene).
+            final scenItem = await widget.elements.state.currentScene?.addSource(source);
+            if (scenItem != null) {
+              // Update the position and scale of the video source.
+              final info = await scenItem.getTransformInfo();
+              final newInfo = info.copyWith(scale: DiveVec2(0.7, 0.7));
+              scenItem.updateTransformInfo(newInfo);
+            }
+
+            // Add the video source to scene 2.
+            final scenItem2 = await scene2.addSource(source);
+
+            // Update the position and scale of the video source.
+            final info = await scenItem2.getTransformInfo();
+            final newInfo = info.copyWith(pos: DiveVec2(300, 300), scale: DiveVec2(0.3, 0.3));
+            scenItem2.updateTransformInfo(newInfo);
           }
         });
       }
+    });
+
+    // Wait 7 seconds and then switch to scene 2.
+    Future.delayed(Duration(seconds: 7), () {
+      widget.elements.changeCurrentScene(scene2);
     });
 
     _initialized = true;
@@ -104,32 +126,6 @@ class MediaPlayer extends ConsumerWidget {
           controller: state.videoMixes[0].controller,
           aspectRatio: DiveCoreAspectRatio.HD.ratio,
         ));
-
-    final item = state.currentScene == null || state.currentScene!.sceneItems.isEmpty
-        ? null
-        : state.currentScene!.sceneItems[0];
-
-    final camera = Container(
-      height: 200,
-      width: 200 * DiveCoreAspectRatio.HD.ratio,
-      child: item != null
-          ? DiveSourceCard(
-              item: item,
-              child: DivePreview(
-                  controller: state.videoSources.length == 0 ? null : (state.videoSources[0]).controller,
-                  aspectRatio: DiveCoreAspectRatio.HD.ratio),
-              elements: elements,
-            )
-          : SizedBox.shrink(),
-    );
-
-    final mainContent = Row(
-      children: [
-        camera,
-        videoMix,
-      ],
-    );
-
-    return Container(color: Colors.white, child: mainContent);
+    return videoMix;
   }
 }
