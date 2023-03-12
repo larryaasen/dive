@@ -16,10 +16,7 @@ class AppWidget extends StatelessWidget {
     return MaterialApp(
         title: 'Dive Example 1',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
+        theme: ThemeData(primarySwatch: Colors.blue, visualDensity: VisualDensity.adaptivePlatformDensity),
         home: Scaffold(
           appBar: AppBar(
             title: const Text('Dive Media Player Example'),
@@ -51,15 +48,16 @@ class _BodyWidgetState extends State<BodyWidget> {
     super.initState();
   }
 
-  void _initialize() {
-    _diveCore.setupOBS(DiveCoreResolution.HD);
+  void _initialize() async {
+    await _diveCore.setupOBS(DiveCoreResolution.HD);
 
     // Create the main scene.
     widget.elements.addScene(DiveScene.create());
 
     DiveVideoMix.create().then((mix) {
       if (mix != null) {
-        widget.elements.updateState((state) => state..videoMixes.add(mix));
+        widget.elements
+            .updateState((state) => state.copyWith(videoMixes: state.videoMixes.toList()..add(mix)));
       }
     });
   }

@@ -66,14 +66,14 @@ class _BodyWidgetState extends State<BodyWidget> {
   final _diveCore = DiveCore();
   bool _initialized = false;
 
-  void _initialize(BuildContext context) {
+  void _initialize(BuildContext context) async {
     if (_initialized) return;
 
     // /// DiveCore and other modules must use the same [ProviderContainer], so
     // /// it needs to be passed to DiveCore at the start.
     // DiveUI.setup(context);
 
-    _diveCore.setupOBS(DiveCoreResolution.HD);
+    await _diveCore.setupOBS(DiveCoreResolution.HD);
 
     // Create the main scene.
     widget.elements.addScene(DiveScene.create());

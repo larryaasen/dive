@@ -53,15 +53,17 @@ class _BodyWidgetState extends State<BodyWidget> {
     widget.elements.addScene(DiveScene.create());
 
     DiveVideoMix.create().then((mix) {
-      if (mix != null) widget.elements.updateState((state) => state..videoMixes.add(mix));
+      if (mix != null) {
+        widget.elements
+            .updateState((state) => state.copyWith(videoMixes: state.videoMixes.toList()..add(mix)));
+      }
     });
 
     DiveAudioSource.create('main audio').then((source) {
       if (source != null) {
-        setState(() {
-          widget.elements.updateState((state) => state..audioSources.add(source));
-        });
-        widget.elements.updateState((state) => state..currentScene?.addSource(source));
+        widget.elements
+            .updateState((state) => state.copyWith(audioSources: state.audioSources.toList()..add(source)));
+        widget.elements.state.currentScene?.addSource(source);
 
         DiveAudioMeterSource.create(source: source).then((volumeMeter) {
           setState(() {
@@ -75,8 +77,9 @@ class _BodyWidgetState extends State<BodyWidget> {
       print(videoInput);
       DiveVideoSource.create(videoInput).then((source) {
         if (source != null) {
-          widget.elements.updateState((state) => state..videoSources.add(source));
-          widget.elements.updateState((state) => state..currentScene?.addSource(source));
+          widget.elements
+              .updateState((state) => state.copyWith(videoSources: state.videoSources.toList()..add(source)));
+          widget.elements.state.currentScene?.addSource(source);
         }
       });
     });

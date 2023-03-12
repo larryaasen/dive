@@ -154,6 +154,7 @@ class DiveAudioSource extends DiveSource {
   final DiveInput? input;
   DiveAudioMeterSource? volumeMeter;
 
+  /// Create an audio source. When [input] is null, it will create the "default" audio source.
   static Future<DiveAudioSource?> create(String name, {DiveInput? input}) async {
     final source = DiveAudioSource(name: name, input: input, inputType: DiveInputType.audioSource);
 
@@ -207,10 +208,8 @@ class DiveVideoSource extends DiveSource with DiveTextureSetup {
     obslib.removeSourceFrameCallback(trackingUUID, pointer!.address);
     obslib.releaseSource(pointer!);
     releaseController();
-    if (volumeMeter != null) {
-      volumeMeter!.dispose();
-      volumeMeter = null;
-    }
+    volumeMeter?.dispose();
+    volumeMeter = null;
     super.dispose();
     return true;
   }

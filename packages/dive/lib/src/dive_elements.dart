@@ -185,11 +185,8 @@ class DiveCoreElements {
     }
     DiveImageSource.create(localFile).then((source) {
       if (source != null) {
-        final state = DiveCore.container.read(provider.notifier).state;
-        state.imageSources.add(source);
-        state.currentScene!.addSource(source).then((item) {
-          DiveCore.container.read(provider.notifier).state = state;
-        });
+        updateState((state) => state.copyWith(imageSources: state.imageSources.toList()..add(source)));
+        state.currentScene?.addSource(source);
       }
     });
   }
@@ -207,9 +204,8 @@ class DiveCoreElements {
           source.volumeMeter = volumeMeter;
         });
 
-        updateState((state) => state
-          ..mediaSources.add(source)
-          ..currentScene!.addSource(source));
+        updateState((state) => state.copyWith(mediaSources: state.mediaSources.toList()..add(source)));
+        state.currentScene?.addSource(source);
       }
     });
   }

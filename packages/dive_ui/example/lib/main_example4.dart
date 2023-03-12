@@ -43,8 +43,9 @@ class DiveExample {
     // Create the main audio source
     DiveAudioSource.create('main audio').then((source) {
       if (source != null) {
-        _elements.updateState((state) => state..audioSources.add(source));
-        _elements.updateState((state) => state..currentScene?.addSource(source));
+        _elements
+            .updateState((state) => state.copyWith(audioSources: state.audioSources.toList()..add(source)));
+        _elements.state.currentScene?.addSource(source);
       }
     });
 
@@ -55,9 +56,10 @@ class DiveExample {
     // Create the last video source from the video input
     DiveVideoSource.create(videoInput).then((source) {
       if (source != null) {
-        _elements.updateState((state) => state..videoSources.add(source));
+        _elements
+            .updateState((state) => state.copyWith(videoSources: state.videoSources.toList()..add(source)));
         // Add the video source to the scene
-        _elements.updateState((state) => state..currentScene?.addSource(source));
+        _elements..state.currentScene?.addSource(source);
       }
     });
 
@@ -71,7 +73,7 @@ class DiveExample {
 
     // Twitch Settings
     // Replace this Twitch key with your own. This one is no longer valid.
-    output.serviceKey = 'live_276488556_uIKncv1zAGQ3kz5aVzCvfshg8W4ENC';
+    output.serviceKey = 'live_276488556_ZQRwvdknV8MrOJCaGwquIzM17dQDJ5';
     output.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/${output.serviceKey}';
 
     _elements.updateState((state) => state.copyWith(streamingOutput: output));

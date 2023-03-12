@@ -49,10 +49,10 @@ class _BodyWidgetState extends State<BodyWidget> {
   DiveCore _diveCore = DiveCore();
   bool _initialized = false;
 
-  void _initialize() {
+  void _initialize() async {
     if (_initialized) return;
 
-    _diveCore.setupOBS(DiveCoreResolution.HD);
+    await _diveCore.setupOBS(DiveCoreResolution.HD);
 
     // Create the main scene.
     widget.elements.addScene(DiveScene.create());

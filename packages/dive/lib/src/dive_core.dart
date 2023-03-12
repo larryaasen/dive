@@ -60,6 +60,7 @@ class DiveCoreFPS {
 }
 
 /// The various different video resolutions.
+/// TODO: add use of Equatable here.
 class DiveCoreResolution {
   const DiveCoreResolution(this.name, this.width, this.height);
 

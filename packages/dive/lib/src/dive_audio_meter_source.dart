@@ -118,6 +118,7 @@ class DiveAudioMeterSource {
     pointer.releasePointer();
   }
 
+  /// Creat an audio meter for a [source].
   static Future<DiveAudioMeterSource?> create({required DiveSource source}) async {
     final sourcePointer = source.pointer;
     if (sourcePointer == null || sourcePointer.isNull) return null;
@@ -254,6 +255,7 @@ class DiveAudioMeterSource {
       noSignal: false,
     );
     DiveCore.container.read(provider.notifier).state = newState;
+
 
     _startNoSignalTimer();
   }

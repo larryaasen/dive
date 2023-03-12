@@ -16,10 +16,7 @@ class AppWidget extends StatelessWidget {
     return MaterialApp(
         title: 'Dive Example 7',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
+        theme: ThemeData(primarySwatch: Colors.blue, visualDensity: VisualDensity.adaptivePlatformDensity),
         home: Scaffold(
           appBar: AppBar(
             title: const Text('Dive Audio Inputs Example'),
@@ -42,8 +39,15 @@ class _BodyWidgetState extends State<BodyWidget> {
   final _diveCore = DiveCore();
   bool _initialized = false;
 
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () => _initialize());
+    super.initState();
+  }
+
   void _initialize() async {
     if (_initialized) return;
+    _initialized = true;
 
     await _diveCore.setupOBS(DiveCoreResolution.HD);
 
@@ -51,43 +55,56 @@ class _BodyWidgetState extends State<BodyWidget> {
     widget.elements.addScene(DiveScene.create());
 
     DiveVideoMix.create().then((mix) {
-      if (mix != null) widget.elements.updateState((state) => state..videoMixes.add(mix));
+      if (mix != null)
+        widget.elements
+            .updateState((state) => state.copyWith(videoMixes: state.videoMixes.toList()..add(mix)));
     });
 
+    // DiveAudioSource.create('main audio').then((source) {
+    //   if (source != null) {
+    //     setState(() {
+    //       widget.elements
+    //           .updateState((state) => state.copyWith(audioSources: state.audioSources.toList()..add(source)));
+    //     });
+    //     widget.elements.state.currentScene?.addSource(source);
+
+    //     DiveAudioMeterSource.create(source: source).then((volumeMeter) {
+    //       setState(() {
+    //         source.volumeMeter = volumeMeter;
+    //       });
+    //     });
+    //   }
+    // });
+
     DiveInputs.audio().forEach((audioInput) {
+      // Create an audio source.
       DiveAudioSource.create("audio", input: audioInput).then((source) {
         if (source != null) {
-          print("created audio source: ${audioInput.id}");
-          widget.elements.updateState((state) {
-            state.audioSources.add(source);
-            state.currentScene?.addSource(source);
-            DiveAudioMeterSource.create(source: source).then((volumeMeter) {
-              source.volumeMeter = volumeMeter;
-            });
-            return state;
+          widget.elements.state.currentScene?.addSource(source);
+          DiveAudioMeterSource.create(source: source).then((volumeMeter) {
+            source.volumeMeter = volumeMeter;
           });
+          widget.elements
+              .updateState((state) => state.copyWith(audioSources: state.audioSources.toList()..add(source)));
         }
       });
     });
 
     DiveInputs.video().forEach((videoInput) {
-      if (videoInput.name != null && videoInput.name!.contains('C920')) {
-        print(videoInput);
+      if (videoInput.name != null && videoInput.name!.contains('FaceTime')) {
         DiveVideoSource.create(videoInput).then((source) {
           if (source != null) {
-            widget.elements.updateState((state) => state..videoSources.add(source));
-            widget.elements.updateState((state) => state..currentScene?.addSource(source));
+            widget.elements.updateState(
+                (state) => state.copyWith(videoSources: state.videoSources.toList()..add(source)));
+            widget.elements.state.currentScene?.addSource(source);
           }
         });
       }
     });
-
-    _initialized = true;
   }
 
   @override
   Widget build(BuildContext context) {
-    _initialize();
     return MediaPlayer(context: context, elements: widget.elements);
   }
 }

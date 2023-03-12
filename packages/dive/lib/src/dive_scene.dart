@@ -19,6 +19,7 @@ class DiveScene extends DiveTracking {
     final scene = DiveScene();
     name = name ?? 'Scene $_sceneCount';
     scene.pointer = obslib.createScene(scene.trackingUUID, name);
+    assert(scene.pointer != null);
 
     return scene;
   }
@@ -26,6 +27,7 @@ class DiveScene extends DiveTracking {
   /// Add a source to a scene.
   /// Returns a new scene item.
   Future<DiveSceneItem> addSource(DiveSource source) async {
+    assert(pointer != null);
     final item = obslib.sceneAddSource(pointer!, source.pointer!);
     final sceneItem = DiveSceneItem(item: item, source: source, scene: this);
     _sceneItems.add(sceneItem);
