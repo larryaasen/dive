@@ -11,11 +11,11 @@ class DiveVideoSettings {
   final provider = StateProvider<DiveVideoSettingsState>((ref) => const DiveVideoSettingsState());
 
   /// The state.
-  DiveVideoSettingsState get state => DiveCore.providerContainer!.read(provider.notifier).state;
+  DiveVideoSettingsState get state => DiveCore.providerContainer.read(provider.notifier).state;
 
   /// Update the state.
   void updateState(DiveVideoSettingsState newState) {
-    final notifier = DiveCore.providerContainer!.read(provider.notifier);
+    final notifier = DiveCore.providerContainer.read(provider.notifier);
     if (notifier.state != newState) {
       notifier.state = newState;
     }
@@ -114,11 +114,11 @@ class DiveCoreElements {
   void removeSource(DiveSource source, List<DiveSource> sources) {
     final item = state.currentScene!.findSceneItem(source);
     if (item != null) {
-      final state = DiveCore.container!.read(provider.notifier).state;
+      final state = DiveCore.container.read(provider.notifier).state;
       state.currentScene!.removeSceneItem(item);
       sources.remove(source);
       source.dispose();
-      DiveCore.container!.read(provider.notifier).state = state;
+      DiveCore.container.read(provider.notifier).state = state;
     }
   }
 
@@ -135,10 +135,10 @@ class DiveCoreElements {
     }
     DiveImageSource.create(localFile).then((source) {
       if (source != null) {
-        final state = DiveCore.container!.read(provider.notifier).state;
+        final state = DiveCore.container.read(provider.notifier).state;
         state.imageSources.add(source);
         state.currentScene!.addSource(source).then((item) {
-          DiveCore.container!.read(provider.notifier).state = state;
+          DiveCore.container.read(provider.notifier).state = state;
         });
       }
     });
@@ -153,7 +153,7 @@ class DiveCoreElements {
     DiveMediaSource.create(settings: settings).then((source) {
       if (source != null) {
         source.monitoringType = DiveCoreMonitoringType.monitorAndOutput;
-        DiveAudioMeterSource().create(source: source).then((volumeMeter) {
+        DiveAudioMeterSource.create(source: source).then((volumeMeter) {
           source.volumeMeter = volumeMeter;
         });
 
@@ -166,13 +166,13 @@ class DiveCoreElements {
 
   /// The current state. Changes to this state do not get saved and are not
   /// sent to notifiers. To change the state, use [updateState].
-  DiveCoreElementsState get state => DiveCore.container!.read(provider.notifier).state;
+  DiveCoreElementsState get state => DiveCore.container.read(provider.notifier).state;
 
   /// Update the current state. Changes to this state are saved and are
   /// sent to notifiers. This method is good for making many state
   /// changes, and then having only one change sent the notifiers.
   void updateState(DiveCoreElementsState Function(DiveCoreElementsState state) onChangeState) {
-    final controller = DiveCore.container!.read(provider.notifier);
+    final controller = DiveCore.container.read(provider.notifier);
     controller.state = onChangeState(controller.state);
   }
 }

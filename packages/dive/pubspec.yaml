@@ -5,8 +5,8 @@ homepage: https://divekit.dev
 repository: https://github.com/larryaasen/dive/tree/main/packages/dive
 
 environment:
-  sdk: '>=2.19.0 <3.0.0'
-  flutter: '>=3.7.0'
+  sdk: ">=2.19.0 <3.0.0"
+  flutter: ">=3.7.0"
 
 dependencies:
   flutter:
@@ -21,7 +21,7 @@ dependencies:
   equatable: ^2.0.5
 
   # From Dart Team: provides internationalization and localization facilities, including message translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
-  intl: ^0.18.0
+  intl: ^0.17.0
 
   # From darky12s@gmail.com: a state-manangement library
   riverpod: ^2.3.1

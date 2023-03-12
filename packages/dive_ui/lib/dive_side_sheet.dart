@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 /// Show a Material side sheet.
 class DiveSideSheet {
   static showSideSheet({
-    BuildContext context,
-    Widget Function(BuildContext) builder,
+    required BuildContext context,
+    Widget Function(BuildContext)? builder,
     bool rightSide = true,
     Duration animationDuration = const Duration(milliseconds: 300),
     double width = 300,
@@ -19,7 +19,7 @@ class DiveSideSheet {
         return Align(
           alignment: (rightSide ? Alignment.centerRight : Alignment.centerLeft),
           child: Container(
-            child: builder(context),
+            child: builder!(context),
             height: double.infinity,
             width: width,
             decoration: BoxDecoration(

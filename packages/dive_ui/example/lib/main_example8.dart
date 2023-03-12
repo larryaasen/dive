@@ -33,7 +33,7 @@ class AppWidget extends StatelessWidget {
 }
 
 class BodyWidget extends StatefulWidget {
-  BodyWidget({Key key, this.elements}) : super(key: key);
+  BodyWidget({super.key, required this.elements});
 
   final DiveCoreElements elements;
 
@@ -42,30 +42,29 @@ class BodyWidget extends StatefulWidget {
 }
 
 class _BodyWidgetState extends State<BodyWidget> {
-  DiveCore _diveCore;
-  DiveCoreElements _elements;
+  final _diveCore = DiveCore();
   bool _initialized = false;
 
   void _initialize() {
     if (_initialized) return;
 
-    _elements = widget.elements;
-    _diveCore = DiveCore();
     _diveCore.setupOBS(DiveCoreResolution.HD);
 
     final scene = DiveScene.create();
-    _elements.updateState((state) => state.copyWith(currentScene: scene));
+    widget.elements.updateState((state) => state.copyWith(currentScene: scene));
 
     DiveVideoMix.create().then((mix) {
-      _elements.updateState((state) => state..videoMixes.add(mix));
+      if (mix != null) widget.elements.updateState((state) => state..videoMixes.add(mix));
     });
 
     DiveInputs.video().forEach((videoInput) {
-      if (videoInput.name.contains('C920')) {
+      if (videoInput.name != null && videoInput.name!.contains('C920')) {
         print(videoInput);
         DiveVideoSource.create(videoInput).then((source) {
-          _elements.updateState((state) => state..videoSources.add(source));
-          _elements.updateState((state) => state..currentScene.addSource(source));
+          if (source != null) {
+            widget.elements.updateState((state) => state..videoSources.add(source));
+            widget.elements.updateState((state) => state..currentScene?.addSource(source));
+          }
         });
       }
     });
@@ -76,16 +75,12 @@ class _BodyWidgetState extends State<BodyWidget> {
   @override
   Widget build(BuildContext context) {
     _initialize();
-    return MediaPlayer(context: context, elements: _elements);
+    return MediaPlayer(context: context, elements: widget.elements);
   }
 }
 
 class MediaPlayer extends ConsumerWidget {
-  const MediaPlayer({
-    Key key,
-    @required this.elements,
-    @required this.context,
-  }) : super(key: key);
+  const MediaPlayer({super.key, required this.elements, required this.context});
 
   final DiveCoreElements elements;
   final BuildContext context;
@@ -100,13 +95,14 @@ class MediaPlayer extends ConsumerWidget {
     final videoMix = Container(
         color: Colors.black,
         padding: EdgeInsets.all(4),
-        child: DiveMeterPreview(
+        child: DivePreview(
           controller: state.videoMixes[0].controller,
-          meterVertical: true,
           aspectRatio: DiveCoreAspectRatio.HD.ratio,
         ));
 
-    final item = state.currentScene.sceneItems.isEmpty ? null : state.currentScene.sceneItems[0];
+    final item = state.currentScene == null || state.currentScene!.sceneItems.isEmpty
+        ? null
+        : state.currentScene!.sceneItems[0];
 
     final camera = Container(
         height: 200,

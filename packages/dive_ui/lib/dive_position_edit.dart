@@ -9,10 +9,10 @@ typedef DiveMoveEditItemCallback = void Function(DiveSceneItemMovement move);
 typedef DiveTransformApplyCallback = void Function(DiveTransformInfo info);
 
 class DivePositionEdit extends StatefulWidget {
-  DivePositionEdit({Key key, this.transformInfo, this.onApplyCallback}) : super(key: key);
+  DivePositionEdit({Key? key, this.transformInfo, this.onApplyCallback}) : super(key: key);
 
-  final DiveTransformInfo transformInfo;
-  final DiveTransformApplyCallback onApplyCallback;
+  final DiveTransformInfo? transformInfo;
+  final DiveTransformApplyCallback? onApplyCallback;
 
   @override
   _DivePositionEditState createState() => _DivePositionEditState();
@@ -113,8 +113,8 @@ class _DivePositionEditState extends State<DivePositionEdit> {
   }
 
   void _useInitialState() {
-    final pos = widget.transformInfo != null ? widget.transformInfo.pos : null;
-    final scale = widget.transformInfo != null ? widget.transformInfo.scale : null;
+    final pos = widget.transformInfo != null ? widget.transformInfo!.pos : null;
+    final scale = widget.transformInfo != null ? widget.transformInfo!.scale : null;
 
     _posXCont.text = pos == null ? '' : pos.x.toInt().toString();
     _posYCont.text = pos == null ? '' : pos.y.toInt().toString();
@@ -128,7 +128,7 @@ class _DivePositionEditState extends State<DivePositionEdit> {
       _useInitialState();
     });
 
-    ScaffoldMessenger.maybeOf(context).showSnackBar(SnackBar(
+    ScaffoldMessenger.maybeOf(context)!.showSnackBar(SnackBar(
       content: Text("Properties set back to their original values."),
     ));
   }
@@ -140,7 +140,7 @@ class _DivePositionEditState extends State<DivePositionEdit> {
     final scale = DiveVec2(double.parse(_scaleXCont.text) / 100.0, double.parse(_scaleYCont.text) / 100.0);
     final info = DiveTransformInfo(pos: pos, scale: scale);
 
-    widget.onApplyCallback(info);
+    widget.onApplyCallback!(info);
 
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("Properties have been applied."),
@@ -149,9 +149,9 @@ class _DivePositionEditState extends State<DivePositionEdit> {
 }
 
 class DiveMoveItemEdit extends StatefulWidget {
-  const DiveMoveItemEdit({Key key, this.onSetOrderCallback}) : super(key: key);
+  const DiveMoveItemEdit({Key? key, this.onSetOrderCallback}) : super(key: key);
 
-  final DiveMoveEditItemCallback onSetOrderCallback;
+  final DiveMoveEditItemCallback? onSetOrderCallback;
 
   @override
   _DiveMoveItemEditState createState() => _DiveMoveItemEditState();
@@ -189,7 +189,7 @@ class _DiveMoveItemEditState extends State<DiveMoveItemEdit> {
 
   void _onMovePressed(DiveSceneItemMovement move) {
     if (widget.onSetOrderCallback != null) {
-      widget.onSetOrderCallback(move);
+      widget.onSetOrderCallback?.call(move);
     }
   }
 }

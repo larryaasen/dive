@@ -178,10 +178,10 @@ class DiveMediaSource extends DiveTextureSource {
 
   /// Sync the media state from the media source to the state provider.
   Future<void> _syncState() async {
-    final currentStateModel = DiveCore.container!.read(provider.notifier).state;
+    final currentStateModel = DiveCore.container.read(provider.notifier).state;
     final newStateModel = await getState();
     if (currentStateModel != newStateModel) {
-      DiveCore.container!.read(provider.notifier).state = newStateModel;
+      DiveCore.container.read(provider.notifier).state = newStateModel;
     }
     return;
   }

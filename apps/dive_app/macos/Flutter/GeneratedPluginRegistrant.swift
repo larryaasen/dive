@@ -7,7 +7,7 @@ import Foundation
 
 import dive_obslib
 import file_selector_macos
-import path_provider_macos
+import path_provider_foundation
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   DiveObsLibPlugin.register(with: registry.registrar(forPlugin: "DiveObsLibPlugin"))

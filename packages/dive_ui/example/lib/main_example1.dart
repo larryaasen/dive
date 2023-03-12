@@ -33,7 +33,7 @@ class AppWidget extends StatelessWidget {
 }
 
 class BodyWidget extends StatefulWidget {
-  BodyWidget({Key key, this.elements}) : super(key: key);
+  BodyWidget({super.key, required this.elements});
 
   final DiveCoreElements elements;
 
@@ -42,44 +42,35 @@ class BodyWidget extends StatefulWidget {
 }
 
 class _BodyWidgetState extends State<BodyWidget> {
-  DiveCore _diveCore;
-  DiveCoreElements _elements;
-  bool _initialized = false;
+  final _diveCore = DiveCore();
 
-  void _initialize(BuildContext context) {
-    if (_initialized) return;
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () => _initialize());
+    super.initState();
+  }
 
-    /// DiveCore and other modules must use the same [ProviderContainer], so
-    /// it needs to be passed to DiveCore at the start.
-    DiveUI.setup(context);
-
-    _elements = widget.elements;
-    _diveCore = DiveCore();
+  void _initialize() {
     _diveCore.setupOBS(DiveCoreResolution.HD);
 
     final scene = DiveScene.create();
-    _elements.updateState((state) => state.copyWith(currentScene: scene));
+    widget.elements.updateState((state) => state.copyWith(currentScene: scene));
 
     DiveVideoMix.create().then((mix) {
-      _elements.updateState((state) => state..videoMixes.add(mix));
+      if (mix != null) {
+        widget.elements.updateState((state) => state..videoMixes.add(mix));
+      }
     });
-
-    _initialized = true;
   }
 
   @override
   Widget build(BuildContext context) {
-    _initialize(context);
-    return MediaPlayer(context: context, elements: _elements);
+    return MediaPlayer(context: context, elements: widget.elements);
   }
 }
 
 class MediaPlayer extends ConsumerWidget {
-  const MediaPlayer({
-    Key key,
-    @required this.elements,
-    @required this.context,
-  }) : super(key: key);
+  const MediaPlayer({super.key, required this.elements, required this.context});
 
   final DiveCoreElements elements;
   final BuildContext context;
@@ -104,8 +95,7 @@ class MediaPlayer extends ConsumerWidget {
                 alignment: Alignment.center,
                 child: DiveMediaButtonBar(iconColor: Colors.white54, mediaSource: source))));
 
-    final meterVideoMix = DiveMeterPreview(
-      volumeMeter: source.volumeMeter,
+    final meterVideoMix = DivePreview(
       controller: videoMix.controller,
       aspectRatio: DiveCoreAspectRatio.HD.ratio,
     );

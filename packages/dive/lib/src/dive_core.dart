@@ -16,9 +16,6 @@ void configDiveApp() {
 
   // Configure globally for all Equatable instances via EquatableConfig
   EquatableConfig.stringify = true;
-
-  // Setup [ProviderContainer] so DiveCore and other modules use the same one
-  DiveCore.providerContainer = ProviderContainer();
 }
 
 /// The various different frame rates (FPS).
@@ -66,12 +63,12 @@ class DiveCoreFPS {
 class DiveCoreResolution {
   const DiveCoreResolution(this.name, this.width, this.height);
 
-  final String? name;
-  final int? width;
-  final int? height;
+  final String name;
+  final int width;
+  final int height;
 
   String get resolution => "${width}x$height ($name)";
-  double get aspectRatio => width! / height!;
+  double get aspectRatio => width / height;
 
   static const r7680_4320 = DiveCoreResolution('8K', 7680, 4320);
 
@@ -124,7 +121,7 @@ class DiveCoreResolution {
   }
 
   /// Find the name of the resolution with this [width] and [height].
-  static String? nameOf(int? width, int? height) {
+  static String? nameOf(int width, int height) {
     for (var resolution in DiveCoreResolution.all) {
       if (width == resolution.width && height == resolution.height) {
         return resolution.name;
@@ -216,13 +213,8 @@ class DiveCoreLevel {
 ///
 class DiveCore {
   /// For use with Riverpod
-  static ProviderContainer? providerContainer;
-  static ProviderContainer? get container {
-    if (providerContainer == null) throw DiveCoreProviderContainerException();
-    return providerContainer;
-  }
-
-  static bool get initialized => DiveCore.providerContainer != null;
+  static final providerContainer = ProviderContainer();
+  static ProviderContainer get container => providerContainer;
 
   Future<bool> setupOBS(
     DiveCoreResolution baseResolution, {
@@ -233,10 +225,10 @@ class DiveCore {
     if (rv) {
       outResolution = outResolution ?? baseResolution;
       rv = obslib.startObs(
-        baseResolution.width!,
-        baseResolution.height!,
-        outResolution.width!,
-        outResolution.height!,
+        baseResolution.width,
+        baseResolution.height,
+        outResolution.width,
+        outResolution.height,
         fps.numerator,
         fps.denominator,
       );

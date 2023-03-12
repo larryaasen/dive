@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 /// A material design widget that creates a [Card] widget that contains content
 /// and actions about a single subject.
 class DiveTopicCard extends StatelessWidget {
-  final Widget richMedia;
-  final String headerText;
-  final String subheadText;
-  final String supportingText;
-  final List<String> buttonTitles;
+  final Widget? richMedia;
+  final String? headerText;
+  final String? subheadText;
+  final String? supportingText;
+  final List<String>? buttonTitles;
   final double width;
   const DiveTopicCard(
-      {Key key,
+      {Key? key,
       this.richMedia,
       this.headerText,
       this.subheadText,
@@ -29,7 +29,7 @@ class DiveTopicCard extends StatelessWidget {
     );
     final buttons = buttonTitles == null
         ? null
-        : buttonTitles.map((title) => TextButton(
+        : buttonTitles!.map((title) => TextButton(
             style: bStyle,
             onPressed: () => null,
             child: Text(title.toUpperCase())));
@@ -37,30 +37,30 @@ class DiveTopicCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
-          if (richMedia != null) richMedia,
+          if (richMedia != null) richMedia!,
           ListTile(
-            title: headerText == null || headerText.isEmpty
+            title: headerText == null || headerText!.isEmpty
                 ? null
-                : Text(headerText,
+                : Text(headerText!,
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 18.0,
                     )),
-            subtitle: subheadText == null || subheadText.isEmpty
+            subtitle: subheadText == null || subheadText!.isEmpty
                 ? null
                 : Text(
-                    subheadText,
+                    subheadText!,
                     style: TextStyle(
                       color: Colors.black.withOpacity(0.6),
                     ),
                   ),
           ),
-          if (supportingText != null && supportingText.isNotEmpty)
+          if (supportingText != null && supportingText!.isNotEmpty)
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                supportingText,
+                supportingText!,
                 style: TextStyle(color: Colors.black.withOpacity(0.6)),
               ),
             ),
@@ -74,8 +74,8 @@ class DiveTopicCard extends StatelessWidget {
   }
 
   factory DiveTopicCard.sample({int sampleNumber = 1}) {
-    Widget richMedia;
-    var buttonTitles = null;
+    Widget? richMedia;
+    dynamic buttonTitles = null;
     String headerText = 'Card title';
     String subheadText = 'Secondary text';
     String supportingText =

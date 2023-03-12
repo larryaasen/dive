@@ -34,7 +34,7 @@ class AppWidget extends StatelessWidget {
 }
 
 class BodyWidget extends StatefulWidget {
-  BodyWidget({Key key, this.elements}) : super(key: key);
+  BodyWidget({super.key, required this.elements});
 
   final DiveCoreElements elements;
 
@@ -43,8 +43,7 @@ class BodyWidget extends StatefulWidget {
 }
 
 class _BodyWidgetState extends State<BodyWidget> {
-  DiveCore _diveCore;
-  DiveCoreElements _elements;
+  final _diveCore = DiveCore();
   bool _initialized = false;
 
   @override
@@ -57,12 +56,10 @@ class _BodyWidgetState extends State<BodyWidget> {
     if (_initialized) return;
     _initialized = true;
 
-    _elements = widget.elements;
-    _diveCore = DiveCore();
     await _diveCore.setupOBS(DiveCoreResolution.FULL_HD);
 
     final scene = DiveScene.create();
-    _elements.updateState((state) => state.copyWith(currentScene: scene));
+    widget.elements.updateState((state) => state.copyWith(currentScene: scene));
 
     final settings = DiveSettings();
     settings.set('display', 0); // Display #0
@@ -73,22 +70,24 @@ class _BodyWidgetState extends State<BodyWidget> {
       name: 'display capture 1',
       settings: settings,
     );
-    _elements.updateState((state) => state..sources.add(displayCaptureSource));
-    _elements.updateState((state) => state..currentScene.addSource(displayCaptureSource));
+    if (displayCaptureSource != null) {
+      widget.elements.updateState((state) => state..sources.add(displayCaptureSource));
+      widget.elements.updateState((state) => state..currentScene?.addSource(displayCaptureSource));
+    }
 
     DiveVideoMix.create().then((mix) {
-      _elements.updateState((state) => state..videoMixes.add(mix));
+      if (mix != null) widget.elements.updateState((state) => state..videoMixes.add(mix));
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return MediaPlayer(context: context, elements: _elements);
+    return MediaPlayer(context: context, elements: widget.elements);
   }
 }
 
 class MediaPlayer extends ConsumerWidget {
-  const MediaPlayer({Key key, @required this.elements, @required this.context}) : super(key: key);
+  const MediaPlayer({super.key, required this.elements, required this.context});
 
   final DiveCoreElements elements;
   final BuildContext context;

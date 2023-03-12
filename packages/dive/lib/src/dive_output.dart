@@ -72,7 +72,7 @@ class DiveOutput {
     // amount of time for the output to actually be fully stopped.
     // TODO: This should be improved to use signals and other techniques to determine when the output
     // has stopped.
-    DiveCore.container!.read(provider.notifier).state = DiveOutputStreamingState.stopped;
+    DiveCore.container.read(provider.notifier).state = DiveOutputStreamingState.stopped;
 
     return true;
   }
@@ -109,7 +109,7 @@ class DiveOutput {
   Future<void> _updateState() async {
     if (_output == null) return;
     final state = DiveOutputStreamingState.values[obslib.streamOutputGetState(_output!)];
-    DiveCore.container!.read(provider.notifier).state = state;
+    DiveCore.container.read(provider.notifier).state = state;
     if (state == DiveOutputStreamingState.stopped) {}
   }
 }

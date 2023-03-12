@@ -5,15 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// A widget to display a multi-channel audio meter and update the values. It can be displayed
 /// either horizonally or verically (default).
 class DiveAudioMeter extends ConsumerWidget {
-  const DiveAudioMeter({Key key, @required this.volumeMeter, this.vertical = true}) : super(key: key);
+  const DiveAudioMeter({super.key, required this.volumeMeter, this.vertical = true});
 
   final DiveAudioMeterSource volumeMeter;
   final bool vertical;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (volumeMeter == null) return Container();
-
     final stateModel = ref.watch(volumeMeter.provider);
     return DiveAudioMeterPaint(key: key, state: stateModel, vertical: vertical);
   }
@@ -22,7 +20,7 @@ class DiveAudioMeter extends ConsumerWidget {
 /// A widget to display a multi-channel audio meter. It can be displayed
 /// either horizonally or verically (default).
 class DiveAudioMeterPaint extends StatelessWidget {
-  const DiveAudioMeterPaint({Key key, @required this.state, this.vertical = true}) : super(key: key);
+  const DiveAudioMeterPaint({super.key, required this.state, this.vertical = true});
 
   final DiveAudioMeterState state;
   final bool vertical;
@@ -45,12 +43,10 @@ class DiveAudioMeterPainter extends CustomPainter {
   final thickness = 4;
   final margin = 2;
 
-  DiveAudioMeterPainter({this.state, this.vertical = true});
+  DiveAudioMeterPainter({required this.state, this.vertical = true});
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (state == null || state.channelCount == null) return;
-
     for (var channelIndex = 0; channelIndex < state.channelCount; channelIndex++) {
       if (vertical) {
         try {
@@ -60,9 +56,9 @@ class DiveAudioMeterPainter extends CustomPainter {
             margin,
             thickness,
             size.height.round() - (margin * 2) + 1,
-            state.magnitudeAttacked[channelIndex],
-            state.peakDecayed[channelIndex],
-            state.peakHold[channelIndex],
+            state.magnitudeAttacked![channelIndex],
+            state.peakDecayed![channelIndex],
+            state.peakHold![channelIndex],
             state.noSignal,
           );
         } catch (e, s) {
@@ -78,10 +74,10 @@ class DiveAudioMeterPainter extends CustomPainter {
             y,
             size.width.round() - (margin * 2),
             thickness,
-            state.magnitudeAttacked[channelIndex],
-            state.peakDecayed[channelIndex],
-            state.peakHold[channelIndex],
-            state.inputPeakHold[channelIndex],
+            state.magnitudeAttacked![channelIndex],
+            state.peakDecayed![channelIndex],
+            state.peakHold![channelIndex],
+            state.inputPeakHold![channelIndex],
             state.noSignal,
           );
         } catch (e, s) {
@@ -110,14 +106,10 @@ class DiveAudioMeterPainter extends CustomPainter {
   final magnitudeColor = Color.fromARGB(0xff, 0x00, 0x00, 0x00);
 
   final miniBox = 3;
-
   bool clipping = false;
-  int positionOffset;
 
   void fillRect(Canvas canvas, Color color, int left, int top, int width, int height) {
     try {
-      top = positionOffset == null ? top : positionOffset - top;
-      height = positionOffset == null ? height : positionOffset - height;
       final rect = Rect.fromLTWH(left.toDouble(), top.toDouble(), width.toDouble(), height.toDouble());
       final paint = Paint()
         ..color = color
@@ -136,9 +128,9 @@ class DiveAudioMeterPainter extends CustomPainter {
     int width,
     int height,
     double magnitude,
-    double peak,
+    double? peak,
     double peakHold,
-    double inputPeakHold,
+    double? inputPeakHold,
     bool noSignal,
   ) {
     final scale = width / minimumLevel;
@@ -148,7 +140,7 @@ class DiveAudioMeterPainter extends CustomPainter {
     int minimumPosition = x + 0;
     int maximumPosition = x + width;
     int magnitudePosition = (maximumPosition - (magnitude * scale)).floor();
-    int peakPosition = (maximumPosition - (peak * scale)).floor();
+    int peakPosition = (maximumPosition - (peak! * scale)).floor();
 
     // print(
     //     "maximumPosition=$maximumPosition, peak=$peak, peakHold=$peakHold, scale=$scale");
@@ -232,18 +224,18 @@ class DiveAudioMeterPainter extends CustomPainter {
     int width,
     int height,
     double magnitude,
-    double peak,
+    double? peak,
     double peakHold,
     bool noSignal,
   ) {
     final scale = height / minimumLevel;
 
-    peak = noSignal ? minimumLevel : peak;
+    final usePeak = noSignal ? minimumLevel : peak ?? 0;
 
     int minimumPosition = y + height;
     int maximumPosition = y + 0;
     int magnitudePosition = (maximumPosition + (magnitude * scale)).floor();
-    int peakPosition = (maximumPosition + (peak * scale)).floor();
+    int peakPosition = (maximumPosition + (usePeak * scale)).floor();
     int peakHoldPosition = (maximumPosition + (peakHold * scale)).floor();
     int warningPosition = (maximumPosition + (warningLevel * scale)).floor();
     int errorPosition = (maximumPosition + (errorLevel * scale)).floor();

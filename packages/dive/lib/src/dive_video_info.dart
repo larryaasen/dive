@@ -196,12 +196,12 @@ class DiveVideoInfo {
 
     final fps = DiveCoreFPS.values(videoInfo['fps_num'], videoInfo['fps_den']);
     final baseRes = DiveCoreResolution(
-      DiveCoreResolution.nameOf(videoInfo['base_width'], videoInfo['base_height']),
+      DiveCoreResolution.nameOf(videoInfo['base_width'], videoInfo['base_height']) ?? '',
       videoInfo['base_width'],
       videoInfo['base_height'],
     );
     final outputRes = DiveCoreResolution(
-      DiveCoreResolution.nameOf(videoInfo['output_width'], videoInfo['output_height']),
+      DiveCoreResolution.nameOf(videoInfo['output_width'], videoInfo['output_height']) ?? '',
       videoInfo['output_width'],
       videoInfo['output_height'],
     );
@@ -227,7 +227,7 @@ class DiveVideoInfo {
 
   /// Change the base and output resolution of the output video.
   static Future<bool> changeResolution(DiveCoreResolution base, DiveCoreResolution output) async {
-    final rv = await obslib.changeResolution(base.width!, base.height!, output.width!, output.height!);
+    final rv = await obslib.changeResolution(base.width, base.height, output.width, output.height);
     return rv;
   }
 }

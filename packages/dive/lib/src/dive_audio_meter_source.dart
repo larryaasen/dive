@@ -42,7 +42,7 @@ class DiveAudioMeterState {
   final DateTime? lastUpdateTime;
 
   /// no signal
-  final bool? noSignal;
+  final bool noSignal;
 
   DiveAudioMeterState({
     this.channelCount = 0,
@@ -56,7 +56,7 @@ class DiveAudioMeterState {
     this.inputpPeakHoldLastUpdateTime,
     this.peakHoldLastUpdateTime,
     this.lastUpdateTime,
-    this.noSignal,
+    this.noSignal = false,
   });
 
   DiveAudioMeterState copyWith({
@@ -88,36 +88,14 @@ class DiveAudioMeterState {
       noSignal: noSignal ?? this.noSignal,
     );
   }
-
-  @override
-  String toString() {
-    return "channelCount: $channelCount, "
-        "inputPeak: ${inputPeak == null ? 'null' : inputPeak!.sublist(0, channelCount)}, "
-        "inputPeakHold: ${inputPeakHold == null ? 'null' : inputPeakHold!.sublist(0, channelCount)}, "
-        "magnitude: ${magnitude == null ? 'null' : magnitude!.sublist(0, channelCount)}, "
-        "magnitudeAttacked: ${magnitudeAttacked == null ? 'null' : magnitudeAttacked!.sublist(0, channelCount)}, "
-        "peak: ${peak == null ? 'null' : peak!.sublist(0, channelCount)}, "
-        "peakDecayed: ${peakDecayed == null ? 'null' : peakDecayed!.sublist(0, channelCount)}, "
-        "peakHold: ${peakHold == null ? 'null' : peakHold!.sublist(0, channelCount)}, "
-        "inputpPeakHoldLastUpdateTime: $inputpPeakHoldLastUpdateTime, "
-        "peakHoldLastUpdateTime: $peakHoldLastUpdateTime, "
-        "lastUpdateTime: $lastUpdateTime, "
-        "noSignal: $noSignal";
-  }
 }
-
-// class DiveAudioMeterStateNotifier extends StateNotifier<DiveAudioMeterState> {
-//   DiveAudioMeterState get stateModel => state;
-
-//   DiveAudioMeterStateNotifier(DiveAudioMeterState stateModel) : super(stateModel ?? DiveAudioMeterState());
-
-//   void updateState(DiveAudioMeterState stateModel) {
-//     state = stateModel;
-//   }
-// }
 
 /// A class for the audio meter data and processing.
 class DiveAudioMeterSource {
+  final DivePointer pointer;
+
+  DiveAudioMeterSource(this.pointer);
+
   /// Audio meter minumum level (dB)
   static const double audioMinLevel = DiveBaseObslib.audioMinLevel;
 
@@ -125,42 +103,52 @@ class DiveAudioMeterSource {
   static const peakHoldDuration = 20.0; //  seconds
   static const inputPeakHoldDuration = 1.0; // seconds
 
-  DivePointer? _pointer;
-  DivePointer? get pointer => _pointer;
   Timer? _noSignalTimer;
   Stopwatch? _stopwatch;
 
   final provider = StateProvider<DiveAudioMeterState>((ref) => DiveAudioMeterState());
 
   void dispose() {
-    obslib.volumeMeterDestroy(_pointer!);
-    _pointer = null;
-    if (_noSignalTimer != null) {
-      _noSignalTimer!.cancel();
-    }
+    destroy(pointer);
+    _noSignalTimer?.cancel();
   }
 
-  Future<DiveAudioMeterSource?> create({required DiveSource source}) async {
-    _pointer = obslib.volumeMeterCreate();
-    final rv = obslib.volumeMeterAttachSource(_pointer!, source.pointer!);
+  static void destroy(DivePointer pointer) {
+    obslib.volumeMeterDestroy(pointer);
+    pointer.releasePointer();
+  }
+
+  static Future<DiveAudioMeterSource?> create({required DiveSource source}) async {
+    final sourcePointer = source.pointer;
+    if (sourcePointer == null || sourcePointer.isNull) return null;
+
+    final pointer = obslib.volumeMeterCreate();
+    if (pointer.isNull) return null;
+
+    final rv = obslib.volumeMeterAttachSource(pointer, sourcePointer);
     if (!rv) {
       print("DiveAudioMeterSource.create: volumeMeterAttachSource failed");
-      dispose();
+      destroy(pointer);
       return null;
     }
 
-    int channelCount = await obslib.addVolumeMeterCallback(_pointer!.address, _onMeterUpdated);
+    final volumeMeter = DiveAudioMeterSource(pointer);
+    await volumeMeter.initialize();
+    return volumeMeter;
+  }
 
-    DiveCore.container!.read(provider.notifier).state =
+  Future<void> initialize() async {
+    int channelCount = await obslib.addVolumeMeterCallback(pointer.address, _onMeterUpdated);
+
+    DiveCore.container.read(provider.notifier).state =
         _clearDerived(DiveAudioMeterState(channelCount: channelCount));
-    return this;
   }
 
   /// Called when the volume meter is updated.
   void _onMeterUpdated(
       int volumeMeterPointer, List<double> magnitude, List<double> peak, List<double> inputPeak) {
     assert(magnitude.length == peak.length && peak.length == inputPeak.length);
-    if (_pointer!.toInt() != volumeMeterPointer) return;
+    if (pointer.toInt() != volumeMeterPointer) return;
 
     // Determine the elapsed time since the last update (seconds)
     double elapsedTime;
@@ -169,13 +157,13 @@ class DiveAudioMeterSource {
       elapsedTime = 0.0;
     } else {
       elapsedTime = _stopwatch!.elapsedMilliseconds / 1000.0;
-      _stopwatch!.reset();
+      _stopwatch?.reset();
     }
 
     final now = DateTime.now();
 
     // Get the current state
-    var currentState = DiveCore.container!.read(provider.notifier).state;
+    var currentState = DiveCore.container.read(provider.notifier).state;
 
     // Determine the attack of audio since last update (seconds).
     double attackRate = 0.99;
@@ -265,7 +253,7 @@ class DiveAudioMeterSource {
       lastUpdateTime: now,
       noSignal: false,
     );
-    DiveCore.container!.read(provider.notifier).state = newState;
+    DiveCore.container.read(provider.notifier).state = newState;
 
     _startNoSignalTimer();
   }
@@ -280,20 +268,20 @@ class DiveAudioMeterSource {
   /// Start the no signal timer
   void _startNoSignalTimer() {
     if (_noSignalTimer != null) {
-      _noSignalTimer!.cancel();
+      _noSignalTimer?.cancel();
     }
     _noSignalTimer = Timer(const Duration(milliseconds: 500), _noSignalTimeout);
   }
 
   void _noSignalTimeout() {
-    _noSignalTimer!.cancel();
+    _noSignalTimer?.cancel();
     _noSignalTimer = null;
 
-    var currentState = DiveCore.container!.read(provider.notifier).state;
+    var currentState = DiveCore.container.read(provider.notifier).state;
 
     // Update the state and notify
     final newState = _clearDerived(currentState);
-    DiveCore.container!.read(provider.notifier).state = newState;
+    DiveCore.container.read(provider.notifier).state = newState;
   }
 
   DiveAudioMeterState _clearDerived(DiveAudioMeterState state) => state.copyWith(
@@ -308,6 +296,6 @@ class DiveAudioMeterSource {
 
   @override
   String toString() {
-    return "DiveAudioMeterSource: pointer: ${pointer!.address}";
+    return "DiveAudioMeterSource: pointer: ${pointer.address}";
   }
 }

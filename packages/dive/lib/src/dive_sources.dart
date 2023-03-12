@@ -195,7 +195,7 @@ class DiveVideoSource extends DiveSource with DiveTextureSetup {
 
   static Future<DiveVideoSource?> create(DiveInput videoInput) async {
     final source = DiveVideoSource(name: videoInput.name);
-    source.pointer = obslib.createVideoSource(source.trackingUUID, videoInput.name!, videoInput.id!);
+    source.pointer = obslib.createVideoSource(source.trackingUUID, videoInput.name!, videoInput.id);
     await source.setupTexture(source.trackingUUID);
     await obslib.addSourceFrameCallback(source.trackingUUID, source.pointer!.address);
     return source.pointer == null ? null : source;

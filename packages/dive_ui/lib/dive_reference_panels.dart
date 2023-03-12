@@ -4,14 +4,14 @@ import 'package:dive/dive.dart';
 import 'package:equatable/equatable.dart';
 
 class DiveReferencePanel extends Equatable {
-  DiveReferencePanel({this.assignedSource, String id}) : this.id = id == null ? DiveUuid.newId() : id;
+  DiveReferencePanel({this.assignedSource, String? id}) : this.id = id == null ? DiveUuid.newId() : id;
 
-  final DiveSource assignedSource;
+  final DiveSource? assignedSource;
   final String id;
 
   DiveReferencePanel copyWith({
-    DiveSource assignedSource,
-    String id,
+    DiveSource? assignedSource,
+    String? id,
   }) {
     return DiveReferencePanel(
       assignedSource: assignedSource,
@@ -23,7 +23,7 @@ class DiveReferencePanel extends Equatable {
   bool get stringify => true;
 
   @override
-  List<Object> get props => [assignedSource, id];
+  List<Object?> get props => [assignedSource, id];
 }
 
 class DiveReferencePanels extends Equatable {
@@ -33,14 +33,14 @@ class DiveReferencePanels extends Equatable {
 
   static const maxPanelSources = 6;
 
-  final BuiltList<DiveReferencePanel> panels;
+  final BuiltList<DiveReferencePanel?>? panels;
 
   static BuiltList<DiveReferencePanel> defaultPanels() {
     return List<DiveReferencePanel>.generate(maxPanelSources, (index) => DiveReferencePanel()).build();
   }
 
   DiveReferencePanels copyWith({
-    BuiltList<DiveReferencePanel> panels,
+    BuiltList<DiveReferencePanel?>? panels,
   }) {
     return DiveReferencePanels(
       panels: panels ?? this.panels,
@@ -51,14 +51,14 @@ class DiveReferencePanels extends Equatable {
   bool get stringify => true;
 
   @override
-  List<Object> get props => [panels];
+  List<Object?> get props => [panels];
 }
 
 class DiveReferencePanelsCubit extends Cubit<DiveReferencePanels> {
   DiveReferencePanelsCubit() : super(DiveReferencePanels.initial());
 
-  void assignSource(DiveSource source, DiveReferencePanel panel) {
-    int panelIndex = state.panels.indexOf(panel);
+  void assignSource(DiveSource? source, DiveReferencePanel? panel) {
+    int panelIndex = state.panels!.indexOf(panel);
     assert(panelIndex >= 0 && panelIndex < DiveReferencePanels.maxPanelSources);
     if (panelIndex < 0 || panelIndex >= DiveReferencePanels.maxPanelSources) {
       print("DiveReferencePanelsCubit.assignSource panel not found: $panel");
@@ -66,7 +66,7 @@ class DiveReferencePanelsCubit extends Cubit<DiveReferencePanels> {
     }
 
     final newState = state.copyWith(
-        panels: state.panels.rebuild((b) => b[panelIndex] = b[panelIndex].copyWith(assignedSource: source)));
+        panels: state.panels!.rebuild((b) => b[panelIndex] = b[panelIndex]!.copyWith(assignedSource: source)));
 
     emit(newState);
   }

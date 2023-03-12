@@ -7,7 +7,7 @@ import 'package:dive/dive.dart';
 class DiveCameraAppWidget extends StatelessWidget {
   final _elements = DiveCoreElements();
 
-  DiveCameraAppWidget({Key key}) : super(key: key);
+  DiveCameraAppWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,17 +25,17 @@ class DiveCameraAppWidget extends StatelessWidget {
 }
 
 class DiveCameraAppBody extends StatefulWidget {
-  DiveCameraAppBody({Key key, this.elements}) : super(key: key);
+  DiveCameraAppBody({Key? key, this.elements}) : super(key: key);
 
-  final DiveCoreElements elements;
+  final DiveCoreElements? elements;
 
   @override
   _DiveCameraAppBodyState createState() => _DiveCameraAppBodyState();
 }
 
 class _DiveCameraAppBodyState extends State<DiveCameraAppBody> {
-  DiveCore _diveCore;
-  DiveCoreElements _elements;
+  late DiveCore _diveCore;
+  DiveCoreElements? _elements;
   bool _initialized = false;
 
   @override
@@ -53,18 +53,22 @@ class _DiveCameraAppBodyState extends State<DiveCameraAppBody> {
     await _diveCore.setupOBS(DiveCoreResolution.HD);
 
     final scene = DiveScene.create();
-    _elements.updateState((state) => state.copyWith(currentScene: scene));
+    _elements!.updateState((state) => state.copyWith(currentScene: scene));
 
     DiveVideoMix.create().then((mix) {
-      _elements.updateState((state) => state..videoMixes.add(mix));
+      if (mix != null) {
+        _elements!.updateState((state) => state..videoMixes.add(mix));
+      }
     });
 
     DiveInputs.video().forEach((videoInput) {
       print(videoInput);
       DiveVideoSource.create(videoInput).then((source) {
-        _elements.updateState((state) => state
-          ..videoSources.add(source)
-          ..currentScene.addSource(source));
+        if (source != null) {
+          _elements!.updateState((state) => state
+            ..videoSources.add(source)
+            ..currentScene?.addSource(source));
+        }
       });
     });
   }
@@ -77,17 +81,17 @@ class _DiveCameraAppBodyState extends State<DiveCameraAppBody> {
 
 class DiveCameraAppMediaPlayer extends ConsumerWidget {
   const DiveCameraAppMediaPlayer({
-    Key key,
-    @required this.elements,
-    @required this.context,
+    Key? key,
+    required this.elements,
+    required this.context,
   }) : super(key: key);
 
-  final DiveCoreElements elements;
+  final DiveCoreElements? elements;
   final BuildContext context;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(elements.provider);
+    final state = ref.watch(elements!.provider);
     if (state.videoMixes.length == 0) {
       return Container(color: Colors.purple);
     }
@@ -101,9 +105,9 @@ class DiveCameraAppMediaPlayer extends ConsumerWidget {
         elements: elements,
         state: state,
         onTap: (int currentIndex, int newIndex) {
-          final state = elements.state;
+          final state = elements!.state;
           final source = state.videoSources[newIndex];
-          final sceneItem = state.currentScene.findSceneItem(source);
+          final sceneItem = state.currentScene?.findSceneItem(source);
           if (sceneItem != null) {
             sceneItem.setOrder(DiveSceneItemMovement.moveTop);
           }

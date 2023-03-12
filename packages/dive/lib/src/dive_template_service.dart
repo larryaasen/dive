@@ -16,11 +16,11 @@ class TemplateService {
   final provider = StateProvider<TemplateState>((ref) => const TemplateState());
 
   /// The state.
-  TemplateState get state => DiveCore.providerContainer!.read(provider.notifier).state;
+  TemplateState get state => DiveCore.providerContainer.read(provider.notifier).state;
 
   /// Update the state.
   void updateState(TemplateState newState) {
-    final notifier = DiveCore.providerContainer!.read(provider.notifier);
+    final notifier = DiveCore.providerContainer.read(provider.notifier);
     if (notifier.state != newState) {
       notifier.state = newState;
     }

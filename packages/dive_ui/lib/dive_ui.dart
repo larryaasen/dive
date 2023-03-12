@@ -61,17 +61,16 @@ void runDiveUIApp(Widget app) {
   // Configure globally for all Equatable instances via EquatableConfig
   EquatableConfig.stringify = true;
 
-  // Use [ProviderScope] so DiveCore and other modules use
-  // the same [ProviderContainer]
-  runApp(ProviderScope(child: DiveUIApp(child: app)));
+  // Use [ProviderScope] so DiveCore and other modules use the same [ProviderContainer].
+  runApp(ProviderScope(parent: DiveCore.providerContainer, child: DiveUIApp(child: app)));
 }
 
 class DiveUI {
-  /// DiveCore and DiveUI must use the same [ProviderContainer], so it needs
-  /// to be passed to DiveCore at the start.
-  static void setup(BuildContext context) {
-    DiveCore.providerContainer = ProviderScope.containerOf(context);
-  }
+  // /// DiveCore and DiveUI must use the same [ProviderContainer], so it needs
+  // /// to be passed to DiveCore at the start.
+  // static void setup(BuildContext context) {
+  //   DiveCore.providerContainer = ProviderScope.containerOf(context);
+  // }
 
   /// The default icon set.
   static DiveIconSet get iconSet => _iconSet;
@@ -80,10 +79,10 @@ class DiveUI {
 
 /// Use [DiveUIApp] to setup DiveUI before the first [build] is called.
 class DiveUIApp extends StatefulWidget {
-  const DiveUIApp({Key key, this.child}) : super(key: key);
+  const DiveUIApp({Key? key, this.child}) : super(key: key);
 
   /// The [child] contained by the widget.
-  final Widget child;
+  final Widget? child;
 
   @override
   _DiveUIAppState createState() => _DiveUIAppState();
@@ -97,22 +96,22 @@ class _DiveUIAppState extends State<DiveUIApp> {
     if (!_initialized) {
       _initialized = true;
 
-      /// DiveCore and other modules must use the same [ProviderContainer], so
-      /// it needs to be passed to DiveCore at the start.
-      DiveUI.setup(context);
+      // /// DiveCore and other modules must use the same [ProviderContainer], so
+      // /// it needs to be passed to DiveCore at the start.
+      // DiveUI.setup(context);
     }
-    return widget.child;
+    return widget.child!;
   }
 }
 
 class DiveSourceCard extends StatefulWidget {
   DiveSourceCard({this.child, this.item, this.elements, this.referencePanels, this.panel});
 
-  final Widget child;
-  final DiveSceneItem item;
-  final DiveCoreElements elements;
-  final DiveReferencePanelsCubit referencePanels;
-  final DiveReferencePanel panel;
+  final Widget? child;
+  final DiveSceneItem? item;
+  final DiveCoreElements? elements;
+  final DiveReferencePanelsCubit? referencePanels;
+  final DiveReferencePanel? panel;
 
   @override
   _DiveSourceCardState createState() => _DiveSourceCardState();
@@ -167,10 +166,10 @@ class _DiveSourceCardState extends State<DiveSourceCard> {
 /// A [DivePreview] with a [DiveAudioMeter] overlay using a [DiveAudioMeterSource].
 class DiveMeterPreview extends DivePreview {
   DiveMeterPreview({
-    DiveTextureController controller,
-    this.volumeMeter,
-    Key key,
-    double aspectRatio,
+    DiveTextureController? controller,
+    required this.volumeMeter,
+    Key? key,
+    double? aspectRatio,
     this.meterVertical = false,
   }) : super(controller: controller, key: key, aspectRatio: aspectRatio);
 
@@ -186,7 +185,7 @@ class DiveMeterPreview extends DivePreview {
   @override
   Widget build(BuildContext context) {
     final superWidget = super.build(context);
-    if (volumeMeter == null) return superWidget;
+
     final child = SizedBox.expand(
         child: DiveAudioMeter(
       volumeMeter: volumeMeter,
@@ -210,22 +209,22 @@ class DiveMeterPreview extends DivePreview {
 /// A widget showing a preview of an image or video frames using a Flutter [Texture] widget.
 class DivePreview extends StatelessWidget {
   /// Creates a preview widget for the given texture preview controller.
-  const DivePreview({this.controller, Key key, this.aspectRatio}) : super(key: key);
+  const DivePreview({this.controller, Key? key, this.aspectRatio}) : super(key: key);
 
   /// The aspect ratio to attempt to use.
   ///
   /// The aspect ratio is expressed as a ratio of width to height. For example,
   /// a 16:9 width:height aspect ratio would have a value of 16.0/9.0.
-  final double aspectRatio;
+  final double? aspectRatio;
 
   /// The controller for the texture that the preview is shown for. Dive uses
   /// textures in Flutter to display raw image and video frames.
-  final DiveTextureController controller;
+  final DiveTextureController? controller;
 
   @override
   Widget build(BuildContext context) {
-    var texture = controller != null && controller.isInitialized
-        ? Texture(textureId: controller.textureId)
+    var texture = controller != null && controller!.isInitialized && controller!.textureId != null
+        ? Texture(textureId: controller!.textureId!)
         : Container(color: Colors.blue);
 
     final widget = aspectRatio != null ? DiveAspectRatio(aspectRatio: aspectRatio, child: texture) : texture;
@@ -236,25 +235,23 @@ class DivePreview extends StatelessWidget {
 
 class DiveOutputButton extends ConsumerWidget {
   const DiveOutputButton({
-    Key key,
-    @required this.elements,
+    Key? key,
+    required this.elements,
   }) : super(key: key);
 
   final DiveCoreElements elements;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (elements == null) return Container();
-
     final state = ref.watch(elements.provider);
     if (state.streamingOutput == null) return Container();
 
-    return DiveStreamPlayButton(streamingOutput: elements.state.streamingOutput);
+    return DiveStreamPlayButton(streamingOutput: state.streamingOutput!);
   }
 }
 
 class DiveStreamPlayButton extends ConsumerWidget {
-  const DiveStreamPlayButton({Key key, @required DiveOutput streamingOutput, this.iconColor = Colors.white})
+  const DiveStreamPlayButton({Key? key, required DiveOutput streamingOutput, this.iconColor = Colors.white})
       : streamingOutput = streamingOutput,
         super(key: key);
 
@@ -263,10 +260,6 @@ class DiveStreamPlayButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (streamingOutput == null) {
-      return Container();
-    }
-
     final state = ref.watch(streamingOutput.provider);
 
     return IconButton(
@@ -291,8 +284,8 @@ class DiveAspectRatio extends StatelessWidget {
   ///
   /// The [aspectRatio] argument must be a finite number greater than zero.
   const DiveAspectRatio({
-    Key key,
-    @required this.aspectRatio,
+    Key? key,
+    required this.aspectRatio,
     this.child,
   }) : super(key: key);
 
@@ -300,28 +293,28 @@ class DiveAspectRatio extends StatelessWidget {
   ///
   /// The aspect ratio is expressed as a ratio of width to height. For example,
   /// a 16:9 width:height aspect ratio would have a value of 16.0/9.0.
-  final double aspectRatio;
+  final double? aspectRatio;
 
   /// The widget below this widget in the tree.
   ///
   /// {@macro flutter.widgets.ProxyWidget.child}
-  final Widget child;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
     // The aspect ratio must be greater than 0.
-    final ratio = aspectRatio > 0 ? aspectRatio : 1;
+    final ratio = aspectRatio! > 0 ? aspectRatio! : 1;
 
     // Wrap the AspectRatio inside an Align widget to make the AspectRatio
     // widget actually work.
-    return AspectRatio(aspectRatio: ratio, child: child);
+    return AspectRatio(aspectRatio: ratio as double, child: child);
   }
 }
 
 class DiveGrid extends StatelessWidget {
   const DiveGrid({
-    Key key,
-    @required this.aspectRatio,
+    Key? key,
+    required this.aspectRatio,
     this.children = const <Widget>[],
   }) : super(key: key);
 
@@ -352,11 +345,11 @@ class DiveGrid extends StatelessWidget {
 class DiveSourceMenu extends StatefulWidget {
   DiveSourceMenu({this.item, this.elements, this.referencePanels, this.panel, this.onDisplayed});
 
-  final DiveSceneItem item;
-  final DiveCoreElements elements;
-  final DiveReferencePanelsCubit referencePanels;
-  final DiveReferencePanel panel;
-  final DiveBoolCallback onDisplayed;
+  final DiveSceneItem? item;
+  final DiveCoreElements? elements;
+  final DiveReferencePanelsCubit? referencePanels;
+  final DiveReferencePanel? panel;
+  final DiveBoolCallback? onDisplayed;
 
   @override
   _DiveSourceMenuState createState() => _DiveSourceMenuState();
@@ -367,7 +360,7 @@ class _DiveSourceMenuState extends State<DiveSourceMenu> {
     print("_onClear");
     if (widget.referencePanels != null) {
       print("DiveSourceMenu: assign");
-      widget.referencePanels.assignSource(null, widget.panel);
+      widget.referencePanels!.assignSource(null, widget.panel);
     }
   }
 
@@ -387,7 +380,7 @@ class _DiveSourceMenuState extends State<DiveSourceMenu> {
   @override
   Widget build(BuildContext context) {
     // id, menu text, icon, sub menu?
-    final _sourceItems = widget.elements.state.videoSources
+    final _sourceItems = widget.elements!.state.videoSources
         .map((source) => {
               'id': source.trackingUUID,
               'title': source.name,
@@ -430,7 +423,7 @@ class _DiveSourceMenuState extends State<DiveSourceMenu> {
           itemBuilder: (BuildContext context) {
             print("DiveSourceMenu: displayed");
             if (widget.onDisplayed != null) {
-              widget.onDisplayed(true);
+              widget.onDisplayed!(true);
             }
 
             return _popupItems.map((Map<String, dynamic> item) {
@@ -440,7 +433,7 @@ class _DiveSourceMenuState extends State<DiveSourceMenu> {
                       item['subMenu'],
                       onSelected: (item) {
                         if (widget.referencePanels != null) {
-                          widget.referencePanels.assignSource(item['source'], widget.panel);
+                          widget.referencePanels!.assignSource(item['source'] as DiveSource?, widget.panel);
                         }
                       },
                     )
@@ -460,10 +453,10 @@ class _DiveSourceMenuState extends State<DiveSourceMenu> {
           onSelected: (int item) {
             print("DiveSourceMenu.onSelected: $item");
             if (widget.onDisplayed != null) {
-              widget.onDisplayed(false);
+              widget.onDisplayed!(false);
             }
 
-            final callback = _popupItems[item]['callback'] as Function;
+            final callback = _popupItems[item]['callback'] as Function?;
             if (callback != null) {
               callback();
             }
@@ -471,7 +464,7 @@ class _DiveSourceMenuState extends State<DiveSourceMenu> {
           onCanceled: () {
             print("DiveSourceMenu.onCanceled");
             if (widget.onDisplayed != null) {
-              widget.onDisplayed(false);
+              widget.onDisplayed!(false);
             }
           },
         ));
@@ -481,26 +474,26 @@ class _DiveSourceMenuState extends State<DiveSourceMenu> {
 class DiveSubMenu extends StatelessWidget {
   DiveSubMenu(this.title, this.popupItems, {this.onSelected, this.onCanceled});
 
-  final String title;
-  final List<Map<String, Object>> popupItems;
+  final String? title;
+  final List<Map<String, Object>>? popupItems;
 
   /// Called when the user selects a value from the popup menu created by this
   /// menu.
   /// If the popup menu is dismissed without selecting a value, [onCanceled] is
   /// called instead.
-  final void Function(Map<String, Object> item) onSelected;
+  final void Function(Map<String, Object> item)? onSelected;
 
   /// Called when the user dismisses the popup menu without selecting an item.
   ///
   /// If the user selects a value, [onSelected] is called instead.
-  final void Function() onCanceled;
+  final void Function()? onCanceled;
 
   @override
   Widget build(BuildContext context) {
     final mainChild = Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text(title),
+        Text(title!),
         // Spacer(),
         Icon(DiveUI.iconSet.sourceMenuSubmenuRight, size: 30.0),
       ],
@@ -513,10 +506,10 @@ class DiveSubMenu extends StatelessWidget {
           padding: EdgeInsets.only(right: 0.0),
           offset: Offset(0.0, 0.0),
           itemBuilder: (BuildContext context) {
-            return popupItems.map((Map<String, dynamic> item) {
+            return popupItems!.map((Map<String, dynamic> item) {
               return PopupMenuItem<Map<String, Object>>(
                   key: Key('diveSubMenu_${item['id']}'),
-                  value: item,
+                  value: item as Map<String, Object>?,
                   child: Flexible(
                       child: Row(children: <Widget>[
                     Icon(item['icon'], color: Colors.grey),
@@ -532,7 +525,7 @@ class DiveSubMenu extends StatelessWidget {
           },
           onSelected: (item) {
             if (this.onSelected != null) {
-              this.onSelected(item);
+              this.onSelected!(item);
             }
             if (Navigator.canPop(context)) {
               Navigator.pop(context);
@@ -543,7 +536,7 @@ class DiveSubMenu extends StatelessWidget {
               try {
                 // TODO: Fix this exception thrown on this call:
                 //   NoSuchMethodError: The method 'call' was called on null.
-                this.onCanceled();
+                this.onCanceled!();
               } catch (e) {
                 print("Exception in DiveSubMenu onCanceled: $e");
               }
@@ -557,7 +550,7 @@ class DiveSubMenu extends StatelessWidget {
 }
 
 class DiveImagePickerButton extends StatelessWidget {
-  final DiveCoreElements elements;
+  final DiveCoreElements? elements;
 
   DiveImagePickerButton({this.elements});
 
@@ -582,17 +575,17 @@ class DiveImagePickerButton extends StatelessWidget {
       DiveSystemLog.message('DiveImagePickerButton: file=${file.path}', group: 'dive_ui');
 
       // Remove the first image source, assuming it was added here earlier.
-      if (elements.state.imageSources.isNotEmpty) {
-        elements.removeImageSource(elements.state.imageSources.first);
+      if (elements!.state.imageSources.isNotEmpty) {
+        elements!.removeImageSource(elements!.state.imageSources.first);
       }
 
-      elements.addImageSource(file.path);
+      elements!.addImageSource(file.path);
     });
   }
 }
 
 class DiveVideoPickerButton extends StatelessWidget {
-  final DiveCoreElements elements;
+  final DiveCoreElements? elements;
 
   DiveVideoPickerButton({this.elements});
 
@@ -612,12 +605,12 @@ class DiveVideoPickerButton extends StatelessWidget {
       DiveSystemLog.message('DiveVideoPickerButton: file=${file.path}', group: 'dive_ui');
 
       // Remove the first media source, assuming it was added here earlier.
-      if (elements.state.mediaSources.isNotEmpty) {
-        elements.removeMediaSource(elements.state.mediaSources.first);
+      if (elements!.state.mediaSources.isNotEmpty) {
+        elements!.removeMediaSource(elements!.state.mediaSources.first);
       }
 
       // Add the media source.
-      elements.addLocalVideoMediaSource('video', file.path);
+      elements!.addLocalVideoMediaSource('video', file.path);
     });
   }
 }
@@ -625,19 +618,19 @@ class DiveVideoPickerButton extends StatelessWidget {
 /// A widget that displays a vertical list of the video cameras.
 class DiveCameraList extends StatefulWidget {
   const DiveCameraList({
-    Key key,
-    @required this.elements,
-    @required this.state,
+    Key? key,
+    required this.elements,
+    required this.state,
     this.nameOnly = false,
     this.onTap,
   }) : super(key: key);
 
-  final DiveCoreElements elements;
+  final DiveCoreElements? elements;
   final DiveCoreElementsState state;
   final bool nameOnly;
 
   /// Called when the user taps this list tile.
-  final DiveListTapCallback onTap;
+  final DiveListTapCallback? onTap;
 
   @override
   _DiveCameraListState createState() => _DiveCameraListState();
@@ -666,7 +659,7 @@ class _DiveCameraListState extends State<DiveCameraList> {
               onTap: () {
                 bool rv = true;
                 if (widget.onTap != null) {
-                  rv = widget.onTap(_selectedIndex, index);
+                  rv = widget.onTap!(_selectedIndex, index);
                 }
                 if (rv) {
                   setState(() {
@@ -683,9 +676,9 @@ class _DiveCameraListState extends State<DiveCameraList> {
 /// A widget that displays a vertical list of the video cameras.
 class DiveAudioList extends StatefulWidget {
   const DiveAudioList({
-    Key key,
-    @required this.elements,
-    @required this.state,
+    Key? key,
+    required this.elements,
+    required this.state,
     this.nameOnly = false,
     this.onTap,
   }) : super(key: key);
@@ -695,7 +688,7 @@ class DiveAudioList extends StatefulWidget {
   final bool nameOnly;
 
   /// Called when the user taps this list tile.
-  final DiveListTapCallback onTap;
+  final DiveListTapCallback? onTap;
 
   @override
   _DiveAudioListState createState() => _DiveAudioListState();
@@ -714,7 +707,7 @@ class _DiveAudioListState extends State<DiveAudioList> {
             final meter = Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.state.audioSources[index].input.id),
+                Text(widget.state.audioSources[index].input?.id ?? ''),
                 if (vol != null)
                   Container(
                       height: 20,
@@ -726,13 +719,13 @@ class _DiveAudioListState extends State<DiveAudioList> {
 
             return Card(
                 child: ListTile(
-              title: Text(widget.state.audioSources[index].input.name),
+              title: Text(widget.state.audioSources[index].input?.name ?? ''),
               subtitle: meter,
               selected: index == _selectedIndex,
               onTap: () {
                 bool rv = true;
                 if (widget.onTap != null) {
-                  rv = widget.onTap(_selectedIndex, index);
+                  rv = widget.onTap!(_selectedIndex, index);
                 }
                 if (rv) {
                   setState(() {

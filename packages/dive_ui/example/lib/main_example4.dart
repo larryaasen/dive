@@ -4,6 +4,7 @@ import 'package:dive/dive.dart';
 
 /// Dive Example 4 - Streaming
 void main() async {
+  // Configure an app to use Dive with this built in method.
   configDiveApp();
 
   print('Dive Example 4');
@@ -23,18 +24,17 @@ void main() async {
 
 class DiveExample {
   final _elements = DiveCoreElements();
-  DiveCore _diveCore;
+  final _diveCore = DiveCore();
   bool _initialized = false;
 
-  void run() async {
-    await _initialize();
+  void run() {
+    _initialize();
   }
 
   void _initialize() async {
     if (_initialized) return;
     _initialized = true;
 
-    _diveCore = DiveCore();
     await _diveCore.setupOBS(DiveCoreResolution.HD);
 
     // Create the main scene
@@ -43,8 +43,10 @@ class DiveExample {
 
     // Create the main audio source
     DiveAudioSource.create('main audio').then((source) {
-      _elements.updateState((state) => state..audioSources.add(source));
-      _elements.updateState((state) => state..currentScene.addSource(source));
+      if (source != null) {
+        _elements.updateState((state) => state..audioSources.add(source));
+        _elements.updateState((state) => state..currentScene?.addSource(source));
+      }
     });
 
     // Get the first video input
@@ -53,13 +55,15 @@ class DiveExample {
 
     // Create the last video source from the video input
     DiveVideoSource.create(videoInput).then((source) {
-      _elements.updateState((state) => state..videoSources.add(source));
-      // Add the video source to the scene
-      _elements.updateState((state) => state..currentScene.addSource(source));
+      if (source != null) {
+        _elements.updateState((state) => state..videoSources.add(source));
+        // Add the video source to the scene
+        _elements.updateState((state) => state..currentScene?.addSource(source));
+      }
     });
 
     // Create the streaming output
-    var output = DiveOutput();
+    DiveOutput? output = DiveOutput();
 
     // YouTube settings
     // Replace this YouTube key with your own. This one is no longer valid.
@@ -82,12 +86,12 @@ class DiveExample {
 
     Future.delayed(Duration(seconds: streamDuration), () {
       print('Dive example 4: Stopping stream.');
-      output.stop();
+      output?.stop();
       output = null;
 
       final state = _elements.state;
       // Remove the video and audio sources from the scene
-      state.currentScene.removeAllSceneItems();
+      state.currentScene?.removeAllSceneItems();
 
       // Remove the video source from the state
       final videoSource = state.videoSources.removeLast();
@@ -103,8 +107,6 @@ class DiveExample {
       scene.dispose();
 
       _diveCore.shutdown();
-
-      _diveCore = null;
     });
   }
 }

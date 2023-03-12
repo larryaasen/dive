@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({super.key, required this.title});
 
   final String title;
 
@@ -86,17 +86,21 @@ class SourceMenu extends StatelessWidget {
                   children: <Widget>[
                     Icon(Icons.clear, color: Colors.grey),
                     Padding(
-                        padding: EdgeInsets.only(left: 6.0),
-                        child: DiveSubMenu(
-                            'Select source',
-                            [
-                              {
-                                'id': '111',
-                                'title': 'Camera 1',
-                                'icon': Icons.clear,
-                                'subMenu': null,
-                              }
-                            ].toList())),
+                      padding: EdgeInsets.only(left: 6.0),
+                      child: DiveSubMenu(
+                        'Select source',
+                        [
+                          {
+                            'id': '111',
+                            'title': 'Camera 1',
+                            'icon': Icons.clear,
+                            'subMenu': Null,
+                          }
+                        ],
+                        onCanceled: () {},
+                        onSelected: (item) {},
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -115,7 +119,7 @@ class SourceMenu extends StatelessWidget {
 }
 
 class DiveSubMenu extends StatelessWidget {
-  DiveSubMenu(this.title, this.popupItems, {this.onSelected, this.onCanceled});
+  DiveSubMenu(this.title, this.popupItems, {required this.onSelected, required this.onCanceled});
 
   final String title;
   final List<Map<String, Object>> popupItems;
@@ -152,7 +156,7 @@ class DiveSubMenu extends StatelessWidget {
             return popupItems.map((Map<String, dynamic> item) {
               return PopupMenuItem<Map<String, Object>>(
                   key: Key('diveSubMenu_${item['id']}'),
-                  value: item,
+                  value: item as Map<String, Object>?,
                   child: Flexible(
                       child: Row(children: <Widget>[
                     Icon(item['icon'], color: Colors.grey),
@@ -167,17 +171,15 @@ class DiveSubMenu extends StatelessWidget {
             }).toList();
           },
           onSelected: (item) {
-            if (this.onSelected != null) {
-              this.onSelected(item);
-            }
+            this.onSelected(item);
+
             if (Navigator.canPop(context)) {
               Navigator.pop(context);
             }
           },
           onCanceled: () {
-            if (this.onSelected != null) {
-              this.onCanceled();
-            }
+            this.onCanceled();
+
             if (Navigator.canPop(context)) {
               Navigator.pop(context);
             }

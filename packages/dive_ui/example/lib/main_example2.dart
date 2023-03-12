@@ -5,16 +5,39 @@ import 'package:dive/dive.dart';
 
 /// Dive Example 2 - Image Viewer
 void main() {
-  runDiveUIApp(AppWidget());
+  final _elements = DiveCoreElements();
+
+  runDiveUIApp(SampleAppWidget(
+    title: 'Dive Example 2',
+    barTitle: 'Dive Image Viewer Example',
+    elements: _elements,
+    body: BodyWidget(elements: _elements),
+    actions: <Widget>[
+      DiveImagePickerButton(elements: _elements),
+    ],
+  ));
 }
 
-class AppWidget extends StatelessWidget {
-  final _elements = DiveCoreElements();
+class SampleAppWidget extends StatelessWidget {
+  SampleAppWidget({
+    super.key,
+    required this.title,
+    required this.barTitle,
+    required this.elements,
+    required this.body,
+    this.actions,
+  });
+
+  final String title;
+  final String barTitle;
+  final DiveCoreElements elements;
+  final Widget body;
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Dive Example 2',
+        title: title,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -22,18 +45,16 @@ class AppWidget extends StatelessWidget {
         ),
         home: Scaffold(
           appBar: AppBar(
-            title: const Text('Dive Image Viewer Example'),
-            actions: <Widget>[
-              DiveImagePickerButton(elements: _elements),
-            ],
+            title: Text(barTitle),
+            actions: actions,
           ),
-          body: BodyWidget(elements: _elements),
+          body: body,
         ));
   }
 }
 
 class BodyWidget extends StatefulWidget {
-  BodyWidget({Key key, this.elements}) : super(key: key);
+  BodyWidget({super.key, required this.elements});
 
   final DiveCoreElements elements;
 
@@ -42,26 +63,23 @@ class BodyWidget extends StatefulWidget {
 }
 
 class _BodyWidgetState extends State<BodyWidget> {
-  DiveCore _diveCore;
-  DiveCoreElements _elements;
+  final _diveCore = DiveCore();
   bool _initialized = false;
 
   void _initialize(BuildContext context) {
     if (_initialized) return;
 
-    /// DiveCore and other modules must use the same [ProviderContainer], so
-    /// it needs to be passed to DiveCore at the start.
-    DiveUI.setup(context);
+    // /// DiveCore and other modules must use the same [ProviderContainer], so
+    // /// it needs to be passed to DiveCore at the start.
+    // DiveUI.setup(context);
 
-    _elements = widget.elements;
-    _diveCore = DiveCore();
     _diveCore.setupOBS(DiveCoreResolution.HD);
 
     final scene = DiveScene.create();
-    _elements.updateState((state) => state.copyWith(currentScene: scene));
+    widget.elements.updateState((state) => state.copyWith(currentScene: scene));
 
     DiveVideoMix.create().then((mix) {
-      _elements.updateState((state) => state..videoMixes.add(mix));
+      if (mix != null) widget.elements.updateState((state) => state..videoMixes.add(mix));
     });
 
     _initialized = true;
@@ -70,16 +88,12 @@ class _BodyWidgetState extends State<BodyWidget> {
   @override
   Widget build(BuildContext context) {
     _initialize(context);
-    return MediaPlayer(context: context, elements: _elements);
+    return MediaPlayer(context: context, elements: widget.elements);
   }
 }
 
 class MediaPlayer extends ConsumerWidget {
-  const MediaPlayer({
-    Key key,
-    @required this.elements,
-    @required this.context,
-  }) : super(key: key);
+  const MediaPlayer({super.key, required this.elements, required this.context});
 
   final DiveCoreElements elements;
   final BuildContext context;

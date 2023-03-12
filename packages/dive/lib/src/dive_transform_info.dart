@@ -5,17 +5,17 @@ class DiveAlign {
   static const top = (1 << 2);
   static const bottom = (1 << 3);
 
-  final int? alignment;
+  final int alignment;
   DiveAlign({this.alignment = center});
 }
 
 class DiveVec2 {
-  final double? x, y;
+  final double x, y;
 
   DiveVec2(this.x, this.y);
 
   static DiveVec2 fromMap(Map map) {
-    return DiveVec2(map['x'], map['y']);
+    return DiveVec2(map['x'] ?? 0, map['y'] ?? 0);
   }
 
   @override
@@ -105,13 +105,13 @@ class DiveTransformInfo {
 
   Map toMap() {
     return {
-      'pos': {'x': pos!.x, 'y': pos!.y},
+      'pos': pos == null ? null : {'x': pos!.x, 'y': pos!.y},
       'rot': rot,
-      'scale': {'x': scale!.x, 'y': scale!.y},
-      'alignment': alignment!.alignment,
-      'bounds_type': boundsType!.index,
-      'bounds_alignment': boundsAlignment!.alignment,
-      'bounds': {'x': bounds!.x, 'y': bounds!.y},
+      'scale': scale == null ? null : {'x': scale!.x, 'y': scale!.y},
+      'alignment': alignment?.alignment,
+      'bounds_type': boundsType?.index,
+      'bounds_alignment': boundsAlignment?.alignment,
+      'bounds': bounds == null ? null : {'x': bounds!.x, 'y': bounds!.y},
     };
   }
 

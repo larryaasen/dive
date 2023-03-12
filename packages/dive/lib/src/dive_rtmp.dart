@@ -15,7 +15,10 @@ class DiveRTMPServices {
       final rtmpServers = <DiveRTMPServer>[];
       final servers = obslib.streamOutputGetServiceServers(serviceName: serviceName);
       for (var server in servers.keys) {
-        rtmpServers.add(DiveRTMPServer(name: server, url: servers[server]));
+        final url = servers[server];
+        if (url != null) {
+          rtmpServers.add(DiveRTMPServer(name: server, url: url));
+        }
       }
       services.add(DiveRTMPService(name: serviceName, servers: rtmpServers));
     }
@@ -24,14 +27,14 @@ class DiveRTMPServices {
   }
 
   /// Returns the list of the streaming service names.
-  List<String?> get serviceNames => services.map((service) => service.name).toList();
+  List<String> get serviceNames => services.map((service) => service.name).toList();
 
   /// Returns a service for the [serviceName] or null.
   DiveRTMPService? serviceForName(String serviceName) =>
       services.firstWhereOrNull((service) => service.name == serviceName);
 
   /// Returns the server list for a service.
-  List<String?>? serviceServers(String serviceName) {
+  List<String>? serviceServers(String serviceName) {
     final service = serviceForName(serviceName);
     if (service == null) return null;
     return service.serverNames;
@@ -44,16 +47,16 @@ class DiveRTMPServices {
 }
 
 class DiveRTMPService {
-  final String? name;
-  final List<DiveRTMPServer>? servers;
+  final String name;
+  final List<DiveRTMPServer> servers;
 
-  DiveRTMPService({this.name, this.servers});
+  DiveRTMPService({required this.name, required this.servers});
 
   /// Returns the list of the service server names.
-  List<String?> get serverNames => servers!.map((server) => server.name).toList();
+  List<String> get serverNames => servers.map((server) => server.name).toList();
 
   DiveRTMPServer? serverForName(String serverName) =>
-      servers!.firstWhereOrNull((server) => server.name == serverName);
+      servers.firstWhereOrNull((server) => server.name == serverName);
 
   @override
   String toString() {
@@ -62,10 +65,10 @@ class DiveRTMPService {
 }
 
 class DiveRTMPServer {
-  final String? name;
-  final String? url;
+  final String name;
+  final String url;
 
-  DiveRTMPServer({this.name, this.url});
+  DiveRTMPServer({required this.name, required this.url});
 
   @override
   String toString() {

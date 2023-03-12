@@ -30,7 +30,7 @@ class AppWidget extends StatelessWidget {
 }
 
 class BodyWidget extends StatefulWidget {
-  BodyWidget({Key key, this.elements}) : super(key: key);
+  BodyWidget({super.key, required this.elements});
 
   final DiveCoreElements elements;
 
@@ -39,45 +39,45 @@ class BodyWidget extends StatefulWidget {
 }
 
 class _BodyWidgetState extends State<BodyWidget> {
-  DiveCore _diveCore;
-  DiveCoreElements _elements;
+  final _diveCore = DiveCore();
   bool _initialized = false;
 
   void _initialize() async {
     if (_initialized) return;
 
-    _elements = widget.elements;
-    _diveCore = DiveCore();
     await _diveCore.setupOBS(DiveCoreResolution.HD);
 
     final scene = DiveScene.create();
-    _elements.updateState((state) => state.copyWith(currentScene: scene));
+    widget.elements.updateState((state) => state.copyWith(currentScene: scene));
 
     DiveVideoMix.create().then((mix) {
-      _elements.updateState((state) => state..videoMixes.add(mix));
+      if (mix != null) widget.elements.updateState((state) => state..videoMixes.add(mix));
     });
 
     DiveInputs.audio().forEach((audioInput) {
       DiveAudioSource.create("audio", input: audioInput).then((source) {
-        print("created audio source: ${audioInput.id}");
-        _elements.updateState((state) {
-          state.audioSources.add(source);
-          state.currentScene.addSource(source);
-          DiveAudioMeterSource()
-            ..create(source: source).then((volumeMeter) {
+        if (source != null) {
+          print("created audio source: ${audioInput.id}");
+          widget.elements.updateState((state) {
+            state.audioSources.add(source);
+            state.currentScene?.addSource(source);
+            DiveAudioMeterSource.create(source: source).then((volumeMeter) {
               source.volumeMeter = volumeMeter;
             });
-          return state;
-        });
+            return state;
+          });
+        }
       });
     });
 
     DiveInputs.video().forEach((videoInput) {
-      if (videoInput.name.contains('C920')) {
+      if (videoInput.name != null && videoInput.name!.contains('C920')) {
         print(videoInput);
         DiveVideoSource.create(videoInput).then((source) {
-          _elements.updateState((state) => state..videoSources.add(source));
-          _elements.updateState((state) => state..currentScene.addSource(source));
+          if (source != null) {
+            widget.elements.updateState((state) => state..videoSources.add(source));
+            widget.elements.updateState((state) => state..currentScene?.addSource(source));
+          }
         });
       }
     });
@@ -88,16 +88,12 @@ class _BodyWidgetState extends State<BodyWidget> {
   @override
   Widget build(BuildContext context) {
     _initialize();
-    return MediaPlayer(context: context, elements: _elements);
+    return MediaPlayer(context: context, elements: widget.elements);
   }
 }
 
 class MediaPlayer extends ConsumerWidget {
-  const MediaPlayer({
-    Key key,
-    @required this.elements,
-    @required this.context,
-  }) : super(key: key);
+  const MediaPlayer({super.key, required this.elements, required this.context});
 
   final DiveCoreElements elements;
   final BuildContext context;
@@ -109,9 +105,9 @@ class MediaPlayer extends ConsumerWidget {
       return Container(color: Colors.purple);
     }
 
-    final volumeMeterSource =
-        state.audioSources.firstWhere((source) => source.volumeMeter != null, orElse: () => null);
-    final volumeMeter = volumeMeterSource != null ? volumeMeterSource.volumeMeter : null;
+    final volumeMeterSource = state.audioSources.firstWhere((source) => source.volumeMeter != null);
+    final volumeMeter = volumeMeterSource.volumeMeter;
+    if (volumeMeter == null) return SizedBox.shrink();
 
     final videoMix = Container(
         color: Colors.black,

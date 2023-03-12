@@ -4,20 +4,20 @@ import 'dive_position_edit.dart';
 
 /// Update the position of a scene item.
 class DivePositionDialog extends StatefulWidget {
-  DivePositionDialog({Key key, this.item}) : super(key: key);
+  DivePositionDialog({Key? key, this.item}) : super(key: key);
 
-  final DiveSceneItem item;
+  final DiveSceneItem? item;
 
   @override
   _DivePositionDialogState createState() => _DivePositionDialogState();
 }
 
 class _DivePositionDialogState extends State<DivePositionDialog> {
-  DiveTransformInfo _transformInfo;
+  DiveTransformInfo? _transformInfo;
 
   @override
   void initState() {
-    widget.item.getTransformInfo().then((info) {
+    widget.item!.getTransformInfo().then((info) {
       setState(() {
         _transformInfo = info;
       });
@@ -43,13 +43,13 @@ class _DivePositionDialogState extends State<DivePositionDialog> {
 
   void onApply(DiveTransformInfo info) {
     if (widget.item != null) {
-      widget.item.updateTransformInfo(info);
+      widget.item!.updateTransformInfo(info);
     }
   }
 
   void onSetOrder(DiveSceneItemMovement move) {
     if (widget.item != null) {
-      widget.item.setOrder(move);
+      widget.item!.setOrder(move);
     }
   }
 }

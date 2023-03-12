@@ -5,13 +5,13 @@ class DiveInput {
   final String? name;
 
   /// The input id, such as `0x8020000005ac8514`.
-  final String? id;
+  final String id;
 
   /// The input type id, such as `image_source` or `av_capture_input`.
   /// TODO: Should eventually be changed to [DiveInputType].
-  final String? typeId;
+  final String typeId;
 
-  DiveInput({this.name, this.id, this.typeId});
+  DiveInput({this.name, required this.id, required this.typeId});
 
   static DiveInput fromMap(dynamic map) {
     return DiveInput(

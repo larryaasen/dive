@@ -4,9 +4,9 @@ import 'dive_ui.dart';
 
 /// An icon button that presents the stream settings dialog.
 class DiveStreamSettingsButton extends StatelessWidget {
-  const DiveStreamSettingsButton({Key key, this.elements}) : super(key: key);
+  const DiveStreamSettingsButton({Key? key, this.elements}) : super(key: key);
 
-  final DiveCoreElements elements;
+  final DiveCoreElements? elements;
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +23,10 @@ class DiveStreamSettingsButton extends StatelessWidget {
   /// Returns [DiveStreamSettingsDialog].
   Widget dialog(BuildContext context) {
     return DiveStreamSettingsDialog(
-        service: elements.state.streamingOutput == null ? null : elements.state.streamingOutput.service,
-        server: elements.state.streamingOutput == null ? null : elements.state.streamingOutput.server,
-        serviceKey: elements.state.streamingOutput == null ? null : elements.state.streamingOutput.serviceKey,
+        service: elements!.state.streamingOutput == null ? null : elements!.state.streamingOutput!.service,
+        server: elements!.state.streamingOutput == null ? null : elements!.state.streamingOutput!.server,
+        serviceKey:
+            elements!.state.streamingOutput == null ? null : elements!.state.streamingOutput!.serviceKey,
         onApplyCallback: onApply);
   }
 
@@ -39,13 +40,13 @@ class DiveStreamSettingsButton extends StatelessWidget {
   void onApply(DiveRTMPService service, DiveRTMPServer server, String serviceKey) {
     if (elements == null) return;
 
-    final state = elements.state;
+    final state = elements!.state;
     if (state.streamingOutput != null) {
-      state.streamingOutput.stop();
-      state.streamingOutput.service = service;
-      state.streamingOutput.server = server;
-      state.streamingOutput.serviceUrl = server.url;
-      state.streamingOutput.serviceKey = serviceKey;
+      state.streamingOutput!.stop();
+      state.streamingOutput!.service = service;
+      state.streamingOutput!.server = server;
+      state.streamingOutput!.serviceUrl = server.url;
+      state.streamingOutput!.serviceKey = serviceKey;
     }
   }
 }
@@ -58,13 +59,13 @@ typedef DiveStreamSettingsApplyCallback = void Function(
 /// Stream service URL:
 /// Stream service key:
 class DiveStreamSettingsDialog extends StatefulWidget {
-  DiveStreamSettingsDialog({Key key, this.service, this.server, this.serviceKey, this.onApplyCallback})
+  DiveStreamSettingsDialog({Key? key, this.service, this.server, this.serviceKey, this.onApplyCallback})
       : super(key: key);
 
-  final DiveRTMPService service;
-  final DiveRTMPServer server;
-  final String serviceKey;
-  final DiveStreamSettingsApplyCallback onApplyCallback;
+  final DiveRTMPService? service;
+  final DiveRTMPServer? server;
+  final String? serviceKey;
+  final DiveStreamSettingsApplyCallback? onApplyCallback;
 
   @override
   _DiveStreamSettingsDialogState createState() => _DiveStreamSettingsDialogState();
@@ -74,9 +75,9 @@ class _DiveStreamSettingsDialogState extends State<DiveStreamSettingsDialog> {
   final DiveRTMPServices _rtmpServices = DiveRTMPServices.standard(commonNamesOnly: false);
   TextEditingController _serviceUrl = TextEditingController();
   TextEditingController _serviceKey = TextEditingController();
-  String _serviceName;
-  String _serverName;
-  List<String> _serverNames;
+  String? _serviceName;
+  String? _serverName;
+  List<String>? _serverNames;
 
   @override
   void initState() {
@@ -113,30 +114,32 @@ class _DiveStreamSettingsDialogState extends State<DiveStreamSettingsDialog> {
             Padding(padding: EdgeInsets.only(top: 20), child: Text('Service:')),
             DropdownButton<String>(
               isExpanded: true,
-              value: _serviceName.isEmpty ? null : _serviceName,
+              value: _serviceName!.isEmpty ? null : _serviceName,
               itemHeight: null,
-              onChanged: (String name) {
-                setState(() {
-                  _serviceName = name;
-                  _serverNames = _getServerNames(_serviceName);
-                  _serverName = _serverNames[0];
-                  _serviceUrl.text = _getUrlForServer(_serviceName, _serverName);
-                });
+              onChanged: (String? name) {
+                if (name != null) {
+                  setState(() {
+                    _serviceName = name;
+                    _serverNames = _getServerNames(name);
+                    _serverName = _serverNames?[0];
+                    _serviceUrl.text = _getUrlForServer(_serviceName, _serverName) ?? '';
+                  });
+                }
               },
-              items: _items(_rtmpServices.serviceNames),
+              items: _items(_rtmpServices.serviceNames) as List<DropdownMenuItem<String>>?,
             ),
             Padding(padding: EdgeInsets.only(top: 20), child: Text('Server:')),
             DropdownButton<String>(
               isExpanded: true,
-              value: _serverName.isEmpty ? null : _serverName,
+              value: _serverName!.isEmpty ? null : _serverName,
               itemHeight: null,
-              onChanged: (String name) {
+              onChanged: (String? name) {
                 setState(() {
                   _serverName = name;
-                  _serviceUrl.text = _getUrlForServer(_serviceName, _serverName);
+                  _serviceUrl.text = _getUrlForServer(_serviceName!, _serverName!) ?? '';
                 });
               },
-              items: _items(_serverNames),
+              items: _items(_serverNames ?? []) as List<DropdownMenuItem<String>>?,
             ),
             Padding(padding: EdgeInsets.only(top: 20), child: Text('URL:')),
             TextField(controller: _serviceUrl, readOnly: true),
@@ -172,19 +175,24 @@ class _DiveStreamSettingsDialogState extends State<DiveStreamSettingsDialog> {
 
   void _useInitialState() {
     // _serviceUrl.text = widget.serviceUrl;
-    _serviceKey.text = widget.serviceKey;
-    _serviceName = widget.service == null ? 'Twitch' : widget.service.name;
-    _serverNames = _getServerNames(_serviceName);
-    _serverName = widget.server == null ? _serverNames[0] : widget.server.name;
-    _serviceUrl.text = _getUrlForServer(_serviceName, _serverName);
+    _serviceKey.text = widget.serviceKey ?? '';
+    _serviceName = widget.service == null ? 'Twitch' : widget.service?.name;
+    _serverNames = _getServerNames(_serviceName ?? '');
+    _serverName = widget.server != null
+        ? widget.server?.name
+        : _serverNames != null
+            ? _serverNames![0]
+            : null;
+    _serviceUrl.text = _getUrlForServer(_serviceName ?? '', _serverName ?? '') ?? '';
   }
 
-  List<String> _getServerNames(String serviceName) => _rtmpServices.serviceServers(serviceName);
+  List<String>? _getServerNames(String serviceName) => _rtmpServices.serviceServers(serviceName);
 
-  String _getUrlForServer(String serviceName, String serverName) {
+  String? _getUrlForServer(String? serviceName, String? serverName) {
+    if (serviceName == null) return null;
     final service = _rtmpServices.serviceForName(serviceName);
-    final server = service.serverForName(serverName);
-    return server.url;
+    final server = service != null && serverName != null ? service.serverForName(serverName) : null;
+    return server?.url;
   }
 
   void _onReset() {
@@ -192,15 +200,18 @@ class _DiveStreamSettingsDialogState extends State<DiveStreamSettingsDialog> {
       _useInitialState();
     });
 
-    ScaffoldMessenger.maybeOf(context).showSnackBar(SnackBar(
+    ScaffoldMessenger.maybeOf(context)!.showSnackBar(SnackBar(
       content: Text("Properties set back to their original values."),
     ));
   }
 
   void _onApply() {
-    if (widget.onApplyCallback == null) return;
-    final service = _rtmpServices.serviceForName(_serviceName);
-    widget.onApplyCallback(service, service.serverForName(_serverName), _serviceKey.text);
+    if (widget.onApplyCallback == null || _serviceName == null || _serverName == null) return;
+    final service = _rtmpServices.serviceForName(_serviceName!);
+    if (service == null) return;
+    final server = service.serverForName(_serverName!);
+    if (server == null) return;
+    widget.onApplyCallback?.call(service, server, _serviceKey.text);
 
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("Properties have been applied."),

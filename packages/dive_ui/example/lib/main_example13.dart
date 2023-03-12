@@ -35,7 +35,7 @@ class AppWidget extends StatelessWidget {
 }
 
 class BodyWidget extends StatefulWidget {
-  BodyWidget({Key key, this.elements}) : super(key: key);
+  BodyWidget({super.key, required this.elements});
 
   final DiveCoreElements elements;
 
@@ -44,8 +44,7 @@ class BodyWidget extends StatefulWidget {
 }
 
 class _BodyWidgetState extends State<BodyWidget> {
-  DiveCore _diveCore;
-  DiveCoreElements _elements;
+  final _diveCore = DiveCore();
   bool _initialized = false;
 
   @override
@@ -58,12 +57,11 @@ class _BodyWidgetState extends State<BodyWidget> {
     if (_initialized) return;
     _initialized = true;
 
-    _elements = widget.elements;
-    _diveCore = DiveCore();
+    _diveCore;
     await _diveCore.setupOBS(DiveCoreResolution.FULL_HD);
 
     final scene = DiveScene.create();
-    _elements.updateState((state) => state.copyWith(currentScene: scene));
+    widget.elements.updateState((state) => state.copyWith(currentScene: scene));
 
     final settings = DiveSettings();
     settings.set('display', 0); // Display #1
@@ -74,49 +72,55 @@ class _BodyWidgetState extends State<BodyWidget> {
       name: 'display capture 1',
       settings: settings,
     );
-    _elements.updateState((state) {
-      state.sources.add(displayCaptureSource);
-      state.currentScene.addSource(displayCaptureSource).then((item) {
-        // Scale the dispaly down to 50% to make it fit.
-        final info = DiveTransformInfo(scale: DiveVec2(0.5, 0.5));
-        item.updateTransformInfo(info);
+    if (displayCaptureSource != null) {
+      widget.elements.updateState((state) {
+        state.sources.add(displayCaptureSource);
+        state.currentScene?.addSource(displayCaptureSource).then((item) {
+          // Scale the dispaly down to 50% to make it fit.
+          final info = DiveTransformInfo(scale: DiveVec2(0.5, 0.5));
+          item.updateTransformInfo(info);
+        });
+        return state;
       });
-      return state;
-    });
+    }
 
     DiveVideoMix.create().then((mix) {
-      _elements.updateState((state) => state..videoMixes.add(mix));
+      if (mix != null) {
+        widget.elements.updateState((state) => state..videoMixes.add(mix));
+      }
     });
 
     DiveAudioSource.create('main audio').then((source) {
-      setState(() {
-        _elements.updateState((state) => state..audioSources.add(source));
-      });
-      _elements.updateState((state) => state..currentScene.addSource(source));
-
-      DiveAudioMeterSource()
-        ..create(source: source).then((volumeMeter) {
+      if (source != null) {
+        setState(() {
+          widget.elements.updateState((state) => state..audioSources.add(source));
+        });
+        widget.elements.updateState((state) => state..currentScene?.addSource(source));
+        DiveAudioMeterSource.create(source: source).then((volumeMeter) {
           setState(() {
             source.volumeMeter = volumeMeter;
           });
         });
+      }
     });
 
     DiveInputs.video().forEach((videoInput) {
-      if (videoInput.name.contains('Built-in')) {
+      if (videoInput.name != null && videoInput.name!.contains('Built-in')) {
         DiveVideoSource.create(videoInput).then((source) {
-          _elements.updateState((state) {
-            state.videoSources.add(source);
-            state.currentScene.addSource(source).then((item) {
-              final info = DiveTransformInfo(
-                pos: DiveVec2(1350, 760),
-                bounds: DiveVec2(533, 300),
-                boundsType: DiveBoundsType.scaleInner,
-              );
-              item.updateTransformInfo(info);
+          if (source != null) {
+            widget.elements.updateState((state) {
+              state.videoSources.add(source);
+              state.currentScene?.addSource(source).then((item) {
+                final info = DiveTransformInfo(
+                  pos: DiveVec2(1350, 760),
+                  bounds: DiveVec2(533, 300),
+                  boundsType: DiveBoundsType.scaleInner,
+                );
+                item.updateTransformInfo(info);
+              });
+              return state;
             });
-            return state;
-          });
+          }
         });
       }
     });
@@ -131,26 +135,26 @@ class _BodyWidgetState extends State<BodyWidget> {
       if (source != null) {
         source.monitoringType = DiveCoreMonitoringType.none;
         source.volume = DiveCoreLevel.dB(-30.0);
-        _elements.updateState((state) => state
+        widget.elements.updateState((state) => state
           ..mediaSources.add(source)
-          ..currentScene.addSource(source));
+          ..currentScene?.addSource(source));
         source.play();
       }
     });
 
     // Create the streaming output
     final output = DiveOutput();
-    _elements.updateState((state) => state.copyWith(streamingOutput: output));
+    widget.elements.updateState((state) => state.copyWith(streamingOutput: output));
   }
 
   @override
   Widget build(BuildContext context) {
-    return MediaPlayer(context: context, elements: _elements);
+    return MediaPlayer(context: context, elements: widget.elements);
   }
 }
 
 class MediaPlayer extends ConsumerWidget {
-  const MediaPlayer({Key key, @required this.elements, @required this.context}) : super(key: key);
+  const MediaPlayer({super.key, required this.elements, required this.context});
 
   final DiveCoreElements elements;
   final BuildContext context;
@@ -163,7 +167,8 @@ class MediaPlayer extends ConsumerWidget {
     }
 
     final volumeMeterSource = state.audioSources.firstWhere((source) => source.volumeMeter != null);
-    final volumeMeter = volumeMeterSource != null ? volumeMeterSource.volumeMeter : null;
+    final volumeMeter = volumeMeterSource.volumeMeter;
+    if (volumeMeter == null) return SizedBox.shrink();
 
     final videoMix = Container(
         color: Colors.black,

@@ -23,6 +23,7 @@ class DivePointer {
   }
 
   int get address => (pointer as ffi.Pointer).address;
+  bool get isNull => pointer == ffi.nullptr;
 }
 
 class DivePointerData extends DivePointer {

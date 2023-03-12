@@ -41,11 +41,11 @@ class AppWidget extends StatelessWidget {
     final points = [Point<double>(680, 100), Point<double>(200, 370), Point<double>(0, 0)];
     multiCamera = true;
     _elements.updateState((state) {
-      state.currentScene.removeAllSceneItems();
+      state.currentScene?.removeAllSceneItems();
 
       var index = 0;
       state.videoSources.forEach((videoSource) {
-        state.currentScene.addSource(videoSource).then((item) {
+        state.currentScene?.addSource(videoSource).then((item) {
           final point = points[index];
           index++;
           final info = DiveTransformInfo(
@@ -64,7 +64,7 @@ class AppWidget extends StatelessWidget {
     int tickCount = 0;
     Timer.periodic(Duration(milliseconds: 80), (timer) {
       final state = _elements.state;
-      state.currentScene.sceneItems.forEach((item) {
+      state.currentScene?.sceneItems.forEach((item) {
         final height = 350.0;
         final x = (height * DiveCoreAspectRatio.HD.ratio) * (tickCount / ticks);
         final y = height * (tickCount / ticks);
@@ -80,7 +80,7 @@ class AppWidget extends StatelessWidget {
 }
 
 class BodyWidget extends StatefulWidget {
-  BodyWidget({Key key, this.elements}) : super(key: key);
+  BodyWidget({super.key, required this.elements});
 
   final DiveCoreElements elements;
 
@@ -89,8 +89,7 @@ class BodyWidget extends StatefulWidget {
 }
 
 class _BodyWidgetState extends State<BodyWidget> {
-  DiveCore _diveCore;
-  DiveCoreElements _elements;
+  final _diveCore = DiveCore();
   bool _initialized = false;
 
   @override
@@ -103,39 +102,40 @@ class _BodyWidgetState extends State<BodyWidget> {
     if (_initialized) return;
     _initialized = true;
 
-    _elements = widget.elements;
-    _diveCore = DiveCore();
     await _diveCore.setupOBS(DiveCoreResolution.HD);
 
     final scene = DiveScene.create();
-    _elements.updateState((state) => state.copyWith(currentScene: scene));
+    widget.elements.updateState((state) => state.copyWith(currentScene: scene));
 
     DiveVideoMix.create().then((mix) {
-      _elements.updateState((state) => state..videoMixes.add(mix));
+      if (mix != null) widget.elements.updateState((state) => state..videoMixes.add(mix));
     });
 
     DiveAudioSource.create('main audio').then((source) {
-      setState(() {
-        _elements.updateState((state) => state..audioSources.add(source));
-      });
-      _elements.updateState((state) => state..currentScene.addSource(source));
+      if (source != null) {
+        setState(() {
+          widget.elements.updateState((state) => state..audioSources.add(source));
+        });
+        widget.elements.updateState((state) => state..currentScene?.addSource(source));
 
-      DiveAudioMeterSource()
-        ..create(source: source).then((volumeMeter) {
+        DiveAudioMeterSource.create(source: source).then((volumeMeter) {
           setState(() {
             source.volumeMeter = volumeMeter;
           });
         });
+      }
     });
 
     DiveInputs.video().forEach((videoInput) {
       print(videoInput);
       DiveVideoSource.create(videoInput).then((source) {
-        _elements.updateState((state) {
-          state.videoSources.add(source);
-          state.currentScene.addSource(source);
-          return state;
-        });
+        if (source != null) {
+          widget.elements.updateState((state) {
+            state.videoSources.add(source);
+            state.currentScene?.addSource(source);
+            return state;
+          });
+        }
       });
     });
 
@@ -152,21 +152,21 @@ class _BodyWidgetState extends State<BodyWidget> {
     output.serviceKey = 'live_276488556_uIKncv1zAGQ3kz5aVzCvfshg8W4ENC';
     output.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/${output.serviceKey}';
 
-    _elements.updateState((state) => state.copyWith(streamingOutput: output));
+    widget.elements.updateState((state) => state.copyWith(streamingOutput: output));
   }
 
   @override
   Widget build(BuildContext context) {
-    return MediaPlayer(context: context, elements: _elements);
+    return MediaPlayer(context: context, elements: widget.elements);
   }
 }
 
 class MediaPlayer extends ConsumerWidget {
   const MediaPlayer({
-    Key key,
-    @required this.elements,
-    @required this.context,
-  }) : super(key: key);
+    super.key,
+    required this.elements,
+    required this.context,
+  });
 
   final DiveCoreElements elements;
   final BuildContext context;
@@ -179,7 +179,8 @@ class MediaPlayer extends ConsumerWidget {
     }
 
     final volumeMeterSource = state.audioSources.firstWhere((source) => source.volumeMeter != null);
-    final volumeMeter = volumeMeterSource != null ? volumeMeterSource.volumeMeter : null;
+    final volumeMeter = volumeMeterSource.volumeMeter;
+    if (volumeMeter == null) return SizedBox.shrink();
 
     final videoMix = Flexible(
         child: Container(
@@ -197,7 +198,7 @@ class MediaPlayer extends ConsumerWidget {
         onTap: (int currentIndex, int newIndex) {
           final state = elements.state;
           final source = state.videoSources[newIndex];
-          final sceneItem = state.currentScene.findSceneItem(source);
+          final sceneItem = state.currentScene?.findSceneItem(source);
           if (sceneItem != null) {
             sceneItem.setOrder(DiveSceneItemMovement.moveTop);
           }

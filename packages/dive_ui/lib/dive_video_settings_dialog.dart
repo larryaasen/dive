@@ -4,7 +4,7 @@ import 'dive_ui.dart';
 
 /// An icon button that presents the settings dialog.
 class DiveSettingsButton extends StatelessWidget {
-  const DiveSettingsButton({Key key}) : super(key: key);
+  const DiveSettingsButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +34,14 @@ class DiveSettingsButton extends StatelessWidget {
 /// Resolution:
 /// Frame rate:
 class DiveVideoSettingsDialog extends StatefulWidget {
-  DiveVideoSettingsDialog({Key key}) : super(key: key);
+  DiveVideoSettingsDialog({Key? key}) : super(key: key);
 
   @override
   _DiveVideoSettingsDialogState createState() => _DiveVideoSettingsDialogState();
 }
 
 class _DiveVideoSettingsDialogState extends State<DiveVideoSettingsDialog> {
-  DiveVideoInfo _videoInfo;
+  DiveVideoInfo? _videoInfo;
 
   @override
   void initState() {
@@ -67,7 +67,8 @@ class _DiveVideoSettingsDialogState extends State<DiveVideoSettingsDialog> {
 
   /// Frame rate - FPS.
   Widget _buildFPS(BuildContext context) {
-    int groupValue = _videoInfo != null ? DiveCoreFPS.indexOf(_videoInfo.fps) : -1;
+    int groupValue =
+        _videoInfo != null && _videoInfo!.fps != null ? DiveCoreFPS.indexOf(_videoInfo!.fps!) : -1;
 
     final header = Text('Frame rate', style: TextStyle(fontWeight: FontWeight.bold));
     final list = _videoInfo == null
@@ -91,7 +92,7 @@ class _DiveVideoSettingsDialogState extends State<DiveVideoSettingsDialog> {
                       groupValue: groupValue,
                       value: index,
                       visualDensity: VisualDensity.compact,
-                      onChanged: (value) async {
+                      onChanged: (dynamic value) async {
                         await DiveVideoInfo.changeFrameRate(DiveCoreFPS.all[index]);
                         final info = DiveVideoInfo.get();
                         setState(() {
@@ -123,7 +124,9 @@ class _DiveVideoSettingsDialogState extends State<DiveVideoSettingsDialog> {
 
   /// Output resolution.
   Widget _buildResolution(BuildContext context) {
-    int groupValue = _videoInfo != null ? DiveCoreResolution.indexOf(_videoInfo.outputResolution) : -1;
+    int groupValue = _videoInfo != null && _videoInfo!.outputResolution != null
+        ? DiveCoreResolution.indexOf(_videoInfo!.outputResolution!)
+        : -1;
     final header = Text('Resolution', style: TextStyle(fontWeight: FontWeight.bold));
     final list = _videoInfo == null
         ? Container()
@@ -146,7 +149,7 @@ class _DiveVideoSettingsDialogState extends State<DiveVideoSettingsDialog> {
                         groupValue: groupValue,
                         value: index,
                         visualDensity: VisualDensity.compact,
-                        onChanged: (value) async {
+                        onChanged: (dynamic value) async {
                           // Change the output resultion, not the base resolution
                           await DiveVideoInfo.changeResolution(
                               DiveCoreResolution.all[index], DiveCoreResolution.all[index]);

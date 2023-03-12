@@ -8,7 +8,7 @@ import 'package:path/path.dart' as path;
 import 'dive_ui.dart';
 
 class DiveMediaPreview extends DivePreview {
-  DiveMediaPreview(this.mediaSource) : super(controller: mediaSource == null ? null : mediaSource.controller);
+  DiveMediaPreview(this.mediaSource) : super(controller: mediaSource.controller);
 
   final DiveMediaSource mediaSource;
 
@@ -16,16 +16,22 @@ class DiveMediaPreview extends DivePreview {
   Widget build(BuildContext context) {
     final superWidget = super.build(context);
 
-    if (mediaSource == null) return superWidget;
-
     final meterPosition = Rect.fromLTRB(5, 5, 5, 5);
-    final meter = Positioned.fromRect(
-        rect: meterPosition,
-        child: SizedBox.expand(child: DiveAudioMeter(volumeMeter: mediaSource.volumeMeter)));
+    final meter = mediaSource.volumeMeter != null
+        ? Positioned.fromRect(
+            rect: meterPosition,
+            child: SizedBox.expand(
+              child: DiveAudioMeter(volumeMeter: mediaSource.volumeMeter!),
+            ),
+          )
+        : null;
 
-    final file = new File(mediaSource.settings.get('local_file'));
-    String filename = path.basename(file.path);
-    final filenameText = Center(child: Text(filename, style: TextStyle(color: Colors.grey, fontSize: 14)));
+    final localFile = mediaSource.settings?.get<String>('local_file');
+    final file = localFile != null ? File(localFile) : null;
+    final filename = file != null ? path.basename(file.path) : null;
+    final filenameText = filename != null
+        ? Center(child: Text(filename, style: TextStyle(color: Colors.grey, fontSize: 14)))
+        : null;
 
     final buttons = Positioned(
         right: 5, bottom: 5, child: DiveMediaButtonBar(mediaSource: mediaSource, iconColor: Colors.grey));
@@ -33,9 +39,9 @@ class DiveMediaPreview extends DivePreview {
     final stack = Stack(
       children: <Widget>[
         superWidget,
-        filenameText,
+        if (filenameText != null) filenameText,
         buttons,
-        meter,
+        if (meter != null) meter,
       ],
     );
     final content = Container(child: stack, color: Colors.white);
@@ -45,7 +51,7 @@ class DiveMediaPreview extends DivePreview {
 }
 
 class DiveMediaPlayButton extends ConsumerWidget {
-  const DiveMediaPlayButton({Key key, @required DiveMediaSource mediaSource, this.iconColor = Colors.white})
+  const DiveMediaPlayButton({Key? key, required DiveMediaSource mediaSource, this.iconColor = Colors.white})
       : mediaSource = mediaSource,
         super(key: key);
 
@@ -55,12 +61,9 @@ class DiveMediaPlayButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var mediaState;
-    if (mediaSource != null) {
-      final stateModel = ref.watch(mediaSource.provider);
-      mediaState = stateModel.mediaState;
-    } else {
-      mediaState = DiveMediaState.STOPPED;
-    }
+
+    final stateModel = ref.watch(mediaSource.provider);
+    mediaState = stateModel.mediaState;
 
     return IconButton(
       icon: Icon(
@@ -100,7 +103,7 @@ class DiveMediaPlayButton extends ConsumerWidget {
 }
 
 class DiveMediaStopButton extends StatelessWidget {
-  const DiveMediaStopButton({Key key, @required this.mediaSource, this.iconColor = Colors.white})
+  const DiveMediaStopButton({Key? key, required this.mediaSource, this.iconColor = Colors.white})
       : super(key: key);
 
   final DiveMediaSource mediaSource;
@@ -108,8 +111,6 @@ class DiveMediaStopButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (mediaSource == null) return Container();
-
     return IconButton(
       icon: Icon(DiveUI.iconSet.mediaStopButton, color: iconColor),
       tooltip: 'Stop video',
@@ -123,17 +124,13 @@ class DiveMediaStopButton extends StatelessWidget {
 }
 
 class DiveMediaDuration extends ConsumerWidget {
-  const DiveMediaDuration({Key key, @required this.mediaSource, this.textColor}) : super(key: key);
+  const DiveMediaDuration({Key? key, required this.mediaSource, this.textColor}) : super(key: key);
 
   final DiveMediaSource mediaSource;
-  final Color textColor;
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (mediaSource == null) {
-      return Container();
-    }
-
     final stateModel = ref.watch(mediaSource.provider);
     final cur = DiveFormat.formatDuration(Duration(milliseconds: stateModel.currentTime));
     final dur = DiveFormat.formatDuration(Duration(milliseconds: stateModel.duration));
@@ -148,7 +145,7 @@ class DiveMediaDuration extends ConsumerWidget {
 }
 
 class DiveMediaButtonBar extends StatelessWidget {
-  const DiveMediaButtonBar({Key key, @required DiveMediaSource mediaSource, this.iconColor = Colors.white})
+  const DiveMediaButtonBar({Key? key, required DiveMediaSource mediaSource, this.iconColor = Colors.white})
       : mediaSource = mediaSource,
         super(key: key);
 
@@ -157,10 +154,6 @@ class DiveMediaButtonBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (mediaSource == null) {
-      return Container();
-    }
-
     final row = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
