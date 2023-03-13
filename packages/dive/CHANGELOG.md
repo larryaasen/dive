@@ -1,14 +1,19 @@
-# Changelog
-All notable changes to this project will be documented in this file.
+## 0.6.0
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+- Converted all code to null safety.
+- Added support for multiple scenes, and added Example 14 to demonstrate multiple scenes.
+- Updated all examples.
+- Minimum Dart version required is now 2.19.0 and Flutter is 3.7.0.
+- Updated many of the package dependency versions including Riverpod, uuid, ffi, ffigen, and path_provider.
+- Updated the use of Riverpod to version 2.3.1, and changed use of StateNotifierProvider to StateProvider.
+- Added recording features that are not yet finished.
+- Renamed DiveOutput to DiveStreamingOutput.
 
-## [0.5.0]
+## 0.5.0
 
 - Updated dive package to use flutter_lints 1.0.4 and updated code to conform to the lints.
 
-## [0.4.0]
+## 0.4.0
 
 - Updated dependency versions for intl and riverpod, to resolve static analysis warnings.
 - Added DiveSettings class.
@@ -20,12 +25,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 when creating the source.
 - Fixed issues with DiveOutput and streaming to the auto server of Twitch.
 
-## [0.3.0]
+## 0.3.0
 
 - Added class `DiveRTMPServices` to provide a list of streaming services.
 - Added service and server to `DiveOutput`.
 
-## [0.2.0]
+## 0.2.0
 ### Changed
 
 - Updated to dive_obslib 0.1.0.
@@ -42,11 +47,11 @@ when creating the source.
 
 - Added default audio monitoring.
 
-## [0.1.0]
+## 0.1.0
 
 The first release incorporating the use of dive_obslib.
 
-## [0.1.0-alpha.1]
+## 0.1.0-alpha.1
 
 Initial release of alpha code. Not ready for production use. More features to
 be added soon.
