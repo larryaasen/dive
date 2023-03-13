@@ -37,39 +37,25 @@ first to get familiar with the widgets and classes that are part of Dive.
 button, click Download ZIP.
 1. Once the repo has been downloaded, open/uncompress the zip file. It should create the folder `dive-main`.
 1. Open the path `dive-main/packages/dive_ui/example` in an IDE such as [Visual Studio Code](https://code.visualstudio.com/) or Android Studio.
-1. Open a TERMINAL window in your IDE.
-1. Make sure the current working directory (pwd) is `dive-main/packages/dive_ui/example`.
-1. Since this example will not run using the IDE run command, you need to run it from the command line.
-7. In the TERMINAL run this command: `flutter run lib/main_example1.dart -d macos`. You should see output
-like this:
-```
-Launching lib/main_example1.dart on macOS in debug mode...
-...
-Building macOS application...                                           
-Error waiting for a debug connection: The log reader stopped unexpectedly, or never started.
-Error launching application on macOS.
-```
-That command was successful in building the app, but not connecting to the log reader, so it terminated. This
-[issue was recorded with Flutter](https://github.com/flutter/flutter/issues/82630) on May 15, 2021
-and is still open. That is ok because we can run it from Xcode. 
-
-8. Open the workspace in Xcode by loading this workspace: `dive-main/packages/dive_ui/example/macos/Runner.xcworkspace`
-9. Once the workspace is loaded, run the app with ⌘R (Run).
-10. The app should run and appear like this:
+1. Navigate to packages > dive_ui > example > lib.
+1. There you will see many example files.
+1. Right click on main_example1.dart and run it.
+1. If the macOS app does not build properly, you may have to make some path changes to get it working.
+1. The app should run and appear like this:
 
 ![image](screenshots/example-1.png)
 
-11. Click the camera icon in the top right corner of the app window.
-12. Select a video file from your local drive, such as an MP4 file, and click Open.
-13. The video file should start playing immediately.
-14. You should be able to see the player controls at the bottom of the screen. If you don't,
+1. Click the camera icon in the top right corner of the app window.
+1. Select a video file from your local drive, such as an MP4 file, and click Open.
+1. The video file should start playing immediately.
+1. You should be able to see the player controls at the bottom of the screen. If you don't,
 just resize the window until they appear. The player controls will not be displayed until
 a video file is opened.
 
 ![image](screenshots/example-1-controls.png)
 
-15. Now that you have successfully run the first `dive_ui` example, you can run the
-other examples located in the same folder as `dive_ui/sexample/lib/main_example1.dart`.
+1. Now that you have successfully run the first `dive_ui` example, you can run the
+other examples located in the same folder as `dive_ui/example/lib/main_example1.dart`.
 
 If you run into any issues with these steps, please create a Dive GitHub
 issue [here](https://github.com/larryaasen/dive/issues).

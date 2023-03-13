@@ -12,8 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  dive:
-    path: ../dive
+  dive: ^0.6.0
 
   # From bloclibrary.dev: easy to implement the BLoC Design Pattern
   bloc: ^8.1.1
@@ -41,6 +40,9 @@ dependencies:
 
   # From Dart Team: provides internationalization and localization facilities, including message translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
   intl: ^0.17.0
+
+  # From Dart team:
+  path: ^1.8.2
 
   # From Dart team:
   path_provider: ^2.0.13

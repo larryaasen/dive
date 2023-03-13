@@ -24,15 +24,12 @@ class DiveTopicCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ButtonStyle bStyle = ButtonStyle(
-      foregroundColor:
-          MaterialStateProperty.all<Color>(const Color(0xFF6200EE)),
+      foregroundColor: MaterialStateProperty.all<Color>(const Color(0xFF6200EE)),
     );
     final buttons = buttonTitles == null
         ? null
-        : buttonTitles!.map((title) => TextButton(
-            style: bStyle,
-            onPressed: () => null,
-            child: Text(title.toUpperCase())));
+        : buttonTitles!.map(
+            (title) => TextButton(style: bStyle, onPressed: () => null, child: Text(title.toUpperCase())));
     final card = Card(
       clipBehavior: Clip.antiAlias,
       child: Column(
@@ -65,8 +62,7 @@ class DiveTopicCard extends StatelessWidget {
               ),
             ),
           if (buttons != null && buttons.isNotEmpty)
-            ButtonBar(
-                alignment: MainAxisAlignment.start, children: buttons.toList()),
+            ButtonBar(alignment: MainAxisAlignment.start, children: buttons.toList()),
         ],
       ),
     );
@@ -75,11 +71,10 @@ class DiveTopicCard extends StatelessWidget {
 
   factory DiveTopicCard.sample({int sampleNumber = 1}) {
     Widget? richMedia;
-    dynamic buttonTitles = null;
+    List<String>? buttonTitles;
     String headerText = 'Card title';
     String subheadText = 'Secondary text';
-    String supportingText =
-        'Greyhound divisively hello coldly wonderfully marginally far upon excluding.';
+    String supportingText = 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.';
     switch (sampleNumber) {
       case 1:
         richMedia = Image.memory(base64Decode(demoImageUrl));
@@ -94,8 +89,7 @@ class DiveTopicCard extends StatelessWidget {
         richMedia = Container(
           width: 180,
           height: 220,
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.purpleAccent.shade100)),
+          decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100)),
           child: Center(child: Text('Centered Text')),
         );
         break;
