@@ -64,11 +64,6 @@ class DiveExample {
     });
 
     // Create the streaming output
-    final recordingOutput = DiveRecordingOutput();
-    print("Dive example 4: Start recording.");
-    recordingOutput.start();
-
-    // Create the streaming output
     final streamingOutput = DiveStreamingOutput();
 
     // YouTube settings
@@ -84,8 +79,8 @@ class DiveExample {
     _elements.updateState((state) => state.copyWith(streamingOutput: streamingOutput));
 
     // Start streaming
-    // print("Dive example 4: Starting stream.");
-    // streamingOutput.start();
+    print("Dive example 4: Starting stream.");
+    streamingOutput.start();
 
     const streamDuration = 30;
     print('Dive example 4: Waiting $streamDuration seconds.');
@@ -94,9 +89,6 @@ class DiveExample {
       print('Dive example 4: Stopping stream.');
       streamingOutput.stop();
       streamingOutput.dispose();
-
-      recordingOutput.stop();
-      recordingOutput.dispose();
 
       final state = _elements.state;
       // Remove the video and audio sources from the scene

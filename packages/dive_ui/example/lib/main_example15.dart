@@ -8,7 +8,7 @@ import 'package:dive/dive.dart';
 
 bool multiCamera = false;
 
-/// Dive Example 5 - Multi Camera Mix
+/// Dive Example 15 - Multi Camera Streaming and Recording
 void main() {
   runDiveUIApp(AppWidget());
 }
@@ -19,7 +19,7 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Dive Example 5',
+        title: 'Dive Example 15',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -27,7 +27,7 @@ class AppWidget extends StatelessWidget {
         ),
         home: Scaffold(
           appBar: AppBar(
-            title: const Text('Dive Multi Camera Mix Example'),
+            title: const Text('Dive Multi Camera Streaming and Recording Example'),
             actions: <Widget>[
               IconButton(icon: Icon(Icons.all_inbox_rounded), onPressed: () => _switchToMultiCamera()),
               DiveOutputButton(elements: _elements),
@@ -140,7 +140,7 @@ class _BodyWidgetState extends State<BodyWidget> {
     });
 
     // Create the streaming output
-    final output = DiveStreamingOutput();
+    final streamingOutput = DiveStreamingOutput();
 
     // YouTube settings
     // Replace this YouTube key with your own. This one is no longer valid.
@@ -149,10 +149,17 @@ class _BodyWidgetState extends State<BodyWidget> {
 
     // Twitch Settings
     // Replace this Twitch key with your own. This one is no longer valid.
-    output.serviceKey = 'live_276488556_uIKncv1zAGQ3kz5aVzCvfshg8W4ENC';
-    output.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/${output.serviceKey}';
+    streamingOutput.serviceKey = '-----';
+    streamingOutput.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/${streamingOutput.serviceKey}';
 
-    widget.elements.updateState((state) => state.copyWith(streamingOutput: output));
+    widget.elements.updateState((state) => state.copyWith(streamingOutput: streamingOutput));
+
+    // Create the recording output
+    final recordingOutput = DiveRecordingOutput();
+    widget.elements.updateState((state) => state.copyWith(recordingOutput: recordingOutput));
+
+    // Start recording.
+    recordingOutput.start('/Users/larry/Movies/dive/dive1.mkv');
   }
 
   @override

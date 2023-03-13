@@ -14,7 +14,8 @@ dependencies:
 
   collection: ^1.17.0
 
-  dive_obslib: ^0.4.0
+  dive_obslib:
+    path: ../dive_obslib
 
   # From fluttetcommunity.dev: Simplify Dart Equality Comparisons
   equatable: ^2.0.5

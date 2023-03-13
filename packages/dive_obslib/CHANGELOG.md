@@ -1,3 +1,7 @@
+## Next
+
+- Added path parameter to the recordingOutputCreate method.
+
 ## 0.4.0
 
 - Converted all code to null safety.

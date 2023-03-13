@@ -4,6 +4,7 @@ import 'package:riverpod/riverpod.dart';
 import 'dive_audio_meter_source.dart';
 import 'dive_core.dart';
 import 'dive_media_source.dart';
+import 'dive_recording_output.dart';
 import 'dive_streaming_output.dart';
 import 'dive_scene.dart';
 import 'dive_sources.dart';
@@ -41,6 +42,7 @@ class DiveCoreElementsState extends Equatable {
   final List<DiveSource> sources;
   final Iterable<DiveScene> scenes;
   final List<DiveVideoMix> videoMixes;
+  final DiveRecordingOutput? recordingOutput;
   final DiveStreamingOutput? streamingOutput;
   final DiveScene? currentScene;
 
@@ -52,6 +54,7 @@ class DiveCoreElementsState extends Equatable {
       List<DiveSource>? sources,
       Iterable<DiveScene>? scenes,
       List<DiveVideoMix>? videoMixes,
+      this.recordingOutput,
       this.streamingOutput,
       this.currentScene})
       : audioSources = audioSources ?? const [],
@@ -71,6 +74,7 @@ class DiveCoreElementsState extends Equatable {
     List<DiveSource>? sources,
     Iterable<DiveScene>? scenes,
     List<DiveVideoMix>? videoMixes,
+    DiveRecordingOutput? recordingOutput,
     DiveStreamingOutput? streamingOutput,
     DiveScene? currentScene,
   }) {
@@ -82,6 +86,7 @@ class DiveCoreElementsState extends Equatable {
       sources: sources ?? this.sources,
       scenes: scenes ?? this.scenes,
       videoMixes: videoMixes ?? this.videoMixes,
+      recordingOutput: recordingOutput ?? this.recordingOutput,
       streamingOutput: streamingOutput ?? this.streamingOutput,
       currentScene: currentScene ?? this.currentScene,
     );
@@ -95,6 +100,7 @@ class DiveCoreElementsState extends Equatable {
     bool sources = false,
     bool scenes = false,
     bool videoMixes = false,
+    bool recordingOutput = false,
     bool streamingOutput = false,
     bool currentScene = false,
   }) {
@@ -106,6 +112,7 @@ class DiveCoreElementsState extends Equatable {
       sources: sources ? null : this.sources,
       scenes: scenes ? null : this.scenes,
       videoMixes: videoMixes ? null : this.videoMixes,
+      recordingOutput: recordingOutput ? null : this.recordingOutput,
       streamingOutput: streamingOutput ? null : this.streamingOutput,
       currentScene: currentScene ? null : this.currentScene,
     );
@@ -120,39 +127,10 @@ class DiveCoreElementsState extends Equatable {
         sources,
         scenes,
         videoMixes,
+        recordingOutput,
         streamingOutput,
         currentScene,
       ];
-
-  // @override
-  // bool operator ==(Object other) {
-  //   if (identical(this, other)) return true;
-  //   final listEquals = const DeepCollectionEquality().equals;
-
-  //   return other is DiveCoreElementsState &&
-  //       listEquals(other.audioSources, audioSources) &&
-  //       listEquals(other.imageSources, imageSources) &&
-  //       listEquals(other.mediaSources, mediaSources) &&
-  //       listEquals(other.videoSources, videoSources) &&
-  //       listEquals(other.scenes, scenes) &&
-  //       listEquals(other.sources, sources) &&
-  //       listEquals(other.videoMixes, videoMixes) &&
-  //       other.streamingOutput == streamingOutput &&
-  //       other.currentScene == currentScene;
-  // }
-
-  // @override
-  // int get hashCode {
-  //   return audioSources.hashCode ^
-  //       imageSources.hashCode ^
-  //       mediaSources.hashCode ^
-  //       videoSources.hashCode ^
-  //       scenes.hashCode ^
-  //       sources.hashCode ^
-  //       videoMixes.hashCode ^
-  //       streamingOutput.hashCode ^
-  //       currentScene.hashCode;
-  // }
 }
 
 /// The core elements used in a Dive app.

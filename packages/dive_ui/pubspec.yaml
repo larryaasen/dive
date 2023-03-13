@@ -12,7 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  dive: ^0.6.0
+  dive:
+    path: ../dive
 
   # From bloclibrary.dev: easy to implement the BLoC Design Pattern
   bloc: ^8.1.1

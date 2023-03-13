@@ -1,3 +1,8 @@
+## Next
+
+- Added path parameter to the start method of the DiveRecordingOutput class.
+- Added DiveRecordingOutput to DiveCoreElementsState for recording.
+
 ## 0.6.0
 
 - Converted all code to null safety.

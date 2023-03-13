@@ -29,16 +29,18 @@ class DiveRecordingOutput {
     stop();
   }
 
-  bool start() {
+  /// Start recording locally at the [path] specified.
+  /// "/Users/larry/Movies/larry1.mkv"
+  bool start(String path) {
     if (_output != null) {
       stop();
     }
-    DiveSystemLog.message('DiveRecordingOutput.start');
+    DiveSystemLog.message('DiveRecordingOutput.start at path: $path');
 
     // Create recording service
-    _output = obslib.recordingOutputCreate(outputName: 'tbd', outputType: outputType);
+    _output = obslib.recordingOutputCreate(path: path, outputName: 'tbd', outputType: outputType);
     if (_output == null) {
-      DiveSystemLog.error('DiveRecordingOutput.start failed');
+      DiveSystemLog.error('DiveRecordingOutput.start output create failed');
       return false;
     }
 
@@ -46,6 +48,8 @@ class DiveRecordingOutput {
     final rv = obslib.outputStart(_output!);
     if (rv) {
       _syncState(_updateState, repeating: true);
+    } else {
+      DiveSystemLog.error('DiveRecordingOutput.start output start failed');
     }
     return rv;
   }

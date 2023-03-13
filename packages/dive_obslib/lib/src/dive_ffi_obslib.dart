@@ -305,9 +305,10 @@ extension DiveFFIObslib on DiveBaseObslib {
 
   /// Recording Controls
 
-  /// Create the recording output.
+  /// Create the recording output at the specified [path],
   /// Returns a pointer or null.
   DivePointerOutput? recordingOutputCreate({
+    required String path,
     required String outputName,
     String outputType = 'ffmpeg_muxer',
   }) {
@@ -331,7 +332,7 @@ extension DiveFFIObslib on DiveBaseObslib {
     // _lib.obs_encoder_release(aencoder);
 
     final outputSettings = DiveObslibData();
-    outputSettings.setString("path", "/Users/larry/Movies/larry1.mkv");
+    outputSettings.setString("path", path);
     outputSettings.setString("muxer_settings", "");
     outputSettings.setString("format_name", "avi");
     outputSettings.setString("video_encoder", "utvideo");
