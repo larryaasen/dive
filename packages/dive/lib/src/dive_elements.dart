@@ -4,7 +4,7 @@ import 'package:riverpod/riverpod.dart';
 import 'dive_audio_meter_source.dart';
 import 'dive_core.dart';
 import 'dive_media_source.dart';
-import 'dive_output.dart';
+import 'dive_streaming_output.dart';
 import 'dive_scene.dart';
 import 'dive_sources.dart';
 
@@ -41,7 +41,7 @@ class DiveCoreElementsState extends Equatable {
   final List<DiveSource> sources;
   final Iterable<DiveScene> scenes;
   final List<DiveVideoMix> videoMixes;
-  final DiveOutput? streamingOutput;
+  final DiveStreamingOutput? streamingOutput;
   final DiveScene? currentScene;
 
   const DiveCoreElementsState(
@@ -71,7 +71,7 @@ class DiveCoreElementsState extends Equatable {
     List<DiveSource>? sources,
     Iterable<DiveScene>? scenes,
     List<DiveVideoMix>? videoMixes,
-    DiveOutput? streamingOutput,
+    DiveStreamingOutput? streamingOutput,
     DiveScene? currentScene,
   }) {
     return DiveCoreElementsState(

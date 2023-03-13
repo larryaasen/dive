@@ -140,7 +140,7 @@ class _BodyWidgetState extends State<BodyWidget> {
     });
 
     // Create the streaming output
-    final output = DiveOutput();
+    final output = DiveStreamingOutput();
 
     // YouTube settings
     // Replace this YouTube key with your own. This one is no longer valid.

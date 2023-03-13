@@ -1,28 +1,24 @@
 import 'dart:async';
-import 'package:dive/dive.dart';
+
 import 'package:dive_obslib/dive_obslib.dart';
 import 'package:flutter/material.dart';
 import 'package:riverpod/riverpod.dart';
 
-enum DiveOutputStreamingState { stopped, active, paused, reconnecting }
+import 'dive_core.dart';
+import 'dive_system_log.dart';
+
+enum DiveOutputRecordingState { stopped, active, paused }
 
 /// Signature for the state syncer.
 typedef _DiveSyncer = Future<void> Function();
 
-/// Streaming output.
-class DiveOutput {
-  DiveOutput();
+/// Recording output.
+class DiveRecordingOutput {
+  final outputType = 'ffmpeg_muxer';
 
-  DiveRTMPService? service;
-  DiveRTMPServer? server;
-  String serviceUrl = '';
-  String serviceKey = '';
-  String serviceId = 'rtmp_common';
-  String outputType = 'rtmp_output';
-
-  final provider = StateProvider<DiveOutputStreamingState>((ref) {
-    return DiveOutputStreamingState.stopped;
-  }, name: 'output-provider');
+  final provider = StateProvider<DiveOutputRecordingState>((ref) {
+    return DiveOutputRecordingState.stopped;
+  }, name: 'output-recording-provider');
 
   DivePointerOutput? _output;
   Timer? _timer;
@@ -37,23 +33,17 @@ class DiveOutput {
     if (_output != null) {
       stop();
     }
-    DiveSystemLog.message('DiveOutput.start');
+    DiveSystemLog.message('DiveRecordingOutput.start');
 
-    // Create streaming service
-    _output = obslib.streamOutputCreate(
-      serviceName: service?.name ?? 'tbd',
-      serviceUrl: serviceUrl,
-      serviceKey: serviceKey,
-      serviceId: serviceId,
-      outputType: outputType,
-    );
+    // Create recording service
+    _output = obslib.recordingOutputCreate(outputName: 'tbd', outputType: outputType);
     if (_output == null) {
-      DiveSystemLog.error('DiveOutput.start failed');
+      DiveSystemLog.error('DiveRecordingOutput.start failed');
       return false;
     }
 
-    // Start streaming.
-    final rv = obslib.streamOutputStart(_output!);
+    // Start recording.
+    final rv = obslib.outputStart(_output!);
     if (rv) {
       _syncState(_updateState, repeating: true);
     }
@@ -63,16 +53,16 @@ class DiveOutput {
   // Always call this method `stop` to ensure the resources are cleaned up.
   bool stop() {
     if (_output == null) return false;
-    DiveSystemLog.message('DiveOutput.stop');
-    obslib.streamOutputStop(_output!);
-    obslib.streamOutputRelease(_output!);
+    DiveSystemLog.message('DiveRecordingOutput.stop');
+    obslib.outputStop(_output!);
+    obslib.outputRelease(_output!);
     _output = null;
 
     // Assume the state is now stopped. However, this is making an assumption. It takes a short
     // amount of time for the output to actually be fully stopped.
     // TODO: This should be improved to use signals and other techniques to determine when the output
     // has stopped.
-    DiveCore.container.read(provider.notifier).state = DiveOutputStreamingState.stopped;
+    DiveCore.container.read(provider.notifier).state = DiveOutputRecordingState.stopped;
 
     return true;
   }
@@ -108,8 +98,8 @@ class DiveOutput {
   /// Sync the media state from the media source to the state provider.
   Future<void> _updateState() async {
     if (_output == null) return;
-    final state = DiveOutputStreamingState.values[obslib.streamOutputGetState(_output!)];
+    final state = DiveOutputRecordingState.values[obslib.outputGetState(_output!)];
     DiveCore.container.read(provider.notifier).state = state;
-    if (state == DiveOutputStreamingState.stopped) {}
+    if (state == DiveOutputRecordingState.stopped) {}
   }
 }

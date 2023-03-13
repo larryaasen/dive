@@ -1,10 +1,9 @@
-# Changelog
-All notable changes to this project will be documented in this file.
+## 0.4.0
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+- Converted all code to null safety.
+- Minimum Dart version required is now 2.19.0 and Flutter is 3.7.0.
 
-## [0.3.0]
+## 0.3.0
 
 - Changed DiveFFIObslib inputTypes() to get inputTypes.
 - Added example to dive_obslib.
@@ -15,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 with services that use "auto" server URLs.
 - Added source set/get volume and monitoring type.
 
-## [0.2.0]
+## 0.2.0
 
 - Changed method `outputGetState` to `streamOutputGetState`.
 - Added methods `streamOutputGetServiceNames` and `streamOutputGetServiceServers` to DiveFFIObslib
@@ -23,7 +22,7 @@ to get service properties for streaming services.
 - Added `modify` method to DiveObslibData.
 - Added Int8Extensions.
 
-## [0.1.0]
+## 0.1.0
 ### Changed
 
 - Updated the ffi package to 1.1.2 and ffigen package to 4.1.3 for null safety.
@@ -43,7 +42,7 @@ to get service properties for streaming services.
 - Added comments to code.
 - Added audio monitoring improvements.
 
-## [0.0.1]
+## 0.0.1
 ### Added
 
 - Initial release. A Flutter plugin package that provides low level access to

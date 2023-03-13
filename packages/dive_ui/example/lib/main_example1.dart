@@ -49,6 +49,9 @@ class _BodyWidgetState extends State<BodyWidget> {
   }
 
   void _initialize() async {
+    if (_initialized) return;
+    _initialized = true;
+
     await _diveCore.setupOBS(DiveCoreResolution.HD);
 
     // Create the main scene.

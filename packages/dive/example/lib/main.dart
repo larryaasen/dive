@@ -48,7 +48,7 @@ class DiveExample {
     });
 
     // Create the streaming output
-    var output = DiveOutput();
+    var output = DiveStreamingOutput();
 
     // YouTube settings
     // Replace this YouTube key with your own. This one is no longer valid.

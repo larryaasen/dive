@@ -303,6 +303,48 @@ extension DiveFFIObslib on DiveBaseObslib {
   //     };
   // }
 
+  /// Recording Controls
+
+  /// Create the recording output.
+  /// Returns a pointer or null.
+  DivePointerOutput? recordingOutputCreate({
+    required String outputName,
+    String outputType = 'ffmpeg_muxer',
+  }) {
+    final recordingOutput =
+        _lib.obs_output_create(outputType.int8(), outputName.int8(), ffi.nullptr, ffi.nullptr);
+    if (recordingOutput == ffi.nullptr) {
+      print("creation of recording output type $outputType failed");
+      return null;
+    }
+
+    final vencoder = _lib.obs_video_encoder_create(
+        "obs_x264".int8(), "simple_h264_stream".int8(), ffi.nullptr, ffi.nullptr);
+    final aencoder =
+        _lib.obs_audio_encoder_create("ffmpeg_aac".int8(), "test_aac".int8(), ffi.nullptr, 0, ffi.nullptr);
+    _lib.obs_encoder_set_video(vencoder, _lib.obs_get_video());
+    _lib.obs_encoder_set_audio(aencoder, _lib.obs_get_audio());
+    _lib.obs_output_set_video_encoder(recordingOutput, vencoder);
+    _lib.obs_output_set_audio_encoder(recordingOutput, aencoder, 0);
+
+    // _lib.obs_encoder_release(vencoder);
+    // _lib.obs_encoder_release(aencoder);
+
+    final outputSettings = DiveObslibData();
+    outputSettings.setString("path", "/Users/larry/Movies/larry1.mkv");
+    outputSettings.setString("muxer_settings", "");
+    outputSettings.setString("format_name", "avi");
+    outputSettings.setString("video_encoder", "utvideo");
+    outputSettings.setString("audio_encoder", "pcm_s16le");
+    _lib.obs_output_update(recordingOutput, outputSettings.pointer);
+    outputSettings.dispose();
+
+    final aMixes = 1;
+    _lib.obs_output_set_mixers(recordingOutput, aMixes);
+
+    return DivePointerOutput(recordingOutput);
+  }
+
   /// Stream Controls
 
   /// Create the stream output.
@@ -330,8 +372,8 @@ extension DiveFFIObslib on DiveBaseObslib {
       return null;
     }
 
-    final vencoder =
-        _lib.obs_video_encoder_create("obs_x264".int8(), "test_x264".int8(), ffi.nullptr, ffi.nullptr);
+    final vencoder = _lib.obs_video_encoder_create(
+        "obs_x264".int8(), "simple_h264_stream".int8(), ffi.nullptr, ffi.nullptr);
     final aencoder =
         _lib.obs_audio_encoder_create("ffmpeg_aac".int8(), "test_aac".int8(), ffi.nullptr, 0, ffi.nullptr);
     _lib.obs_encoder_set_video(vencoder, _lib.obs_get_video());
@@ -355,23 +397,23 @@ extension DiveFFIObslib on DiveBaseObslib {
     return DivePointerOutput(streamOutput);
   }
 
-  /// Release the stream output.
-  bool streamOutputRelease(DivePointerOutput output) {
+  /// Release the output.
+  bool outputRelease(DivePointerOutput output) {
     _lib.obs_output_release(output.pointer);
     return true;
   }
 
-  /// Start the stream output.
-  bool streamOutputStart(DivePointerOutput output) {
+  /// Start the output.
+  bool outputStart(DivePointerOutput output) {
     final rv = _lib.obs_output_start(output.pointer);
     if (rv != 1) {
-      print("streamOutputStart: stream not started");
+      print("streamOutputStart: output not started");
     }
     return rv == 1;
   }
 
-  /// Stop the stream output.
-  void streamOutputStop(DivePointerOutput output) {
+  /// Stop the output.
+  void outputStop(DivePointerOutput output) {
     _lib.obs_output_stop(output.pointer);
   }
 
@@ -390,8 +432,8 @@ extension DiveFFIObslib on DiveBaseObslib {
     settings.dispose();
 
     final services = _lib.obs_properties_get(props, "service".int8());
-    final services_count = _lib.obs_property_list_item_count(services);
-    for (var index = 0; index < services_count; index++) {
+    final servicesCount = _lib.obs_property_list_item_count(services);
+    for (var index = 0; index < servicesCount; index++) {
       final name = _lib.obs_property_list_item_string(services, index);
       final nameStr = StringExtensions.fromInt8(name);
       if (nameStr != null && nameStr.isNotEmpty) {
@@ -419,8 +461,8 @@ extension DiveFFIObslib on DiveBaseObslib {
     settings.dispose();
 
     final services = _lib.obs_properties_get(props, "server".int8());
-    final services_count = _lib.obs_property_list_item_count(services);
-    for (var index = 0; index < services_count; index++) {
+    final servicesCount = _lib.obs_property_list_item_count(services);
+    for (var index = 0; index < servicesCount; index++) {
       final name = _lib.obs_property_list_item_name(services, index).string;
       final server = _lib.obs_property_list_item_string(services, index).string;
       if (name != null && name.isNotEmpty && server != null && server.isNotEmpty) names[name] = server;
@@ -432,7 +474,7 @@ extension DiveFFIObslib on DiveBaseObslib {
   }
 
   /// Get the output state: 0 (stopped), 1 (active), 2 (paused), or 3 (reconnecting)
-  int streamOutputGetState(DivePointerOutput output) {
+  int outputGetState(DivePointerOutput output) {
     final active = _lib.obs_output_active(output.pointer);
     final paused = _lib.obs_output_paused(output.pointer);
     final reconnecting = _lib.obs_output_reconnecting(output.pointer);

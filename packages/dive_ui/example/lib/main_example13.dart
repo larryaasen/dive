@@ -143,7 +143,7 @@ class _BodyWidgetState extends State<BodyWidget> {
     });
 
     // Create the streaming output
-    final output = DiveOutput();
+    final output = DiveStreamingOutput();
     widget.elements.updateState((state) => state.copyWith(streamingOutput: output));
   }
 

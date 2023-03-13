@@ -64,7 +64,12 @@ class DiveExample {
     });
 
     // Create the streaming output
-    DiveOutput? output = DiveOutput();
+    final recordingOutput = DiveRecordingOutput();
+    print("Dive example 4: Start recording.");
+    recordingOutput.start();
+
+    // Create the streaming output
+    final streamingOutput = DiveStreamingOutput();
 
     // YouTube settings
     // Replace this YouTube key with your own. This one is no longer valid.
@@ -73,22 +78,25 @@ class DiveExample {
 
     // Twitch Settings
     // Replace this Twitch key with your own. This one is no longer valid.
-    output.serviceKey = 'live_276488556_ZQRwvdknV8MrOJCaGwquIzM17dQDJ5';
-    output.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/${output.serviceKey}';
+    streamingOutput.serviceKey = 'live_276488556_ZQRwvdknV8MrOJCaGwquIzM17dQDJ5';
+    streamingOutput.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/${streamingOutput.serviceKey}';
 
-    _elements.updateState((state) => state.copyWith(streamingOutput: output));
+    _elements.updateState((state) => state.copyWith(streamingOutput: streamingOutput));
 
     // Start streaming
-    print("Dive example 4: Starting stream.");
-    output.start();
+    // print("Dive example 4: Starting stream.");
+    // streamingOutput.start();
 
     const streamDuration = 30;
     print('Dive example 4: Waiting $streamDuration seconds.');
 
     Future.delayed(Duration(seconds: streamDuration), () {
       print('Dive example 4: Stopping stream.');
-      output?.stop();
-      output = null;
+      streamingOutput.stop();
+      streamingOutput.dispose();
+
+      recordingOutput.stop();
+      recordingOutput.dispose();
 
       final state = _elements.state;
       // Remove the video and audio sources from the scene

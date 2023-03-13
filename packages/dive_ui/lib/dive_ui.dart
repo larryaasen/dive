@@ -177,11 +177,12 @@ class DiveOutputButton extends ConsumerWidget {
 }
 
 class DiveStreamPlayButton extends ConsumerWidget {
-  const DiveStreamPlayButton({Key? key, required DiveOutput streamingOutput, this.iconColor = Colors.white})
+  const DiveStreamPlayButton(
+      {Key? key, required DiveStreamingOutput streamingOutput, this.iconColor = Colors.white})
       : streamingOutput = streamingOutput,
         super(key: key);
 
-  final DiveOutput streamingOutput;
+  final DiveStreamingOutput streamingOutput;
   final Color iconColor;
 
   @override
