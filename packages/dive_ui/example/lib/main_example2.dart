@@ -79,7 +79,7 @@ class _BodyWidgetState extends State<BodyWidget> {
     widget.elements.addScene(DiveScene.create());
 
     DiveVideoMix.create().then((mix) {
-      if (mix != null) widget.elements.updateState((state) => state..videoMixes.add(mix));
+      if (mix != null) widget.elements.addMix(mix);
     });
 
     _initialized = true;
@@ -106,7 +106,7 @@ class MediaPlayer extends ConsumerWidget {
     }
 
     final videoMix =
-        DivePreview(controller: state.videoMixes[0].controller, aspectRatio: DiveCoreAspectRatio.HD.ratio);
+        DivePreview(controller: state.videoMixes.first.controller, aspectRatio: DiveCoreAspectRatio.HD.ratio);
 
     final mainContent = Column(
       crossAxisAlignment: CrossAxisAlignment.center,

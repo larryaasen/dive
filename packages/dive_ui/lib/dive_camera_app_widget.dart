@@ -57,7 +57,7 @@ class _DiveCameraAppBodyState extends State<DiveCameraAppBody> {
 
     DiveVideoMix.create().then((mix) {
       if (mix != null) {
-        _elements!.updateState((state) => state..videoMixes.add(mix));
+        _elements!..addMix(mix);
       }
     });
 
@@ -65,9 +65,8 @@ class _DiveCameraAppBodyState extends State<DiveCameraAppBody> {
       print(videoInput);
       DiveVideoSource.create(videoInput).then((source) {
         if (source != null) {
-          _elements!.updateState((state) => state
-            ..videoSources.add(source)
-            ..currentScene?.addSource(source));
+          _elements!.addVideoSource(source);
+          _elements!.state.currentScene?.addSource(source);
         }
       });
     });
@@ -97,7 +96,7 @@ class DiveCameraAppMediaPlayer extends ConsumerWidget {
     }
 
     final videoMix = DivePreview(
-      controller: state.videoMixes[0].controller,
+      controller: state.videoMixes.first.controller,
       aspectRatio: DiveCoreAspectRatio.HD.ratio,
     );
 
@@ -106,7 +105,7 @@ class DiveCameraAppMediaPlayer extends ConsumerWidget {
         state: state,
         onTap: (int currentIndex, int newIndex) {
           final state = elements!.state;
-          final source = state.videoSources[newIndex];
+          final source = state.videoSources.toList()[newIndex];
           final sceneItem = state.currentScene?.findSceneItem(source);
           if (sceneItem != null) {
             sceneItem.setOrder(DiveSceneItemMovement.moveTop);
@@ -117,7 +116,7 @@ class DiveCameraAppMediaPlayer extends ConsumerWidget {
     final mainContent = Row(
       children: [
         if (state.videoSources.length > 0) cameras,
-        videoMix,
+        Expanded(child: videoMix),
       ],
     );
 

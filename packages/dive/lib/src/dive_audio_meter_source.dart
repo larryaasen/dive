@@ -1,13 +1,15 @@
 import 'dart:async';
 import 'dart:core';
+
 import 'package:dive_obslib/dive_obslib.dart';
+import 'package:equatable/equatable.dart';
 import 'package:riverpod/riverpod.dart';
 
 import 'dive_core.dart';
 import 'dive_sources.dart';
 
 /// The state model for an audio meter.
-class DiveAudioMeterState {
+class DiveAudioMeterState extends Equatable {
   /// channel count
   final int channelCount;
 
@@ -44,7 +46,7 @@ class DiveAudioMeterState {
   /// no signal
   final bool noSignal;
 
-  DiveAudioMeterState({
+  const DiveAudioMeterState({
     this.channelCount = 0,
     this.inputPeak,
     this.inputPeakHold,
@@ -88,6 +90,22 @@ class DiveAudioMeterState {
       noSignal: noSignal ?? this.noSignal,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        channelCount,
+        inputPeak,
+        inputPeakHold,
+        magnitude,
+        magnitudeAttacked,
+        peak,
+        peakDecayed,
+        peakHold,
+        inputpPeakHoldLastUpdateTime,
+        peakHoldLastUpdateTime,
+        lastUpdateTime,
+        noSignal,
+      ];
 }
 
 /// A class for the audio meter data and processing.
@@ -106,7 +124,8 @@ class DiveAudioMeterSource {
   Timer? _noSignalTimer;
   Stopwatch? _stopwatch;
 
-  final provider = StateProvider<DiveAudioMeterState>((ref) => DiveAudioMeterState());
+  /// A Riverpod [StateProvider] that provides [DiveAudioMeterState] state updates.
+  final provider = StateProvider<DiveAudioMeterState>((ref) => const DiveAudioMeterState());
 
   void dispose() {
     destroy(pointer);
@@ -164,7 +183,7 @@ class DiveAudioMeterSource {
     final now = DateTime.now();
 
     // Get the current state
-    var currentState = DiveCore.container.read(provider.notifier).state;
+    final currentState = DiveCore.container.read(provider.notifier).state;
 
     // Determine the attack of audio since last update (seconds).
     double attackRate = 0.99;
@@ -254,8 +273,11 @@ class DiveAudioMeterSource {
       lastUpdateTime: now,
       noSignal: false,
     );
-    DiveCore.container.read(provider.notifier).state = newState;
 
+    if (currentState == newState) {
+      print('Why are these states the same?');
+    }
+    DiveCore.container.read(provider.notifier).state = newState;
 
     _startNoSignalTimer();
   }
@@ -269,9 +291,7 @@ class DiveAudioMeterSource {
 
   /// Start the no signal timer
   void _startNoSignalTimer() {
-    if (_noSignalTimer != null) {
-      _noSignalTimer?.cancel();
-    }
+    _noSignalTimer?.cancel();
     _noSignalTimer = Timer(const Duration(milliseconds: 500), _noSignalTimeout);
   }
 
@@ -279,7 +299,7 @@ class DiveAudioMeterSource {
     _noSignalTimer?.cancel();
     _noSignalTimer = null;
 
-    var currentState = DiveCore.container.read(provider.notifier).state;
+    final currentState = DiveCore.container.read(provider.notifier).state;
 
     // Update the state and notify
     final newState = _clearDerived(currentState);

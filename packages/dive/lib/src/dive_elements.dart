@@ -34,26 +34,25 @@ class DiveVideoSettings {
 
 /// The state model for core elements.
 class DiveCoreElementsState extends Equatable {
-  // TODO: change all List to Iterable to make these lists immutable.
-  final List<DiveAudioSource> audioSources;
-  final List<DiveImageSource> imageSources;
-  final List<DiveMediaSource> mediaSources;
-  final List<DiveVideoSource> videoSources;
-  final List<DiveSource> sources;
+  final Iterable<DiveAudioSource> audioSources;
+  final Iterable<DiveImageSource> imageSources;
+  final Iterable<DiveMediaSource> mediaSources;
+  final Iterable<DiveVideoSource> videoSources;
+  final Iterable<DiveSource> sources;
   final Iterable<DiveScene> scenes;
-  final List<DiveVideoMix> videoMixes;
+  final Iterable<DiveVideoMix> videoMixes;
   final DiveRecordingOutput? recordingOutput;
   final DiveStreamingOutput? streamingOutput;
   final DiveScene? currentScene;
 
   const DiveCoreElementsState(
-      {List<DiveAudioSource>? audioSources,
-      List<DiveImageSource>? imageSources,
-      List<DiveMediaSource>? mediaSources,
-      List<DiveVideoSource>? videoSources,
-      List<DiveSource>? sources,
+      {Iterable<DiveAudioSource>? audioSources,
+      Iterable<DiveImageSource>? imageSources,
+      Iterable<DiveMediaSource>? mediaSources,
+      Iterable<DiveVideoSource>? videoSources,
+      Iterable<DiveSource>? sources,
       Iterable<DiveScene>? scenes,
-      List<DiveVideoMix>? videoMixes,
+      Iterable<DiveVideoMix>? videoMixes,
       this.recordingOutput,
       this.streamingOutput,
       this.currentScene})
@@ -67,13 +66,13 @@ class DiveCoreElementsState extends Equatable {
 
   /// Updates the current state with only the arguments that are not null.
   DiveCoreElementsState copyWith({
-    List<DiveAudioSource>? audioSources,
-    List<DiveImageSource>? imageSources,
-    List<DiveMediaSource>? mediaSources,
-    List<DiveVideoSource>? videoSources,
-    List<DiveSource>? sources,
+    Iterable<DiveAudioSource>? audioSources,
+    Iterable<DiveImageSource>? imageSources,
+    Iterable<DiveMediaSource>? mediaSources,
+    Iterable<DiveVideoSource>? videoSources,
+    Iterable<DiveSource>? sources,
     Iterable<DiveScene>? scenes,
-    List<DiveVideoMix>? videoMixes,
+    Iterable<DiveVideoMix>? videoMixes,
     DiveRecordingOutput? recordingOutput,
     DiveStreamingOutput? streamingOutput,
     DiveScene? currentScene,
@@ -139,14 +138,15 @@ class DiveCoreElements {
   final provider = StateProvider<DiveCoreElementsState>((ref) => const DiveCoreElementsState());
 
   /// Remove a source.
-  void removeSource(DiveSource source, List<DiveSource> sources) {
-    final item = state.currentScene!.findSceneItem(source);
+  void removeSource(DiveSource source, Iterable<DiveSource> sources) {
+    final state = DiveCore.container.read(provider.notifier).state;
+    if (state.currentScene == null) return;
+    final item = state.currentScene?.findSceneItem(source);
     if (item != null) {
-      final state = DiveCore.container.read(provider.notifier).state;
-      state.currentScene!.removeSceneItem(item);
-      sources.remove(source);
+      state.currentScene?.removeSceneItem(item);
+      final newState = state.copyWith(sources: sources.toList()..remove(source));
       source.dispose();
-      DiveCore.container.read(provider.notifier).state = state;
+      DiveCore.container.read(provider.notifier).state = newState;
     }
   }
 
@@ -155,49 +155,6 @@ class DiveCoreElements {
 
   /// Remove media source from the current scene.
   void removeMediaSource(DiveMediaSource source) => removeSource(source, state.mediaSources);
-
-  /// Add an image source.
-  void addImageSource(final localFile) {
-    if (state.currentScene == null) {
-      throw AssertionError('currentScene must not be null');
-    }
-    DiveImageSource.create(localFile).then((source) {
-      if (source != null) {
-        updateState((state) => state.copyWith(imageSources: state.imageSources.toList()..add(source)));
-        state.currentScene?.addSource(source);
-      }
-    });
-  }
-
-  /// Add a local video media source to the current scene.
-  void addLocalVideoMediaSource(String name, String localFile) {
-    if (state.currentScene == null) {
-      throw AssertionError('currentScene must not be null');
-    }
-    final settings = DiveMediaSourceSettings(localFile: localFile, isLocalFile: true);
-    DiveMediaSource.create(settings: settings).then((source) {
-      if (source != null) {
-        source.monitoringType = DiveCoreMonitoringType.monitorAndOutput;
-        DiveAudioMeterSource.create(source: source).then((volumeMeter) {
-          source.volumeMeter = volumeMeter;
-        });
-
-        updateState((state) => state.copyWith(mediaSources: state.mediaSources.toList()..add(source)));
-        state.currentScene?.addSource(source);
-      }
-    });
-  }
-
-  /// Add a scene and set it as the [currentScene] if null.
-  DiveScene addScene(DiveScene scene) {
-    updateState((state) {
-      return state.copyWith(scenes: state.scenes.toList()..add(scene));
-    });
-    if (state.currentScene == null) {
-      updateState((state) => state.copyWith(currentScene: scene));
-    }
-    return scene;
-  }
 
   /// Change the current scene to this [scene].
   void changeCurrentScene(DiveScene scene) {
@@ -231,5 +188,83 @@ class DiveCoreElements {
     final isEqual = newState == currentState;
     assert(!isEqual, 'why are these states equal?');
     controller.state = newState;
+  }
+}
+
+extension DiveCoreElementsAdd on DiveCoreElements {
+  // Add an audio source.
+  void addAudioSource(DiveAudioSource source) {
+    updateState((state) => state.copyWith(audioSources: state.audioSources.toList()..add(source)));
+  }
+
+  /// Add an image source.
+  void addImageSource(final localFile) {
+    if (state.currentScene == null) {
+      throw AssertionError('currentScene must not be null');
+    }
+    DiveImageSource.create(localFile).then((source) {
+      if (source != null) {
+        updateState((state) => state.copyWith(imageSources: state.imageSources.toList()..add(source)));
+        state.currentScene?.addSource(source);
+      }
+    });
+  }
+
+  /// Add a local video media source to the current scene.
+  void addLocalVideoMediaSource(String name, String localFile) {
+    if (state.currentScene == null) {
+      throw AssertionError('currentScene must not be null');
+    }
+    final settings = DiveMediaSourceSettings(localFile: localFile, isLocalFile: true);
+    DiveMediaSource.create(settings: settings).then((source) {
+      if (source != null) {
+        source.monitoringType = DiveCoreMonitoringType.monitorAndOutput;
+        DiveAudioMeterSource.create(source: source).then((volumeMeter) {
+          source.volumeMeter = volumeMeter;
+        });
+        addMediaSource(source);
+        state.currentScene?.addSource(source);
+      }
+    });
+  }
+
+  void addMediaSource(DiveMediaSource source) {
+    updateState((state) => state.copyWith(mediaSources: state.mediaSources.toList()..add(source)));
+  }
+
+  /// Add a video mix.
+  void addMix(DiveVideoMix mix) {
+    updateState((state) => state.copyWith(videoMixes: state.videoMixes.toList()..add(mix)));
+  }
+
+  /// Add recording output.
+  void addRecordingOutput(DiveRecordingOutput output) {
+    updateState((state) => state.copyWith(recordingOutput: output));
+  }
+
+  /// Add a scene and set it as the [currentScene] if null.
+  DiveScene addScene(DiveScene scene) {
+    updateState((state) {
+      return state.copyWith(scenes: state.scenes.toList()..add(scene));
+    });
+    if (state.currentScene == null) {
+      updateState((state) => state.copyWith(currentScene: scene));
+    }
+    return scene;
+  }
+
+  // Add a source.
+  void addSource(DiveSource source) {
+    updateState((state) => state.copyWith(sources: state.sources.toList()..add(source)));
+  }
+
+  /// Add streaming output.
+  void addStreamingOutput(DiveStreamingOutput output) {
+    updateState((state) => state.copyWith(streamingOutput: output));
+  }
+
+  /// Add a video source.
+  void addVideoSource(DiveVideoSource source) {
+    updateState((state) => state.copyWith(videoSources: state.videoSources.toList()..add(source)));
   }
 }

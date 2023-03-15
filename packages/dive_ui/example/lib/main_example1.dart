@@ -59,8 +59,7 @@ class _BodyWidgetState extends State<BodyWidget> {
 
     DiveVideoMix.create().then((mix) {
       if (mix != null) {
-        widget.elements
-            .updateState((state) => state.copyWith(videoMixes: state.videoMixes.toList()..add(mix)));
+        widget.elements.addMix(mix);
       }
     });
   }
@@ -86,8 +85,8 @@ class MediaPlayer extends ConsumerWidget {
       return Container(color: Colors.purple);
     }
     print("MediaPlayer.build usable state");
-    final source = state.mediaSources[0];
-    final videoMix = state.videoMixes[0];
+    final source = state.mediaSources.first;
+    final videoMix = state.videoMixes.first;
 
     final mediaButtons = Container(
         height: 40,

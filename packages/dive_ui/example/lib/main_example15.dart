@@ -108,15 +108,12 @@ class _BodyWidgetState extends State<BodyWidget> {
     widget.elements.addScene(DiveScene.create());
 
     DiveVideoMix.create().then((mix) {
-      if (mix != null)
-        widget.elements
-            .updateState((state) => state.copyWith(videoMixes: state.videoMixes.toList()..add(mix)));
+      if (mix != null) widget.elements.addMix(mix);
     });
 
     DiveAudioSource.create('main audio').then((source) {
       if (source != null) {
-        widget.elements
-            .updateState((state) => state.copyWith(audioSources: state.audioSources.toList()..add(source)));
+        widget.elements.addAudioSource(source);
         widget.elements.state.currentScene?.addSource(source);
 
         DiveAudioMeterSource.create(source: source).then((volumeMeter) {
@@ -131,9 +128,7 @@ class _BodyWidgetState extends State<BodyWidget> {
       print(videoInput);
       DiveVideoSource.create(videoInput).then((source) {
         if (source != null) {
-          widget.elements
-              .updateState((state) => state.copyWith(videoSources: state.videoSources.toList()..add(source)));
-
+          widget.elements.addVideoSource(source);
           widget.elements.state.currentScene?.addSource(source);
         }
       });
@@ -152,11 +147,11 @@ class _BodyWidgetState extends State<BodyWidget> {
     streamingOutput.serviceKey = '-----';
     streamingOutput.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/${streamingOutput.serviceKey}';
 
-    widget.elements.updateState((state) => state.copyWith(streamingOutput: streamingOutput));
+    widget.elements.addStreamingOutput(streamingOutput);
 
     // Create the recording output
     final recordingOutput = DiveRecordingOutput();
-    widget.elements.updateState((state) => state.copyWith(recordingOutput: recordingOutput));
+    widget.elements.addRecordingOutput(recordingOutput);
 
     // Start recording.
     recordingOutput.start('/Users/larry/Movies/dive/dive1.mkv');
@@ -194,7 +189,7 @@ class MediaPlayer extends ConsumerWidget {
             color: Colors.black,
             padding: EdgeInsets.all(4),
             child: DiveMeterPreview(
-              controller: state.videoMixes[0].controller,
+              controller: state.videoMixes.first.controller,
               volumeMeter: volumeMeter,
               aspectRatio: DiveCoreAspectRatio.HD.ratio,
             )));
@@ -204,7 +199,7 @@ class MediaPlayer extends ConsumerWidget {
         state: state,
         onTap: (int currentIndex, int newIndex) {
           final state = elements.state;
-          final source = state.videoSources[newIndex];
+          final source = state.videoSources.toList()[newIndex];
           final sceneItem = state.currentScene?.findSceneItem(source);
           if (sceneItem != null) {
             sceneItem.setOrder(DiveSceneItemMovement.moveTop);
@@ -215,7 +210,7 @@ class MediaPlayer extends ConsumerWidget {
     final mainContent = Row(
       children: [
         if (state.videoSources.length > 0) cameras,
-        videoMix,
+        Expanded(child: videoMix),
       ],
     );
 

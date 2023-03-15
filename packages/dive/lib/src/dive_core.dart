@@ -7,8 +7,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:riverpod/riverpod.dart';
 
-// TODO: Review use of Riverpod.
-
 /// Configure a Dive app.
 void configDiveApp() {
   // We need the binding to be initialized before calling runApp
@@ -60,8 +58,7 @@ class DiveCoreFPS {
 }
 
 /// The various different video resolutions.
-/// TODO: add use of Equatable here.
-class DiveCoreResolution {
+class DiveCoreResolution extends Equatable {
   const DiveCoreResolution(this.name, this.width, this.height);
 
   final String name;
@@ -130,18 +127,27 @@ class DiveCoreResolution {
     }
     return null;
   }
+
+  @override
+  List<Object?> get props => [name, width, height];
+
+  @override
+  bool? get stringify => true;
 }
 
 /// Aspect ratios.
-class DiveCoreAspectRatio {
-  const DiveCoreAspectRatio(this._sRatio, this._dRatio);
+class DiveCoreAspectRatio extends Equatable {
+  const DiveCoreAspectRatio(this.sRatio, this.dRatio);
 
-  final String _sRatio;
-  final double _dRatio;
+  /// Ratio as text.
+  final String sRatio;
 
-  double get ratio => _dRatio;
-  double get toDouble => _dRatio;
-  String get text => _sRatio;
+  /// Ratio as a number.
+  final double dRatio;
+
+  double get ratio => dRatio;
+  double get toDouble => dRatio;
+  String get text => sRatio;
 
   /// HD TV aspect ratio
   static const r16_9 = DiveCoreAspectRatio("16:9", 16 / 9);
@@ -178,6 +184,12 @@ class DiveCoreAspectRatio {
 
   /// IMAX Digital aspect ratio
   static const IMAX_DIGITAL = r19_10;
+
+  @override
+  List<Object?> get props => [sRatio, dRatio];
+
+  @override
+  bool? get stringify => true;
 }
 
 class MonitoringType {
@@ -190,21 +202,25 @@ class MonitoringType {
 enum DiveCoreMonitoringType { none, monitorOnly, monitorAndOutput }
 
 /// An audio level.
-class DiveCoreLevel {
-  final double _level;
-
-  /// Get the level in dB.
-  double get dB => obslib.toDb(_level);
-
-  /// Get the level.
-  void get level => _level;
-
+class DiveCoreLevel extends Equatable {
   /// Creates an instance of [DiveCoreLevel].
   /// To create an instance using dB, use [DiveCoreLevel.dB].
-  DiveCoreLevel(double level) : _level = level;
+  const DiveCoreLevel(this.level);
 
   /// Creates an instance of [DiveCoreLevel] using a level in dB.
   factory DiveCoreLevel.dB(double levelDb) => DiveCoreLevel(obslib.fromDb(levelDb));
+
+  /// The audio level.
+  final double level;
+
+  /// Get the audio level in dB.
+  double get dB => obslib.toDb(level);
+
+  @override
+  List<Object?> get props => [level];
+
+  @override
+  bool? get stringify => true;
 }
 
 /// Usage:
@@ -213,7 +229,7 @@ class DiveCoreLevel {
 ///   core.setupOBS(DiveCoreResolution.HD);
 ///
 class DiveCore {
-  /// For use with Riverpod
+  /// For use with Riverpod. This is the container used by both packages and the app.
   static final providerContainer = ProviderContainer();
   static ProviderContainer get container => providerContainer;
 
@@ -241,14 +257,10 @@ class DiveCore {
     return rv;
   }
 
+  /// Shut down obslib.
   void shutdown() {
     obslib.shutdown();
   }
-}
-
-class DiveCoreProviderContainerException implements Exception {
-  @override
-  String toString() => 'DiveCore.providerContainer should not be null.';
 }
 
 /// Extention methods on double.

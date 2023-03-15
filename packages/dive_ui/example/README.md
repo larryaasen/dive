@@ -34,17 +34,7 @@ time.
 
 ## Example 3 - Video Cameras
 
-This example shows how to use dive_ui, dive_core, and dive_obslib to display
-multiple video cameras in a list, and select one for the video mix.
-* Use `DiveCoreElements` to track the scene, video mix (`DiveVideoMix`), audio source, and video source.
-* Create a scene (`DiveScene`) and display the video mix using the `DiveMeterPreview` widget showing the video mix.
-* Create a `DiveAudioSource` for the main audio.
-* Create a video source (`DiveVideoSource`) for each video input (`DiveInputs.video()`).
-* Display an audio meter in the horizontal orientation on the video mix.
-* Display the list of video camera sources in a list (`DiveCameraList`).
-* Usage: flutter run lib/main_example3.dart -d macos
-
-![image](example3-media-player.png)
+This example was deleted because it was duplicated by Example 5.
 
 ## Example 4 - Streaming
 

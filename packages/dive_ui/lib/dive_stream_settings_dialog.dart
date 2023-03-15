@@ -121,7 +121,7 @@ class _DiveStreamSettingsDialogState extends State<DiveStreamSettingsDialog> {
                   setState(() {
                     _serviceName = name;
                     _serverNames = _getServerNames(name);
-                    _serverName = _serverNames?[0];
+                    _serverName = _serverNames?.first;
                     _serviceUrl.text = _getUrlForServer(_serviceName, _serverName) ?? '';
                   });
                 }
@@ -181,7 +181,7 @@ class _DiveStreamSettingsDialogState extends State<DiveStreamSettingsDialog> {
     _serverName = widget.server != null
         ? widget.server?.name
         : _serverNames != null
-            ? _serverNames![0]
+            ? _serverNames!.first
             : null;
     _serviceUrl.text = _getUrlForServer(_serviceName ?? '', _serverName ?? '') ?? '';
   }

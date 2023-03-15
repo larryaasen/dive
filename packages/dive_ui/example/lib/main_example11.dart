@@ -64,15 +64,15 @@ class _BodyWidgetState extends State<BodyWidget> {
     widget.elements.addScene(DiveScene.create());
 
     DiveVideoMix.create().then((mix) {
-      if (mix != null) widget.elements.updateState((state) => state..videoMixes.add(mix));
+      if (mix != null) widget.elements.addMix(mix);
     });
 
     DiveAudioSource.create('main audio').then((source) {
       if (source != null) {
         setState(() {
-          widget.elements.updateState((state) => state..audioSources.add(source));
+          widget.elements.addAudioSource(source);
         });
-        widget.elements.updateState((state) => state..currentScene?.addSource(source));
+        widget.elements.state.currentScene?.addSource(source);
 
         DiveAudioMeterSource.create(source: source).then((volumeMeter) {
           setState(() {
@@ -86,18 +86,15 @@ class _BodyWidgetState extends State<BodyWidget> {
       print(videoInput);
       DiveVideoSource.create(videoInput).then((source) {
         if (source != null) {
-          widget.elements.updateState((state) {
-            state.videoSources.add(source);
-            state.currentScene?.addSource(source);
-            return state;
-          });
+          widget.elements.addVideoSource(source);
+          widget.elements.state.currentScene?.addSource(source);
         }
       });
     });
 
     // Create the streaming output
     final output = DiveStreamingOutput();
-    widget.elements.updateState((state) => state.copyWith(streamingOutput: output));
+    widget.elements.addStreamingOutput(output);
   }
 
   @override
@@ -127,7 +124,7 @@ class MediaPlayer extends ConsumerWidget {
         color: Colors.black,
         padding: EdgeInsets.all(4),
         child: DiveMeterPreview(
-          controller: state.videoMixes[0].controller,
+          controller: state.videoMixes.first.controller,
           volumeMeter: volumeMeter,
           aspectRatio: DiveCoreAspectRatio.HD.ratio,
         ));
@@ -136,14 +133,11 @@ class MediaPlayer extends ConsumerWidget {
         elements: elements,
         state: state,
         onTap: (int currentIndex, int newIndex) {
-          elements.updateState((state) {
-            final source = state.videoSources[newIndex];
-            final sceneItem = state.currentScene?.findSceneItem(source);
-            if (sceneItem != null) {
-              sceneItem.setOrder(DiveSceneItemMovement.moveTop);
-            }
-            return state;
-          });
+          final source = elements.state.videoSources.toList()[newIndex];
+          final sceneItem = state.currentScene?.findSceneItem(source);
+          if (sceneItem != null) {
+            sceneItem.setOrder(DiveSceneItemMovement.moveTop);
+          }
           return true;
         });
 

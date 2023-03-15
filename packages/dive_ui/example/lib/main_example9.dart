@@ -55,7 +55,7 @@ class _BodyWidgetState extends State<BodyWidget> {
 
     DiveVideoMix.create().then((mix) {
       if (mix != null) {
-        widget.elements.updateState((state) => state..videoMixes.add(mix));
+        widget.elements..addMix(mix);
       }
     });
 
@@ -64,8 +64,8 @@ class _BodyWidgetState extends State<BodyWidget> {
         print(videoInput);
         DiveVideoSource.create(videoInput).then((source) {
           if (source != null) {
-            widget.elements.updateState((state) => state..videoSources.add(source));
-            widget.elements.updateState((state) => state..currentScene?.addSource(source));
+            widget.elements.addVideoSource(source);
+            widget.elements.state.currentScene?.addSource(source);
           }
         });
       }
@@ -98,13 +98,13 @@ class MediaPlayer extends ConsumerWidget {
         color: Colors.black,
         padding: EdgeInsets.all(4),
         child: DivePreview(
-          controller: state.videoMixes[0].controller,
+          controller: state.videoMixes.first.controller,
           aspectRatio: DiveCoreAspectRatio.HD.ratio,
         ));
 
     final mainContent = Row(
       children: [
-        videoMix,
+        Expanded(child: videoMix),
       ],
     );
 

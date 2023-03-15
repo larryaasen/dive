@@ -57,9 +57,7 @@ class _BodyWidgetState extends State<BodyWidget> {
     widget.elements.addScene(DiveScene.create());
 
     DiveVideoMix.create().then((mix) {
-      if (mix != null)
-        widget.elements
-            .updateState((state) => state.copyWith(videoMixes: state.videoMixes.toList()..add(mix)));
+      if (mix != null) widget.elements.addMix(mix);
     });
 
     DiveInputs.video().forEach((videoInput) {
@@ -67,8 +65,7 @@ class _BodyWidgetState extends State<BodyWidget> {
         print(videoInput);
         DiveVideoSource.create(videoInput).then((source) {
           if (source != null) {
-            widget.elements.updateState(
-                (state) => state.copyWith(videoSources: state.videoSources.toList()..add(source)));
+            widget.elements.addVideoSource(source);
             widget.elements.state.currentScene?.addSource(source);
           }
         });
@@ -101,13 +98,13 @@ class MediaPlayer extends ConsumerWidget {
         color: Colors.black,
         padding: EdgeInsets.all(4),
         child: DivePreview(
-          controller: state.videoMixes[0].controller,
+          controller: state.videoMixes.first.controller,
           aspectRatio: DiveCoreAspectRatio.HD.ratio,
         ));
 
     final item = state.currentScene == null || state.currentScene!.sceneItems.isEmpty
         ? null
-        : state.currentScene!.sceneItems[0];
+        : state.currentScene!.sceneItems.first;
 
     final camera = Container(
       height: 200,
@@ -116,7 +113,7 @@ class MediaPlayer extends ConsumerWidget {
           ? DiveSourceCard(
               item: item,
               child: DivePreview(
-                  controller: state.videoSources.length == 0 ? null : (state.videoSources[0]).controller,
+                  controller: state.videoSources.length == 0 ? null : (state.videoSources.first).controller,
                   aspectRatio: DiveCoreAspectRatio.HD.ratio),
               elements: elements,
             )
@@ -126,7 +123,7 @@ class MediaPlayer extends ConsumerWidget {
     final mainContent = Row(
       children: [
         camera,
-        videoMix,
+        Expanded(child: videoMix),
       ],
     );
 

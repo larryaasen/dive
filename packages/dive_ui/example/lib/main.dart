@@ -42,8 +42,8 @@ class DiveExample {
     // Create the main audio source
     DiveAudioSource.create('main audio').then((source) {
       if (source != null) {
-        _elements.updateState((state) => state..audioSources.add(source));
-        _elements.updateState((state) => state..currentScene?.addSource(source));
+        _elements.addAudioSource(source);
+        _elements.state.currentScene?.addSource(source);
       }
     });
 
@@ -54,9 +54,9 @@ class DiveExample {
     // Create the last video source from the video input
     DiveVideoSource.create(videoInput).then((source) {
       if (source != null) {
-        _elements.updateState((state) => state..videoSources.add(source));
+        _elements.addVideoSource(source);
         // Add the video source to the scene
-        _elements.updateState((state) => state..currentScene?.addSource(source));
+        _elements.state.currentScene?.addSource(source);
       }
     });
 
@@ -69,12 +69,12 @@ class DiveExample {
       state.currentScene?.removeAllSceneItems();
 
       // Remove the video source from the state
-      final videoSource = state.videoSources.removeLast();
+      final videoSource = state.videoSources.last;
       // Delete the source resources
       videoSource.dispose();
 
       // Remove the video source from the state
-      final audioSource = state.audioSources.removeLast();
+      final audioSource = state.audioSources.last;
       // Delete the source resources
       audioSource.dispose();
 

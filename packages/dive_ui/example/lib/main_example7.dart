@@ -55,26 +55,8 @@ class _BodyWidgetState extends State<BodyWidget> {
     widget.elements.addScene(DiveScene.create());
 
     DiveVideoMix.create().then((mix) {
-      if (mix != null)
-        widget.elements
-            .updateState((state) => state.copyWith(videoMixes: state.videoMixes.toList()..add(mix)));
+      if (mix != null) widget.elements.addMix(mix);
     });
-
-    // DiveAudioSource.create('main audio').then((source) {
-    //   if (source != null) {
-    //     setState(() {
-    //       widget.elements
-    //           .updateState((state) => state.copyWith(audioSources: state.audioSources.toList()..add(source)));
-    //     });
-    //     widget.elements.state.currentScene?.addSource(source);
-
-    //     DiveAudioMeterSource.create(source: source).then((volumeMeter) {
-    //       setState(() {
-    //         source.volumeMeter = volumeMeter;
-    //       });
-    //     });
-    //   }
-    // });
 
     DiveInputs.audio().forEach((audioInput) {
       // Create an audio source.
@@ -84,18 +66,16 @@ class _BodyWidgetState extends State<BodyWidget> {
           DiveAudioMeterSource.create(source: source).then((volumeMeter) {
             source.volumeMeter = volumeMeter;
           });
-          widget.elements
-              .updateState((state) => state.copyWith(audioSources: state.audioSources.toList()..add(source)));
+          widget.elements.addAudioSource(source);
         }
       });
     });
 
     DiveInputs.video().forEach((videoInput) {
-      if (videoInput.name != null && videoInput.name!.contains('FaceTime')) {
+      if (videoInput.name != null && videoInput.name!.contains('C920')) {
         DiveVideoSource.create(videoInput).then((source) {
           if (source != null) {
-            widget.elements.updateState(
-                (state) => state.copyWith(videoSources: state.videoSources.toList()..add(source)));
+            widget.elements.addVideoSource(source);
             widget.elements.state.currentScene?.addSource(source);
           }
         });
@@ -126,22 +106,19 @@ class MediaPlayer extends ConsumerWidget {
     final volumeMeter = volumeMeterSource.volumeMeter;
     if (volumeMeter == null) return SizedBox.shrink();
 
-    final videoMix = Container(
-        color: Colors.black,
-        padding: EdgeInsets.all(4),
-        child: DiveMeterPreview(
-          controller: state.videoMixes[0].controller,
-          volumeMeter: volumeMeter,
-          meterVertical: true,
-          aspectRatio: DiveCoreAspectRatio.HD.ratio,
-        ));
+    final videoMix = DiveMeterPreview(
+      controller: state.videoMixes.first.controller,
+      volumeMeter: volumeMeter,
+      meterVertical: true,
+      aspectRatio: DiveCoreAspectRatio.HD.ratio,
+    );
 
     final audios = DiveAudioList(elements: elements, state: state);
 
     final mainContent = Row(
       children: [
         if (state.audioSources.length > 0) audios,
-        videoMix,
+        Expanded(child: videoMix),
       ],
     );
 

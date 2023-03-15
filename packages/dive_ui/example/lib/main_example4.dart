@@ -43,8 +43,7 @@ class DiveExample {
     // Create the main audio source
     DiveAudioSource.create('main audio').then((source) {
       if (source != null) {
-        _elements
-            .updateState((state) => state.copyWith(audioSources: state.audioSources.toList()..add(source)));
+        _elements.addAudioSource(source);
         _elements.state.currentScene?.addSource(source);
       }
     });
@@ -56,8 +55,7 @@ class DiveExample {
     // Create the last video source from the video input
     DiveVideoSource.create(videoInput).then((source) {
       if (source != null) {
-        _elements
-            .updateState((state) => state.copyWith(videoSources: state.videoSources.toList()..add(source)));
+        _elements.addVideoSource(source);
         // Add the video source to the scene
         _elements..state.currentScene?.addSource(source);
       }
@@ -76,7 +74,7 @@ class DiveExample {
     streamingOutput.serviceKey = 'live_276488556_ZQRwvdknV8MrOJCaGwquIzM17dQDJ5';
     streamingOutput.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/${streamingOutput.serviceKey}';
 
-    _elements.updateState((state) => state.copyWith(streamingOutput: streamingOutput));
+    _elements.addStreamingOutput(streamingOutput);
 
     // Start streaming
     print("Dive example 4: Starting stream.");
@@ -94,13 +92,11 @@ class DiveExample {
       // Remove the video and audio sources from the scene
       state.currentScene?.removeAllSceneItems();
 
-      // Remove the video source from the state
-      final videoSource = state.videoSources.removeLast();
+      final videoSource = state.videoSources.last;
       // Delete the source resources
       videoSource.dispose();
 
-      // Remove the video source from the state
-      final audioSource = state.audioSources.removeLast();
+      final audioSource = state.audioSources.last;
       // Delete the source resources
       audioSource.dispose();
 

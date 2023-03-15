@@ -226,11 +226,9 @@ class DiveAspectRatio extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // The aspect ratio must be greater than 0.
-    final ratio = aspectRatio > 0 ? aspectRatio : 1;
+    final ratio = aspectRatio > 0 ? aspectRatio : 1.0;
 
-    // Wrap the AspectRatio inside an Align widget to make the AspectRatio
-    // widget actually work.
-    return AspectRatio(aspectRatio: ratio as double, child: child);
+    return AspectRatio(aspectRatio: ratio, child: child);
   }
 }
 
@@ -549,10 +547,10 @@ class _DiveCameraListState extends State<DiveCameraList> {
           itemCount: widget.state.videoSources.length,
           itemBuilder: (context, index) {
             final content = widget.nameOnly
-                ? Text("Camera:\n${widget.state.videoSources[index].name}")
+                ? Text("Camera:\n${widget.state.videoSources.toList()[index].name}")
                 : DiveAspectRatio(
                     aspectRatio: DiveCoreAspectRatio.HD.ratio,
-                    child: DivePreview(controller: widget.state.videoSources[index].controller));
+                    child: DivePreview(controller: widget.state.videoSources.toList()[index].controller));
             return Card(
                 child: ListTile(
               tileColor: Colors.grey.shade900,
@@ -603,11 +601,11 @@ class _DiveAudioListState extends State<DiveAudioList> {
         child: ListView.builder(
           itemCount: widget.state.audioSources.length,
           itemBuilder: (context, index) {
-            final vol = widget.state.audioSources[index].volumeMeter ?? null;
+            final vol = widget.state.audioSources.toList()[index].volumeMeter ?? null;
             final meter = Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.state.audioSources[index].input?.id ?? ''),
+                Text(widget.state.audioSources.toList()[index].input?.id ?? ''),
                 if (vol != null)
                   Container(
                       height: 20,
@@ -619,7 +617,7 @@ class _DiveAudioListState extends State<DiveAudioList> {
 
             return Card(
                 child: ListTile(
-              title: Text(widget.state.audioSources[index].input?.name ?? ''),
+              title: Text(widget.state.audioSources.toList()[index].input?.name ?? ''),
               subtitle: meter,
               selected: index == _selectedIndex,
               onTap: () {

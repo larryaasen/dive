@@ -71,12 +71,12 @@ class _BodyWidgetState extends State<BodyWidget> {
       settings: settings,
     );
     if (displayCaptureSource != null) {
-      widget.elements.updateState((state) => state..sources.add(displayCaptureSource));
-      widget.elements.updateState((state) => state..currentScene?.addSource(displayCaptureSource));
+      widget.elements.addSource(displayCaptureSource);
+      widget.elements.state.currentScene?.addSource(displayCaptureSource);
     }
 
     DiveVideoMix.create().then((mix) {
-      if (mix != null) widget.elements.updateState((state) => state..videoMixes.add(mix));
+      if (mix != null) widget.elements.addMix(mix);
     });
   }
 
@@ -103,7 +103,7 @@ class MediaPlayer extends ConsumerWidget {
         color: Colors.black,
         padding: EdgeInsets.all(4),
         child: DivePreview(
-          controller: state.videoMixes[0].controller,
+          controller: state.videoMixes.first.controller,
           aspectRatio: DiveCoreAspectRatio.HD.ratio,
         ));
 

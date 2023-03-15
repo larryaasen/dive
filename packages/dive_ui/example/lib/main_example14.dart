@@ -58,9 +58,7 @@ class _BodyWidgetState extends State<BodyWidget> {
     final scene2 = widget.elements.addScene(DiveScene.create());
 
     DiveVideoMix.create().then((mix) {
-      if (mix != null)
-        widget.elements
-            .updateState((state) => state.copyWith(videoMixes: state.videoMixes.toList()..add(mix)));
+      if (mix != null) widget.elements.addMix(mix);
     });
 
     DiveInputs.video().forEach((videoInput) {
@@ -69,8 +67,7 @@ class _BodyWidgetState extends State<BodyWidget> {
         DiveVideoSource.create(videoInput).then((source) async {
           if (source != null) {
             // Save the video source.
-            widget.elements.updateState(
-                (state) => state.copyWith(videoSources: state.videoSources.toList()..add(source)));
+            widget.elements.addVideoSource(source);
 
             // Add the video source to scene 1 (the current scene).
             final scenItem = await widget.elements.state.currentScene?.addSource(source);
@@ -124,7 +121,7 @@ class MediaPlayer extends ConsumerWidget {
         color: Colors.black,
         padding: EdgeInsets.all(4),
         child: DivePreview(
-          controller: state.videoMixes[0].controller,
+          controller: state.videoMixes.first.controller,
           aspectRatio: DiveCoreAspectRatio.HD.ratio,
         ));
     return videoMix;

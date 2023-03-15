@@ -21,10 +21,7 @@ class AppWidget extends StatelessWidget {
     return MaterialApp(
         title: 'Dive Example 5',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
+        theme: ThemeData(primarySwatch: Colors.blue, visualDensity: VisualDensity.adaptivePlatformDensity),
         home: Scaffold(
           appBar: AppBar(
             title: const Text('Dive Multi Camera Mix Example'),
@@ -38,33 +35,36 @@ class AppWidget extends StatelessWidget {
   }
 
   void _switchToMultiCamera() {
-    final points = [Point<double>(680, 100), Point<double>(200, 370), Point<double>(0, 0)];
     multiCamera = true;
-    _elements.updateState((state) {
-      state.currentScene?.removeAllSceneItems();
+    final elementState = _elements.state;
 
-      var index = 0;
-      state.videoSources.forEach((videoSource) {
-        state.currentScene?.addSource(videoSource).then((item) {
-          final point = points[index];
-          index++;
-          final info = DiveTransformInfo(
-            pos: DiveVec2(point.x, point.y),
-            bounds: DiveVec2(350 * DiveCoreAspectRatio.HD.ratio, 0),
-            boundsType: DiveBoundsType.scaleInner,
-          );
-          item.updateTransformInfo(info);
-        });
+    final totalVideoSources = elementState.videoSources.length;
+    final random = Random();
+    final points = List.generate(totalVideoSources,
+        (index) => Point<double>(random.nextDouble() * 800.0, random.nextDouble() * 600.0));
+
+    elementState.currentScene?.removeAllSceneItems();
+
+    var index = 0;
+    elementState.videoSources.forEach((videoSource) {
+      elementState.currentScene?.addSource(videoSource).then((item) {
+        final point = points[index];
+        index++;
+        final info = DiveTransformInfo(
+          pos: DiveVec2(point.x, point.y),
+          bounds: DiveVec2(350 * DiveCoreAspectRatio.HD.ratio, 0),
+          boundsType: DiveBoundsType.scaleInner,
+        );
+        item.updateTransformInfo(info);
       });
-      return state;
     });
 
     // Set animation timer
     final ticks = 10;
     int tickCount = 0;
     Timer.periodic(Duration(milliseconds: 80), (timer) {
-      final state = _elements.state;
-      state.currentScene?.sceneItems.forEach((item) {
+      final elementState = _elements.state;
+      elementState.currentScene?.sceneItems.forEach((item) {
         final height = 350.0;
         final x = (height * DiveCoreAspectRatio.HD.ratio) * (tickCount / ticks);
         final y = height * (tickCount / ticks);
@@ -108,15 +108,12 @@ class _BodyWidgetState extends State<BodyWidget> {
     widget.elements.addScene(DiveScene.create());
 
     DiveVideoMix.create().then((mix) {
-      if (mix != null)
-        widget.elements
-            .updateState((state) => state.copyWith(videoMixes: state.videoMixes.toList()..add(mix)));
+      if (mix != null) widget.elements.addMix(mix);
     });
 
     DiveAudioSource.create('main audio').then((source) {
       if (source != null) {
-        widget.elements
-            .updateState((state) => state.copyWith(audioSources: state.audioSources.toList()..add(source)));
+        widget.elements.addAudioSource(source);
         widget.elements.state.currentScene?.addSource(source);
 
         DiveAudioMeterSource.create(source: source).then((volumeMeter) {
@@ -131,9 +128,7 @@ class _BodyWidgetState extends State<BodyWidget> {
       print(videoInput);
       DiveVideoSource.create(videoInput).then((source) {
         if (source != null) {
-          widget.elements
-              .updateState((state) => state.copyWith(videoSources: state.videoSources.toList()..add(source)));
-
+          widget.elements.addVideoSource(source);
           widget.elements.state.currentScene?.addSource(source);
         }
       });
@@ -152,7 +147,7 @@ class _BodyWidgetState extends State<BodyWidget> {
     output.serviceKey = 'live_276488556_uIKncv1zAGQ3kz5aVzCvfshg8W4ENC';
     output.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/${output.serviceKey}';
 
-    widget.elements.updateState((state) => state.copyWith(streamingOutput: output));
+    widget.elements.addStreamingOutput(output);
   }
 
   @override
@@ -162,11 +157,7 @@ class _BodyWidgetState extends State<BodyWidget> {
 }
 
 class MediaPlayer extends ConsumerWidget {
-  const MediaPlayer({
-    super.key,
-    required this.elements,
-    required this.context,
-  });
+  const MediaPlayer({super.key, required this.elements, required this.context});
 
   final DiveCoreElements elements;
   final BuildContext context;
@@ -187,7 +178,7 @@ class MediaPlayer extends ConsumerWidget {
             color: Colors.black,
             padding: EdgeInsets.all(4),
             child: DiveMeterPreview(
-              controller: state.videoMixes[0].controller,
+              controller: state.videoMixes.first.controller,
               volumeMeter: volumeMeter,
               aspectRatio: DiveCoreAspectRatio.HD.ratio,
             )));
@@ -197,7 +188,7 @@ class MediaPlayer extends ConsumerWidget {
         state: state,
         onTap: (int currentIndex, int newIndex) {
           final state = elements.state;
-          final source = state.videoSources[newIndex];
+          final source = state.videoSources.toList()[newIndex];
           final sceneItem = state.currentScene?.findSceneItem(source);
           if (sceneItem != null) {
             sceneItem.setOrder(DiveSceneItemMovement.moveTop);
@@ -208,7 +199,7 @@ class MediaPlayer extends ConsumerWidget {
     final mainContent = Row(
       children: [
         if (state.videoSources.length > 0) cameras,
-        videoMix,
+        Expanded(child: videoMix),
       ],
     );
 
