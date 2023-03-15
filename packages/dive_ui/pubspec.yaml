@@ -1,6 +1,6 @@
 name: dive_ui
 description: The Dive UI widgets. A toolkit for video recording and streaming.
-version: 0.1.0
+version: 0.2.0
 homepage: https://divekit.dev
 repository: https://github.com/larryaasen/dive/tree/main/packages/dive_ui
 
@@ -12,8 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  dive:
-    path: ../dive
+  dive: ^0.7.0
 
   # From bloclibrary.dev: easy to implement the BLoC Design Pattern
   bloc: ^8.1.1

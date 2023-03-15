@@ -18,7 +18,7 @@ platforms will be added.
 | Package         | Version | Description |
 | -- | -- | -- |
 | **dive**        | [![pub package](https://img.shields.io/pub/v/dive.svg)](https://pub.dev/packages/dive) | A Flutter package that provides video capabilities. |
-| **dive_ui**     | [![pub package](https://img.shields.io/pub/v/dive_ui.svg)](https://pub.dev/packages/dive_ui) | (COMING SOON) A Flutter package for Dive containing Widgets for building Flutter apps for video recording and streaming. |
+| **dive_ui**     | [![pub package](https://img.shields.io/pub/v/dive_ui.svg)](https://pub.dev/packages/dive_ui) | A Flutter package for Dive containing Widgets for building Flutter apps for video recording and streaming. |
 | **dive_obslib** | [![pub package](https://img.shields.io/pub/v/dive_obslib.svg)](https://pub.dev/packages/dive_obslib) | A Flutter plugin package for Dive that provides low level access to obslib using FFI. |
 
 # Packages

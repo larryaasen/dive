@@ -1,7 +1,9 @@
-## Next
+## 0.7.0
 
 - Added path parameter to the start method of the DiveRecordingOutput class.
 - Added DiveRecordingOutput to DiveCoreElementsState for recording.
+- Fixed the use of obs-ffmpeg-mux for recording so now recording while streaming works.
+- Bumped dive_obslib to 0.5.0.
 
 ## 0.6.0
 
