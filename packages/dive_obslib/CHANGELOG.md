@@ -1,4 +1,4 @@
-## Next
+## 0.5.0
 
 - Added path parameter to the recordingOutputCreate method.
 
