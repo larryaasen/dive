@@ -3,7 +3,7 @@ PODS:
     - FlutterMacOS
     - obslib
   - FlutterMacOS (1.0.0)
-  - obslib (26.1.2)
+  - obslib (26.1.2-alpha.1)
 
 DEPENDENCIES:
   - dive_obslib (from `Flutter/ephemeral/.symlinks/plugins/dive_obslib/macos`)
@@ -21,8 +21,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   dive_obslib: cab926fd057929181b2fe597e89013f06b683c74
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
-  obslib: 4386ee80f17f565c35828dc62ff0903ede645faa
+  obslib: cf704b7a162b010f89f3b0bd626c1f6a65a3daba
 
-PODFILE CHECKSUM: bed24f389d2416fafa809a339decdc6492dc6b88
+PODFILE CHECKSUM: c59c25991aafdc2dc516ed4ae02537c70201a5e2
 
 COCOAPODS: 1.11.2

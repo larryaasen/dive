@@ -30,7 +30,9 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  pod 'obslib', :path => '/Users/larry/Projects/obslib-framework'
+   pod 'obslib', :path => '/Users/larry/Projects/obslib-framework'
+#  pod 'obslib', :git => 'https://github.com/larryaasen/obslib-framework.git', :tag => 'obs-ffmpeg-mux'
+#   pod 'obslib', :path => '.'
 
   flutter_install_all_macos_pods File.dirname(File.realpath(__FILE__))
 end

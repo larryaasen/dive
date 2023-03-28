@@ -5,7 +5,7 @@ PODS:
   - file_selector_macos (0.0.1):
     - FlutterMacOS
   - FlutterMacOS (1.0.0)
-  - obslib (26.1.2)
+  - obslib (26.1.2-alpha.1)
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -33,7 +33,7 @@ SPEC CHECKSUMS:
   dive_obslib: cab926fd057929181b2fe597e89013f06b683c74
   file_selector_macos: 0f85c1108e2fd597b58246bc0b0c1cb483d7593b
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
-  obslib: 4386ee80f17f565c35828dc62ff0903ede645faa
+  obslib: ebd216bfe52103efb1e41a540ccd6a33d859e3d5
   path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
 
 PODFILE CHECKSUM: bed24f389d2416fafa809a339decdc6492dc6b88
