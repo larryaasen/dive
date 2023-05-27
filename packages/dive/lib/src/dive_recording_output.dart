@@ -2,43 +2,63 @@ import 'dart:async';
 
 import 'package:dive_obslib/dive_obslib.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart' as path;
 import 'package:riverpod/riverpod.dart';
 
 import 'dive_core.dart';
+import 'dive_format.dart';
 import 'dive_system_log.dart';
 
-enum DiveOutputRecordingState { stopped, active, paused }
+enum DiveOutputRecordingActiveState { stopped, active, paused }
 
-/// Signature for the state syncer.
-typedef _DiveSyncer = Future<void> Function();
+class DiveOutputRecordingState {
+  DiveOutputRecordingState({
+    this.activeState = DiveOutputRecordingActiveState.stopped,
+    this.startTime,
+    this.duration,
+  });
+
+  final DiveOutputRecordingActiveState activeState;
+  final DateTime? startTime;
+  final Duration? duration;
+}
 
 /// Recording output.
 class DiveRecordingOutput {
   final outputType = 'ffmpeg_muxer';
 
   final provider = StateProvider<DiveOutputRecordingState>((ref) {
-    return DiveOutputRecordingState.stopped;
+    return DiveOutputRecordingState();
   }, name: 'output-recording-provider');
 
   DivePointerOutput? _output;
-  Timer? _timer;
+  Timer? _updateTimer;
 
   @mustCallSuper
   void dispose() {
-    _cancelTimer();
     stop();
   }
 
-  /// Start recording locally at the [path] specified.
-  /// "/Users/larry/Movies/larry1.mkv"
-  bool start(String path) {
+  /// Start recording locally at the [filePath] specified.
+  /// "/Users/larry/Movies/dive1.mkv"
+  /// when [appendTimeStamp] is true:
+  bool start(String filePath, {String? filename, bool appendTimeStamp = false, String extension = 'mkv'}) {
     if (_output != null) {
       stop();
     }
-    DiveSystemLog.message('DiveRecordingOutput.start at path: $path');
+
+    String outputPath = filePath;
+    if (filename != null && appendTimeStamp) {
+      final now = DateTime.now();
+      final date = DiveFormat.formatterRecordingDate.format(now);
+      final time = DiveFormat.formatterRecordingTime.format(now);
+      final timeFilename = '$filename $date at $time.$extension';
+      outputPath = path.join(filePath, timeFilename);
+    }
+    DiveSystemLog.message('DiveRecordingOutput.start at path: $outputPath');
 
     // Create recording service
-    _output = obslib.recordingOutputCreate(path: path, outputName: 'tbd', outputType: outputType);
+    _output = obslib.recordingOutputCreate(path: outputPath, outputName: 'tbd', outputType: outputType);
     if (_output == null) {
       DiveSystemLog.error('DiveRecordingOutput.start output create failed');
       return false;
@@ -47,7 +67,8 @@ class DiveRecordingOutput {
     // Start recording.
     final rv = obslib.outputStart(_output!);
     if (rv) {
-      _syncState(_updateState, repeating: true);
+      _updateState();
+      _updateTimer = Timer.periodic(const Duration(seconds: 1), (timer) => _updateState());
     } else {
       DiveSystemLog.error('DiveRecordingOutput.start output start failed');
     }
@@ -56,6 +77,8 @@ class DiveRecordingOutput {
 
   // Always call this method `stop` to ensure the resources are cleaned up.
   bool stop() {
+    _cancelTimer();
+
     if (_output == null) return false;
     DiveSystemLog.message('DiveRecordingOutput.stop');
     obslib.outputStop(_output!);
@@ -66,44 +89,27 @@ class DiveRecordingOutput {
     // amount of time for the output to actually be fully stopped.
     // TODO: This should be improved to use signals and other techniques to determine when the output
     // has stopped.
-    DiveCore.container.read(provider.notifier).state = DiveOutputRecordingState.stopped;
+    DiveCore.container.read(provider.notifier).state = DiveOutputRecordingState();
 
     return true;
   }
 
-  /// Sync the media state from the media source to the state provider,
-  /// delaying if necessary.
-  Future<void> _syncState(_DiveSyncer? syncer, {int delay = 100, bool repeating = false}) async {
-    if (repeating) {
-      // Poll the for 2 seconds
-      if (_timer == null) {
-        delay = delay == 0 ? 100 : delay;
-        _timer = Timer.periodic(Duration(milliseconds: delay), (timer) => _updateState());
-        Timer(const Duration(seconds: 2), () {
-          _cancelTimer();
-        });
-      }
-    } else if (delay > 0) {
-      Future.delayed(Duration(milliseconds: delay), () {
-        if (syncer != null) syncer();
-      });
-    } else {
-      if (syncer != null) syncer();
-    }
-    return;
-  }
-
   void _cancelTimer() {
-    if (_timer == null) return;
-    _timer!.cancel();
-    _timer = null;
+    _updateTimer?.cancel();
+    _updateTimer = null;
   }
 
   /// Sync the media state from the media source to the state provider.
   Future<void> _updateState() async {
     if (_output == null) return;
-    final state = DiveOutputRecordingState.values[obslib.outputGetState(_output!)];
-    DiveCore.container.read(provider.notifier).state = state;
-    if (state == DiveOutputRecordingState.stopped) {}
+    final activeState = DiveOutputRecordingActiveState.values[obslib.outputGetState(_output!)];
+    final currentState = DiveCore.container.read(provider.notifier).state;
+    var startTime = currentState.startTime;
+    if (currentState.startTime == null && activeState == DiveOutputRecordingActiveState.active) {
+      startTime = DateTime.now();
+    }
+    final duration = startTime != null ? DateTime.now().difference(startTime) : Duration.zero;
+    DiveCore.container.read(provider.notifier).state =
+        DiveOutputRecordingState(activeState: activeState, startTime: startTime, duration: duration);
   }
 }

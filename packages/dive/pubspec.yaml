@@ -22,6 +22,9 @@ dependencies:
   # From Dart Team: provides internationalization and localization facilities, including message translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
   intl: ^0.17.0
 
+  # From Dart Team: cross-platform path manipulation library
+  path: ^1.8.3
+
   # From darky12s@gmail.com: a state-manangement library
   riverpod: ^2.3.1
 

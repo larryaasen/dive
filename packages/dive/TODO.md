@@ -3,4 +3,3 @@
 the starting and stopping of a stream.
 1. Support signals.
 1. Use Equatable everywhere.
-1. Add support for recording.

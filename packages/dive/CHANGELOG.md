@@ -1,3 +1,8 @@
+## Next
+
+- Added a time service that can be used to display the time with updates.
+- The recording service now provides timestamps appended to the filename.
+
 ## 0.7.0
 
 - Added path parameter to the start method of the DiveRecordingOutput class.

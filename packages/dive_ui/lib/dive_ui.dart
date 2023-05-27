@@ -3,7 +3,6 @@ library dive_ui;
 import 'dart:math';
 
 import 'package:dive/dive.dart';
-import 'package:equatable/equatable.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,6 +14,7 @@ import 'dive_side_sheet.dart';
 
 export 'dive_audio_meter.dart';
 export 'dive_camera_app_widget.dart';
+export 'dive_caster.dart';
 export 'dive_media_ui.dart';
 export 'dive_meter_preview.dart';
 export 'dive_position_dialog.dart';
@@ -58,9 +58,6 @@ DiveIconSet _iconSet = DiveIconSet();
 void runDiveUIApp(Widget app) {
   // We need the binding to be initialized before calling runApp
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Configure globally for all Equatable instances via EquatableConfig
-  EquatableConfig.stringify = true;
 
   // Use [ProviderScope] so DiveCore and other modules use the same [ProviderContainer].
   runApp(ProviderScope(parent: DiveCore.providerContainer, child: app));

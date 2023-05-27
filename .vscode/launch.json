@@ -18,6 +18,13 @@
             "type": "dart"
         },
         {
+            "name": "Dive Caster",
+            "cwd": "packages/dive_ui/example",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/dive_caster.dart"
+        },
+        {
             "name": "dive_ui example",
             "cwd": "packages/dive_ui/example",
             "request": "launch",

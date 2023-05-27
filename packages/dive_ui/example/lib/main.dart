@@ -1,87 +1,111 @@
-import 'dart:io';
-
+import 'package:dive_ui/dive_ui.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dive/dive.dart';
 
-/// Dive Example
-void main() async {
-  configDiveApp();
-
-  print('Dive Example');
-
-  var n = 0;
-  ProcessSignal.sigint.watch().listen((signal) {
-    print(" caught ${++n} of 3");
-
-    if (n == 3) {
-      exit(0);
-    }
-  });
-
-  await DiveExample()
-    ..run();
+/// Dive Example - Media Player
+void main() {
+  runDiveUIApp(AppWidget());
 }
 
-class DiveExample {
+class AppWidget extends StatelessWidget {
   final _elements = DiveCoreElements();
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        title: 'Dive Example',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(primarySwatch: Colors.blue, visualDensity: VisualDensity.adaptivePlatformDensity),
+        home: Scaffold(
+          appBar: AppBar(
+            title: const Text('Dive Media Player Example'),
+            actions: <Widget>[
+              DiveVideoPickerButton(elements: _elements),
+            ],
+          ),
+          body: BodyWidget(elements: _elements),
+        ));
+  }
+}
+
+class BodyWidget extends StatefulWidget {
+  BodyWidget({super.key, required this.elements});
+
+  final DiveCoreElements elements;
+
+  @override
+  _BodyWidgetState createState() => _BodyWidgetState();
+}
+
+class _BodyWidgetState extends State<BodyWidget> {
   final _diveCore = DiveCore();
   bool _initialized = false;
 
-  void run() async {
-    await _initialize();
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () => _initialize());
+    super.initState();
   }
 
-  Future<void> _initialize() async {
+  void _initialize() async {
     if (_initialized) return;
     _initialized = true;
 
     await _diveCore.setupOBS(DiveCoreResolution.HD);
 
     // Create the main scene.
-    _elements.addScene(DiveScene.create());
+    widget.elements.addScene(DiveScene.create());
 
-    // Create the main audio source
-    DiveAudioSource.create('main audio').then((source) {
-      if (source != null) {
-        _elements.addAudioSource(source);
-        _elements.state.currentScene?.addSource(source);
+    DiveVideoMix.create().then((mix) {
+      if (mix != null) {
+        widget.elements.addMix(mix);
       }
     });
+  }
 
-    // Get the first video input
-    final videoInput = DiveInputs.video().last;
-    print(videoInput);
+  @override
+  Widget build(BuildContext context) {
+    return MediaPlayer(context: context, elements: widget.elements);
+  }
+}
 
-    // Create the last video source from the video input
-    DiveVideoSource.create(videoInput).then((source) {
-      if (source != null) {
-        _elements.addVideoSource(source);
-        // Add the video source to the scene
-        _elements.state.currentScene?.addSource(source);
-      }
-    });
+class MediaPlayer extends ConsumerWidget {
+  const MediaPlayer({super.key, required this.elements, required this.context});
 
-    const streamDuration = 5;
-    print('Dive example: Waiting $streamDuration seconds.');
+  final DiveCoreElements elements;
+  final BuildContext context;
 
-    Future.delayed(Duration(seconds: streamDuration), () {
-      final state = _elements.state;
-      // Remove the video and audio sources from the scene
-      state.currentScene?.removeAllSceneItems();
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(elements.provider);
+    if (state.mediaSources.length == 0 || state.videoMixes.length == 0) {
+      return Container(color: Colors.purple);
+    }
+    final source = state.mediaSources.first;
+    final videoMix = state.videoMixes.first;
 
-      // Remove the video source from the state
-      final videoSource = state.videoSources.last;
-      // Delete the source resources
-      videoSource.dispose();
+    final mediaButtons = Container(
+        height: 40,
+        color: Colors.black,
+        child: SizedBox.expand(
+            child: Container(
+                alignment: Alignment.center,
+                child: DiveMediaButtonBar(iconColor: Colors.white54, mediaSource: source))));
 
-      // Remove the video source from the state
-      final audioSource = state.audioSources.last;
-      // Delete the source resources
-      audioSource.dispose();
+    final meterVideoMix = DivePreview(
+      controller: videoMix.controller,
+      aspectRatio: DiveCoreAspectRatio.HD.ratio,
+    );
 
-      // Delete the scene resources
-      _elements.removeAllScenes();
+    final mainContent = Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        meterVideoMix,
+        mediaButtons,
+      ],
+    );
 
-      _diveCore.shutdown();
-    });
+    return Container(color: Colors.white, child: mainContent);
   }
 }

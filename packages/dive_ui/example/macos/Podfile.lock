@@ -15,7 +15,7 @@ DEPENDENCIES:
   - file_selector_macos (from `Flutter/ephemeral/.symlinks/plugins/file_selector_macos/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
   - obslib (from `/Users/larry/Projects/obslib-framework`)
-  - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/macos`)
+  - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
 
 EXTERNAL SOURCES:
   dive_obslib:
@@ -27,14 +27,14 @@ EXTERNAL SOURCES:
   obslib:
     :path: "/Users/larry/Projects/obslib-framework"
   path_provider_foundation:
-    :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/macos
+    :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
 
 SPEC CHECKSUMS:
   dive_obslib: cab926fd057929181b2fe597e89013f06b683c74
   file_selector_macos: 0f85c1108e2fd597b58246bc0b0c1cb483d7593b
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
-  obslib: ebd216bfe52103efb1e41a540ccd6a33d859e3d5
-  path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
+  obslib: cf704b7a162b010f89f3b0bd626c1f6a65a3daba
+  path_provider_foundation: eaf5b3e458fc0e5fbb9940fb09980e853fe058b8
 
 PODFILE CHECKSUM: bed24f389d2416fafa809a339decdc6492dc6b88
 

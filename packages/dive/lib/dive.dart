@@ -15,6 +15,7 @@ export 'src/dive_sources.dart';
 export 'src/dive_streaming_output.dart';
 export 'src/dive_system_log.dart';
 export 'src/dive_texture_controller.dart';
+export 'src/dive_time_service.dart';
 export 'src/dive_transform_info.dart';
 export 'src/dive_uuid.dart';
 export 'src/dive_video_info.dart';

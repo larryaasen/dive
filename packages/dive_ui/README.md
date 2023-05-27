@@ -52,7 +52,7 @@ button, click Download ZIP.
 just resize the window until they appear. The player controls will not be displayed until
 a video file is opened.
 
-![image](screenshots/example-1-controls.png)
+![image](example/example1-media-player.png)
 
 1. Now that you have successfully run the first `dive_ui` example, you can run the
 other examples located in the same folder as `dive_ui/example/lib/main_example1.dart`.
@@ -89,7 +89,7 @@ and DiveMediaStopButton.
 * DiveOutputButton - Streaming output button.
 * DiveStreamPlayButton - Streaming play button.
 * DiveAspectRatio - A widget that will size the child to a specific aspect ratio.
-* DiveGrid - A grid of widgets that maaintains the aspect ratio.
+* DiveGrid - A grid of widgets that maintains the aspect ratio.
 * DiveSourceMenu - 
 * DiveSubMenu - A popup menu.
 * DiveImagePickerButton - An icon button that presents the image file picker dialog.

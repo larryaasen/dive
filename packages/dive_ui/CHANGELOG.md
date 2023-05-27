@@ -1,3 +1,7 @@
+# Next
+
+- Added the Dive Caster example and Widgets to demo Multi Camera Streaming and Recording.
+
 ## 0.2.0
 
 - Added Example 15, which demonstrates how to stream both video and audio while simultaneously recording using multiple cameras. The example also includes a mix of camera feeds and shows how to switch between them.

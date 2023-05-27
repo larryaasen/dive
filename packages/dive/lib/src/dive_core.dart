@@ -7,6 +7,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:riverpod/riverpod.dart';
 
+import 'dive_time_service.dart';
+
 /// Configure a Dive app.
 void configDiveApp() {
   // We need the binding to be initialized before calling runApp
@@ -192,7 +194,7 @@ class DiveCoreAspectRatio extends Equatable {
   bool? get stringify => true;
 }
 
-class MonitoringType {
+class DiveMonitoringType {
   static const none = 0;
   static const monitorOnly = 1;
   static const monitorAndOutput = 2;
@@ -232,6 +234,9 @@ class DiveCore {
   /// For use with Riverpod. This is the container used by both packages and the app.
   static final providerContainer = ProviderContainer();
   static ProviderContainer get container => providerContainer;
+
+  /// Setup a wall clock timer service.
+  static final timeService = DiveTimeService()..initialize();
 
   /// Setup and start OBS lib.
   Future<bool> setupOBS(
