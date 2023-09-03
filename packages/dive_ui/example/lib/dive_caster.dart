@@ -1,6 +1,8 @@
 import 'package:dive/dive.dart';
-import 'package:dive_ui/dive_ui.dart';
+import 'package:dive_ui/dive_caster.dart';
+import 'package:dive_ui/dive_ui_widgets.dart';
 import 'package:flutter/widgets.dart';
+import 'package:path_provider/path_provider.dart';
 
 /// Dive Caster Multi Camera Streaming and Recording
 Future<void> main() async {
@@ -24,6 +26,18 @@ class DiveCasterMain {
   Future<void> initialize() async {
     if (_initialized) return;
     _initialized = true;
+
+    final applicationSupportDirectory = await getApplicationSupportDirectory();
+
+    // Setup app settings.
+    final appSettings =
+        DiveAppSettings(directoryPath: applicationSupportDirectory, mainFileName: 'dive_caster_settings.yml');
+    final elementsNode = DiveAppSettingsNode(nodeName: 'elements', parentNode: appSettings);
+    final windowNode = DiveAppSettingsNode(nodeName: 'window', parentNode: appSettings);
+    appSettings.addNode(elementsNode);
+    appSettings.addNode(windowNode);
+    _elements.appSettings = elementsNode;
+    await appSettings.loadSettings();
 
     // Setup and start OBS.
     await _diveCore.setupOBS(DiveCoreResolution.HD);
@@ -60,26 +74,10 @@ class DiveCasterMain {
     final recordingOutput = DiveRecordingOutput();
     elements.addRecordingOutput(recordingOutput);
 
-    // // Create the streaming output
-    // final streamingOutput = DiveStreamingOutput();
+    // Create the streaming output
+    final streamingOutput = DiveStreamingOutput();
+    streamingOutput.updateFromMap(elementsNode.settings['streaming'] as Map<String, dynamic>? ?? {});
 
-    // // YouTube settings
-    // // Replace this YouTube key with your own. This one is no longer valid.
-    // // output.serviceKey = '26qe-9gxw-9veb-kf2m-dhv3';
-    // // output.serviceUrl = 'rtmp://a.rtmp.youtube.com/live2';
-
-    // // Twitch Settings
-    // // Replace this Twitch key with your own. This one is no longer valid.
-    // streamingOutput.serviceKey = '-----';
-    // streamingOutput.serviceUrl = 'rtmp://live-iad05.twitch.tv/app/${streamingOutput.serviceKey}';
-
-    // elements.addStreamingOutput(streamingOutput);
-
-    // // Create the recording output
-    // final recordingOutput = DiveRecordingOutput();
-    // elements.addRecordingOutput(recordingOutput);
-
-    // // Start recording.
-    // recordingOutput.start('/Users/larry/Movies/dive/dive1.mkv');
+    elements.addStreamingOutput(streamingOutput);
   }
 }

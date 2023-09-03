@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:riverpod/riverpod.dart';
 
+import 'dive_app_settings.dart';
 import 'dive_audio_meter_source.dart';
 import 'dive_core.dart';
 import 'dive_media_source.dart';
@@ -8,29 +9,6 @@ import 'dive_recording_output.dart';
 import 'dive_streaming_output.dart';
 import 'dive_scene.dart';
 import 'dive_sources.dart';
-
-class DiveVideoSettingsState extends Equatable {
-  const DiveVideoSettingsState();
-
-  @override
-  List<Object?> get props => [];
-}
-
-class DiveVideoSettings {
-  /// Create a Riverpod provider to maintain the state.
-  final provider = StateProvider<DiveVideoSettingsState>((ref) => const DiveVideoSettingsState());
-
-  /// Update the state.
-  void updateState(DiveVideoSettingsState newState) {
-    final notifier = DiveCore.providerContainer.read(provider.notifier);
-    if (notifier.state != newState) {
-      notifier.state = newState;
-    }
-  }
-
-  /// Initialize this service.
-  void initialize() async {}
-}
 
 /// The state model for core elements.
 class DiveCoreElementsState extends Equatable {
@@ -134,6 +112,12 @@ class DiveCoreElementsState extends Equatable {
 
 /// The core elements used in a Dive app.
 class DiveCoreElements {
+  DiveCoreElements();
+
+  // Optional app settings that will be saved on each state update.
+  DiveAppSettingsNode? _appSettings;
+  set appSettings(DiveAppSettingsNode node) => _appSettings = node;
+
   /// Create a Riverpod provider to maintain the state.
   final provider = StateProvider<DiveCoreElementsState>((ref) => const DiveCoreElementsState());
 
@@ -188,6 +172,25 @@ class DiveCoreElements {
     final isEqual = newState == currentState;
     assert(!isEqual, 'why are these states equal?');
     controller.state = newState;
+  }
+
+  /// Save the current state to app settings.
+  void saveAppSettings() {
+    final controller = DiveCore.container.read(provider.notifier);
+    final elementState = controller.state;
+    _saveAppSettings(elementState);
+  }
+
+  /// Save the state to app settings.
+  void _saveAppSettings(DiveCoreElementsState newState) {
+    if (_appSettings == null) return;
+    if (newState.recordingOutput != null) {
+      _appSettings?.settings['recording'] = newState.recordingOutput!.toMap();
+    }
+    if (newState.streamingOutput != null) {
+      _appSettings?.settings['streaming'] = newState.streamingOutput!.toMap();
+    }
+    _appSettings?.saveSettings();
   }
 }
 

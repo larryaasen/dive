@@ -120,6 +120,12 @@ class DiveSource extends DiveTracking {
     return DiveCoreLevel.dB(levelDb);
   }
 
+  void saveFrame() {
+    if (pointer != null) {
+      // final frame = obslib.sourceGetFrame(pointer!);
+    }
+  }
+
   @override
   String toString() {
     return "$runtimeType($hashCode, $name)";

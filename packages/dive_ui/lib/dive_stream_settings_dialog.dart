@@ -20,9 +20,9 @@ class DiveStreamSettingsButton extends StatelessWidget {
   void buttonPressed(BuildContext context) => presentDialog(context);
 
   /// Override this method to provide a custom stream settings dialog.
-  /// Returns [DiveStreamSettingsDialog].
+  /// Returns [DiveStreamSettingsScreen].
   Widget dialog(BuildContext context) {
-    return DiveStreamSettingsDialog(
+    return DiveStreamSettingsScreen(
         service: elements!.state.streamingOutput == null ? null : elements!.state.streamingOutput!.service,
         server: elements!.state.streamingOutput == null ? null : elements!.state.streamingOutput!.server,
         serviceKey:
@@ -58,20 +58,27 @@ typedef DiveStreamSettingsApplyCallback = void Function(
 /// Update the video output settings.
 /// Stream service URL:
 /// Stream service key:
-class DiveStreamSettingsDialog extends StatefulWidget {
-  DiveStreamSettingsDialog({Key? key, this.service, this.server, this.serviceKey, this.onApplyCallback})
-      : super(key: key);
+class DiveStreamSettingsScreen extends StatefulWidget {
+  DiveStreamSettingsScreen({
+    Key? key,
+    this.service,
+    this.server,
+    this.serviceKey,
+    this.useDialog = false,
+    this.onApplyCallback,
+  }) : super(key: key);
 
   final DiveRTMPService? service;
   final DiveRTMPServer? server;
   final String? serviceKey;
+  final bool useDialog;
   final DiveStreamSettingsApplyCallback? onApplyCallback;
 
   @override
-  _DiveStreamSettingsDialogState createState() => _DiveStreamSettingsDialogState();
+  _DiveStreamSettingsScreenState createState() => _DiveStreamSettingsScreenState();
 }
 
-class _DiveStreamSettingsDialogState extends State<DiveStreamSettingsDialog> {
+class _DiveStreamSettingsScreenState extends State<DiveStreamSettingsScreen> {
   final DiveRTMPServices _rtmpServices = DiveRTMPServices.standard(commonNamesOnly: false);
   TextEditingController _serviceUrl = TextEditingController();
   TextEditingController _serviceKey = TextEditingController();
@@ -87,16 +94,20 @@ class _DiveStreamSettingsDialogState extends State<DiveStreamSettingsDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final title = const Text('Stream Settings');
+    final content = Center(
+      child: Column(children: [
+        _buildConfig(context),
+      ]),
+    );
+
+    if (widget.useDialog) {
+      return AlertDialog(title: title, content: content);
+    }
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFF6200EE),
-        title: Text('Stream Settings'),
-      ),
-      body: Center(
-        child: Column(children: [
-          _buildConfig(context),
-        ]),
-      ),
+      appBar: AppBar(backgroundColor: Color(0xFF6200EE), title: title),
+      body: content,
     );
   }
 
@@ -154,7 +165,7 @@ class _DiveStreamSettingsDialogState extends State<DiveStreamSettingsDialog> {
           ElevatedButton(child: Text('Reset'), onPressed: () => _onReset()),
           Container(width: 15),
           ElevatedButton(
-            child: Text('Apply'),
+            child: Text(widget.useDialog ? 'OK' : 'Apply'),
             onPressed: widget.onApplyCallback == null ? null : _onApply,
           ),
         ]));
@@ -176,7 +187,8 @@ class _DiveStreamSettingsDialogState extends State<DiveStreamSettingsDialog> {
   void _useInitialState() {
     // _serviceUrl.text = widget.serviceUrl;
     _serviceKey.text = widget.serviceKey ?? '';
-    _serviceName = widget.service == null ? 'Twitch' : widget.service?.name;
+    _serviceName =
+        widget.service != null && widget.service!.name.isNotEmpty ? widget.service!.name : 'Twitch';
     _serverNames = _getServerNames(_serviceName ?? '');
     _serverName = widget.server != null
         ? widget.server?.name
@@ -213,8 +225,8 @@ class _DiveStreamSettingsDialogState extends State<DiveStreamSettingsDialog> {
     if (server == null) return;
     widget.onApplyCallback?.call(service, server, _serviceKey.text);
 
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text("Properties have been applied."),
-    ));
+    if (!widget.useDialog) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Properties have been applied.")));
+    }
   }
 }

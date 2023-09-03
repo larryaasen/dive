@@ -70,3 +70,39 @@ The framework folder contains an example macOS application that consumes the
 obslib framework without using CocoaPods and is used to test the framework.
 
 # Getting Started
+
+# Settings
+
+For app level settings there is the `DiveAppSettings` class.
+
+It will create a YAML file like this one:
+```
+elements: 
+  recording: 
+    folder: ''
+  streaming: 
+    outputType: ''
+    server.name: 'Auto (Recommended)'
+    server.url: 'auto'
+    service.name: 'Twitch'
+    serviceId: ''
+    serviceKey: 'live_276488556_DiEfrH0a7dbE8gwZbNmlmjhjGIz1ia'
+    serviceUrl: 'auto'
+
+window: 
+```
+
+Here is an example of using `DiveAppSettings`:
+```Dart
+  final applicationSupportDirectory = Directory('/Users/Larry/ApplicationSupport/dive/');
+  final appSettings =
+      DiveAppSettings(directoryPath: applicationSupportDirectory, mainFileName: 'dive_caster_settings.yml');
+  final elementsNode = DiveAppSettingsNode(nodeName: 'elements', parentNode: appSettings);
+  final windowNode = DiveAppSettingsNode(nodeName: 'window', parentNode: appSettings);
+  appSettings.addNode(elementsNode);
+  appSettings.addNode(windowNode);
+  await appSettings.loadSettings();
+
+  final streamingOutput = DiveStreamingOutput();
+  streamingOutput.updateFromMap(elementsNode.settings['streaming'] as Map<String, dynamic>? ?? {});
+```

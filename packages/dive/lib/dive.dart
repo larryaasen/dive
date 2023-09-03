@@ -1,5 +1,6 @@
 library dive;
 
+export 'src/dive_app_settings.dart';
 export 'src/dive_audio_meter_source.dart';
 export 'src/dive_core.dart';
 export 'src/dive_elements.dart';

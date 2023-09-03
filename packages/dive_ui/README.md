@@ -77,7 +77,7 @@ issue [here](https://github.com/larryaasen/dive/issues).
 * DiveMoveItemEdit - Update the z-priority of a scene item.
 * DiveSideSheet - Show a Material side sheet.
 * DiveStreamSettingsButton - An icon button that presents the stream settings dialog.
-* DiveStreamSettingsDialog - A dialog to update the video output settings.
+* DiveStreamSettingsScreen - A dialog to update the video output settings.
 * DiveTopicCard - A material design widget that creates a [Card] widget that contains content and actions about a single subject.
 * DiveIconSet - The default icons for `dive_ui` widgets. Override these methods to provide custom icons.
 * DiveUI - Contains the key setup method.

@@ -6,7 +6,7 @@ class DiveFormat {
   static final formatterShort = DateFormat('mm:ss');
   static final formatterShortest = DateFormat('s.S');
   static final formatterLog = DateFormat('y/M/d H:mm:ss');
-  static final formatterTime = DateFormat('H:mm:ss a');
+  static final formatterTime = DateFormat('h:mm:ss a');
   static final formatterRecordingDate = DateFormat('y-MM-dd');
   static final formatterRecordingTime = DateFormat('HH-mm-ss');
 

@@ -14,13 +14,15 @@ dependencies:
 
   collection: ^1.17.0
 
-  dive_obslib: ^0.5.0
+  # dive_obslib: ^0.5.0
+  dive_obslib:
+    path: ../dive_obslib
 
   # From fluttetcommunity.dev: Simplify Dart Equality Comparisons
   equatable: ^2.0.5
 
   # From Dart Team: provides internationalization and localization facilities, including message translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
-  intl: ^0.17.0
+  intl: ^0.18.0
 
   # From Dart Team: cross-platform path manipulation library
   path: ^1.8.3
@@ -30,6 +32,12 @@ dependencies:
 
   # From: yuli.dev. Simple, fast generation of RFC4122 UUIDs
   uuid: ^3.0.7
+
+  # From Dart Team: A parser for YAML.
+  yaml: ^3.1.2
+
+  # From unknown: write YAML documents
+  yaml_writer: ^1.0.3
 
 dev_dependencies:
   flutter_test:

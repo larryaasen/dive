@@ -252,6 +252,16 @@ extension DiveFFIObslib on DiveBaseObslib {
     _lib.obs_source_release(source.pointer);
   }
 
+  /// Gets the current async video frame.
+  void sourceGetFrame(DivePointer source) {
+    ffi.Pointer<obs_source_frame> frame = _lib.obs_source_get_frame(source.pointer);
+    if (frame == ffi.nullptr) {
+      debugPrint('sourceGetFrame: could not get a frame');
+    } else {
+      debugPrint('sourceGetFrame $frame');
+    }
+  }
+
   /// Add an existing source to an existing scene, and return sceneitem id.
   DivePointerSceneItem sceneAddSource(DivePointer scene, DivePointer source) {
     final item = _lib.obs_scene_add(scene.pointer, source.pointer);
@@ -474,17 +484,25 @@ extension DiveFFIObslib on DiveBaseObslib {
     return names;
   }
 
-  /// Get the output state: 0 (stopped), 1 (active), 2 (paused), or 3 (reconnecting)
+  /// Get the output state: 0 (stopped), 1 (active), 2 (paused), 3 (reconnecting), 4 (failed)
   int outputGetState(DivePointerOutput output) {
     final active = _lib.obs_output_active(output.pointer);
     final paused = _lib.obs_output_paused(output.pointer);
     final reconnecting = _lib.obs_output_reconnecting(output.pointer);
+    final error = _lib.obs_output_get_last_error(output.pointer);
+    final errorMsg = error.string;
+
     int state = 0;
-    if (active == 1)
+    if (reconnecting == 1)
+      state = 3;
+    else if (active == 1)
       state = 1;
     else if (paused == 1)
       state = 2;
-    else if (reconnecting == 1) state = 3;
+    else if (errorMsg != null && errorMsg.isNotEmpty) {
+      state = 4;
+    }
+    ;
 
     return state;
   }
@@ -643,10 +661,10 @@ extension DiveFFIObslib on DiveBaseObslib {
 
     final cb = ffi.Pointer.fromFunction<
         ffi.Uint8 Function(
-      ffi.Pointer<ffi.Void>,
-      ffi.Pointer<ffi.Int8>,
-      ffi.Pointer<ffi.Int8>,
-    )>(_audioCallback, 0);
+          ffi.Pointer<ffi.Void>,
+          ffi.Pointer<ffi.Int8>,
+          ffi.Pointer<ffi.Int8>,
+        )>(_audioCallback, 0);
     _lib.obs_enum_audio_monitoring_devices(cb, list as dynamic);
 
     list.add({'id': 'default', 'name': 'Default'});

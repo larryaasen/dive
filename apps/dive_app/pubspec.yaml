@@ -21,7 +21,7 @@ dependencies:
   dive_ui:
     path: ../../packages/dive_ui
 
-  intl: ^0.17.0
+  intl: ^0.18.0
 
 dev_dependencies:
   flutter_test:
