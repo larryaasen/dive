@@ -2,6 +2,7 @@ import 'package:dive/dive.dart';
 import 'package:dive_ui/dive_caster.dart';
 import 'package:dive_ui/dive_ui_widgets.dart';
 import 'package:flutter/widgets.dart';
+import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
 /// Dive Caster Multi Camera Streaming and Recording
@@ -72,6 +73,12 @@ class DiveCasterMain {
 
     // Create the recording output
     final recordingOutput = DiveRecordingOutput();
+    recordingOutput.updateFromMap(elementsNode.settings['recording'] as Map<String, dynamic>? ?? {});
+    final recordingState = recordingOutput.state;
+    if (recordingState.folder == null || recordingState.folder!.isEmpty) {
+      final folder = path.join(applicationSupportDirectory.path, 'recordings');
+      recordingOutput.state = recordingState.copyWith(folder: folder);
+    }
     elements.addRecordingOutput(recordingOutput);
 
     // Create the streaming output

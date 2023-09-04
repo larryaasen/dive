@@ -3,7 +3,6 @@
 import 'package:dive/dive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart' as path;
 
 import 'dive_record_settings_dialog.dart';
 import 'dive_stream_settings_dialog.dart';
@@ -118,13 +117,10 @@ class DiveHeaderRecordButton extends StatelessWidget {
         String duration = '';
         final elementsState = ref.watch(elements.provider);
         if (elementsState.recordingOutput != null) {
-          final recordingState =
-              ref.watch(elementsState.recordingOutput!.provider);
-          recording = recordingState.activeState ==
-              DiveOutputRecordingActiveState.active;
-          duration = recordingState.duration != null
-              ? DiveFormat.formatDuration(recordingState.duration!)
-              : '';
+          final recordingState = ref.watch(elementsState.recordingOutput!.provider);
+          recording = recordingState.activeState == DiveOutputRecordingActiveState.active;
+          duration =
+              recordingState.duration != null ? DiveFormat.formatDuration(recordingState.duration!) : '';
         }
         return DiveHeaderButton(
           title: recording ? 'RECORDING' : 'RECORD',
@@ -133,18 +129,14 @@ class DiveHeaderRecordButton extends StatelessWidget {
           onPressed: () async {
             final elementsState = elements.state;
             if (elementsState.recordingOutput != null) {
-              final recordingState =
-                  ref.read(elementsState.recordingOutput!.provider);
-              final recording = recordingState.activeState ==
-                  DiveOutputRecordingActiveState.active;
+              final recordingState = ref.read(elementsState.recordingOutput!.provider);
+              final recording = recordingState.activeState == DiveOutputRecordingActiveState.active;
               if (recording) {
                 // Stop recording.
                 elementsState.recordingOutput!.stop();
               } else {
-                final folder = path.join('~/Documents');
                 // Start recording.
-                elementsState.recordingOutput!
-                    .start(folder, filename: 'dive1', appendTimeStamp: true);
+                elementsState.recordingOutput!.start(filename: 'dive1', appendTimeStamp: true);
               }
             }
           },
@@ -166,8 +158,7 @@ class DiveHeaderRecordButton extends StatelessWidget {
             child: DiveRecordSettingsScreen(
               saveFolder: recordingOutput.state.folder,
               useDialog: true,
-              onApplyCallback: (String directory) =>
-                  _onDialogApply(context, directory),
+              onApplyCallback: (String directory) => _onDialogApply(context, directory),
             ),
           );
         });
@@ -177,7 +168,10 @@ class DiveHeaderRecordButton extends StatelessWidget {
     final recordingOutput = elements.state.recordingOutput;
     if (recordingOutput != null) {
       recordingOutput.stop();
-// ?      recordingOutput. .state.folder = directory;
+      recordingOutput.state = recordingOutput.state.copyWith(folder: directory);
+
+      // Save the updated settings.
+      elements.saveAppSettings();
     }
     Navigator.of(context).pop();
   }
@@ -197,15 +191,11 @@ class DiveHeaderStreamButton extends StatelessWidget {
         String duration = '';
         final elementsState = ref.watch(elements.provider);
         if (elementsState.streamingOutput != null) {
-          final streamingState =
-              ref.watch(elementsState.streamingOutput!.provider);
-          streaming = streamingState.activeState ==
-              DiveOutputStreamingActiveState.active;
-          failed = streamingState.activeState ==
-              DiveOutputStreamingActiveState.failed;
-          duration = streamingState.duration != null
-              ? DiveFormat.formatDuration(streamingState.duration!)
-              : '';
+          final streamingState = ref.watch(elementsState.streamingOutput!.provider);
+          streaming = streamingState.activeState == DiveOutputStreamingActiveState.active;
+          failed = streamingState.activeState == DiveOutputStreamingActiveState.failed;
+          duration =
+              streamingState.duration != null ? DiveFormat.formatDuration(streamingState.duration!) : '';
         }
         return DiveHeaderButton(
           title: streaming ? 'STREAMING' : 'STREAM',
@@ -220,10 +210,8 @@ class DiveHeaderStreamButton extends StatelessWidget {
           onPressed: () {
             final elementsState = elements.state;
             if (elementsState.streamingOutput != null) {
-              final recordingState =
-                  ref.read(elementsState.streamingOutput!.provider);
-              final active = recordingState.activeState ==
-                  DiveOutputStreamingActiveState.active;
+              final recordingState = ref.read(elementsState.streamingOutput!.provider);
+              final active = recordingState.activeState == DiveOutputStreamingActiveState.active;
               if (active) {
                 // Stop streaming.
                 elementsState.streamingOutput!.stop();
@@ -248,34 +236,30 @@ class DiveHeaderStreamButton extends StatelessWidget {
         builder: (BuildContext context) {
           return SingleChildScrollView(
             child: DiveStreamSettingsScreen(
-              service: elements.state.streamingOutput == null
-                  ? null
-                  : elements.state.streamingOutput!.service,
-              server: elements.state.streamingOutput == null
-                  ? null
-                  : elements.state.streamingOutput!.server,
-              serviceKey: elements.state.streamingOutput == null
-                  ? null
-                  : elements.state.streamingOutput!.serviceKey,
+              service:
+                  elements.state.streamingOutput == null ? null : elements.state.streamingOutput!.service,
+              server: elements.state.streamingOutput == null ? null : elements.state.streamingOutput!.server,
+              serviceKey:
+                  elements.state.streamingOutput == null ? null : elements.state.streamingOutput!.serviceKey,
               useDialog: true,
-              onApplyCallback: (DiveRTMPService service, DiveRTMPServer server,
-                      String serviceKey) =>
+              onApplyCallback: (DiveRTMPService service, DiveRTMPServer server, String serviceKey) =>
                   _onDialogApply(context, service, server, serviceKey),
             ),
           );
         });
   }
 
-  void _onDialogApply(BuildContext context, DiveRTMPService service,
-      DiveRTMPServer server, String serviceKey) {
-    final state = elements.state;
-    if (state.streamingOutput != null) {
-      state.streamingOutput!.stop();
-      state.streamingOutput!.service = service;
-      state.streamingOutput!.server = server;
-      state.streamingOutput!.serviceUrl = server.url;
-      state.streamingOutput!.serviceKey = serviceKey;
+  void _onDialogApply(
+      BuildContext context, DiveRTMPService service, DiveRTMPServer server, String serviceKey) {
+    final streamingOutput = elements.state.streamingOutput;
+    if (streamingOutput != null) {
+      streamingOutput.stop();
+      streamingOutput.service = service;
+      streamingOutput.server = server;
+      streamingOutput.serviceUrl = server.url;
+      streamingOutput.serviceKey = serviceKey;
 
+      // Save the updated settings.
       elements.saveAppSettings();
     }
     Navigator.of(context).pop();
@@ -295,8 +279,7 @@ class DiveCasterFooter extends StatelessWidget {
       height: 40.0,
       child: Row(
         children: [
-          DiveHeaderIcon(
-              icon: Icon(Icons.live_tv, color: DiveCasterTheme.textColor)),
+          DiveHeaderIcon(icon: Icon(Icons.live_tv, color: DiveCasterTheme.textColor)),
           DiveHeaderText(text: 'Dive Caster'),
         ],
       ),
@@ -358,13 +341,10 @@ class DiveCasterContentArea extends StatelessWidget {
     return Consumer(
       builder: (context, ref, child) {
         final elementsState = ref.watch(elements.provider);
-        final controller = elementsState.videoMixes.isNotEmpty
-            ? elementsState.videoMixes.first.controller
-            : null;
+        final controller =
+            elementsState.videoMixes.isNotEmpty ? elementsState.videoMixes.first.controller : null;
         return Center(
-          child: DivePreview(
-              aspectRatio: DiveCoreAspectRatio.HD.ratio,
-              controller: controller),
+          child: DivePreview(aspectRatio: DiveCoreAspectRatio.HD.ratio, controller: controller),
         );
       },
     );
@@ -388,8 +368,7 @@ class DiveHeaderClock extends ConsumerWidget {
       width: 100.0,
       height: 36,
       child: Center(
-        child: Text(nowFormatted,
-            style: TextStyle(color: DiveCasterTheme.textColor)),
+        child: Text(nowFormatted, style: TextStyle(color: DiveCasterTheme.textColor)),
       ),
     );
   }
@@ -467,15 +446,12 @@ class _DiveHeaderButtonState extends State<DiveHeaderButton> {
           : widget.useRedBackground
               ? MaterialStatePropertyAll(DiveCasterTheme.headerButtonRedColor)
               : MaterialStatePropertyAll(DiveCasterTheme.headerBackgroundColor),
-      foregroundColor:
-          MaterialStatePropertyAll(DiveCasterTheme.headerButtonTextColor),
+      foregroundColor: MaterialStatePropertyAll(DiveCasterTheme.headerButtonTextColor),
       overlayColor: widget.useBlueBackground
           ? MaterialStatePropertyAll(DiveCasterTheme.headerButtonBlueHoverColor)
           : widget.useRedBackground
-              ? MaterialStatePropertyAll(
-                  DiveCasterTheme.headerButtonRedHoverColor)
-              : MaterialStatePropertyAll(
-                  DiveCasterTheme.headerButtonHoverColor),
+              ? MaterialStatePropertyAll(DiveCasterTheme.headerButtonRedHoverColor)
+              : MaterialStatePropertyAll(DiveCasterTheme.headerButtonHoverColor),
       splashFactory: NoSplash.splashFactory,
     );
 
@@ -499,9 +475,7 @@ class _DiveHeaderButtonState extends State<DiveHeaderButton> {
         if (widget.onGearPressed != null)
           IconButton(
             icon: Icon(DiveUI.iconSet.sourceSettingsButton),
-            color: _hovering
-                ? DiveCasterTheme.headerButtonTextColor
-                : DiveCasterTheme.headerButtonHoverColor,
+            color: _hovering ? DiveCasterTheme.headerButtonTextColor : DiveCasterTheme.headerButtonHoverColor,
             onPressed: widget.onGearPressed,
           ),
       ],

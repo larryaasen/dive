@@ -1,7 +1,9 @@
 // Copyright (c) 2023 Larry Aasen. All rights reserved.
 
 import 'package:dive/dive.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
+
 import 'dive_ui.dart';
 
 /// An icon button that presents the record settings dialog.
@@ -96,13 +98,14 @@ class _DiveRecordSettingsScreenState extends State<DiveRecordSettingsScreen> {
 
   Widget _buildConfig(BuildContext context) {
     final position = Padding(
-        padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+        padding: EdgeInsets.only(top: 0.0, left: 10, right: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            ElevatedButton(child: Text('Change Folder'), onPressed: () => _onChangeFolder()),
             Padding(padding: EdgeInsets.only(top: 20), child: Text('Save recordings to this folder:')),
-            Text(_saveFolder),
+            Container(constraints: BoxConstraints(maxWidth: 400.0), child: Text(_saveFolder)),
           ],
         ));
 
@@ -125,6 +128,14 @@ class _DiveRecordSettingsScreenState extends State<DiveRecordSettingsScreen> {
 
   void _useInitialState() {
     _saveFolder = widget.saveFolder ?? '';
+  }
+
+  void _onChangeFolder() async {
+    getDirectoryPath(confirmButtonText: 'OK', initialDirectory: '').then((String? path) {
+      if (path == null) return;
+      DiveSystemLog.message('DiveRecordSettingsScreen: patj=$path', group: 'dive_ui');
+      setState(() => _saveFolder = path);
+    });
   }
 
   void _onReset() {

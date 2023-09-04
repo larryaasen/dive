@@ -152,9 +152,10 @@ class _BodyWidgetState extends State<BodyWidget> {
     // Create the recording output
     final recordingOutput = DiveRecordingOutput();
     widget.elements.addRecordingOutput(recordingOutput);
+    recordingOutput.state = recordingOutput.state.copyWith(folder: '/Users/larry/Movies/dive/');
 
     // Start recording.
-    recordingOutput.start('/Users/larry/Movies/dive/dive1.mkv');
+    recordingOutput.start(filename: 'dive1', appendTimeStamp: true);
   }
 
   @override

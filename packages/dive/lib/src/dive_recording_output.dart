@@ -51,10 +51,8 @@ class DiveRecordingOutput {
     return const DiveOutputRecordingState();
   }, name: 'output-recording-provider');
 
-  DiveOutputRecordingState get state =>
-      DiveCore.container.read(provider.notifier).state;
-  set state(DiveOutputRecordingState newState) =>
-      DiveCore.container.read(provider.notifier).state = newState;
+  DiveOutputRecordingState get state => DiveCore.container.read(provider.notifier).state;
+  set state(DiveOutputRecordingState newState) => DiveCore.container.read(provider.notifier).state = newState;
 
   DivePointerOutput? _output;
   Timer? _updateTimer;
@@ -64,7 +62,7 @@ class DiveRecordingOutput {
     stop();
   }
 
-  void updateFromMap(Map<String, Object> map) {
+  void updateFromMap(Map<String, Object?> map) {
     final newState = state.copyWith(
       folder: map['folder'] as String? ?? '',
     );
@@ -80,27 +78,23 @@ class DiveRecordingOutput {
   /// Start recording locally at the [filePath] specified.
   /// "/Users/larry/Movies/dive1.mkv"
   /// when [appendTimeStamp] is true:
-  bool start(String filePath,
-      {String? filename,
-      bool appendTimeStamp = false,
-      String extension = 'mkv'}) {
+  bool start({String? filename, bool appendTimeStamp = false, String extension = 'mkv'}) {
     if (_output != null) {
       stop();
     }
 
-    String outputPath = filePath;
+    String outputPath = state.folder ?? '';
     if (filename != null && appendTimeStamp) {
       final now = DateTime.now();
       final date = DiveFormat.formatterRecordingDate.format(now);
       final time = DiveFormat.formatterRecordingTime.format(now);
       final timeFilename = '$filename $date at $time.$extension';
-      outputPath = path.join(filePath, timeFilename);
+      outputPath = path.join(outputPath, timeFilename);
     }
     DiveSystemLog.message('DiveRecordingOutput.start at path: $outputPath');
 
     // Create recording service
-    _output = obslib.recordingOutputCreate(
-        path: outputPath, outputName: 'tbd', outputType: outputType);
+    _output = obslib.recordingOutputCreate(path: outputPath, outputName: 'tbd', outputType: outputType);
     if (_output == null) {
       DiveSystemLog.error('DiveRecordingOutput.start output create failed');
       return false;
@@ -110,8 +104,7 @@ class DiveRecordingOutput {
     final rv = obslib.outputStart(_output!);
     if (rv) {
       _updateState();
-      _updateTimer =
-          Timer.periodic(const Duration(seconds: 1), (timer) => _updateState());
+      _updateTimer = Timer.periodic(const Duration(seconds: 1), (timer) => _updateState());
     } else {
       DiveSystemLog.error('DiveRecordingOutput.start output start failed');
     }
@@ -145,18 +138,13 @@ class DiveRecordingOutput {
   /// Sync the media state from the media source to the state provider.
   Future<void> _updateState() async {
     if (_output == null) return;
-    final activeState =
-        DiveOutputRecordingActiveState.values[obslib.outputGetState(_output!)];
+    final activeState = DiveOutputRecordingActiveState.values[obslib.outputGetState(_output!)];
     final currentState = state;
     var startTime = currentState.startTime;
-    if (currentState.startTime == null &&
-        activeState == DiveOutputRecordingActiveState.active) {
+    if (currentState.startTime == null && activeState == DiveOutputRecordingActiveState.active) {
       startTime = DateTime.now();
     }
-    final duration = startTime != null
-        ? DateTime.now().difference(startTime)
-        : Duration.zero;
-    state = DiveOutputRecordingState(
-        activeState: activeState, startTime: startTime, duration: duration);
+    final duration = startTime != null ? DateTime.now().difference(startTime) : Duration.zero;
+    state = DiveOutputRecordingState(activeState: activeState, startTime: startTime, duration: duration);
   }
 }
