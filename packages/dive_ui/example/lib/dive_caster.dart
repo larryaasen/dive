@@ -74,17 +74,11 @@ class DiveCasterMain {
     // Create the recording output
     final recordingOutput = DiveRecordingOutput();
     recordingOutput.updateFromMap(elementsNode.settings['recording'] as Map<String, dynamic>? ?? {});
-    final recordingState = recordingOutput.state;
-    if (recordingState.folder == null || recordingState.folder!.isEmpty) {
-      final folder = path.join(applicationSupportDirectory.path, 'recordings');
-      recordingOutput.state = recordingState.copyWith(folder: folder);
-    }
     elements.addRecordingOutput(recordingOutput);
 
     // Create the streaming output
     final streamingOutput = DiveStreamingOutput();
     streamingOutput.updateFromMap(elementsNode.settings['streaming'] as Map<String, dynamic>? ?? {});
-
     elements.addStreamingOutput(streamingOutput);
   }
 }

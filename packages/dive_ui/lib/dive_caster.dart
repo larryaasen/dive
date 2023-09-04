@@ -133,10 +133,16 @@ class DiveHeaderRecordButton extends StatelessWidget {
               final recording = recordingState.activeState == DiveOutputRecordingActiveState.active;
               if (recording) {
                 // Stop recording.
-                elementsState.recordingOutput!.stop();
+                if (elementsState.recordingOutput!.stop()) {
+                  ScaffoldMessenger.maybeOf(context)!
+                      .showSnackBar(SnackBar(content: Text("Record stopped.")));
+                }
               } else {
                 // Start recording.
-                elementsState.recordingOutput!.start(filename: 'dive1', appendTimeStamp: true);
+                if (elementsState.recordingOutput!.start(filename: 'dive1', appendTimeStamp: true)) {
+                  ScaffoldMessenger.maybeOf(context)!
+                      .showSnackBar(SnackBar(content: Text("Record started.")));
+                }
               }
             }
           },
@@ -214,10 +220,16 @@ class DiveHeaderStreamButton extends StatelessWidget {
               final active = recordingState.activeState == DiveOutputStreamingActiveState.active;
               if (active) {
                 // Stop streaming.
-                elementsState.streamingOutput!.stop();
+                if (elementsState.streamingOutput!.stop()) {
+                  ScaffoldMessenger.maybeOf(context)!
+                      .showSnackBar(SnackBar(content: Text("Stream stopped.")));
+                }
               } else {
                 // Start streaming.
-                elementsState.streamingOutput!.start();
+                if (elementsState.streamingOutput!.start()) {
+                  ScaffoldMessenger.maybeOf(context)!
+                      .showSnackBar(SnackBar(content: Text("Stream started.")));
+                }
               }
             }
           },
