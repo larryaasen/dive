@@ -58,12 +58,18 @@ class DiveUI {
   static set iconSet(DiveIconSet iconSet) => _iconSet = iconSet;
 }
 
+/// A class to provide a [child], normally a [DivePreview], with a [DiveSourceMenu] gear button displayed
+/// on top.
 class DiveSourceCard extends StatefulWidget {
-  DiveSourceCard(
-      {required this.child, required this.item, required this.elements, this.referencePanels, this.panel});
+  /// Provides a [child], normally a [DivePreview], with a [DiveSourceMenu] gear
+  /// button displayed on top.
+  DiveSourceCard({required this.child, this.item, required this.elements, this.referencePanels, this.panel});
 
   final Widget child;
-  final DiveSceneItem item;
+
+  /// Used by the [DiveSourceMenu].
+  final DiveSceneItem? item;
+
   final DiveCoreElements elements;
   final DiveReferencePanelsCubit? referencePanels;
   final DiveReferencePanel? panel;
@@ -249,11 +255,13 @@ class DiveGrid extends StatelessWidget {
   }
 }
 
+// A class to provide a source menu.
 class DiveSourceMenu extends StatefulWidget {
-  DiveSourceMenu(
-      {required this.item, required this.elements, this.referencePanels, this.panel, this.onDisplayed});
+  /// Provides a menu with a list of selectable video sources from [elements]. It also provides a button
+  /// that when tapped displays the menu.
+  DiveSourceMenu({this.item, required this.elements, this.referencePanels, this.panel, this.onDisplayed});
 
-  final DiveSceneItem item;
+  final DiveSceneItem? item;
   final DiveCoreElements elements;
   final DiveReferencePanelsCubit? referencePanels;
   final DiveReferencePanel? panel;

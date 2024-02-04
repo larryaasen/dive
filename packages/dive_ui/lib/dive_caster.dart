@@ -335,7 +335,16 @@ class DiveCasterContentArea extends StatelessWidget {
   }
 
   Widget _grid() {
-    final items = List.generate(12, (index) => DivePreview());
+    final items = List.generate(12, (index) {
+      return DiveSourceCard(
+        // item: item,
+        child: DivePreview(
+            // controller: state.videoSources.length == 0 ? null : (state.videoSources.first).controller,
+            controller: null,
+            aspectRatio: DiveCoreAspectRatio.HD.ratio),
+        elements: elements,
+      );
+    });
 
     return GridView.count(
       primary: false,
@@ -501,7 +510,8 @@ class _DiveHeaderButtonState extends State<DiveHeaderButton> {
         setState(() => _hovering = false);
       },
       child: SizedBox(
-        height: double.infinity,
+        width: 160.0,
+        // height: double.infinity,
         child: TextButton(
           style: style,
           onPressed: () {

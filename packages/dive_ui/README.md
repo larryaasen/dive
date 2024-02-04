@@ -61,7 +61,7 @@ If you run into any issues with these steps, please create a Dive GitHub
 issue [here](https://github.com/larryaasen/dive/issues).
 
 # Video Widgets
-* DiveSourceCard - stack, gear menu, child
+* DiveSourceCard - Provides a child, normally a [DivePreview], with a [DiveSourceMenu] gear button displayed on top.
 * DiveMediaPreview - stack, text, buttons
 * DiveMeterPreview - A [DivePreview] with a [DiveAudioMeter] overlay using a [DiveAudioMeterSource].
 * DivePreview - A widget showing a preview of a video/image frame using a [Texture] widget.
@@ -90,7 +90,7 @@ and DiveMediaStopButton.
 * DiveStreamPlayButton - Streaming play button.
 * DiveAspectRatio - A widget that will size the child to a specific aspect ratio.
 * DiveGrid - A grid of widgets that maintains the aspect ratio.
-* DiveSourceMenu - 
+* DiveSourceMenu - Provides a menu with a list of selectable video sources from [elements]. It also provides a button that when tapped displays the menu.
 * DiveSubMenu - A popup menu.
 * DiveImagePickerButton - An icon button that presents the image file picker dialog.
 * DiveVideoPickerButton - An icon button that presents the video file picker dialog.

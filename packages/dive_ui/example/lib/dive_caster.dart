@@ -2,7 +2,6 @@ import 'package:dive/dive.dart';
 import 'package:dive_ui/dive_caster.dart';
 import 'package:dive_ui/dive_ui_widgets.dart';
 import 'package:flutter/widgets.dart';
-import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
 /// Dive Caster Multi Camera Streaming and Recording
