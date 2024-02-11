@@ -1,0 +1,22 @@
+PODS:
+  - dive_av (0.0.1):
+    - FlutterMacOS
+  - FlutterMacOS (1.0.0)
+
+DEPENDENCIES:
+  - dive_av (from `Flutter/ephemeral/.symlinks/plugins/dive_av/macos`)
+  - FlutterMacOS (from `Flutter/ephemeral`)
+
+EXTERNAL SOURCES:
+  dive_av:
+    :path: Flutter/ephemeral/.symlinks/plugins/dive_av/macos
+  FlutterMacOS:
+    :path: Flutter/ephemeral
+
+SPEC CHECKSUMS:
+  dive_av: 2c554534c6face82a66ab084f1b14bd4d576b26e
+  FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
+
+PODFILE CHECKSUM: 236401fc2c932af29a9fcf0e97baeeb2d750d367
+
+COCOAPODS: 1.13.0
