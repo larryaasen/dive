@@ -23,11 +23,15 @@ abstract class DiveAvPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> createVideoSource(String deviceUniqueID) {
+  Future<String?> createVideoSource(String deviceUniqueID, int? textureId) {
     throw UnimplementedError('createVideoSource has not been implemented.');
   }
 
   Future<bool> removeSource({required String sourceId}) {
     throw UnimplementedError('removeSource has not been implemented.');
+  }
+
+  Future<int> initializeTexture() {
+    throw UnimplementedError('initializeTexture has not been implemented.');
   }
 }

@@ -10,15 +10,23 @@ class MethodChannelDiveAv extends DiveAvPlatform {
   final methodChannel = const MethodChannel('dive_av.io/plugin');
 
   @override
-  Future<String?> createVideoSource(String deviceUniqueID) async {
-    final rv =
-        await methodChannel.invokeMethod<String?>('createVideoSource', {'device_uique_id': deviceUniqueID});
+  Future<String?> createVideoSource(String deviceUniqueID, int? textureId) async {
+    final rv = await methodChannel.invokeMethod<String?>('createVideoSource', {
+      'device_uique_id': deviceUniqueID,
+      'texture_id': textureId,
+    });
     return rv;
   }
 
   @override
   Future<bool> removeSource({required String sourceId}) async {
     final rv = await methodChannel.invokeMethod<bool>('removeSource', {'source_id': sourceId}) ?? false;
+    return rv;
+  }
+
+  @override
+  Future<int> initializeTexture() async {
+    final rv = await methodChannel.invokeMethod<int>('initializeTexture') ?? 0;
     return rv;
   }
 }

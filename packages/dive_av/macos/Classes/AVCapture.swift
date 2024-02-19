@@ -1,6 +1,7 @@
 // Copyright (c) 2024 Larry Aasen. All rights reserved.
 
 import AVFoundation
+import Accelerate
 import CoreMedia
 import CoreMediaIO
 import CoreVideo
@@ -183,7 +184,6 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
       print("No session created")
       return false
     }
-    guard let videoOutput else { return false }
 
     let device = AVCaptureDevice(uniqueID: uniqueID)
 
@@ -199,13 +199,15 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
     }
 
     guard let device else {
-      if !uniqueID.isEmpty {
+      if uniqueID.isEmpty {
         print("No device selected")
       } else {
         print("Unable to initialize device with unique ID \(uniqueID)")
       }
       return false
     }
+
+    guard let videoOutput else { return false }
 
     //    let deviceName = device.localizedName.utf8CString as? UnsafePointer<Int8>
     //    obs_data_set_string(captureInfo.settings, "device_name", deviceName)``
@@ -276,14 +278,19 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
           .uint32Value ?? 0)
 
       if AVCapture.format(fromSubtype: subType) != .none {
-        print("Using native fourcc \(subType)")
+        if subType == kCVPixelFormatType_422YpCbCr8 {
+          print("Using native fourcc kCVPixelFormatType_422YpCbCr8")
+        } else {
+          print("Using native fourcc \(subType)")
+        }
       } else {
-        print("Using fallback fourcc '\(kCVPixelFormatType_32BGRA))' \(subType) unsupported)")
+        let fallbackType = kCVPixelFormatType_32ARGB
+        print("Using fallback fourcc '\(fallbackType))' \(subType) unsupported)")
 
         var videoSettings = videoOutput.videoSettings
 
         videoSettings?[kCVPixelBufferPixelFormatTypeKey as String] = NSNumber(
-          value: kCVPixelFormatType_32BGRA)
+          value: fallbackType)
 
         videoOutput.videoSettings = videoSettings
       }
@@ -339,8 +346,8 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
       return false
     }
     guard let session else {
-        print("No session")
-        return false
+      print("No session")
+      return false
     }
 
     if session.canSetSessionPreset(preset) {
@@ -480,21 +487,21 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
       return
     }
 
-    if !device.uniqueID.isEqual(deviceUUID) {
-      //      obs_source_update_properties(captureInfo.source)
-      return
-    }
-
     if let device = deviceInput?.device {
       print(
-        "Received connect event with active device '\(device.localizedName)' (UUID \(device.uniqueID)"
+        "Received connect event with active device '\(device.localizedName)' \(device.uniqueID)"
       )
 
       //      obs_source_update_properties(captureInfo.source)
       return
     }
 
-    print("Received connect event for device '\(device.localizedName)' (UUID \(device.uniqueID)")
+    print("Received connect event for device '\(device.localizedName)' \(device.uniqueID)")
+
+    if !device.uniqueID.isEqual(deviceUUID) {
+      //      obs_source_update_properties(captureInfo.source)
+      return
+    }
 
     /*
     var error: Error?
@@ -523,28 +530,25 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
   }
 
   func deviceDisconnected(_ notification: Notification?) {
-    let device = notification?.object as? AVCaptureDevice
-    if device == nil {
+    guard let device = notification?.object as? AVCaptureDevice else {
       return
     }
 
+    if let deviceConnected = deviceInput?.device {
+      print(
+        "Received disconnect event for inactive device '\(deviceConnected.localizedName)' \(deviceConnected.uniqueID)"
+      )
+      //      obs_source_update_properties(captureInfo.source)
+      return
+    }
+
+    print("Received disconnect event for device '\(device.localizedName)' \(device.uniqueID)")
+
     /*
-    if !(device?.uniqueID.isEqual(to: deviceUUID) ?? false) {
-      obs_source_update_properties(captureInfo.source)
-      return
-    }
-    if !deviceInput.device {
-      avCaptureLog(
-        LOG_ERROR,
-        withFormat: "Received disconnect event for inactive device '%@' (UUID %@)",
-        device.localizedName, device.uniqueID)
-      obs_source_update_properties(captureInfo.source)
-      return
-    }
-    avCaptureLog(
-      LOG_INFO,
-      withFormat: "Received disconnect event for device '%@' (UUID %@)", device.localizedName,
-      device.uniqueID)
+      if !(device?.uniqueID.isEqual(to: deviceUUID) ?? false) {
+        obs_source_update_properties(captureInfo.source)
+        return
+      }
 
     weak var weakSelf = self
     sessionQueue.async(execute: {
@@ -600,9 +604,10 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
     switch mediaType {
     case kCMMediaType_Video:
       _frameCount += 1
-      print("video frame \(_frameCount)")
       let sampleBufferDimensions = CMVideoFormatDescriptionGetDimensions(description)
       let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
+      let pixelBuffer: CVPixelBuffer? = CMSampleBufferGetImageBuffer(sampleBuffer)
+      outputPixelBuffer(pixelBuffer)
       let mediaSubType = CMFormatDescriptionGetMediaSubType(description)
 
       var newInfo = AVCaptureVideoInfo(
@@ -959,6 +964,158 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
     }
   }
 
+  func outputPixelBuffer(_ pixelBuffer: CVPixelBuffer?) {
+    if let captureInfo, let callback = captureInfo.pixelBufferCallback {
+      callback(pixelBuffer)
+    }
+  }
+
+  /// Convert pixelBuffer to a pixelBuffer with format type kCVPixelFormatType_32ARGB.
+  func convert(pixelBuffer: CVPixelBuffer) -> CVPixelBuffer? {
+
+    CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
+    defer { CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly) }
+
+    guard var data = CVPixelBufferGetBaseAddress(pixelBuffer) else {
+      return nil
+    }
+
+    let shouldSwapRedBlue = false
+
+    var formatType = CVPixelBufferGetPixelFormatType(pixelBuffer)
+    let width = CVPixelBufferGetWidth(pixelBuffer)
+    let height = CVPixelBufferGetHeight(pixelBuffer)
+    var linesize = CVPixelBufferGetBytesPerRow(pixelBuffer)
+    var upscaleImageData: UnsafeMutableRawPointer?
+
+    // If pixel format is 2vuy
+    if formatType == kCVPixelFormatType_422YpCbCr8 {
+      upscaleImageData = upscaleImage(
+        width: width, height: height, pixelFormatType: formatType, linesize: linesize, data: data)
+      if let upscaleImageData {
+        data = upscaleImageData
+        linesize = width * 4
+        formatType = kCVPixelFormatType_32ARGB
+      }
+
+    } else {
+      print("AVCapture.convert: unkown format type: \(formatType)")
+      assert(false, "AVCapture.convert: unkown format type: \(formatType)")
+      return nil
+    }
+
+    if CVPixelBufferIsPlanar(pixelBuffer) {
+      //              let planeCount = CVPixelBufferGetPlaneCount(imageBuffer)
+      //
+      //              for i in 0..<planeCount {
+      //                frame.linesize[i] = UInt32(CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, i))
+      //                if let buffer = CVPixelBufferGetBaseAddressOfPlane(imageBuffer, i) {
+      //                  frame.data[i] = buffer
+      //                }
+      //              }
+    } else {
+      // Save the image buffer
+
+      if shouldSwapRedBlue {
+        //           data = swap_blue_red_colors(data, linesize*height);
+      }
+
+      var pxbuffer: CVPixelBuffer? = nil
+      let attributes =
+        [
+          kCVPixelBufferPixelFormatTypeKey as String: Int(formatType),
+          kCVPixelBufferOpenGLCompatibilityKey as String: true,
+          kCVPixelBufferMetalCompatibilityKey as String: true,
+        ] as [String: Any]
+
+      let status = CVPixelBufferCreate(
+        kCFAllocatorDefault,
+        width,
+        height,
+        formatType,
+        attributes as CFDictionary,
+        &pxbuffer)
+      if status != kCVReturnSuccess || pxbuffer == nil {
+        print("AVCapture.convert: CVPixelBufferCreate operation failed")
+        return nil
+      }
+
+      CVPixelBufferLockBaseAddress(pxbuffer!, CVPixelBufferLockFlags(rawValue: 0))
+      defer { CVPixelBufferUnlockBaseAddress(pxbuffer!, CVPixelBufferLockFlags(rawValue: 0)) }
+
+      guard let copyBaseAddress = CVPixelBufferGetBaseAddress(pxbuffer!) else {
+        print("Error: could not get pixel buffer base address")
+        return nil
+      }
+
+      memcpy(copyBaseAddress, data, linesize * height)
+
+      if shouldSwapRedBlue {
+        // free(data)
+      }
+
+      if let upscaleImageData {
+        free(upscaleImageData)
+      }
+
+      return pxbuffer
+
+    }
+
+    return nil
+  }
+
+  var conversionInfo = vImage_YpCbCrToARGB()
+  var conversionInfoAvailable = false
+
+  func upscaleImage(
+    width: Int, height: Int, pixelFormatType: OSType, linesize: Int,
+    data: UnsafeMutableRawPointer
+  ) -> UnsafeMutableRawPointer? {
+    if !conversionInfoAvailable {
+      var pixelRange = vImage_YpCbCrPixelRange(
+        Yp_bias: 16, CbCr_bias: 128, YpRangeMax: 235, CbCrRangeMax: 240, YpMax: 255, YpMin: 0,
+        CbCrMax: 255, CbCrMin: 1)  // video range 8-bit, unclamped
+      // let pixelRange = vImage_YpCbCrPixelRange(Yp_bias: 16, CbCr_bias: 128, YpRangeMax: 235, CbCrRangeMax: 240, YpMax: 235, YpMin: 16, CbCrMax: 240, CbCrMin: 16) // video range 8-bit, clamped to video range
+      // let pixelRange = vImage_YpCbCrPixelRange(Yp_bias: 0, CbCr_bias: 128, YpRangeMax: 255, CbCrRangeMax: 255, YpMax: 255, YpMin: 1, CbCrMax: 255, CbCrMin: 0) // full range 8-bit, clamped to full range
+      let convertError = vImageConvert_YpCbCrToARGB_GenerateConversion(
+        kvImage_YpCbCrToARGBMatrix_ITU_R_709_2,
+        &pixelRange,
+        &conversionInfo,
+        kvImage422YpCbYpCr8,
+        kvImageARGB8888,
+        vImage_Flags(kvImagePrintDiagnosticsToConsole))
+      conversionInfoAvailable = convertError == kvImageNoError
+    }
+
+    var upscaleImageData: UnsafeMutableRawPointer? = nil
+
+    if conversionInfoAvailable {
+      var src = vImage_Buffer(
+        data: data, height: vImagePixelCount(height), width: vImagePixelCount(width),
+        rowBytes: linesize)
+      upscaleImageData = UnsafeMutableRawPointer.allocate(
+        byteCount: width * height * 4, alignment: MemoryLayout<UInt8>.alignment)
+      var dest = vImage_Buffer(
+        data: upscaleImageData, height: vImagePixelCount(height), width: vImagePixelCount(width),
+        rowBytes: width * 4)
+      let permuteMap: [UInt8] = [3, 2, 1, 0]
+      let alpha: UInt8 = 255
+      let flags = vImage_Flags(kvImagePrintDiagnosticsToConsole)
+
+      let imageError = vImageConvert_422CbYpCrYp8ToARGB8888(
+        &src, &dest, &conversionInfo, permuteMap, alpha, flags)
+
+      if imageError != kvImageNoError {
+        print("image convert error: \(imageError)")
+        upscaleImageData?.deallocate()
+        upscaleImageData = nil
+      }
+    }
+
+    return upscaleImageData
+  }
+
   func videoFormatGetParametersForFormat(
     colorSpace: inout AVCaptureVideoColorspace,
     range: AVCaptureVideoRange,
@@ -1184,6 +1341,7 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
     var sampleBufferDescription: CMFormatDescription?
     var lastAudioError: String?
     var frameCallback: ((_ frame: AVCaptureVideoFrame?) -> Void)? = nil
+    var pixelBufferCallback: ((_ frame: CVPixelBuffer?) -> Void)? = nil
   }
 
   public struct AVCaptureVideoFrame {

@@ -17,7 +17,7 @@ A new Flutter plugin project.
   s.frameworks  = 'AVFoundation'
   s.dependency 'FlutterMacOS'
 
-  s.platform = :osx, '10.13'
+  s.platform = :osx, '13.0'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
   s.swift_version = '5.2'
 end

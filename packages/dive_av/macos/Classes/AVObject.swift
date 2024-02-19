@@ -3,5 +3,6 @@
 import AVFoundation
 
 protocol AVObject {
+  // TODO: maybe rename objectId to sourceId???
   var objectId: String { get set }
 }

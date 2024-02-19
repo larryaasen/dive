@@ -85,22 +85,14 @@ public class DiveAVPlugin: NSObject, FlutterPlugin {
   }
 
   private func createVideoSource(_ arguments: [String: Any]?) -> String? {
-    //    guard let args = arguments,
-    //      let source_uuid = args["source_uuid"] as! String?,
-    //      let name = args["device_name"] as! String?,
-    //      let uid = args["device_uid"] as! String?
-    //    else {
-    //      return false
-    //    }
-      guard let args = arguments,
-        let deviceUniqueID = args["device_uique_id"] as! String?
-      else {
-        return nil
-      }
+    guard let args = arguments,
+      let deviceUniqueID = args["device_uique_id"] as! String?
+    else {
+      return nil
+    }
+    let textureId = args["texture_id"] as? Int64
 
-    // Razer Kiyo Pro: 0x1421100015320e05
-    // FaceTime HD Camera (Built-in): 0x8020000005ac8514
-    return controller.createVideoSource(deviceUniqueID: deviceUniqueID)
+    return controller.createVideoSource(deviceUniqueID: deviceUniqueID, textureId: textureId)
   }
 
   private func removeSource(_ arguments: [String: Any]?) -> Bool {
@@ -112,70 +104,23 @@ public class DiveAVPlugin: NSObject, FlutterPlugin {
     return controller.removeSource(objectId: source_id)
   }
 
-  private func disposeTexture(_ arguments: [String: Any]?) -> Bool {
-    var rv = false
-    if let args = arguments {
-      if let texturedId = args["textureId"] as! Int64? {
-        DiveAVPlugin.textureRegistry?.unregisterTexture(texturedId)
-        rv = true
-      }
-    }
-    return rv
-  }
-
+  /// Registers a `FlutterTexture` for usage in Flutter and returns an id that can be used to reference
+  /// that texture when calling into Flutter with channels. Textures must be registered on the
+  /// platform thread. On success returns the pointer to the registered texture, else returns 0.
   private func initializeTexture(_ arguments: [String: Any]?) -> Int64 {
-    guard let args = arguments, let trackingUUID = args["tracking_uuid"] as! String? else {
+    guard DiveAVPlugin.textureRegistry != nil else {
       return 0
     }
-
-    // TODO: fix this to be immutable
-
-    let provider = TextureProvider(uuid: trackingUUID, registry: DiveAVPlugin.textureRegistry)
-    if let texturedId = DiveAVPlugin.textureRegistry?.register(provider) {
-      provider.textureId = texturedId
-      // source.trackingUUID = trackingUUID
-      saveTextureProvider(provider)
-      return texturedId
-    }
-
-    return 0
+    return controller.initializeTexture(textureRegistry: DiveAVPlugin.textureRegistry!)
   }
 
-  /// Map of all texture providers where the key is a source UUID and the value is a texture provider pointer
-  private var textureProviders: [String: TextureProvider] = [:]
-
-  private func saveTextureProvider(_ textureProvider: TextureProvider) {
-    guard !textureProvider.trackingUUID.isEmpty else {
-      print("saveTextureProvider: missing sourceUUID\n")
-      return
+  private func disposeTexture(_ arguments: [String: Any]?) -> Bool {
+    if let args = arguments {
+      if let textureId = args["textureId"] as? Int64 {
+        return controller.disposeTexture(
+          textureRegistry: DiveAVPlugin.textureRegistry!, textureId: textureId)
+      }
     }
-
-    //    let uuid_str = Int8(trackingUUID.utf8CString ?? 0)
-    objc_sync_enter(textureProviders)
-    defer { objc_sync_exit(textureProviders) }
-
-    let provider = textureProviders[textureProvider.trackingUUID]
-    if provider != nil {
-      print("saveTextureProvider: duplicate texture provider: \(textureProvider.trackingUUID)")
-      return
-    }
-    textureProviders[textureProvider.trackingUUID] = textureProvider
-  }
-
-  private func removeTextureProvider(_ textureProvider: TextureProvider) {
-    guard !textureProvider.trackingUUID.isEmpty else {
-      print("removeTextureProvider: missing sourceUUID\n")
-      return
-    }
-
-    objc_sync_enter(textureProviders)
-    defer { objc_sync_exit(textureProviders) }
-    let provider = textureProviders[textureProvider.trackingUUID]
-    if provider == nil {
-      print("removeTextureProvider: unknown texture provider: \(textureProvider.trackingUUID)\n")
-      return
-    }
-
-    textureProviders.removeValue(forKey: textureProvider.trackingUUID)
+    return false
   }
 }

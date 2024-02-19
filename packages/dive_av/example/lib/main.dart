@@ -20,6 +20,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final _diveAvPlugin = DiveAv();
+  int? _textureId;
 
   @override
   void initState() {
@@ -35,14 +36,24 @@ class _MyAppState extends State<MyApp> {
       // Razer Kiyo Pro: 0x1421100015320e05
       // FaceTime HD Camera (Built-in): 0x8020000005ac8514
 
-      final sourceId1 = await _diveAvPlugin.createVideoSource('0x1421100015320e05');
+      final textureId = await _diveAvPlugin.initializeTexture();
+
+      final sourceId1 = await _diveAvPlugin
+          .createVideoSource('0x1421100015320e05', textureId: textureId);
       print('createVideoSource: $sourceId1');
+
+      setState(() {
+        _textureId = textureId;
+      });
 
       // final sourceId2 = await _diveAvPlugin.createVideoSource('0x8020000005ac8514');
       // print('createVideoSource: $sourceId2');
 
       Future.delayed(const Duration(seconds: 10)).then((value) async {
         if (sourceId1 != null) {
+          setState(() {
+            _textureId = null;
+          });
           final rv1 = await _diveAvPlugin.removeSource(sourceId: sourceId1);
           print('removeSource: $sourceId1, $rv1');
         }
@@ -68,8 +79,10 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: const Center(
-          child: Text('Running'),
+        body: Center(
+          child: _textureId == null
+              ? const Text('Running')
+              : Texture(textureId: _textureId!),
         ),
       ),
     );
