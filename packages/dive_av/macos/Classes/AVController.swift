@@ -10,9 +10,6 @@ class AVController {
 
   private var avObjects: [String: AVObject] = [:]
 
-  // Razer Kiyo Pro: 0x1421100015320e05
-  // FaceTime HD Camera (Built-in): 0x8020000005ac8514
-
   public func createVideoSource(deviceUniqueID: String, textureId: Int64? = nil) -> String {
     let captureInfo = AVCapture.AVCaptureInfo(uniqueID: deviceUniqueID)
     let avCapture = AVCapture(captureInfo: captureInfo)
@@ -20,11 +17,14 @@ class AVController {
 
     if let textureId, textureId != 0 {
       if let provider = _textureProviders[textureId] {
-        avCapture.captureInfo?.frameCallback = provider.onCaptureFrame
         avCapture.captureInfo?.pixelBufferCallback = { [self] pixelBuffer in
           convertPixelBuffer(pixelBuffer, provider, avCapture)
         }
+      } else {
+        print("createVideoSource: unknown textureProvider")
       }
+    } else {
+      print("createVideoSource: unknown textureId=$textureId")
     }
     return avCapture.objectId
 

@@ -48,12 +48,13 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
 
     enableDALdevices()
 
-    let devices = AVInputs.inputsFromType()
-    for device in devices {
-      if device.hasMediaType(.video) {
-        //        print("\(device.localizedName): \(device.uniqueID)")
-      }
-    }
+    //    let devices = AVInputs.inputsFromType()
+    //      print("Available video devices:")
+    //    for device in devices {
+    //      if device.hasMediaType(.video) {
+    //                print("\(device.localizedName): \(device.uniqueID)")
+    //      }
+    //    }
 
     errorDomain = "com.dive.diveavplugin.avcapture"
     sessionQueue = DispatchQueue(label: "session queue")
@@ -608,6 +609,8 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
       let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
       let pixelBuffer: CVPixelBuffer? = CMSampleBufferGetImageBuffer(sampleBuffer)
       outputPixelBuffer(pixelBuffer)
+      return
+
       let mediaSubType = CMFormatDescriptionGetMediaSubType(description)
 
       var newInfo = AVCaptureVideoInfo(
@@ -972,7 +975,6 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
 
   /// Convert pixelBuffer to a pixelBuffer with format type kCVPixelFormatType_32ARGB.
   func convert(pixelBuffer: CVPixelBuffer) -> CVPixelBuffer? {
-
     CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
     defer { CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly) }
 

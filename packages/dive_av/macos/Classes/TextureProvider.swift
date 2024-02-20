@@ -65,7 +65,6 @@ class TextureProvider: NSObject, FlutterTexture {
 
     // Inform the Flutter Texture Registry that a texture frame is available to draw.
     registry.textureFrameAvailable(textureId)
-
   }
 
   func onCaptureFrame(frame: AVCapture.AVCaptureVideoFrame?) {

@@ -20,7 +20,9 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final _diveAvPlugin = DiveAv();
-  int? _textureId;
+  int? _textureId1;
+  int? _textureId2;
+  int? _textureId3;
 
   @override
   void initState() {
@@ -34,33 +36,48 @@ class _MyAppState extends State<MyApp> {
     // We also handle the message potentially returning null.
     try {
       // Razer Kiyo Pro: 0x1421100015320e05
+      // mmhmm Camera: mmhmmCameraDevice
       // FaceTime HD Camera (Built-in): 0x8020000005ac8514
+      // Larry’s iPhone 13 Camera: 46363936-0000-0000-0000-000000000001
 
-      final textureId = await _diveAvPlugin.initializeTexture();
+      final textureId1 = await _diveAvPlugin.initializeTexture();
+      final textureId2 = await _diveAvPlugin.initializeTexture();
+      final textureId3 = await _diveAvPlugin.initializeTexture();
 
-      final sourceId1 = await _diveAvPlugin
-          .createVideoSource('0x1421100015320e05', textureId: textureId);
+      final sourceId1 = await _diveAvPlugin.createVideoSource(
+          '46363936-0000-0000-0000-000000000001',
+          textureId: textureId1);
+      setState(() => _textureId1 = textureId1);
       print('createVideoSource: $sourceId1');
 
-      setState(() {
-        _textureId = textureId;
-      });
+      final sourceId2 = await _diveAvPlugin
+          .createVideoSource('0x1421100015320e05', textureId: textureId2);
+      setState(() => _textureId2 = textureId2);
+      print('createVideoSource: $sourceId2');
 
-      // final sourceId2 = await _diveAvPlugin.createVideoSource('0x8020000005ac8514');
-      // print('createVideoSource: $sourceId2');
+      final sourceId3 =
+          await _diveAvPlugin.createVideoSource('-', textureId: textureId3);
+      setState(() => _textureId3 = textureId3);
+      print('createVideoSource: $sourceId3');
 
-      Future.delayed(const Duration(seconds: 10)).then((value) async {
+      Future.delayed(const Duration(seconds: 20)).then((value) async {
         if (sourceId1 != null) {
-          setState(() {
-            _textureId = null;
-          });
           final rv1 = await _diveAvPlugin.removeSource(sourceId: sourceId1);
           print('removeSource: $sourceId1, $rv1');
         }
-        // if (sourceId2 != null) {
-        //   final rv2 = await _diveAvPlugin.removeSource(sourceId: sourceId2);
-        //   print('removeSource: $sourceId2, $rv2');
-        // }
+        if (sourceId2 != null) {
+          final rv2 = await _diveAvPlugin.removeSource(sourceId: sourceId2);
+          print('removeSource: $sourceId2, $rv2');
+        }
+        if (sourceId3 != null) {
+          final rv3 = await _diveAvPlugin.removeSource(sourceId: sourceId3);
+          print('removeSource: $sourceId3, $rv3');
+        }
+        setState(() {
+          _textureId1 = null;
+          _textureId2 = null;
+          _textureId3 = null;
+        });
       });
     } catch (e) {
       print('error');
@@ -80,11 +97,27 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: _textureId == null
+          child: _textureId1 == null
               ? const Text('Running')
-              : Texture(textureId: _textureId!),
+              : Wrap(
+                  children: [
+                    if (_textureId1 != null) _texture(_textureId1!),
+                    const SizedBox(width: 20, height: 20),
+                    if (_textureId2 != null) _texture(_textureId2!),
+                    const SizedBox(width: 20, height: 20),
+                    if (_textureId3 != null) _texture(_textureId3!),
+                  ],
+                ),
         ),
       ),
+    );
+  }
+
+  Widget _texture(int textureId) {
+    return SizedBox(
+      width: 200,
+      height: 100,
+      child: Texture(textureId: textureId),
     );
   }
 }

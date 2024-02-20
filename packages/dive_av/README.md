@@ -4,7 +4,7 @@ Dive AV
 
 ## macOS Setup
 
-The minimum macOS version supported is 10.14 and above.
+The minimum macOS version supported is 13.0 and above.
 
 In macOS, you also need to enable the following entitlements in Signing & Capabilities for your app targets:
 
