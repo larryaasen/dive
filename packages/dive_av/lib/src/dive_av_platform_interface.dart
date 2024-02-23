@@ -1,5 +1,6 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
+import 'dive_av_input_type.dart';
 import 'dive_av_method_channel.dart';
 
 abstract class DiveAvPlatform extends PlatformInterface {
@@ -33,5 +34,13 @@ abstract class DiveAvPlatform extends PlatformInterface {
 
   Future<int> initializeTexture() {
     throw UnimplementedError('initializeTexture has not been implemented.');
+  }
+
+  Future<bool> disposeTexture(int textureId) {
+    throw UnimplementedError('disposeTexture has not been implemented.');
+  }
+
+  Future<List<DiveAVInputType>> inputsFromType(String typeId) {
+    throw UnimplementedError('inputsFromType has not been implemented.');
   }
 }

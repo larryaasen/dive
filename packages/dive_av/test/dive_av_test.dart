@@ -1,5 +1,5 @@
-import 'package:dive_av/dive_av_method_channel.dart';
-import 'package:dive_av/dive_av_platform_interface.dart';
+import 'package:dive_av/src/dive_av_method_channel.dart';
+import 'package:dive_av/src/dive_av_platform_interface.dart';
 import 'package:flutter_test/flutter_test.dart';
 // import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 

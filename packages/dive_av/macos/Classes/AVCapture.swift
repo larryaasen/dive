@@ -1376,44 +1376,36 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
 }
 
 class AVInputs {
-  static func inputsFromType() -> [AVCaptureDevice] {
+  static func inputsFromVideoType() -> [AVCaptureDevice] {
     #if os(iOS)
-      let session = AVCaptureDevice.DiscoverySession(
-        deviceTypes: [
-          .builtInWideAngleCamera,
-          .builtInTelephotoCamera,
-        ],
-        mediaType: .video,
-        position: .unspecified)
-      return session.devices
+      let deviceTypes = [
+        AVCaptureDevice.DeviceType.builtInWideAngleCamera,
+        AVCaptureDevice.DeviceType.builtInTelephotoCamera,
+      ]
     #elseif os(macOS)
-      if #available(macOS 15.0, *) {
-        let session = AVCaptureDevice.DiscoverySession(
-          deviceTypes: [
-            .builtInWideAngleCamera
-          ],
-          mediaType: .video,
-          position: .unspecified)
-        return session.devices
-      } else {
-        return AVCaptureDevice.devices(for: .video)
-      }
+      let deviceTypes = [
+        AVCaptureDevice.DeviceType.builtInWideAngleCamera,
+        AVCaptureDevice.DeviceType.externalUnknown, AVCaptureDevice.DeviceType.deskViewCamera,
+      ]
     #endif
+
+    let session = AVCaptureDevice.DiscoverySession(
+      deviceTypes: deviceTypes,
+      mediaType: .video,
+      position: .unspecified)
+
+    return session.devices
   }
 
   /// Returns all microphones on the device.
-  static public func getListOfMicrophones() -> [AVCaptureDevice] {
-    if #available(macOS 15.0, *) {
-      let session = AVCaptureDevice.DiscoverySession(
-        deviceTypes: [
-          .builtInMicrophone
-        ],
-        mediaType: .audio,
-        position: .unspecified)
+  static public func inputsFromAudioType() -> [AVCaptureDevice] {
+    let session = AVCaptureDevice.DiscoverySession(
+      deviceTypes: [
+        .builtInMicrophone
+      ],
+      mediaType: .audio,
+      position: .unspecified)
 
-      return session.devices
-    } else {
-      return AVCaptureDevice.devices(for: .audio)
-    }
+    return session.devices
   }
 }

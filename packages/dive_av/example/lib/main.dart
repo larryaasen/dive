@@ -20,9 +20,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final _diveAvPlugin = DiveAv();
-  int? _textureId1;
-  int? _textureId2;
-  int? _textureId3;
+  final _textureIds = <int>[];
+  final _sourceIds = <String>[];
 
   @override
   void initState() {
@@ -30,7 +29,6 @@ class _MyAppState extends State<MyApp> {
     initPlatformState();
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
@@ -40,53 +38,40 @@ class _MyAppState extends State<MyApp> {
       // FaceTime HD Camera (Built-in): 0x8020000005ac8514
       // Larry’s iPhone 13 Camera: 46363936-0000-0000-0000-000000000001
 
-      final textureId1 = await _diveAvPlugin.initializeTexture();
-      final textureId2 = await _diveAvPlugin.initializeTexture();
-      final textureId3 = await _diveAvPlugin.initializeTexture();
+      final inputTypes = await _diveAvPlugin.inputsFromType('video');
 
-      final sourceId1 = await _diveAvPlugin.createVideoSource(
-          '46363936-0000-0000-0000-000000000001',
-          textureId: textureId1);
-      setState(() => _textureId1 = textureId1);
-      print('createVideoSource: $sourceId1');
-
-      final sourceId2 = await _diveAvPlugin
-          .createVideoSource('0x1421100015320e05', textureId: textureId2);
-      setState(() => _textureId2 = textureId2);
-      print('createVideoSource: $sourceId2');
-
-      final sourceId3 =
-          await _diveAvPlugin.createVideoSource('-', textureId: textureId3);
-      setState(() => _textureId3 = textureId3);
-      print('createVideoSource: $sourceId3');
+      for (var input in inputTypes) {
+        final textureId = await _diveAvPlugin.initializeTexture();
+        final sourceId = await _diveAvPlugin.createVideoSource(input.uniqueID,
+            textureId: textureId);
+        print('created video source: $sourceId');
+        if (sourceId != null) {
+          setState(() {
+            _textureIds.add(textureId);
+            _sourceIds.add(sourceId);
+          });
+        }
+      }
 
       Future.delayed(const Duration(seconds: 20)).then((value) async {
-        if (sourceId1 != null) {
-          final rv1 = await _diveAvPlugin.removeSource(sourceId: sourceId1);
-          print('removeSource: $sourceId1, $rv1');
+        for (final sourceId in _sourceIds) {
+          final rv = await _diveAvPlugin.removeSource(sourceId: sourceId);
+          print('removed source: $sourceId, $rv');
         }
-        if (sourceId2 != null) {
-          final rv2 = await _diveAvPlugin.removeSource(sourceId: sourceId2);
-          print('removeSource: $sourceId2, $rv2');
+
+        for (final textureId in _textureIds) {
+          final rv = await _diveAvPlugin.disposeTexture(textureId);
+          print('removed texture: $textureId, $rv');
         }
-        if (sourceId3 != null) {
-          final rv3 = await _diveAvPlugin.removeSource(sourceId: sourceId3);
-          print('removeSource: $sourceId3, $rv3');
-        }
+
         setState(() {
-          _textureId1 = null;
-          _textureId2 = null;
-          _textureId3 = null;
+          _sourceIds.clear();
+          _textureIds.clear();
         });
       });
     } catch (e) {
-      print('error');
+      print('error $e');
     }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
   }
 
   @override
@@ -97,17 +82,9 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: _textureId1 == null
-              ? const Text('Running')
-              : Wrap(
-                  children: [
-                    if (_textureId1 != null) _texture(_textureId1!),
-                    const SizedBox(width: 20, height: 20),
-                    if (_textureId2 != null) _texture(_textureId2!),
-                    const SizedBox(width: 20, height: 20),
-                    if (_textureId3 != null) _texture(_textureId3!),
-                  ],
-                ),
+          child: Wrap(
+            children: _textureIds.map((e) => _texture(e)).toList(),
+          ),
         ),
       ),
     );
@@ -116,8 +93,10 @@ class _MyAppState extends State<MyApp> {
   Widget _texture(int textureId) {
     return SizedBox(
       width: 200,
-      height: 100,
-      child: Texture(textureId: textureId),
+      child: AspectRatio(
+        aspectRatio: 16.0 / 9.0,
+        child: Texture(textureId: textureId),
+      ),
     );
   }
 }

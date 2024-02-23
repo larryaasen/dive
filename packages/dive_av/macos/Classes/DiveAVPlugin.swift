@@ -6,6 +6,7 @@ public class DiveAVPlugin: NSObject, FlutterPlugin {
   struct Method {
     static let DisposeTexture = "disposeTexture"
     static let InitializeTexture = "initializeTexture"
+    static let InputsFromType = "inputsFromType"
     // static let AddSourceFrameCallback = "addSourceFrameCallback"
     // static let RemoveSourceFrameCallback = "removeSourceFrameCallback"
 
@@ -61,24 +62,8 @@ public class DiveAVPlugin: NSObject, FlutterPlugin {
       result(createVideoSource(arguments))
     case Method.RemoveSource:
       result(removeSource(arguments))
-    // case Method.AddSourceFrameCallback:
-    //     result(addSourceFrameCallback(arguments))
-    // case Method.RemoveSourceFrameCallback:
-    //     result(removeSourceFrameCallback(arguments))
-    // case Method.CreateVideoMix:
-    //     result(createVideoMix(arguments))
-    // case Method.RemoveVideoMix:
-    //     result(removeVideoMix(arguments))
-    // case Method.ChangeFrameRate:
-    //     result(changeFrameRate(arguments))
-    // case Method.ChangeResolution:
-    //     result(changeResolution(arguments))
-    // case Method.AddVolumeMeterCallback:
-    //     result(addVolumeMeterCallback(arguments))
-    // case Method.GetSceneItemInfo:
-    //     result(getSceneItemInfo(arguments))
-    // case Method.SetSceneItemInfo:
-    //     result(setSceneItemInfo(arguments))
+    case Method.InputsFromType:
+      result(inputsFromType(arguments))
     default:
       result(FlutterMethodNotImplemented)
     }
@@ -112,6 +97,10 @@ public class DiveAVPlugin: NSObject, FlutterPlugin {
       return 0
     }
     return controller.initializeTexture(textureRegistry: DiveAVPlugin.textureRegistry!)
+  }
+
+  private func inputsFromType(_ arguments: [String: Any]?) -> [[String: String]] {
+    return controller.inputsFromType()
   }
 
   private func disposeTexture(_ arguments: [String: Any]?) -> Bool {

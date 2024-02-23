@@ -74,9 +74,25 @@ class AVController {
     if let provider = _textureProviders[textureId] {
       _removeTextureProvider(provider)
       textureRegistry.unregisterTexture(textureId)
+        return true
     }
 
-    return true
+    return false
+  }
+
+  public func inputsFromType(mediaType: AVMediaType = .video) -> [[String: String]] {
+    var inputs: [[String: String]] = []
+    let devices = AVInputs.inputsFromVideoType()
+    for device in devices {
+      if device.hasMediaType(mediaType) {
+        print("\(device.localizedName): \(device.uniqueID)")
+        inputs.append([
+          "uniqueID": device.uniqueID, "localizedName": device.localizedName, "typeId": "video",
+        ])
+      }
+    }
+
+    return inputs
   }
 
   /// Map of all texture providers where the key is a source UUID and the value is a texture provider pointer
