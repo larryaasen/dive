@@ -187,7 +187,7 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
     }
 
     let device = AVCaptureDevice(uniqueID: uniqueID)
-
+      
     if deviceInput != nil || device == nil {
       stopCaptureSession()
 
@@ -245,6 +245,11 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
     if session.canAddInput(deviceInput) {
       session.addInput(deviceInput)
       self.deviceInput = deviceInput
+        if let deviceInput {
+            print(deviceInput.set.keys)
+            print(videoSettings.values)
+        }
+
     } else {
       session.commitConfiguration()
       return false
@@ -1409,3 +1414,4 @@ class AVInputs {
     return session.devices
   }
 }
+    

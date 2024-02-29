@@ -89,6 +89,12 @@ class AVController {
         inputs.append([
           "uniqueID": device.uniqueID, "localizedName": device.localizedName, "typeId": "video",
         ])
+          
+          for format in device.formats {
+              for range in format.videoSupportedFrameRateRanges {
+                  print("device \(device.localizedName): format \(format), range \(range)")
+              }
+          }
       }
     }
 
