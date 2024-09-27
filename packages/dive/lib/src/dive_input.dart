@@ -30,6 +30,8 @@ class DiveInput {
 class DiveInputs {
   static List<DiveInput> fromType(String typeId) =>
       obslib.inputsFromType(typeId).map(DiveInput.fromMap).toList();
-  static List<DiveInput> audio() => obslib.audioInputs().map(DiveInput.fromMap).toList();
-  static List<DiveInput> video() => obslib.videoInputs().map(DiveInput.fromMap).toList();
+  static List<DiveInput> audio() =>
+      obslib.audioInputs().map(DiveInput.fromMap).toList();
+  static List<DiveInput> video() =>
+      obslib.videoInputs().map(DiveInput.fromMap).toList();
 }

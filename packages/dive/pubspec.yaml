@@ -22,7 +22,7 @@ dependencies:
   equatable: ^2.0.5
 
   # From Dart Team: provides internationalization and localization facilities, including message translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
-  intl: ^0.18.0
+  intl: ^0.19.0
 
   # From Dart Team: cross-platform path manipulation library
   path: ^1.8.3

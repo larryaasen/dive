@@ -24,7 +24,7 @@ class DiveTopicCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ButtonStyle bStyle = ButtonStyle(
-      foregroundColor: MaterialStateProperty.all<Color>(const Color(0xFF6200EE)),
+      foregroundColor: WidgetStateProperty.all<Color>(const Color(0xFF6200EE)),
     );
     final buttons = buttonTitles == null
         ? null
@@ -62,7 +62,7 @@ class DiveTopicCard extends StatelessWidget {
               ),
             ),
           if (buttons != null && buttons.isNotEmpty)
-            ButtonBar(alignment: MainAxisAlignment.start, children: buttons.toList()),
+            OverflowBar(alignment: MainAxisAlignment.start, children: buttons.toList()),
         ],
       ),
     );

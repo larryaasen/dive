@@ -74,7 +74,7 @@ class AVController {
     if let provider = _textureProviders[textureId] {
       _removeTextureProvider(provider)
       textureRegistry.unregisterTexture(textureId)
-        return true
+      return true
     }
 
     return false
@@ -85,16 +85,16 @@ class AVController {
     let devices = AVInputs.inputsFromVideoType()
     for device in devices {
       if device.hasMediaType(mediaType) {
-        print("\(device.localizedName): \(device.uniqueID)")
+        print("dive_av: \(device.localizedName): \(device.uniqueID)")
         inputs.append([
           "uniqueID": device.uniqueID, "localizedName": device.localizedName, "typeId": "video",
         ])
-          
-          for format in device.formats {
-              for range in format.videoSupportedFrameRateRanges {
-                  print("device \(device.localizedName): format \(format), range \(range)")
-              }
-          }
+
+        //        for format in device.formats {
+        //          for range in format.videoSupportedFrameRateRanges {
+        //            print("device \(device.localizedName): format \(format), range \(range)")
+        //          }
+        //        }
       }
     }
 

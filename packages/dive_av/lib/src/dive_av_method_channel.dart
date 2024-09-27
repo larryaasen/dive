@@ -49,14 +49,8 @@ class MethodChannelDiveAv extends DiveAvPlatform {
     if (rv is List) {
       for (final input in rv) {
         if (input is Map) {
-          final uniqueID = input['uniqueID'] as String?;
-          final localizedName = input['localizedName'] as String?;
-          final typeId = input['typeId'] as String?;
-          if (uniqueID != null && localizedName != null && typeId != null) {
-            final inputType = DiveAVInputType(
-                uniqueID: uniqueID,
-                typeId: typeId,
-                localizedName: localizedName);
+          final inputType = DiveAVInputType.fromMap(input);
+          if (inputType != null) {
             inputs.add(inputType);
           }
         }

@@ -5,6 +5,10 @@ import 'dart:ui';
 
 import 'package:dive_av/dive_av.dart';
 import 'package:flutter/material.dart';
+import 'package:uvc/uvc.dart';
+// import 'package:uvc_flutter/uvc_flutter.dart';
+
+import 'camera_settings_section.dart';
 
 class CameraControllerScreen extends StatefulWidget {
   const CameraControllerScreen({super.key});
@@ -20,6 +24,11 @@ class _MyAppState extends State<CameraControllerScreen>
   DiveAVInputType? _selectedInputType;
   Map? _selectedSource;
   late final AppLifecycleListener _listener;
+
+  // UVC
+  UvcLib? _uvc;
+  UvcControl? _camera;
+
   bool _exiting = false;
 
   @override
@@ -35,7 +44,9 @@ class _MyAppState extends State<CameraControllerScreen>
         });
         // ignore: avoid_print
         print('Exiting.');
-        await _removeTexture();
+        _closeSource();
+        _uvc?.dispose();
+
         return AppExitResponse.exit;
       },
     );
@@ -43,6 +54,7 @@ class _MyAppState extends State<CameraControllerScreen>
 
   @override
   dispose() {
+    _listener.dispose();
     _removeTexture();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
@@ -50,8 +62,11 @@ class _MyAppState extends State<CameraControllerScreen>
 
   Future<void> initPlatformState() async {
     try {
+      // _uvc = UvcLib(libraryName: UvcFlutter.libusbLibraryName);
+
       _inputTypes = await _diveAvPlugin.inputsFromType('video');
       _selectedInputType = _inputTypes.isEmpty ? null : _inputTypes.first;
+
       setState(() {});
 
       await _setupSource();
@@ -73,12 +88,16 @@ class _MyAppState extends State<CameraControllerScreen>
           padding: const EdgeInsets.all(16.0),
           child: _exiting
               ? const Text('Exiting...')
-              : Column(
-                  children: [
-                    _dropdownRow(),
-                    const SizedBox(height: 8.0),
-                    _texture(),
-                  ],
+              : SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      _dropdownRow(),
+                      const SizedBox(height: 8.0),
+                      _texture(),
+                      const SizedBox(height: 16.0),
+                      _settings(),
+                    ],
+                  ),
                 ),
         ),
       ),
@@ -102,7 +121,7 @@ class _MyAppState extends State<CameraControllerScreen>
             items: items.toList(),
             onChanged: (DiveAVInputType? value) {
               setState(() {
-                _removeTexture();
+                _closeSource();
                 _selectedInputType = value;
                 _setupSource();
               });
@@ -111,6 +130,19 @@ class _MyAppState extends State<CameraControllerScreen>
         ),
       ],
     );
+  }
+
+  Widget _settings() {
+    return _camera == null
+        ? const SizedBox.shrink()
+        : CameraSettingsSection(camera: _camera!);
+  }
+
+  void _closeSource() async {
+    await _removeTexture();
+
+    _camera?.close();
+    _camera = null;
   }
 
   Future<void> _setupSource() async {
@@ -122,8 +154,11 @@ class _MyAppState extends State<CameraControllerScreen>
     final sourceId = await _diveAvPlugin
         .createVideoSource(_selectedInputType!.uniqueID, textureId: textureId);
     // ignore: avoid_print
-    print('created video source: $sourceId');
+    print('dive_av: created video source: $sourceId');
     if (sourceId != null) {
+      _camera = _uvc?.control(
+          vendorId: _selectedInputType!.vendorID,
+          productId: _selectedInputType!.productID);
       setState(() {
         _selectedSource = {
           'textureId': textureId,
@@ -138,7 +173,6 @@ class _MyAppState extends State<CameraControllerScreen>
     if (_selectedSource == null) return const SizedBox.shrink();
     final textureId = _selectedSource!['textureId'];
     return Container(
-      width: 400,
       clipBehavior: Clip.antiAlias,
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(8.0)),

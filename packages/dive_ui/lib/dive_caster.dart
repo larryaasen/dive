@@ -463,16 +463,16 @@ class _DiveHeaderButtonState extends State<DiveHeaderButton> {
   Widget build(BuildContext context) {
     final style = ButtonStyle(
       backgroundColor: widget.useBlueBackground
-          ? MaterialStatePropertyAll(DiveCasterTheme.headerButtonBlueColor)
+          ? WidgetStatePropertyAll(DiveCasterTheme.headerButtonBlueColor)
           : widget.useRedBackground
-              ? MaterialStatePropertyAll(DiveCasterTheme.headerButtonRedColor)
-              : MaterialStatePropertyAll(DiveCasterTheme.headerBackgroundColor),
-      foregroundColor: MaterialStatePropertyAll(DiveCasterTheme.headerButtonTextColor),
+              ? WidgetStatePropertyAll(DiveCasterTheme.headerButtonRedColor)
+              : WidgetStatePropertyAll(DiveCasterTheme.headerBackgroundColor),
+      foregroundColor: WidgetStatePropertyAll(DiveCasterTheme.headerButtonTextColor),
       overlayColor: widget.useBlueBackground
-          ? MaterialStatePropertyAll(DiveCasterTheme.headerButtonBlueHoverColor)
+          ? WidgetStatePropertyAll(DiveCasterTheme.headerButtonBlueHoverColor)
           : widget.useRedBackground
-              ? MaterialStatePropertyAll(DiveCasterTheme.headerButtonRedHoverColor)
-              : MaterialStatePropertyAll(DiveCasterTheme.headerButtonHoverColor),
+              ? WidgetStatePropertyAll(DiveCasterTheme.headerButtonRedHoverColor)
+              : WidgetStatePropertyAll(DiveCasterTheme.headerButtonHoverColor),
       splashFactory: NoSplash.splashFactory,
     );
 

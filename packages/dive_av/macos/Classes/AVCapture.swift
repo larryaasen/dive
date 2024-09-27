@@ -78,7 +78,7 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
     captureInfo = capture_info
     if let captureInfo {
       let anUUID = captureInfo.uniqueID
-      let presetName = "bbb"  // OBSAVCapture.string(fromSettings: captureInfo.settings, withSetting: "preset")
+      //      let presetName = "bbb"  // OBSAVCapture.string(fromSettings: captureInfo.settings, withSetting: "preset")
       let isPresetEnabled = false  // obs_data_get_bool(captureInfo.settings, "use_preset")
 
       if captureInfo.isFastPath {
@@ -139,7 +139,7 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
     var property = CMIOObjectPropertyAddress(
       mSelector: CMIOObjectPropertySelector(kCMIOHardwarePropertyAllowScreenCaptureDevices),
       mScope: CMIOObjectPropertyScope(kCMIOObjectPropertyScopeGlobal),
-      mElement: CMIOObjectPropertyElement(kCMIOObjectPropertyElementMaster))
+      mElement: CMIOObjectPropertyElement(kCMIOObjectPropertyElementMain))
     var allow: UInt32 = 1
     let dataSize: UInt32 = UInt32(MemoryLayout.size(ofValue: allow))
     CMIOObjectSetPropertyData(
@@ -187,7 +187,7 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
     }
 
     let device = AVCaptureDevice(uniqueID: uniqueID)
-      
+
     if deviceInput != nil || device == nil {
       stopCaptureSession()
 
@@ -201,9 +201,9 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
 
     guard let device else {
       if uniqueID.isEmpty {
-        print("No device selected")
+        print("dive_av: No device selected")
       } else {
-        print("Unable to initialize device with unique ID \(uniqueID)")
+        print("dive_av: Unable to initialize device with unique ID \(uniqueID)")
       }
       return false
     }
@@ -213,11 +213,11 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
     //    let deviceName = device.localizedName.utf8CString as? UnsafePointer<Int8>
     //    obs_data_set_string(captureInfo.settings, "device_name", deviceName)``
     //    obs_data_set_string(captureInfo.settings, "device", device.uniqueID.utf8CString)
-    print("Selected device \(device.localizedName)")
+    print("dive_av: Selected device \(device.localizedName)")
 
     deviceUUID = device.uniqueID
 
-    let isAudioSupported = device.hasMediaType(.audio) || device.hasMediaType(.muxed)
+    //    let isAudioSupported = device.hasMediaType(.audio) || device.hasMediaType(.muxed)
 
     //    obs_source_set_audio_active(captureInfo.source, isAudioSupported)
 
@@ -245,10 +245,9 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
     if session.canAddInput(deviceInput) {
       session.addInput(deviceInput)
       self.deviceInput = deviceInput
-        if let deviceInput {
-            print(deviceInput.set.keys)
-            print(videoSettings.values)
-        }
+
+      //      print(deviceInput.set.keys)
+      //      print(videoSettings.values)
 
     } else {
       session.commitConfiguration()
@@ -285,13 +284,13 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
 
       if AVCapture.format(fromSubtype: subType) != .none {
         if subType == kCVPixelFormatType_422YpCbCr8 {
-          print("Using native fourcc kCVPixelFormatType_422YpCbCr8")
+          print("dive_av: Using native fourcc kCVPixelFormatType_422YpCbCr8")
         } else {
-          print("Using native fourcc \(subType)")
+          print("dive_av: Using native fourcc \(subType)")
         }
       } else {
         let fallbackType = kCVPixelFormatType_32ARGB
-        print("Using fallback fourcc '\(fallbackType))' \(subType) unsupported)")
+        print("dive_av: Using fallback fourcc '\(fallbackType))' \(subType) unsupported)")
 
         var videoSettings = videoOutput.videoSettings
 
@@ -359,11 +358,11 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
     if session.canSetSessionPreset(preset) {
       if isDeviceLocked {
         if preset.rawValue == session.sessionPreset.rawValue {
-          if let deviceInput {
-            //            deviceInput.device.activeFormat = presetFormat.activeFormat
-            //            deviceInput.device.activeVideoMinFrameDuration = presetFormat.minFrameRate
-            //            deviceInput.device.activeVideoMaxFrameDuration = presetFormat.maxFrameRate
-          }
+          //          if let deviceInput {
+          //            deviceInput.device.activeFormat = presetFormat.activeFormat
+          //            deviceInput.device.activeVideoMinFrameDuration = presetFormat.minFrameRate
+          //            deviceInput.device.activeVideoMaxFrameDuration = presetFormat.maxFrameRate
+          //          }
           //          presetFormat = nil
         }
         deviceInput?.device.unlockForConfiguration()
@@ -592,15 +591,15 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
     didOutput sampleBuffer: CMSampleBuffer,
     from connection: AVCaptureConnection
   ) {
-    guard var videoInfo else { return }
+    //    guard var videoInfo else { return }
     let sampleCount = CMSampleBufferGetNumSamples(sampleBuffer)
     if captureInfo == nil || Int(sampleCount) < 1 {
       return
     }
 
-    let presentationTimeStamp = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
-    let presentationNanoTimeStamp: CMTime = CMTimeConvertScale(
-      presentationTimeStamp, timescale: Int32(1E9), method: .default)
+    //    let presentationTimeStamp = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
+    //    let presentationNanoTimeStamp: CMTime = CMTimeConvertScale(
+    //      presentationTimeStamp, timescale: Int32(1E9), method: .default)
 
     guard let description = CMSampleBufferGetFormatDescription(sampleBuffer) else {
       return
@@ -610,12 +609,13 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
     switch mediaType {
     case kCMMediaType_Video:
       _frameCount += 1
-      let sampleBufferDimensions = CMVideoFormatDescriptionGetDimensions(description)
-      let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
+      //      let sampleBufferDimensions = CMVideoFormatDescriptionGetDimensions(description)
+      //      let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
       let pixelBuffer: CVPixelBuffer? = CMSampleBufferGetImageBuffer(sampleBuffer)
       outputPixelBuffer(pixelBuffer)
       return
 
+    /*
       let mediaSubType = CMFormatDescriptionGetMediaSubType(description)
 
       var newInfo = AVCaptureVideoInfo(
@@ -819,14 +819,14 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
 
         }
       }
-
-      break
+       break
+*/
 
     case kCMMediaType_Audio:
+      /*
       var requiredBufferListSize: size_t
       var status = noErr
 
-      /*
       status = CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(
         sampleBuffer,
         bufferListSizeNeededOut: &requiredBufferListSize,
@@ -1414,4 +1414,3 @@ class AVInputs {
     return session.devices
   }
 }
-    

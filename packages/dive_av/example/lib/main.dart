@@ -18,9 +18,40 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: CameraControllerScreen(),
+    return MaterialApp(
+      home: const CameraControllerScreen(),
       debugShowCheckedModeBanner: false,
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
     );
   }
+}
+
+class AppTheme {
+  static final dark = ThemeData.dark(useMaterial3: true).copyWith(
+      // cardColor: Colors.grey.shade800,
+      // primaryColor: const Color(0xFF5747B2), // The app icon background color.
+      // floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      //   backgroundColor: Colors.pink,
+      //   foregroundColor: Colors.white,
+      //   elevation: 0,
+      // ),
+      );
+
+  static final light = ThemeData.light(useMaterial3: true).copyWith(
+      // canvasColor: Colors.red,
+      // scaffoldBackgroundColor: Colors.white,
+      // cardColor: Colors.white,
+      // primaryColor: const Color(0xFF5747B2), // The app icon background color.
+      // floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      //   backgroundColor: Colors.pink,
+      //   foregroundColor: Colors.white,
+      //   elevation: 0,
+      // ),
+      );
+
+  // static final pinkElevatedButton = ElevatedButton.styleFrom(
+  //   foregroundColor: Colors.white,
+  //   backgroundColor: Colors.pink,
+  // );
 }

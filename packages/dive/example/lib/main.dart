@@ -4,8 +4,7 @@ import 'package:dive/dive.dart';
 void main() async {
   configDiveApp();
 
-  await DiveExample()
-    ..run();
+  await DiveExample().run();
 }
 
 class DiveExample {
@@ -13,11 +12,11 @@ class DiveExample {
   final _diveCore = DiveCore();
   bool _initialized = false;
 
-  void run() async {
-    _initialize();
+  Future<void> run() async {
+    await _initialize();
   }
 
-  void _initialize() async {
+  Future<void> _initialize() async {
     if (_initialized) return;
     _initialized = true;
 
@@ -30,7 +29,7 @@ class DiveExample {
     DiveAudioSource.create('main audio').then((source) {
       if (source != null) {
         _elements.addAudioSource(source);
-        _elements.state..currentScene!.addSource(source);
+        _elements.state.currentScene!.addSource(source);
       }
     });
 
@@ -70,7 +69,7 @@ class DiveExample {
     const streamDuration = 30;
     print('Dive Example 1: Waiting $streamDuration seconds.');
 
-    Future.delayed(Duration(seconds: streamDuration), () {
+    Future.delayed(const Duration(seconds: streamDuration), () {
       print('Dive Example 1: Stopping stream.');
       output.stop();
 

@@ -29,7 +29,7 @@ dependencies:
 
   # From bloclibrary.dev: Widgets that make it easy to use blocs and cubits
   flutter_bloc: ^8.1.2
-  
+
   #From: flutter.dev: A Flutter plugin for iOS and Android allowing access to the device cameras.
   # camera: ^0.5.8+10
 
@@ -37,7 +37,7 @@ dependencies:
   flutter_riverpod: ^2.3.1
 
   # From Dart Team: provides internationalization and localization facilities, including message translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
-  intl: ^0.18.0
+  intl: ^0.19.0
 
   # From Dart team:
   path: ^1.8.2
