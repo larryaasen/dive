@@ -1,0 +1,25 @@
+name: dive_widgets
+description: "A new Flutter package project."
+version: 0.0.1
+publish_to: none
+homepage:
+
+environment:
+  sdk: ^3.4.0
+  flutter: ">=3.24.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  dive_core:
+    path: ../dive_core
+
+### Avoid using dependencies in this package to keep it simple and reusable.
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:

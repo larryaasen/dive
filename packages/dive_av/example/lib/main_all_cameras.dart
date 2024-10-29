@@ -44,10 +44,16 @@ class _MyAppState extends State<MyApp> {
       final inputTypes = await _diveAvPlugin.inputsFromType('video');
 
       for (final inputType in inputTypes) {
+        // Connect a texture to a video source.
+
+        // Create a text.
         final textureId = await _diveAvPlugin.initializeTexture();
+
+        // Create a video source.
         final sourceId = await _diveAvPlugin
             .createVideoSource(inputType.uniqueID, textureId: textureId);
         print('created video source: $sourceId');
+
         if (sourceId != null) {
           setState(() {
             _textures.add({'textureId': textureId, 'inputType': inputType});
@@ -56,7 +62,7 @@ class _MyAppState extends State<MyApp> {
         }
       }
 
-      _shutDown();
+      _setupShutDown();
     } catch (e) {
       print('error $e');
     }
@@ -74,8 +80,10 @@ class _MyAppState extends State<MyApp> {
             runSpacing: 16.0,
             spacing: 16.0,
             children: _textures
-                .map((source) => _texture(source['textureId'],
-                    (source['inputType'] as DiveAVInputType).localizedName))
+                .map((source) =>
+                    // Get a texture display widget
+                    _texture(source['textureId'],
+                        (source['inputType'] as DiveAVInput).localizedName))
                 .toList(),
           ),
         ),
@@ -100,7 +108,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  void _shutDown() {
+  void _setupShutDown() {
     Future.delayed(const Duration(seconds: 20)).then((value) async {
       for (final sourceId in _sourceIds) {
         final rv = await _diveAvPlugin.removeSource(sourceId: sourceId);

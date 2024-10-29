@@ -28,4 +28,29 @@ void main() {
     expect(fmt(const Duration(seconds: 67654, milliseconds: 321)), '18:47:34');
     expect(fmt(const Duration(seconds: 77654, milliseconds: 321)), '21:34:14');
   });
+
+  test('state', () {
+    final state = DiveAudioMeterState(
+      channelCount: 2,
+      inputPeak: const [-32.2206916809082, -34.92798614501953],
+      inputPeakHold: const [-19.778120040893555, -22.0262508392334],
+      magnitude: const [-40.155426025390625, -42.87294006347656],
+      magnitudeAttacked: const [-38.39295041595973, -40.50778031717143],
+      peak: const [-32.2206916809082, -34.92798614501953],
+      peakDecayed: const [-22.771781382841212, -24.99095672158633],
+      peakHold: const [-19.778120040893555, -22.0262508392334],
+      inputpPeakHoldLastUpdateTime: [
+        DateTime.parse("2022-04-05 08:20:09.047773"),
+        DateTime.parse("2022-04-05 08:20:09.271743")
+      ],
+      peakHoldLastUpdateTime: [
+        DateTime.parse("2022-04-05 08:20:09.047773"),
+        DateTime.parse("2022-04-05 08:20:09.271743")
+      ],
+      lastUpdateTime: DateTime.parse("2022-04-05 08:20:09.527938"),
+      noSignal: false,
+    );
+
+    expect(state.channelCount, 2);
+  });
 }

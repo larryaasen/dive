@@ -38,29 +38,30 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
   private var _dropFrameCount = 0
   private var _frameCount = 0
 
-  convenience override init() {
-    self.init(captureInfo: nil)
+  enum ParameterError: Error {
+    case invalidParameter(reason: String)
   }
 
-  // Initialize.
-  init(captureInfo capture_info: AVCaptureInfo?) {
+  override init() {
+    print("Do not use this initializer.")
+  }
+
+  // Designated initializer.
+  init(captureInfo: AVCaptureInfo) throws {
+    if !captureInfo.useAudio && !captureInfo.useVideo {
+      throw ParameterError.invalidParameter(reason: "captureInfo must use audio or video")
+    }
     super.init()
 
     enableDALdevices()
 
-    //    let devices = AVInputs.inputsFromType()
-    //      print("Available video devices:")
-    //    for device in devices {
-    //      if device.hasMediaType(.video) {
-    //                print("\(device.localizedName): \(device.uniqueID)")
-    //      }
-    //    }
-
     errorDomain = "com.dive.diveavplugin.avcapture"
     sessionQueue = DispatchQueue(label: "session queue")
 
-    videoInfo = AVCaptureVideoInfo(
-      colorSpace: .csDefault, videoRange: .rangeDefault, isValid: false)
+    if captureInfo.useVideo {
+      videoInfo = AVCaptureVideoInfo(
+        colorSpace: .csDefault, videoRange: .rangeDefault, isValid: false)
+    }
 
     let notificationCenter = Foundation.NotificationCenter.default
     let mainQueue = OperationQueue.main
@@ -75,49 +76,51 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
       object: nil,
       queue: mainQueue, using: deviceConnected)
 
-    captureInfo = capture_info
-    if let captureInfo {
-      let anUUID = captureInfo.uniqueID
-      //      let presetName = "bbb"  // OBSAVCapture.string(fromSettings: captureInfo.settings, withSetting: "preset")
-      let isPresetEnabled = false  // obs_data_get_bool(captureInfo.settings, "use_preset")
+    self.captureInfo = captureInfo
 
-      if captureInfo.isFastPath {
-        isFastPath = true
-        isPresetBased = false
-      } else {
-        //        let isBufferingEnabled = obs_data_get_bool(captureInfo.settings, "buffering")
+    let anUUID = captureInfo.uniqueID
+    //      let presetName = "bbb"  // OBSAVCapture.string(fromSettings: captureInfo.settings, withSetting: "preset")
+    let isPresetEnabled = false  // obs_data_get_bool(captureInfo.settings, "use_preset")
 
-        //        obs_source_set_async_unbuffered(captureInfo.source, !isBufferingEnabled)
-      }
+    if captureInfo.isFastPath {
+      isFastPath = true
+      isPresetBased = false
+    } else {
+      //        let isBufferingEnabled = obs_data_get_bool(captureInfo.settings, "buffering")
 
-      weak var weakSelf = self
+      //        obs_source_set_async_unbuffered(captureInfo.source, !isBufferingEnabled)
+    }
 
-      sessionQueue?.async {
-        if let instance = weakSelf {
-          if instance.createSession() {
-            if instance.switchCaptureDevice(anUUID) {
-              var isSessionConfigured = false
+    weak var weakSelf = self
 
-              if isPresetEnabled {
-                //                isSessionConfigured = instance.configureSession(withPreset: presetName)
-              } else {
-                isSessionConfigured = instance.configureSession()
-              }
-              if isSessionConfigured {
-                if instance.startCaptureSession() {
-                } else {
-                  print("Could not start the session")
-                }
-              } else {
-                print("Session not configured")
-              }
+    sessionQueue?.async {
+      if let instance = weakSelf {
+        if instance.createSession() {
+          if instance.switchCaptureDevice(anUUID) {
+            var isSessionConfigured = false
+
+            if isPresetEnabled {
+              //                isSessionConfigured = instance.configureSession(withPreset: presetName)
+            } else {
+              isSessionConfigured = instance.configureSession()
             }
-
+            if isSessionConfigured {
+              if instance.startCaptureSession() {
+              } else {
+                print("Could not start the session")
+              }
+            } else {
+              print("Session not configured")
+            }
           } else {
-            print("Could not create a session")
+            print("Could not setup the session")
           }
+
+        } else {
+          print("Could not create a session")
         }
       }
+
     }
   }
 
@@ -132,10 +135,10 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
     }
   }
 
+  /// The first thing we have to do to be able to start capture is to find the device
+  /// of interest, if we are interested in screen capture ( for example capturing the screen of
+  /// an attached iOS device ) we need to enable CoreMediaIO ‘DAL’ plug-ins.
   private func enableDALdevices() {
-    //  The first thing we have to do in-order to be able to start capture is to find the device
-    // of interest, if we are interested in screen capture ( for example capturing the screen of
-    // an attached iOS device ) we need to enable CoreMediaIO ‘DAL’ plug-ins.
     var property = CMIOObjectPropertyAddress(
       mSelector: CMIOObjectPropertySelector(kCMIOHardwarePropertyAllowScreenCaptureDevices),
       mScope: CMIOObjectPropertyScope(kCMIOObjectPropertyScopeGlobal),
@@ -151,15 +154,18 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
     let session = AVCaptureSession()
     session.beginConfiguration()
 
-    let videoOutput = AVCaptureVideoDataOutput()
-    let audioOutput = AVCaptureAudioDataOutput()
-    let videoQueue = DispatchQueue(label: "video")
-    let audioQueue = DispatchQueue(label: "audio")
-
-    if session.canAddOutput(videoOutput) {
-      session.addOutput(videoOutput)
-      videoOutput.setSampleBufferDelegate(self, queue: videoQueue)
+    if captureInfo?.useVideo == true {
+      let videoOutput = AVCaptureVideoDataOutput()
+      let videoQueue = DispatchQueue(label: "video")
+      if session.canAddOutput(videoOutput) {
+        session.addOutput(videoOutput)
+        videoOutput.setSampleBufferDelegate(self, queue: videoQueue)
+        self.videoOutput = videoOutput
+        self.videoQueue = videoQueue
+      }
     }
+    let audioOutput = AVCaptureAudioDataOutput()
+    let audioQueue = DispatchQueue(label: "audio")
 
     if session.canAddOutput(audioOutput) {
       session.addOutput(audioOutput)
@@ -169,8 +175,6 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
     session.commitConfiguration()
 
     self.session = session
-    self.videoOutput = videoOutput
-    self.videoQueue = videoQueue
     self.audioOutput = audioOutput
     self.audioQueue = audioQueue
 
@@ -208,7 +212,9 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
       return false
     }
 
-    guard let videoOutput else { return false }
+    //    if captureInfo?.useVideo == true {
+    //      guard let videoOutput else { return false }
+    //    }
 
     //    let deviceName = device.localizedName.utf8CString as? UnsafePointer<Int8>
     //    obs_data_set_string(captureInfo.settings, "device_name", deviceName)``
@@ -258,48 +264,61 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
 
     let mediaType = CMFormatDescriptionGetMediaType(deviceFormat.formatDescription)
 
-    if mediaType != kCMMediaType_Video && mediaType != kCMMediaType_Muxed {
-      session.removeInput(deviceInput)
-      session.commitConfiguration()
-      return false
+    if mediaType == kCMMediaType_Muxed {
+      print("media type is muxed")
+    } else if mediaType == kCMMediaType_Audio {
+      print("media type has audio")
+    } else if mediaType == kCMMediaType_Video {
+      print("media type has video")
+    }
+
+    if captureInfo?.useVideo == true {
+      if mediaType != kCMMediaType_Video && mediaType != kCMMediaType_Muxed {
+        session.removeInput(deviceInput)
+        session.commitConfiguration()
+        return false
+      }
     }
 
     if isFastPath {
-      videoOutput.videoSettings = nil
-
-      var videoSettings = videoOutput.videoSettings
-
-      let targetPixelFormatType = FourCharCode(kCVPixelFormatType_32BGRA)
-
-      videoSettings?[kCVPixelBufferPixelFormatTypeKey as String] = NSNumber(
-        value: targetPixelFormatType)
-
-      videoOutput.videoSettings = videoSettings
-    } else {
-      videoOutput.videoSettings = nil
-
-      let subType = FourCharCode(
-        (videoOutput.videoSettings?[kCVPixelBufferPixelFormatTypeKey as String] as? NSNumber)?
-          .uint32Value ?? 0)
-
-      if AVCapture.format(fromSubtype: subType) != .none {
-        if subType == kCVPixelFormatType_422YpCbCr8 {
-          print("dive_av: Using native fourcc kCVPixelFormatType_422YpCbCr8")
-        } else {
-          print("dive_av: Using native fourcc \(subType)")
-        }
-      } else {
-        let fallbackType = kCVPixelFormatType_32ARGB
-        print("dive_av: Using fallback fourcc '\(fallbackType))' \(subType) unsupported)")
+      if captureInfo?.useVideo == true, let videoOutput = videoOutput {
+        videoOutput.videoSettings = nil
 
         var videoSettings = videoOutput.videoSettings
 
+        let targetPixelFormatType = FourCharCode(kCVPixelFormatType_32BGRA)
+
         videoSettings?[kCVPixelBufferPixelFormatTypeKey as String] = NSNumber(
-          value: fallbackType)
+          value: targetPixelFormatType)
 
         videoOutput.videoSettings = videoSettings
       }
+    } else {
+      if captureInfo?.useVideo == true, let videoOutput = videoOutput {
+        videoOutput.videoSettings = nil
 
+        let subType = FourCharCode(
+          (videoOutput.videoSettings?[kCVPixelBufferPixelFormatTypeKey as String] as? NSNumber)?
+            .uint32Value ?? 0)
+
+        if AVCapture.format(fromSubtype: subType) != .none {
+          if subType == kCVPixelFormatType_422YpCbCr8 {
+            print("dive_av: Using native fourcc kCVPixelFormatType_422YpCbCr8")
+          } else {
+            print("dive_av: Using native fourcc \(subType)")
+          }
+        } else {
+          let fallbackType = kCVPixelFormatType_32ARGB
+          print("dive_av: Using fallback fourcc '\(fallbackType))' \(subType) unsupported)")
+
+          var videoSettings = videoOutput.videoSettings
+
+          videoSettings?[kCVPixelBufferPixelFormatTypeKey as String] = NSNumber(
+            value: fallbackType)
+
+          videoOutput.videoSettings = videoSettings
+        }
+      }
     }
 
     session.commitConfiguration()
@@ -335,7 +354,7 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
           self.captureInfo?.previousSurface = nil
         }
       } else {
-        outputFrame(nil)
+        outputPixelBuffer(nil)
       }
     }
   }
@@ -380,107 +399,107 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
 
   func configureSession() -> Bool {
     /*
-    var videoRange: AVCaptureVideoRange
-    var colorSpace: Int
-    var inputFourCC: FourCharCode
+         var videoRange: AVCaptureVideoRange
+         var colorSpace: Int
+         var inputFourCC: FourCharCode
 
-    if !self.isFastPath {
-      videoRange = .rangeDefault  // Int(obs_data_get_int(self.captureInfo.settings, "video_range"))
-      if !isValidVideoRange(videoRange) {
-        print("Unsupported video range: \(videoRange)")
-        return false
-      }
-      var inputFormat: Int
-      inputFormat = Int(obs_data_get_int(self.captureInfo.settings, "input_format"))
-      inputFourCC = OBSAVCapture.fourCharCodeFromFormat(inputFormat, withRange: videoRange)
-      colorSpace = Int(obs_data_get_int(self.captureInfo.settings, "color_space"))
-      if !OBSAVCapture.isValidColorspace(colorSpace) {
-        self.AVCaptureLog(LOG_DEBUG, withFormat: "Unsupported color space: %d", colorSpace)
-        return false
-      }
-    } else {
-      let formatDescription = self.deviceInput.device.activeFormat.formatDescription
-      inputFourCC = CMFormatDescriptionGetMediaSubType(formatDescription)
-      colorSpace = OBSAVCapture.colorspaceFromDescription(formatDescription)
-      videoRange =
-        isFullRangeFormat(inputFourCC) ? VIDEO_RANGE_FULL : VIDEO_RANGE_PARTIAL
-    }
-    let dimensions = OBSAVCapture.dimensionsFromSettings(self.captureInfo.settings)
-    if dimensions.width == 0 || dimensions.height == 0 {
-      self.AVCaptureLog(LOG_DEBUG, withFormat: "No valid resolution found in settings")
-      return false
-    }
-    var fps = media_frames_per_second()
-    if !obs_data_get_frames_per_second(self.captureInfo.settings, "frame_rate", &fps, nil) {
-      self.AVCaptureLog(LOG_DEBUG, withFormat: "No valid framerate found in settings")
-      return false
-    }
-    let time = CMTime(value: fps.denominator, timescale: fps.numerator, flags: 1)
-    var format: AVCaptureDeviceFormat? = nil
-    for formatCandidate in self.deviceInput.device.formats.reversed() {
-      let formatDimensions = CMVideoFormatDescriptionGetDimensions(
-        formatCandidate.formatDescription)
-      if !(formatDimensions.width == dimensions.width)
-        || !(formatDimensions.height == dimensions.height)
-      {
-        continue
-      }
-      for range in formatCandidate.videoSupportedFrameRateRanges {
-        if CMTimeCompare(range.maxFrameDuration, time) >= 0
-          && CMTimeCompare(range.minFrameDuration, time) <= 0
-        {
-          let formatDescription = formatCandidate.formatDescription
-          let formatFourCC = CMFormatDescriptionGetMediaSubType(formatDescription)
-          if inputFourCC == formatFourCC {
-            format = formatCandidate
-            inputFourCC = formatFourCC
-            break
-          }
-        }
-      }
-      if format != nil {
-        break
-      }
-    }
-    if format == nil {
-      self.AVCaptureLog(
-        LOG_WARNING, withFormat: "Frame rate is not supported: %g FPS (%u/%u)",
-        media_frames_per_second_to_fps(fps), fps.numerator, fps.denominator)
-      return false
-    }
-    self.session.beginConfiguration()
-    self.isDeviceLocked = self.deviceInput.device.lockForConfiguration(&error)
-    if !self.isDeviceLocked {
-      self.AVCaptureLog(LOG_WARNING, withFormat: "Could not lock devie for configuration")
-      return false
-    }
-    self.AVCaptureLog(
-      LOG_INFO,
-      withFormat:
-        "Capturing '%@' (%@):\n Resolution : %ux%u\n FPS : %g (%u/%u)\n Frame Interval : %g\u{00a0}s\n Input Format : %@\n Requested Color Space : %@ (%d)\n Requested Video Range : %@ (%d)\n Using Format : %@",
-      self.deviceInput.device.localizedName, self.deviceInput.device.uniqueID, dimensions.width,
-      dimensions.height, media_frames_per_second_to_fps(fps), fps.numerator, fps.denominator,
-      media_frames_per_second_to_frame_interval(fps), OBSAVCapture.stringFromSubType(inputFourCC),
-      OBSAVCapture.stringFromColorspace(colorSpace), colorSpace,
-      OBSAVCapture.stringFromVideoRange(videoRange), videoRange, format!.description)
+         if !self.isFastPath {
+         videoRange = .rangeDefault  // Int(obs_data_get_int(self.captureInfo.settings, "video_range"))
+         if !isValidVideoRange(videoRange) {
+         print("Unsupported video range: \(videoRange)")
+         return false
+         }
+         var inputFormat: Int
+         inputFormat = Int(obs_data_get_int(self.captureInfo.settings, "input_format"))
+         inputFourCC = OBSAVCapture.fourCharCodeFromFormat(inputFormat, withRange: videoRange)
+         colorSpace = Int(obs_data_get_int(self.captureInfo.settings, "color_space"))
+         if !OBSAVCapture.isValidColorspace(colorSpace) {
+         self.AVCaptureLog(LOG_DEBUG, withFormat: "Unsupported color space: %d", colorSpace)
+         return false
+         }
+         } else {
+         let formatDescription = self.deviceInput.device.activeFormat.formatDescription
+         inputFourCC = CMFormatDescriptionGetMediaSubType(formatDescription)
+         colorSpace = OBSAVCapture.colorspaceFromDescription(formatDescription)
+         videoRange =
+         isFullRangeFormat(inputFourCC) ? VIDEO_RANGE_FULL : VIDEO_RANGE_PARTIAL
+         }
+         let dimensions = OBSAVCapture.dimensionsFromSettings(self.captureInfo.settings)
+         if dimensions.width == 0 || dimensions.height == 0 {
+         self.AVCaptureLog(LOG_DEBUG, withFormat: "No valid resolution found in settings")
+         return false
+         }
+         var fps = media_frames_per_second()
+         if !obs_data_get_frames_per_second(self.captureInfo.settings, "frame_rate", &fps, nil) {
+         self.AVCaptureLog(LOG_DEBUG, withFormat: "No valid framerate found in settings")
+         return false
+         }
+         let time = CMTime(value: fps.denominator, timescale: fps.numerator, flags: 1)
+         var format: AVCaptureDeviceFormat? = nil
+         for formatCandidate in self.deviceInput.device.formats.reversed() {
+         let formatDimensions = CMVideoFormatDescriptionGetDimensions(
+         formatCandidate.formatDescription)
+         if !(formatDimensions.width == dimensions.width)
+         || !(formatDimensions.height == dimensions.height)
+         {
+         continue
+         }
+         for range in formatCandidate.videoSupportedFrameRateRanges {
+         if CMTimeCompare(range.maxFrameDuration, time) >= 0
+         && CMTimeCompare(range.minFrameDuration, time) <= 0
+         {
+         let formatDescription = formatCandidate.formatDescription
+         let formatFourCC = CMFormatDescriptionGetMediaSubType(formatDescription)
+         if inputFourCC == formatFourCC {
+         format = formatCandidate
+         inputFourCC = formatFourCC
+         break
+         }
+         }
+         }
+         if format != nil {
+         break
+         }
+         }
+         if format == nil {
+         self.AVCaptureLog(
+         LOG_WARNING, withFormat: "Frame rate is not supported: %g FPS (%u/%u)",
+         media_frames_per_second_to_fps(fps), fps.numerator, fps.denominator)
+         return false
+         }
+         self.session.beginConfiguration()
+         self.isDeviceLocked = self.deviceInput.device.lockForConfiguration(&error)
+         if !self.isDeviceLocked {
+         self.AVCaptureLog(LOG_WARNING, withFormat: "Could not lock devie for configuration")
+         return false
+         }
+         self.AVCaptureLog(
+         LOG_INFO,
+         withFormat:
+         "Capturing '%@' (%@):\n Resolution : %ux%u\n FPS : %g (%u/%u)\n Frame Interval : %g\u{00a0}s\n Input Format : %@\n Requested Color Space : %@ (%d)\n Requested Video Range : %@ (%d)\n Using Format : %@",
+         self.deviceInput.device.localizedName, self.deviceInput.device.uniqueID, dimensions.width,
+         dimensions.height, media_frames_per_second_to_fps(fps), fps.numerator, fps.denominator,
+         media_frames_per_second_to_frame_interval(fps), OBSAVCapture.stringFromSubType(inputFourCC),
+         OBSAVCapture.stringFromColorspace(colorSpace), colorSpace,
+         OBSAVCapture.stringFromVideoRange(videoRange), videoRange, format!.description)
 
-    if let videoInfo {
-      self.videoInfo = AVCaptureVideoInfo(
-        colorSpace: videoInfo.colorSpace, videoRange: videoInfo.videoRange, isValid: false)
-    }
-    self.isPresetBased = false
-    if self.presetFormat == nil {
-      let presetInfo = OBSAVCapturePresetInfo()
-      presetInfo.activeFormat = self.deviceInput.device.activeFormat
-      presetInfo.minFrameRate = self.deviceInput.device.activeVideoMinFrameDuration
-      presetInfo.maxFrameRate = self.deviceInput.device.activeVideoMaxFrameDuration
-      self.presetFormat = presetInfo
-    }
-    self.deviceInput.device.activeFormat = format!
-    self.deviceInput.device.activeVideoMinFrameDuration = time
-    self.deviceInput.device.activeVideoMaxFrameDuration = time
-    self.session.commitConfiguration()
-    */
+         if let videoInfo {
+         self.videoInfo = AVCaptureVideoInfo(
+         colorSpace: videoInfo.colorSpace, videoRange: videoInfo.videoRange, isValid: false)
+         }
+         self.isPresetBased = false
+         if self.presetFormat == nil {
+         let presetInfo = OBSAVCapturePresetInfo()
+         presetInfo.activeFormat = self.deviceInput.device.activeFormat
+         presetInfo.minFrameRate = self.deviceInput.device.activeVideoMinFrameDuration
+         presetInfo.maxFrameRate = self.deviceInput.device.activeVideoMaxFrameDuration
+         self.presetFormat = presetInfo
+         }
+         self.deviceInput.device.activeFormat = format!
+         self.deviceInput.device.activeVideoMinFrameDuration = time
+         self.deviceInput.device.activeVideoMaxFrameDuration = time
+         self.session.commitConfiguration()
+         */
 
     return true
   }
@@ -509,28 +528,28 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
     }
 
     /*
-    var error: Error?
-    let presetName = OBSAVCapture.string(fromSettings: captureInfo.settings, withSetting: "preset")
-    let isPresetEnabled = obs_data_get_bool(captureInfo.settings, "use_preset")
-    let isFastPath = captureInfo.isFastPath
-    if switchCaptureDevice(device.uniqueID, withError: &error) {
-      var success: Bool
-      if isPresetEnabled && !isFastPath {
-        success = configureSession(withPreset: presetName, withError: &error)
-      } else {
-        success = configureSession(&error)
-      }
-      if success {
-        sessionQueue.async(execute: { [self] in
-          startCaptureSession()
-        })
-      } else {
-        avCaptureLog(LOG_ERROR, withFormat: error.localizedDescription)
-      }
-    } else {
-      avCaptureLog(LOG_ERROR, withFormat: error.localizedDescription)
-    }
-       */
+         var error: Error?
+         let presetName = OBSAVCapture.string(fromSettings: captureInfo.settings, withSetting: "preset")
+         let isPresetEnabled = obs_data_get_bool(captureInfo.settings, "use_preset")
+         let isFastPath = captureInfo.isFastPath
+         if switchCaptureDevice(device.uniqueID, withError: &error) {
+         var success: Bool
+         if isPresetEnabled && !isFastPath {
+         success = configureSession(withPreset: presetName, withError: &error)
+         } else {
+         success = configureSession(&error)
+         }
+         if success {
+         sessionQueue.async(execute: { [self] in
+         startCaptureSession()
+         })
+         } else {
+         avCaptureLog(LOG_ERROR, withFormat: error.localizedDescription)
+         }
+         } else {
+         avCaptureLog(LOG_ERROR, withFormat: error.localizedDescription)
+         }
+         */
     //    obs_source_update_properties(captureInfo.source)
   }
 
@@ -550,31 +569,31 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
     print("Received disconnect event for device '\(device.localizedName)' \(device.uniqueID)")
 
     /*
-      if !(device?.uniqueID.isEqual(to: deviceUUID) ?? false) {
-        obs_source_update_properties(captureInfo.source)
-        return
-      }
+         if !(device?.uniqueID.isEqual(to: deviceUUID) ?? false) {
+         obs_source_update_properties(captureInfo.source)
+         return
+         }
 
-    weak var weakSelf = self
-    sessionQueue.async(execute: {
-      var instance = weakSelf
+         weak var weakSelf = self
+         sessionQueue.async(execute: {
+         var instance = weakSelf
 
-      instance?.stopSession()
-      if let deviceInput = instance?.deviceInput {
-        instance?.session.removeInput(deviceInput)
-      }
+         instance?.stopSession()
+         if let deviceInput = instance?.deviceInput {
+         instance?.session.removeInput(deviceInput)
+         }
 
-      instance?.deviceInput = nil
-      instance = nil
-    })
-      */
+         instance?.deviceInput = nil
+         instance = nil
+         })
+         */
 
     //    obs_source_update_properties(captureInfo.source)
   }
 
   // MARK: - AVCapture Delegate Methods (begin)
 
-  /// Called once for each frame that is discarded.
+  /// Called whenever a video frame is dropped.
   func captureOutput(
     _ output: AVCaptureOutput,
     didDrop sampleBuffer: CMSampleBuffer,
@@ -586,24 +605,21 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
   }
 
   /// Called whenever an AVCaptureVideoDataOutput instance outputs a new video frame.
+  /// Called whenever an AVCaptureAudioDataOutput instance outputs a new audio sample buffer.
   func captureOutput(
     _ output: AVCaptureOutput,
     didOutput sampleBuffer: CMSampleBuffer,
     from connection: AVCaptureConnection
   ) {
-    //    guard var videoInfo else { return }
+//    guard let captureInfo else { return }
     let sampleCount = CMSampleBufferGetNumSamples(sampleBuffer)
-    if captureInfo == nil || Int(sampleCount) < 1 {
-      return
-    }
+    guard sampleCount > 0 else { return }
 
     //    let presentationTimeStamp = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
     //    let presentationNanoTimeStamp: CMTime = CMTimeConvertScale(
     //      presentationTimeStamp, timescale: Int32(1E9), method: .default)
 
-    guard let description = CMSampleBufferGetFormatDescription(sampleBuffer) else {
-      return
-    }
+    guard let description = CMSampleBufferGetFormatDescription(sampleBuffer) else { return }
     let mediaType = CMFormatDescriptionGetMediaType(description)
 
     switch mediaType {
@@ -616,285 +632,331 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
       return
 
     /*
-      let mediaSubType = CMFormatDescriptionGetMediaSubType(description)
+             let mediaSubType = CMFormatDescriptionGetMediaSubType(description)
 
-      var newInfo = AVCaptureVideoInfo(
-        colorSpace: videoInfo.colorSpace, videoRange: videoInfo.videoRange, isValid: false)
-      let usePreset = false  // obs_data_get_bool(captureInfo.settings, "use_preset")
+             var newInfo = AVCaptureVideoInfo(
+             colorSpace: videoInfo.colorSpace, videoRange: videoInfo.videoRange, isValid: false)
+             let usePreset = false  // obs_data_get_bool(captureInfo.settings, "use_preset")
 
-      if isFastPath {
-        if mediaSubType != kCVPixelFormatType_32BGRA
-          && mediaSubType != kCVPixelFormatType_ARGB2101010LEPacked
-        {
-          //          captureInfo.lastError() = OBSAVCaptureError_SampleBufferFormat
-          if let sampleBufferDescription = captureInfo?.sampleBufferDescription {
-            CMFormatDescriptionCreate(
-              allocator: kCFAllocatorDefault,
-              mediaType: mediaType,
-              mediaSubType: mediaSubType,
-              extensions: nil,
-              formatDescriptionOut: &captureInfo!.sampleBufferDescription)
-          }
-          //          obs_source_update_properties(captureInfo.source)
-          break
-        } else {
-          //          captureInfo.lastError() = OBSAVCaptureError_NoError
-          captureInfo?.sampleBufferDescription = nil
-        }
+             if isFastPath {
+             if mediaSubType != kCVPixelFormatType_32BGRA
+             && mediaSubType != kCVPixelFormatType_ARGB2101010LEPacked
+             {
+             //          captureInfo.lastError() = OBSAVCaptureError_SampleBufferFormat
+             if let sampleBufferDescription = captureInfo?.sampleBufferDescription {
+             CMFormatDescriptionCreate(
+             allocator: kCFAllocatorDefault,
+             mediaType: mediaType,
+             mediaSubType: mediaSubType,
+             extensions: nil,
+             formatDescriptionOut: &captureInfo!.sampleBufferDescription)
+             }
+             //          obs_source_update_properties(captureInfo.source)
+             break
+             } else {
+             //          captureInfo.lastError() = OBSAVCaptureError_NoError
+             captureInfo?.sampleBufferDescription = nil
+             }
 
-        /*
-        CVPixelBufferLockBaseAddress(imageBuffer, [])
-        let frameSurface = CVPixelBufferGetIOSurface(imageBuffer) as? IOSurfaceRef
-        CVPixelBufferUnlockBaseAddress(imageBuffer, [])
+             /*
+              CVPixelBufferLockBaseAddress(imageBuffer, [])
+              let frameSurface = CVPixelBufferGetIOSurface(imageBuffer) as? IOSurfaceRef
+              CVPixelBufferUnlockBaseAddress(imageBuffer, [])
 
-        let previousSurface: IOSurfaceRef? = nil
+              let previousSurface: IOSurfaceRef? = nil
 
-        if frameSurface && !pthread_mutex_lock(0x0) {
-          var frameSize = captureInfo.frameSize
+              if frameSurface && !pthread_mutex_lock(0x0) {
+              var frameSize = captureInfo.frameSize
 
-          if frameSize.size.width != sampleBufferDimensions.width
-            || frameSize.size.height != sampleBufferDimensions.height
-          {
-            frameSize = CGRect(
+              if frameSize.size.width != sampleBufferDimensions.width
+              || frameSize.size.height != sampleBufferDimensions.height
+              {
+              frameSize = CGRect(
               x: 0, y: 0, width: sampleBufferDimensions.width, height: sampleBufferDimensions.height
-            )
-          }
-          previousSurface = captureInfo.currentSurface
-          captureInfo.currentSurface = frameSurface
+              )
+              }
+              previousSurface = captureInfo.currentSurface
+              captureInfo.currentSurface = frameSurface
 
-          CFRetain(captureInfo.currentSurface)
-          IOSurfaceIncrementUseCount(captureInfo.currentSurface)
-          pthread_mutex_unlock(0x0)
+              CFRetain(captureInfo.currentSurface)
+              IOSurfaceIncrementUseCount(captureInfo.currentSurface)
+              pthread_mutex_unlock(0x0)
 
-          newInfo.isValid = true
-
-          if videoInfo.isValid != newInfo.isValid {
-            obs_source_update_properties(captureInfo.source)
-          }
-
-          captureInfo.frameSize = frameSize
-          videoInfo = newInfo
-        }
-
-        if previousSurface {
-          IOSurfaceDecrementUseCount(previousSurface)
-        }
-        */
-
-        break
-      } else {
-        guard var frame = captureInfo?.videoFrame else {
-          break
-        }
-
-        frame.timestamp = UInt64(presentationNanoTimeStamp.value)
-
-        let videoFormat = AVCapture.format(fromSubtype: mediaSubType)
-
-        if videoFormat == AVVideoFormat.none {
-          //          captureInfo.lastError() = OBSAVCaptureError_SampleBufferFormat
-          if let sampleBufferDescription = captureInfo?.sampleBufferDescription {
-            CMFormatDescriptionCreate(
-              allocator: kCFAllocatorDefault,
-              mediaType: mediaType,
-              mediaSubType: mediaSubType,
-              extensions: nil,
-              formatDescriptionOut: &captureInfo!.sampleBufferDescription)
-          }
-        } else {
-
-          //          captureInfo.lastError() = OBSAVCaptureError_NoError
-          captureInfo?.sampleBufferDescription = nil
-          #if DEBUG
-            if frame.format != AVVideoFormat.none && frame.format != videoFormat {
-              print("Switching fourcc")  //: '%@' (0x%x) -> '%@' (0x%x)",
-              //                OBSAVCapture.string(fromFourCharCode: frame.format), frame.format,
-              //                OBSAVCapture.string(fromFourCharCode: mediaSubType), mediaSubType)
-            }
-          #endif
-          let isFrameYuv = formatIsYUV(frame.format)
-          let isSampleBufferYuv = formatIsYUV(videoFormat)
-
-          frame.format = videoFormat
-          frame.width = sampleBufferDimensions.width
-          frame.height = sampleBufferDimensions.height
-
-          var isSampleBufferFullRange = isFullRangeFormat(pixelFormat: mediaSubType)
-
-          if isSampleBufferYuv {
-            var sampleBufferColorSpace = colorspaceFrom(description: description)
-            let sampleBufferRangeType =
-              isSampleBufferFullRange
-              ? AVCaptureVideoRange.rangeFull
-              : AVCaptureVideoRange.rangePartial
-
-            var isColorSpaceMatching = false
-
-            let configuredColorSpace = AVCaptureVideoColorspace.csDefault  // obs_data_get_int(captureInfo.settings, "color_space")
-
-            if usePreset {
-              isColorSpaceMatching = sampleBufferColorSpace == videoInfo.colorSpace
-            } else {
-              isColorSpaceMatching = configuredColorSpace == videoInfo.colorSpace
-            }
-
-            var isVideoRangeMatching = false
-            let configuredVideoRangeType = AVCaptureVideoRange.rangeDefault  // obs_data_get_int(captureInfo.settings, "video_range")
-
-            if usePreset {
-              isVideoRangeMatching = sampleBufferRangeType == videoInfo.videoRange
-            } else {
-              isVideoRangeMatching = configuredVideoRangeType == videoInfo.videoRange
-              isSampleBufferFullRange = configuredVideoRangeType == AVCaptureVideoRange.rangeFull
-            }
-
-            if isColorSpaceMatching && isVideoRangeMatching {
               newInfo.isValid = true
-            } else {
-              frame.fullRange = isSampleBufferFullRange
 
-              let success = videoFormatGetParametersForFormat(
-                colorSpace: &sampleBufferColorSpace,
-                range: sampleBufferRangeType,
-                format: frame.format,
-                matrix: &frame.colorMatrix,
-                rangeMin: &frame.colorRangeMin,
-                rangeMax: &frame.colorRangeMax)
-
-              if !success {
-                if let sampleBufferDescription = captureInfo?.sampleBufferDescription {
-                  CMFormatDescriptionCreate(
-                    allocator: kCFAllocatorDefault,
-                    mediaType: mediaType,
-                    mediaSubType: mediaSubType,
-                    extensions: nil,
-                    formatDescriptionOut: &captureInfo!.sampleBufferDescription)
-                }
-                newInfo.isValid = false
-              } else {
-                newInfo.colorSpace = sampleBufferColorSpace
-                newInfo.videoRange = sampleBufferRangeType
-                newInfo.isValid = true
-              }
-            }
-          } else if !isFrameYuv && !isSampleBufferYuv {
-            newInfo.isValid = true
-          }
-
-          if newInfo.isValid != videoInfo.isValid {
-            //            obs_source_update_properties(captureInfo.source)
-          }
-
-          videoInfo = newInfo
-
-          if newInfo.isValid {
-            if let imageBuffer {
-              CVPixelBufferLockBaseAddress(imageBuffer, .readOnly)
-
-              if !CVPixelBufferIsPlanar(imageBuffer) {
-                frame.linesize[0] = UInt32(CVPixelBufferGetBytesPerRow(imageBuffer))
-                if let buffer = CVPixelBufferGetBaseAddress(imageBuffer) {
-                  // Save the image buffer
-                  frame.data[0] = buffer
-                }
-              } else {
-                let planeCount = CVPixelBufferGetPlaneCount(imageBuffer)
-
-                for i in 0..<planeCount {
-                  frame.linesize[i] = UInt32(CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, i))
-                  if let buffer = CVPixelBufferGetBaseAddressOfPlane(imageBuffer, i) {
-                    frame.data[i] = buffer
-                  }
-                }
+              if videoInfo.isValid != newInfo.isValid {
+              obs_source_update_properties(captureInfo.source)
               }
 
-              outputFrame(frame)
-              CVPixelBufferUnlockBaseAddress(imageBuffer, .readOnly)
-            }
-          } else {
-            outputFrame(nil)
-          }
+              captureInfo.frameSize = frameSize
+              videoInfo = newInfo
+              }
 
-          break
+              if previousSurface {
+              IOSurfaceDecrementUseCount(previousSurface)
+              }
+              */
 
-        }
-      }
-       break
-*/
+             break
+             } else {
+             guard var frame = captureInfo?.videoFrame else {
+             break
+             }
+
+             frame.timestamp = UInt64(presentationNanoTimeStamp.value)
+
+             let videoFormat = AVCapture.format(fromSubtype: mediaSubType)
+
+             if videoFormat == AVVideoFormat.none {
+             //          captureInfo.lastError() = OBSAVCaptureError_SampleBufferFormat
+             if let sampleBufferDescription = captureInfo?.sampleBufferDescription {
+             CMFormatDescriptionCreate(
+             allocator: kCFAllocatorDefault,
+             mediaType: mediaType,
+             mediaSubType: mediaSubType,
+             extensions: nil,
+             formatDescriptionOut: &captureInfo!.sampleBufferDescription)
+             }
+             } else {
+
+             //          captureInfo.lastError() = OBSAVCaptureError_NoError
+             captureInfo?.sampleBufferDescription = nil
+             #if DEBUG
+             if frame.format != AVVideoFormat.none && frame.format != videoFormat {
+             print("Switching fourcc")  //: '%@' (0x%x) -> '%@' (0x%x)",
+             //                OBSAVCapture.string(fromFourCharCode: frame.format), frame.format,
+             //                OBSAVCapture.string(fromFourCharCode: mediaSubType), mediaSubType)
+             }
+             #endif
+             let isFrameYuv = formatIsYUV(frame.format)
+             let isSampleBufferYuv = formatIsYUV(videoFormat)
+
+             frame.format = videoFormat
+             frame.width = sampleBufferDimensions.width
+             frame.height = sampleBufferDimensions.height
+
+             var isSampleBufferFullRange = isFullRangeFormat(pixelFormat: mediaSubType)
+
+             if isSampleBufferYuv {
+             var sampleBufferColorSpace = colorspaceFrom(description: description)
+             let sampleBufferRangeType =
+             isSampleBufferFullRange
+             ? AVCaptureVideoRange.rangeFull
+             : AVCaptureVideoRange.rangePartial
+
+             var isColorSpaceMatching = false
+
+             let configuredColorSpace = AVCaptureVideoColorspace.csDefault  // obs_data_get_int(captureInfo.settings, "color_space")
+
+             if usePreset {
+             isColorSpaceMatching = sampleBufferColorSpace == videoInfo.colorSpace
+             } else {
+             isColorSpaceMatching = configuredColorSpace == videoInfo.colorSpace
+             }
+
+             var isVideoRangeMatching = false
+             let configuredVideoRangeType = AVCaptureVideoRange.rangeDefault  // obs_data_get_int(captureInfo.settings, "video_range")
+
+             if usePreset {
+             isVideoRangeMatching = sampleBufferRangeType == videoInfo.videoRange
+             } else {
+             isVideoRangeMatching = configuredVideoRangeType == videoInfo.videoRange
+             isSampleBufferFullRange = configuredVideoRangeType == AVCaptureVideoRange.rangeFull
+             }
+
+             if isColorSpaceMatching && isVideoRangeMatching {
+             newInfo.isValid = true
+             } else {
+             frame.fullRange = isSampleBufferFullRange
+
+             let success = videoFormatGetParametersForFormat(
+             colorSpace: &sampleBufferColorSpace,
+             range: sampleBufferRangeType,
+             format: frame.format,
+             matrix: &frame.colorMatrix,
+             rangeMin: &frame.colorRangeMin,
+             rangeMax: &frame.colorRangeMax)
+
+             if !success {
+             if let sampleBufferDescription = captureInfo?.sampleBufferDescription {
+             CMFormatDescriptionCreate(
+             allocator: kCFAllocatorDefault,
+             mediaType: mediaType,
+             mediaSubType: mediaSubType,
+             extensions: nil,
+             formatDescriptionOut: &captureInfo!.sampleBufferDescription)
+             }
+             newInfo.isValid = false
+             } else {
+             newInfo.colorSpace = sampleBufferColorSpace
+             newInfo.videoRange = sampleBufferRangeType
+             newInfo.isValid = true
+             }
+             }
+             } else if !isFrameYuv && !isSampleBufferYuv {
+             newInfo.isValid = true
+             }
+
+             if newInfo.isValid != videoInfo.isValid {
+             //            obs_source_update_properties(captureInfo.source)
+             }
+
+             videoInfo = newInfo
+
+             if newInfo.isValid {
+             if let imageBuffer {
+             CVPixelBufferLockBaseAddress(imageBuffer, .readOnly)
+
+             if !CVPixelBufferIsPlanar(imageBuffer) {
+             frame.linesize[0] = UInt32(CVPixelBufferGetBytesPerRow(imageBuffer))
+             if let buffer = CVPixelBufferGetBaseAddress(imageBuffer) {
+             // Save the image buffer
+             frame.data[0] = buffer
+             }
+             } else {
+             let planeCount = CVPixelBufferGetPlaneCount(imageBuffer)
+
+             for i in 0..<planeCount {
+             frame.linesize[i] = UInt32(CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, i))
+             if let buffer = CVPixelBufferGetBaseAddressOfPlane(imageBuffer, i) {
+             frame.data[i] = buffer
+             }
+             }
+             }
+
+             outputFrame(frame)
+             CVPixelBufferUnlockBaseAddress(imageBuffer, .readOnly)
+             }
+             } else {
+             outputFrame(nil)
+             }
+
+             break
+
+             }
+             }
+             break
+             */
 
     case kCMMediaType_Audio:
+      guard let blockBuffer = CMSampleBufferGetDataBuffer(sampleBuffer),
+        let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer)
+      else {
+        print("Unable to get audio sample buffer")
+        return
+      }
+
+      var totalLength = 0
+      var lengthAtOffset = 0
+      var dataPointer: UnsafeMutablePointer<Int8>?
+      CMBlockBufferGetDataPointer(
+        blockBuffer, atOffset: 0, lengthAtOffsetOut: &lengthAtOffset, totalLengthOut: &totalLength,
+        dataPointerOut: &dataPointer)
+
+      if let dataPointer = dataPointer {
+        let audioData = Data(bytes: dataPointer, count: totalLength)
+        processAudioData(audioData, formatDescription: formatDescription)
+      }
+
       /*
-      var requiredBufferListSize: size_t
-      var status = noErr
+             var requiredBufferListSize: size_t
+             var status = noErr
 
-      status = CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(
-        sampleBuffer,
-        bufferListSizeNeededOut: &requiredBufferListSize,
-        bufferListOut: nil,
-        bufferListSize: 0,
-        blockBufferAllocator: nil,
-        blockBufferMemoryAllocator: nil,
-        flags: kCMSampleBufferFlag_AudioBufferList_Assure16ByteAlignment)
-      if status != noErr {
-        captureInfo.lastAudioError = OBSAVCaptureError_AudioBuffer
-        obs_source_update_properties(captureInfo.source)
-        break
-      }
+             status = CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(
+             sampleBuffer,
+             bufferListSizeNeededOut: &requiredBufferListSize,
+             bufferListOut: nil,
+             bufferListSize: 0,
+             blockBufferAllocator: nil,
+             blockBufferMemoryAllocator: nil,
+             flags: kCMSampleBufferFlag_AudioBufferList_Assure16ByteAlignment)
+             if status != noErr {
+             captureInfo.lastAudioError = OBSAVCaptureError_AudioBuffer
+             obs_source_update_properties(captureInfo.source)
+             break
+             }
 
-      let bufferList = malloc(requiredBufferListSize) as? AudioBufferList
-      let blockBuffer: CMBlockBuffer? = nil
-      var error = noErr
-      error = CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(
-        sampleBuffer,
-        bufferListSizeNeededOut: nil,
-        bufferListOut: &bufferList,
-        bufferListSize: requiredBufferListSize,
-        blockBufferAllocator: kCFAllocatorSystemDefault,
-        blockBufferMemoryAllocator: kCFAllocatorSystemDefault,
-        flags: kCMSampleBufferFlag_AudioBufferList_Assure16ByteAlignment,
-        blockBufferOut: &blockBuffer)
+             let bufferList = malloc(requiredBufferListSize) as? AudioBufferList
+             let blockBuffer: CMBlockBuffer? = nil
+             var error = noErr
+             error = CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(
+             sampleBuffer,
+             bufferListSizeNeededOut: nil,
+             bufferListOut: &bufferList,
+             bufferListSize: requiredBufferListSize,
+             blockBufferAllocator: kCFAllocatorSystemDefault,
+             blockBufferMemoryAllocator: kCFAllocatorSystemDefault,
+             flags: kCMSampleBufferFlag_AudioBufferList_Assure16ByteAlignment,
+             blockBufferOut: &blockBuffer)
 
-      if error == noErr {
-        captureInfo.lastAudioError = OBSAVCaptureError_NoError
+             if error == noErr {
+             captureInfo.lastAudioError = OBSAVCaptureError_NoError
 
-        let audio = captureInfo.audioFrame
+             let audio = captureInfo.audioFrame
 
-        for i in 0..<Int(bufferList.mNumberBuffers) {
-          audio?.data[i] = bufferList.mBuffers[i].mData
-        }
+             for i in 0..<Int(bufferList.mNumberBuffers) {
+             audio?.data[i] = bufferList.mBuffers[i].mData
+             }
 
-        audio?.timestamp = presentationNanoTimeStamp.value
-        audio?.frames = UInt32(CMSampleBufferGetNumSamples(sampleBuffer))
+             audio?.timestamp = presentationNanoTimeStamp.value
+             audio?.frames = UInt32(CMSampleBufferGetNumSamples(sampleBuffer))
 
-        let basicDescription =
-          CMAudioFormatDescriptionGetStreamBasicDescription(description)
-          as? AudioStreamBasicDescription
+             let basicDescription =
+             CMAudioFormatDescriptionGetStreamBasicDescription(description)
+             as? AudioStreamBasicDescription
 
-        audio.samples_per_sec = UInt32(basicDescription?.mSampleRate ?? 0)
-        audio.speakers = speaker_layout(rawValue: basicDescription?.mChannelsPerFrame)
+             audio.samples_per_sec = UInt32(basicDescription?.mSampleRate ?? 0)
+             audio.speakers = speaker_layout(rawValue: basicDescription?.mChannelsPerFrame)
 
-        switch basicDescription.mBitsPerChannel {
-        case 8:
-          audio.format = AudioFormat.u8bit  // AUDIO_FORMAT_U8BIT
-        case 16:
-          audio.format = AudioFormat.s16bit  // AUDIO_FORMAT_16BIT
-        case 32:
-          audio.format = AudioFormat.s32bit  // AUDIO_FORMAT_32BIT
-        default:
-          audio.format = AudioFormat.unknown  // AUDIO_FORMAT_UNKNOWN
-        }
+             switch basicDescription.mBitsPerChannel {
+             case 8:
+             audio.format = AudioFormat.u8bit  // AUDIO_FORMAT_U8BIT
+             case 16:
+             audio.format = AudioFormat.s16bit  // AUDIO_FORMAT_16BIT
+             case 32:
+             audio.format = AudioFormat.s32bit  // AUDIO_FORMAT_32BIT
+             default:
+             audio.format = AudioFormat.unknown  // AUDIO_FORMAT_UNKNOWN
+             }
 
-        //        obs_source_output_audio(captureInfo.source, audio)
-      } else {
-        //        captureInfo.lastAudioError = OBSAVCaptureError_AudioBuffer
-        //        obs_source_output_audio(captureInfo.source, nil)
-      }
-         */
+             //        obs_source_output_audio(captureInfo.source, audio)
+             } else {
+             //        captureInfo.lastAudioError = OBSAVCaptureError_AudioBuffer
+             //        obs_source_output_audio(captureInfo.source, nil)
+             }
+             */
       break
     default:
       break
     }
 
+  }
+
+  /// Handle your audio data here
+  private func processAudioData(_ audioData: Data, formatDescription: CMFormatDescription) {
+
+    let movingAverage = movingAverageFilter(audioData)
+
+    if let captureInfo, let callback = captureInfo.audioBufferCallback {
+      callback([movingAverage])
+    }
+  }
+
+  // Perform a moving average filter on the audio data.
+  private func movingAverageFilter(_ audioData: Data) -> Float {
+    if audioData.count == 0 { return 0.0 }
+
+    var total = 0
+    audioData.forEach { value in
+      if value != 0 {
+        let valueInt = Int(value)
+        if valueInt != 0 {
+          total += valueInt
+        }
+      }
+    }
+    let average = Float(total) / Float(audioData.count)
+    return average
   }
 
   // MARK: - AVCapture Delegate Methods (end)
@@ -966,11 +1028,11 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
     return .csDefault
   }
 
-  func outputFrame(_ frame: AVCaptureVideoFrame?) {
-    if let captureInfo, let callback = captureInfo.frameCallback {
-      callback(frame)
-    }
-  }
+  //  func outputFrame(_ frame: AVCaptureVideoFrame?) {
+  //    if let captureInfo, let callback = captureInfo.frameCallback {
+  //      callback(frame)
+  //    }
+  //  }
 
   func outputPixelBuffer(_ pixelBuffer: CVPixelBuffer?) {
     if let captureInfo, let callback = captureInfo.pixelBufferCallback {
@@ -1347,8 +1409,12 @@ class AVCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate,
     var lastError: String?
     var sampleBufferDescription: CMFormatDescription?
     var lastAudioError: String?
-    var frameCallback: ((_ frame: AVCaptureVideoFrame?) -> Void)? = nil
+    //    var frameCallback: ((_ frame: AVCaptureVideoFrame?) -> Void)? = nil
+    var audioBufferCallback: ((_ magnitude: [Float]) -> Void)? = nil
     var pixelBufferCallback: ((_ frame: CVPixelBuffer?) -> Void)? = nil
+
+    var useAudio: Bool = false
+    var useVideo: Bool = false
   }
 
   public struct AVCaptureVideoFrame {

@@ -1,4 +1,6 @@
 import 'package:dive/dive.dart';
+import 'package:dive_core/dive_core.dart';
+import 'package:dive_widgets/dive_widgets.dart';
 import 'package:flutter/widgets.dart';
 
 import 'dive_ui.dart';
@@ -28,8 +30,8 @@ class DiveMeterPreview extends DivePreview {
 
     final child = SizedBox.expand(
         child: DiveAudioMeter(
-      volumeMeter: volumeMeter,
       vertical: meterVertical,
+      values: DiveAudioMeterValues(channelCount: 0),
     ));
 
     final rect = meterVertical ? vPos : hPos;

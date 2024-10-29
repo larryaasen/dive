@@ -5,10 +5,10 @@ import 'dart:ui';
 
 import 'package:dive_av/dive_av.dart';
 import 'package:flutter/material.dart';
-import 'package:uvc/uvc.dart';
+// import 'package:uvc/uvc.dart';
 // import 'package:uvc_flutter/uvc_flutter.dart';
 
-import 'camera_settings_section.dart';
+// import 'camera_settings_section.dart';
 
 class CameraControllerScreen extends StatefulWidget {
   const CameraControllerScreen({super.key});
@@ -20,14 +20,14 @@ class CameraControllerScreen extends StatefulWidget {
 class _MyAppState extends State<CameraControllerScreen>
     with WidgetsBindingObserver {
   final _diveAvPlugin = DiveAv();
-  var _inputTypes = <DiveAVInputType>[];
-  DiveAVInputType? _selectedInputType;
+  var _inputTypes = <DiveAVInput>[];
+  DiveAVInput? _selectedInputType;
   Map? _selectedSource;
   late final AppLifecycleListener _listener;
 
   // UVC
-  UvcLib? _uvc;
-  UvcControl? _camera;
+  // UvcLib? _uvc;
+  // UvcControl? _camera;
 
   bool _exiting = false;
 
@@ -45,7 +45,7 @@ class _MyAppState extends State<CameraControllerScreen>
         // ignore: avoid_print
         print('Exiting.');
         _closeSource();
-        _uvc?.dispose();
+        // _uvc?.dispose();
 
         return AppExitResponse.exit;
       },
@@ -115,11 +115,11 @@ class _MyAppState extends State<CameraControllerScreen>
         const Text('Camera'),
         const SizedBox(width: 16.0),
         Expanded(
-          child: DropdownButton<DiveAVInputType>(
+          child: DropdownButton<DiveAVInput>(
             isDense: true,
             value: _selectedInputType,
             items: items.toList(),
-            onChanged: (DiveAVInputType? value) {
+            onChanged: (DiveAVInput? value) {
               setState(() {
                 _closeSource();
                 _selectedInputType = value;
@@ -133,16 +133,17 @@ class _MyAppState extends State<CameraControllerScreen>
   }
 
   Widget _settings() {
-    return _camera == null
-        ? const SizedBox.shrink()
-        : CameraSettingsSection(camera: _camera!);
+    return /*_camera == null
+        ?*/
+        const SizedBox.shrink();
+    // : CameraSettingsSection(camera: _camera!);
   }
 
   void _closeSource() async {
     await _removeTexture();
 
-    _camera?.close();
-    _camera = null;
+    // _camera?.close();
+    // _camera = null;
   }
 
   Future<void> _setupSource() async {
@@ -156,9 +157,9 @@ class _MyAppState extends State<CameraControllerScreen>
     // ignore: avoid_print
     print('dive_av: created video source: $sourceId');
     if (sourceId != null) {
-      _camera = _uvc?.control(
-          vendorId: _selectedInputType!.vendorID,
-          productId: _selectedInputType!.productID);
+      // _camera = _uvc?.control(
+      //     vendorId: _selectedInputType!.vendorID,
+      //     productId: _selectedInputType!.productID);
       setState(() {
         _selectedSource = {
           'textureId': textureId,

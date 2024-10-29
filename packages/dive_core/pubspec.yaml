@@ -1,0 +1,15 @@
+name: dive_core
+description: The Dive core types.
+version: 1.0.0
+repository: https://github.com/larryaasen/dive
+
+environment:
+  sdk: ^3.5.0
+
+# Keep the dependencies to a minimum.
+dependencies:
+  equatable: ^2.0.5
+
+dev_dependencies:
+  lints: ^4.0.0
+  test: ^1.24.0

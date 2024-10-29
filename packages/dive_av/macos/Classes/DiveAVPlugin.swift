@@ -1,3 +1,4 @@
+import AVFoundation
 import Cocoa
 import FlutterMacOS
 
@@ -12,31 +13,17 @@ public class DiveAVPlugin: NSObject, FlutterPlugin {
 
     // static let AddSource = "addSource"
     // static let CreateImageSource = "createImageSource"
+    static let CreateAudioSource = "createAudioSource"
     static let CreateVideoSource = "createVideoSource"
     static let RemoveSource = "removeSource"
-    // static let CreateVideoMix = "createVideoMix"
-    // static let RemoveVideoMix = "removeVideoMix"
-    // static let ChangeFrameRate = "changeFrameRate"
-    // static let ChangeResolution = "changeResolution"
-    // static let CreateScene = "createScene"
-
-    // static let MediaPlayPause = "mediaPlayPause"
-    // static let MediaRestart = "mediaRestart"
-    // static let MediaStop = "mediaStop"
-    // static let MediaGetDuration = "mediaGetDuration"
-    // static let MediaGetTime = "mediaGetTime"
-    // static let MediaSetTime = "mediaSetTime"
-    // static let MediaGetState = "mediaGetState"
-
-    // static let GetSceneItemInfo = "getSceneItemInfo"
-    // static let SetSceneItemInfo = "setSceneItemInfo"
 
     // static let AddVolumeMeterCallback = "addVolumeMeterCallback"
   }
 
   static let _channelName = "dive_av.io/plugin"
 
-  let controller = AVController()
+  let callbacks: AVCallbacks
+  let controller: AVController
 
   static var textureRegistry: FlutterTextureRegistry?
 
@@ -45,9 +32,17 @@ public class DiveAVPlugin: NSObject, FlutterPlugin {
     textureRegistry = registrar.textures
 
     let channel = FlutterMethodChannel(name: _channelName, binaryMessenger: registrar.messenger)
-    let instance = DiveAVPlugin()
+    let instance = DiveAVPlugin(registrar: registrar)
     registrar.addMethodCallDelegate(instance, channel: channel)
+
     print("DiveAVPlugin registered.")
+  }
+
+  public init(registrar: FlutterPluginRegistrar) {
+    callbacks = AVCallbacks()
+    callbacks.register(registrar)
+
+    controller = AVController(callbacks: callbacks)
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -58,6 +53,8 @@ public class DiveAVPlugin: NSObject, FlutterPlugin {
       result(initializeTexture(arguments))
     case Method.DisposeTexture:
       result(disposeTexture(arguments))
+    case Method.CreateAudioSource:
+      result(createAudioSource(arguments))
     case Method.CreateVideoSource:
       result(createVideoSource(arguments))
     case Method.RemoveSource:
@@ -69,6 +66,23 @@ public class DiveAVPlugin: NSObject, FlutterPlugin {
     }
   }
 
+  /// Creates an audio source and returns the source ID.
+  private func createAudioSource(_ arguments: [String: Any]?) -> String? {
+    guard let args = arguments,
+      let deviceUniqueID = args["device_uique_id"] as! String?
+    else {
+      return nil
+    }
+
+    do {
+      let sourceId = try controller.createAudioSource(deviceUniqueID: deviceUniqueID)
+      return sourceId
+    } catch {
+      print(error)
+      return nil
+    }
+  }
+
   private func createVideoSource(_ arguments: [String: Any]?) -> String? {
     guard let args = arguments,
       let deviceUniqueID = args["device_uique_id"] as! String?
@@ -77,7 +91,11 @@ public class DiveAVPlugin: NSObject, FlutterPlugin {
     }
     let textureId = args["texture_id"] as? Int64
 
-    return controller.createVideoSource(deviceUniqueID: deviceUniqueID, textureId: textureId)
+    do {
+      return try controller.createVideoSource(deviceUniqueID: deviceUniqueID, textureId: textureId)
+    } catch {
+      return nil
+    }
   }
 
   private func removeSource(_ arguments: [String: Any]?) -> Bool {
@@ -100,7 +118,16 @@ public class DiveAVPlugin: NSObject, FlutterPlugin {
   }
 
   private func inputsFromType(_ arguments: [String: Any]?) -> [[String: String]] {
-    return controller.inputsFromType()
+    if let args = arguments {
+      if let typeId = args["typeId"] as? String {
+        guard
+          let mediaType = typeId == "video"
+            ? AVMediaType.video : typeId == "audio" ? AVMediaType.audio : nil
+        else { return [] }
+        return controller.inputsFromType(mediaType: mediaType, typeId: typeId)
+      }
+    }
+    return []
   }
 
   private func disposeTexture(_ arguments: [String: Any]?) -> Bool {

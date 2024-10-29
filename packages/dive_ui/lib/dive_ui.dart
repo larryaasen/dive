@@ -1,6 +1,5 @@
 library dive_ui;
 
-export 'dive_audio_meter.dart';
 export 'dive_camera_app_widget.dart';
 export 'dive_caster.dart';
 export 'dive_media_ui.dart';

@@ -1,7 +1,11 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-import 'dive_av_input_type.dart';
+import 'dive_av_input.dart';
 import 'dive_av_method_channel.dart';
+
+/// Signature of VolumeMeter callback.
+typedef DiveAvVolumeMeterCallback = void Function(String deviceUniqueID,
+    List<double> magnitude, List<double> peak, List<double> inputPeak);
 
 abstract class DiveAvPlatform extends PlatformInterface {
   /// Constructs a DiveAvPlatform.
@@ -24,6 +28,11 @@ abstract class DiveAvPlatform extends PlatformInterface {
     _instance = instance;
   }
 
+  Future<String?> createAudioSource(
+      String deviceUniqueID, DiveAvVolumeMeterCallback? volumeMeterCallback) {
+    throw UnimplementedError('createAudioSource has not been implemented.');
+  }
+
   Future<String?> createVideoSource(String deviceUniqueID, int? textureId) {
     throw UnimplementedError('createVideoSource has not been implemented.');
   }
@@ -40,7 +49,7 @@ abstract class DiveAvPlatform extends PlatformInterface {
     throw UnimplementedError('disposeTexture has not been implemented.');
   }
 
-  Future<List<DiveAVInputType>> inputsFromType(String typeId) {
+  Future<List<DiveAVInput>> inputsFromType(String typeId) {
     throw UnimplementedError('inputsFromType has not been implemented.');
   }
 }

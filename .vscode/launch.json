@@ -18,7 +18,7 @@
             "type": "dart"
         },
         {
-            "name": "Dive Caster",
+            "name": "Dive Caster (dive_ui)",
             "cwd": "packages/dive_ui/example",
             "request": "launch",
             "type": "dart",
@@ -36,6 +36,20 @@
             "cwd": "dive_core/example",
             "request": "launch",
             "type": "dart"
+        },
+        {
+            "name": "AV Audio example",
+            "cwd": "packages/dive_av/example",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_all_audio_sources.dart"
+        },
+        {
+            "name": "Caster example (dive_widgets)",
+            "cwd": "packages/dive_widgets/example",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart"
         }
     ]
 }

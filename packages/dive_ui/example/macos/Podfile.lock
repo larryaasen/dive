@@ -31,11 +31,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   dive_obslib: cab926fd057929181b2fe597e89013f06b683c74
-  file_selector_macos: 0f85c1108e2fd597b58246bc0b0c1cb483d7593b
+  file_selector_macos: 468fb6b81fac7c0e88d71317f3eec34c3b008ff9
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   obslib: cf704b7a162b010f89f3b0bd626c1f6a65a3daba
-  path_provider_foundation: eaf5b3e458fc0e5fbb9940fb09980e853fe058b8
+  path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
 
 PODFILE CHECKSUM: bed24f389d2416fafa809a339decdc6492dc6b88
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.15.2

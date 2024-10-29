@@ -3,11 +3,12 @@
 import 'dart:math';
 
 import 'package:dive/dive.dart';
+import 'package:dive_core/dive_core.dart';
+import 'package:dive_widgets/dive_widgets.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'dive_audio_meter.dart';
 import 'dive_position_dialog.dart';
 import 'dive_reference_panels.dart';
 import 'dive_side_sheet.dart';
@@ -63,7 +64,12 @@ class DiveUI {
 class DiveSourceCard extends StatefulWidget {
   /// Provides a [child], normally a [DivePreview], with a [DiveSourceMenu] gear
   /// button displayed on top.
-  DiveSourceCard({required this.child, this.item, required this.elements, this.referencePanels, this.panel});
+  DiveSourceCard(
+      {required this.child,
+      this.item,
+      required this.elements,
+      this.referencePanels,
+      this.panel});
 
   final Widget child;
 
@@ -141,11 +147,15 @@ class DivePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var texture = controller != null && controller!.isInitialized && controller!.textureId != null
+    var texture = controller != null &&
+            controller!.isInitialized &&
+            controller!.textureId != null
         ? Texture(textureId: controller!.textureId!)
         : Container(color: Colors.blue);
 
-    final widget = aspectRatio != null ? DiveAspectRatio(aspectRatio: aspectRatio!, child: texture) : texture;
+    final widget = aspectRatio != null
+        ? DiveAspectRatio(aspectRatio: aspectRatio!, child: texture)
+        : texture;
 
     return widget;
   }
@@ -170,7 +180,9 @@ class DiveOutputButton extends ConsumerWidget {
 
 class DiveStreamPlayButton extends ConsumerWidget {
   const DiveStreamPlayButton(
-      {Key? key, required DiveStreamingOutput streamingOutput, this.iconColor = Colors.white})
+      {Key? key,
+      required DiveStreamingOutput streamingOutput,
+      this.iconColor = Colors.white})
       : streamingOutput = streamingOutput,
         super(key: key);
 
@@ -185,7 +197,9 @@ class DiveStreamPlayButton extends ConsumerWidget {
       icon: state == DiveOutputStreamingActiveState.active
           ? Icon(DiveUI.iconSet.streamStopButton, color: iconColor)
           : Icon(DiveUI.iconSet.streamStartButton, color: iconColor),
-      tooltip: state == DiveOutputStreamingActiveState.active ? 'Stop streaming' : 'Start streaming',
+      tooltip: state == DiveOutputStreamingActiveState.active
+          ? 'Stop streaming'
+          : 'Start streaming',
       onPressed: () {
         if (state == DiveOutputStreamingActiveState.active) {
           streamingOutput.stop();
@@ -202,7 +216,8 @@ class DiveAspectRatio extends StatelessWidget {
   /// Creates a widget with a specific aspect ratio.
   ///
   /// The [aspectRatio] must be a finite number greater than zero.
-  const DiveAspectRatio({super.key, required this.aspectRatio, required this.child});
+  const DiveAspectRatio(
+      {super.key, required this.aspectRatio, required this.child});
 
   /// The aspect ratio to attempt to use.
   ///
@@ -259,7 +274,12 @@ class DiveGrid extends StatelessWidget {
 class DiveSourceMenu extends StatefulWidget {
   /// Provides a menu with a list of selectable video sources from [elements]. It also provides a button
   /// that when tapped displays the menu.
-  DiveSourceMenu({this.item, required this.elements, this.referencePanels, this.panel, this.onDisplayed});
+  DiveSourceMenu(
+      {this.item,
+      required this.elements,
+      this.referencePanels,
+      this.panel,
+      this.onDisplayed});
 
   final DiveSceneItem? item;
   final DiveCoreElements elements;
@@ -285,7 +305,8 @@ class _DiveSourceMenuState extends State<DiveSourceMenu> {
     DiveSideSheet.showSideSheet(
         context: context,
         rightSide: false,
-        builder: (BuildContext context) => DivePositionDialog(item: widget.item));
+        builder: (BuildContext context) =>
+            DivePositionDialog(item: widget.item));
   }
 
   void _onSelect() {
@@ -346,7 +367,8 @@ class _DiveSourceMenuState extends State<DiveSourceMenu> {
                       item['title'],
                       item['subMenu'],
                       onSelected: (item) {
-                        widget.referencePanels?.assignSource(item['source'] as DiveSource?, widget.panel);
+                        widget.referencePanels?.assignSource(
+                            item['source'] as DiveSource?, widget.panel);
                       },
                     )
                   : Text(item['title']);
@@ -421,7 +443,8 @@ class DiveSubMenu extends StatelessWidget {
                     Padding(
                         padding: EdgeInsets.only(left: 6.0),
                         child: Text(
-                          item['title'].toString().substring(0, min(14, item['title'].toString().length)),
+                          item['title'].toString().substring(
+                              0, min(14, item['title'].toString().length)),
                           softWrap: false,
                           overflow: TextOverflow.ellipsis,
                         )),
@@ -451,7 +474,9 @@ class DiveImagePickerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(icon: Icon(DiveUI.iconSet.imagePickerButton), onPressed: () => _buttonPressed(context));
+    return IconButton(
+        icon: Icon(DiveUI.iconSet.imagePickerButton),
+        onPressed: () => _buttonPressed(context));
   }
 
   void _buttonPressed(BuildContext context) async {
@@ -467,7 +492,8 @@ class DiveImagePickerButton extends StatelessWidget {
     ]);
     openFile(acceptedTypeGroups: [typeGroup]).then((file) {
       if (file == null) return;
-      DiveSystemLog.message('DiveImagePickerButton: file=${file.path}', group: 'dive_ui');
+      DiveSystemLog.message('DiveImagePickerButton: file=${file.path}',
+          group: 'dive_ui');
 
       // Remove the first image source, assuming it was added here earlier.
       if (elements.state.imageSources.isNotEmpty) {
@@ -497,7 +523,8 @@ class DiveVideoPickerButton extends StatelessWidget {
     final typeGroup = XTypeGroup(label: 'videos', extensions: ['mov', 'mp4']);
     openFile(acceptedTypeGroups: [typeGroup]).then((file) {
       if (file == null) return;
-      DiveSystemLog.message('DiveVideoPickerButton: file=${file.path}', group: 'dive_ui');
+      DiveSystemLog.message('DiveVideoPickerButton: file=${file.path}',
+          group: 'dive_ui');
 
       // Remove the first media source, assuming it was added here earlier.
       if (elements.state.mediaSources.isNotEmpty) {
@@ -541,10 +568,14 @@ class _DiveCameraListState extends State<DiveCameraList> {
           itemCount: widget.state.videoSources.length,
           itemBuilder: (context, index) {
             final content = widget.nameOnly
-                ? Text("Camera:\n${widget.state.videoSources.toList()[index].name}")
+                ? Text(
+                    "Camera:\n${widget.state.videoSources.toList()[index].name}")
                 : DiveAspectRatio(
                     aspectRatio: DiveCoreAspectRatio.HD.ratio,
-                    child: DivePreview(controller: widget.state.videoSources.toList()[index].controller));
+                    child: DivePreview(
+                        controller: widget.state.videoSources
+                            .toList()[index]
+                            .controller));
             return Card(
                 child: ListTile(
               tileColor: Colors.grey.shade900,
@@ -595,23 +626,29 @@ class _DiveAudioListState extends State<DiveAudioList> {
         child: ListView.builder(
           itemCount: widget.state.audioSources.length,
           itemBuilder: (context, index) {
-            final vol = widget.state.audioSources.toList()[index].volumeMeter ?? null;
+            final vol =
+                widget.state.audioSources.toList()[index].volumeMeter ?? null;
             final meter = Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(widget.state.audioSources.toList()[index].input?.id ?? ''),
                 if (vol != null)
                   Container(
-                      height: 20,
-                      width: double.infinity,
-                      padding: EdgeInsets.only(top: 5, bottom: 5),
-                      child: DiveAudioMeter(vertical: false, volumeMeter: vol))
+                    height: 20,
+                    width: double.infinity,
+                    padding: EdgeInsets.only(top: 5, bottom: 5),
+                    child: DiveAudioMeter(
+                      vertical: false,
+                      values: DiveAudioMeterValues(channelCount: 0),
+                    ),
+                  )
               ],
             );
 
             return Card(
                 child: ListTile(
-              title: Text(widget.state.audioSources.toList()[index].input?.name ?? ''),
+              title: Text(
+                  widget.state.audioSources.toList()[index].input?.name ?? ''),
               subtitle: meter,
               selected: index == _selectedIndex,
               onTap: () {

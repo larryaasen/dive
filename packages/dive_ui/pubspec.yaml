@@ -12,8 +12,14 @@ dependencies:
   flutter:
     sdk: flutter
 
+  dive_core:
+    path: ../dive_core
+
   dive:
     path: ../dive
+
+  dive_widgets:
+    path: ../dive_widgets
 
   # From bloclibrary.dev: easy to implement the BLoC Design Pattern
   bloc: ^8.1.1

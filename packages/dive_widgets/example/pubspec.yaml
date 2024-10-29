@@ -1,0 +1,30 @@
+name: dive_widgets_example
+description: "An example Flutter app that uses the Dive widgets."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.3
+  flutter: ^3.24.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  dive_av:
+    path: ../../dive_av
+
+  dive_core:
+    path: ../../dive_core
+
+  dive_widgets:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true

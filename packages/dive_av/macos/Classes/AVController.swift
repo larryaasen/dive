@@ -5,14 +5,33 @@ import FlutterMacOS
 
 @available(macOS 13.0, *)
 class AVController {
+  var callbacks: AVCallbacks?
+
+  init(callbacks: AVCallbacks) {
+    self.callbacks = callbacks
+  }
 
   // TODO: maybe rename objectId to sourceId???
 
   private var avObjects: [String: AVObject] = [:]
 
-  public func createVideoSource(deviceUniqueID: String, textureId: Int64? = nil) -> String {
-    let captureInfo = AVCapture.AVCaptureInfo(uniqueID: deviceUniqueID)
-    let avCapture = AVCapture(captureInfo: captureInfo)
+  /// Creates an audio source and returns the source ID.
+  public func createAudioSource(deviceUniqueID: String) throws -> String {
+    let captureInfo = AVCapture.AVCaptureInfo(uniqueID: deviceUniqueID, useAudio: true)
+    let avCapture = try AVCapture(captureInfo: captureInfo)
+    let sourceId = avCapture.objectId
+    avObjects[sourceId] = avCapture
+
+    avCapture.captureInfo?.audioBufferCallback = { [self] magnitude in
+      processAudioBuffer(sourceId, magnitude, avCapture)
+    }
+
+    return sourceId
+  }
+
+  public func createVideoSource(deviceUniqueID: String, textureId: Int64? = nil) throws -> String {
+    let captureInfo = AVCapture.AVCaptureInfo(uniqueID: deviceUniqueID, useVideo: true)
+    let avCapture = try AVCapture(captureInfo: captureInfo)
     avObjects[avCapture.objectId] = avCapture
 
     if let textureId, textureId != 0 {
@@ -27,16 +46,6 @@ class AVController {
       print("createVideoSource: unknown textureId=$textureId")
     }
     return avCapture.objectId
-
-    //    if avCapture.createSession() {
-    //      if avCapture.switchCaptureDevice("0x1421100015320e05") {
-    //        if avCapture.startCaptureSession() {
-    //
-    //        }
-    //      }
-    //    }
-
-    //    return bridge_create_video_source(source_uuid, name, uid)
   }
 
   func convertPixelBuffer(
@@ -48,6 +57,12 @@ class AVController {
     } else {
       provider.onCapturePixelBuffer(nil)
     }
+  }
+
+  func processAudioBuffer(_ sourceId: String, _ magnitude: [Float], _ avCapture: AVCapture) {
+    guard let callbacks else { return }
+    callbacks.volMeterCallback(
+      sourceId: sourceId, magnitude: magnitude, peak: [], inputPeak: [])
   }
 
   public func removeSource(objectId: String) -> Bool {
@@ -80,21 +95,17 @@ class AVController {
     return false
   }
 
-  public func inputsFromType(mediaType: AVMediaType = .video) -> [[String: String]] {
+  public func inputsFromType(mediaType: AVMediaType, typeId: String) -> [[String: String]] {
     var inputs: [[String: String]] = []
-    let devices = AVInputs.inputsFromVideoType()
+    let devices =
+      mediaType == .video
+      ? AVInputs.inputsFromVideoType() : mediaType == .audio ? AVInputs.inputsFromAudioType() : []
     for device in devices {
       if device.hasMediaType(mediaType) {
         print("dive_av: \(device.localizedName): \(device.uniqueID)")
         inputs.append([
-          "uniqueID": device.uniqueID, "localizedName": device.localizedName, "typeId": "video",
+          "uniqueID": device.uniqueID, "localizedName": device.localizedName, "typeId": typeId,
         ])
-
-        //        for format in device.formats {
-        //          for range in format.videoSupportedFrameRateRanges {
-        //            print("device \(device.localizedName): format \(format), range \(range)")
-        //          }
-        //        }
       }
     }
 

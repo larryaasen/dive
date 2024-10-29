@@ -2,16 +2,17 @@
 
 // ignore_for_file: avoid_print
 
-/// An input type.
-class DiveAVInputType {
-  /// Creates an input type.
-  DiveAVInputType(
-      {this.localizedName,
-      required this.uniqueID,
-      required this.typeId,
-      required this.locationID,
-      required this.vendorID,
-      required this.productID});
+/// An input from an input type, such as video or audio.
+class DiveAVInput {
+  /// Creates an input.
+  DiveAVInput({
+    this.localizedName,
+    required this.uniqueID,
+    required this.typeId,
+    required this.locationID,
+    required this.vendorID,
+    required this.productID,
+  });
 
   /// The input name, such as `FaceTime HD Camera (Built-in)`.
   final String? localizedName;
@@ -20,19 +21,20 @@ class DiveAVInputType {
   final String uniqueID;
 
   /// The input type id, such as `video` or `audio`.
+  /// TODO: make typeId into an enum.
   final String typeId;
 
   final int locationID;
   final int vendorID;
   final int productID;
 
-  static DiveAVInputType? fromMap(dynamic map) {
+  static DiveAVInput? fromMap(dynamic map) {
     final uniqueID = map['uniqueID'] as String?;
     final localizedName = map['localizedName'] as String?;
     final typeId = map['typeId'] as String?;
     if (uniqueID != null && localizedName != null && typeId != null) {
       final (locationID, vendorID, productID) = parseUniqueID(uniqueID);
-      return DiveAVInputType(
+      return DiveAVInput(
         uniqueID: uniqueID,
         typeId: typeId,
         localizedName: localizedName,
@@ -91,11 +93,11 @@ class DiveAVInputType {
     LLLLLLLL is the hexadecimal string representing the USB device's location ID
     VVVV is the hexadecimal string representing the USB device's manufacturer ID
     PPPP is the hexadecimal string representing the USB device's product ID.
-    e.g. 0x144000002E1A4C01  
+    e.g. 0x144000002E1A4C01
   */
 
   @override
   String toString() {
-    return "DiveAVInputType name: $uniqueID, id: $localizedName, typeId: $typeId";
+    return "DiveAVInput id: $uniqueID, name: $localizedName, typeId: $typeId";
   }
 }

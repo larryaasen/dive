@@ -42,7 +42,7 @@ that references the obslib CocoaPods library.
 ## dive_obslib
 
 The [dive_obslib](https://pub.dev/packages/dive_obslib) package is a Flutter plugin that provides low level access
-to obslib. This package 
+to obslib. This package
 contains platform-specific implementations with native extensions for macOS, and
 other platforms in the future.
 
@@ -77,10 +77,10 @@ For app level settings there is the `DiveAppSettings` class.
 
 It will create a YAML file like this one:
 ```
-elements: 
-  recording: 
+elements:
+  recording:
     folder: ''
-  streaming: 
+  streaming:
     outputType: ''
     server.name: 'Auto (Recommended)'
     server.url: 'auto'
@@ -89,7 +89,7 @@ elements:
     serviceKey: 'live_276488556_DiEfrH0a7dbE8gwZbNmlmjhjGIz1ia'
     serviceUrl: 'auto'
 
-window: 
+window:
 ```
 
 Here is an example of using `DiveAppSettings`:
@@ -106,3 +106,10 @@ Here is an example of using `DiveAppSettings`:
   final streamingOutput = DiveStreamingOutput();
   streamingOutput.updateFromMap(elementsNode.settings['streaming'] as Map<String, dynamic>? ?? {});
 ```
+
+## Audio signal path
+
+microphone > DiveAv Audio Source > stream<DiveAudioMeterState> >
+    convert<DiveAudioMeterState,DiveAudioMeterInput> > DiveAudioMeterInput > DiveAudioMeter
+
+media file > Dive Media Source >

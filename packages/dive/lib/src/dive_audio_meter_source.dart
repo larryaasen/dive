@@ -1,3 +1,5 @@
+// Copyright (c) 2024 Larry Aasen. All rights reserved.
+
 import 'dart:async';
 import 'dart:core';
 
@@ -10,7 +12,22 @@ import 'dive_sources.dart';
 
 /// The state model for an audio meter.
 class DiveAudioMeterState extends Equatable {
-  /// channel count
+  const DiveAudioMeterState({
+    this.channelCount = 0,
+    this.inputPeak,
+    this.inputPeakHold,
+    this.magnitude,
+    this.magnitudeAttacked,
+    this.peak,
+    this.peakDecayed,
+    this.peakHold,
+    this.inputpPeakHoldLastUpdateTime,
+    this.peakHoldLastUpdateTime,
+    this.lastUpdateTime,
+    this.noSignal = false,
+  });
+
+  /// channel count: there can be many audio channels in an audio source, such as left and right.
   final int channelCount;
 
   /// input peak - original
@@ -46,21 +63,6 @@ class DiveAudioMeterState extends Equatable {
   /// no signal
   final bool noSignal;
 
-  const DiveAudioMeterState({
-    this.channelCount = 0,
-    this.inputPeak,
-    this.inputPeakHold,
-    this.magnitude,
-    this.magnitudeAttacked,
-    this.peak,
-    this.peakDecayed,
-    this.peakHold,
-    this.inputpPeakHoldLastUpdateTime,
-    this.peakHoldLastUpdateTime,
-    this.lastUpdateTime,
-    this.noSignal = false,
-  });
-
   DiveAudioMeterState copyWith({
     channelCount,
     inputPeak,
@@ -84,8 +86,10 @@ class DiveAudioMeterState extends Equatable {
       peak: peak ?? this.peak,
       peakDecayed: peakDecayed ?? this.peakDecayed,
       peakHold: peakHold ?? this.peakHold,
-      inputpPeakHoldLastUpdateTime: inputpPeakHoldLastUpdateTime ?? this.inputpPeakHoldLastUpdateTime,
-      peakHoldLastUpdateTime: peakHoldLastUpdateTime ?? this.peakHoldLastUpdateTime,
+      inputpPeakHoldLastUpdateTime:
+          inputpPeakHoldLastUpdateTime ?? this.inputpPeakHoldLastUpdateTime,
+      peakHoldLastUpdateTime:
+          peakHoldLastUpdateTime ?? this.peakHoldLastUpdateTime,
       lastUpdateTime: lastUpdateTime ?? this.lastUpdateTime,
       noSignal: noSignal ?? this.noSignal,
     );
@@ -125,7 +129,8 @@ class DiveAudioMeterSource {
   Stopwatch? _stopwatch;
 
   /// A Riverpod [StateProvider] that provides [DiveAudioMeterState] state updates.
-  final provider = StateProvider<DiveAudioMeterState>((ref) => const DiveAudioMeterState());
+  final provider =
+      StateProvider<DiveAudioMeterState>((ref) => const DiveAudioMeterState());
 
   void dispose() {
     destroy(pointer);
@@ -138,7 +143,8 @@ class DiveAudioMeterSource {
   }
 
   /// Creat an audio meter for a [source].
-  static Future<DiveAudioMeterSource?> create({required DiveSource source}) async {
+  static Future<DiveAudioMeterSource?> create(
+      {required DiveSource source}) async {
     final sourcePointer = source.pointer;
     if (sourcePointer == null || sourcePointer.isNull) return null;
 
@@ -158,15 +164,16 @@ class DiveAudioMeterSource {
   }
 
   Future<void> initialize() async {
-    int channelCount = await obslib.addVolumeMeterCallback(pointer.address, _onMeterUpdated);
+    int channelCount =
+        await obslib.addVolumeMeterCallback(pointer.address, _onMeterUpdated);
 
     DiveCore.container.read(provider.notifier).state =
         _clearDerived(DiveAudioMeterState(channelCount: channelCount));
   }
 
   /// Called when the volume meter is updated.
-  void _onMeterUpdated(
-      int volumeMeterPointer, List<double> magnitude, List<double> peak, List<double> inputPeak) {
+  void _onMeterUpdated(int volumeMeterPointer, List<double> magnitude,
+      List<double> peak, List<double> inputPeak) {
     assert(magnitude.length == peak.length && peak.length == inputPeak.length);
     if (pointer.toInt() != volumeMeterPointer) return;
 
@@ -197,7 +204,8 @@ class DiveAudioMeterSource {
     final magnitudeAttacked = currentState.magnitudeAttacked;
     final peakDecayed = currentState.peakDecayed;
     final peakHold = currentState.peakHold;
-    final inputPeakHoldLastUpdateTime = currentState.inputpPeakHoldLastUpdateTime;
+    final inputPeakHoldLastUpdateTime =
+        currentState.inputpPeakHoldLastUpdateTime;
     final peakHoldLastUpdateTime = currentState.peakHoldLastUpdateTime;
 
     // For each channel
@@ -207,10 +215,11 @@ class DiveAudioMeterSource {
       } else if (magnitudeAttacked![channel] == initialLevel) {
         magnitudeAttacked[channel] = magnitude[channel];
       } else {
-        final value = (magnitude[channel] - magnitudeAttacked[channel]) * attack;
+        final value =
+            (magnitude[channel] - magnitudeAttacked[channel]) * attack;
         try {
-          magnitudeAttacked[channel] =
-              clamp(magnitudeAttacked[channel] + value, DiveBaseObslib.audioMinLevel, 0.0);
+          magnitudeAttacked[channel] = clamp(magnitudeAttacked[channel] + value,
+              DiveBaseObslib.audioMinLevel, 0.0);
         } catch (e) {
           print("DiveAudioMeterSource._onMeterUpdated: exception 1: $e\n"
               "range ${DiveBaseObslib.audioMinLevel}, 0.0\n"
@@ -224,7 +233,8 @@ class DiveAudioMeterSource {
         inputPeakHold[channel] = inputPeak[channel];
         inputPeakHoldLastUpdateTime![channel] = now;
       } else {
-        final timeSinceLast = now.difference(inputPeakHoldLastUpdateTime![channel]);
+        final timeSinceLast =
+            now.difference(inputPeakHoldLastUpdateTime![channel]);
         if (timeSinceLast.inSeconds >= inputPeakHoldDuration) {
           inputPeakHold[channel] = inputPeak[channel];
           inputPeakHoldLastUpdateTime[channel] = now;
@@ -237,7 +247,8 @@ class DiveAudioMeterSource {
         peakDecayed[channel] = peak[channel];
       } else {
         try {
-          peakDecayed[channel] = clamp(peakDecayed[channel] - peakDecay, peak[channel], 0.0);
+          peakDecayed[channel] =
+              clamp(peakDecayed[channel] - peakDecay, peak[channel], 0.0);
         } catch (e) {
           print("DiveAudioMeterSource._onMeterUpdated: exception 2: $e\n"
               "range ${peak[channel]}, 0.0\n"
@@ -306,13 +317,15 @@ class DiveAudioMeterSource {
     DiveCore.container.read(provider.notifier).state = newState;
   }
 
-  DiveAudioMeterState _clearDerived(DiveAudioMeterState state) => state.copyWith(
+  DiveAudioMeterState _clearDerived(DiveAudioMeterState state) =>
+      state.copyWith(
         noSignal: true,
         inputPeakHold: List.filled(state.channelCount, initialLevel),
         magnitudeAttacked: List.filled(state.channelCount, initialLevel),
         peakDecayed: List.filled(state.channelCount, initialLevel),
         peakHold: List.filled(state.channelCount, initialLevel),
-        inputpPeakHoldLastUpdateTime: List.filled(state.channelCount, DateTime.now()),
+        inputpPeakHoldLastUpdateTime:
+            List.filled(state.channelCount, DateTime.now()),
         peakHoldLastUpdateTime: List.filled(state.channelCount, DateTime.now()),
       );
 
