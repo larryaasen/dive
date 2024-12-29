@@ -70,8 +70,6 @@ class DiveCasterBody extends StatelessWidget {
 class DiveCasterHeader extends StatelessWidget {
   const DiveCasterHeader({super.key});
 
-  // final DiveCoreElements elements;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -85,111 +83,10 @@ class DiveCasterHeader extends StatelessWidget {
               icon: const Icon(Icons.menu),
               color: DiveCasterTheme.textColor),
           const Spacer(),
-          // const DiveHeaderStreamButton(),
-          // const SizedBox(width: 2.0),
-          // const DiveHeaderRecordButton(),
-          // const SizedBox(width: 2.0),
-          // DiveHeaderButton(
-          //     title: 'GRAB',
-          //     onPressed: () {
-          //       // final sources = elements.state.videoSources;
-          //       // for (var source in sources) {
-          //       //   source.saveFrame();
-          //       // }
-          //     }),
-          // const SizedBox(width: 2.0),
           DiveHeaderClock(),
-          // SizedBox(width: 2.0),
-          // Container(width: 40.0, color: Colors.grey.shade800),
         ],
       ),
     );
-  }
-}
-
-class DiveHeaderRecordButton extends StatelessWidget {
-  const DiveHeaderRecordButton({super.key});
-
-  // final DiveCoreElements elements;
-
-  @override
-  Widget build(BuildContext context) {
-    // return Consumer(
-    //   builder: (context, ref, child) {
-    var recording = false;
-    String duration = '';
-    // final elementsState = ref.watch(elements.provider);
-    // if (elementsState.recordingOutput != null) {
-    //   final recordingState =
-    //       ref.watch(elementsState.recordingOutput!.provider);
-    //   recording = recordingState.activeState ==
-    //       DiveOutputRecordingActiveState.active;
-    //   duration = recordingState.duration != null
-    //       ? DiveFormat.formatDuration(recordingState.duration!)
-    //       : '';
-    // }
-    return DiveHeaderButton(
-      title: recording ? 'RECORDING' : 'RECORD',
-      subTitle: recording ? '$duration' : null,
-      useRedBackground: recording,
-      onPressed: () async {
-        // final elementsState = elements.state;
-        // if (elementsState.recordingOutput != null) {
-        //   final recordingState =
-        //       ref.read(elementsState.recordingOutput!.provider);
-        //   final recording = recordingState.activeState ==
-        //       DiveOutputRecordingActiveState.active;
-        //   if (recording) {
-        //     // Stop recording.
-        //     if (elementsState.recordingOutput!.stop()) {
-        //       ScaffoldMessenger.maybeOf(context)!.showSnackBar(
-        //           const SnackBar(content: Text("Record stopped.")));
-        //     }
-        //   } else {
-        //     // Start recording.
-        //     if (elementsState.recordingOutput!
-        //         .start(filename: 'dive1', appendTimeStamp: true)) {
-        //       ScaffoldMessenger.maybeOf(context)!.showSnackBar(
-        //           const SnackBar(content: Text("Record started.")));
-        //     }
-        //   }
-        // }
-      },
-      onGearPressed: () => _onGearPressed(context),
-    );
-    //   },
-    // );
-  }
-
-  void _onGearPressed(BuildContext context) {
-    // final recordingOutput = elements.state.recordingOutput;
-    // assert(recordingOutput != null);
-    // if (recordingOutput == null) return;
-    // showDialog(
-    //     context: context,
-    //     barrierDismissible: true,
-    //     builder: (BuildContext context) {
-    //       return SingleChildScrollView(
-    //         child: DiveRecordSettingsScreen(
-    //           saveFolder: recordingOutput.state.folder,
-    //           useDialog: true,
-    //           onApplyCallback: (String directory) =>
-    //               _onDialogApply(context, directory),
-    //         ),
-    //       );
-    //     });
-  }
-
-  void _onDialogApply(BuildContext context, String directory) {
-    // final recordingOutput = elements.state.recordingOutput;
-    // if (recordingOutput != null) {
-    //   recordingOutput.stop();
-    //   recordingOutput.state = recordingOutput.state.copyWith(folder: directory);
-
-    //   // Save the updated settings.
-    //   elements.saveAppSettings();
-    // }
-    Navigator.of(context).pop();
   }
 }
 
@@ -516,7 +413,7 @@ class _DiveHeaderButtonState extends State<DiveHeaderButton> {
 }
 
 class SimulatedAudio extends StatefulWidget {
-  SimulatedAudio({super.key});
+  const SimulatedAudio({super.key});
 
   @override
   State<SimulatedAudio> createState() => _SimulatedAudioState();
@@ -528,7 +425,7 @@ class _SimulatedAudioState extends State<SimulatedAudio> {
   final _streamController = DiveAudioMeterStream();
 
   late Timer _timer;
-  DiveAudioMeterValues _input = const DiveAudioMeterValues();
+  DiveAudioMeterValues _values = const DiveAudioMeterValues();
   final _simulator = AudioSimulator();
   double _peak = DiveAudioMeterConst.minLevel;
 
@@ -543,7 +440,8 @@ class _SimulatedAudioState extends State<SimulatedAudio> {
         for (final input in inputs) {
           print("input: $input");
 
-          if (input.localizedName != "Vocaster One USB") continue;
+          if (input.localizedName != "MacBook Pro Microphone") continue;
+          // if (input.localizedName != "Vocaster One USB") continue;
 
           // Create an audio source.
           final sourceId = await _diveAvPlugin.createAudioSource(
@@ -590,8 +488,7 @@ class _SimulatedAudioState extends State<SimulatedAudio> {
           ], // const [-9.778120040893555],
           noSignal: false,
         );
-        setState(() => _input = state);
-        print('$magnitude $_peak');
+        setState(() => _values = state);
       },
       onDone: () => print('Simulation stopped.'),
     );
@@ -615,24 +512,25 @@ class _SimulatedAudioState extends State<SimulatedAudio> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          SizedBox(
-            width: 300,
-            child: RepaintBoundary(
-              child: DiveAudioMeter(
-                values: DiveAudioMeterValues.noSignal(2),
-                vertical: false,
-              ),
-            ),
-          ),
+          // SizedBox(
+          //   width: 300,
+          //   child: RepaintBoundary(
+          //     child: DiveAudioMeter(
+          //       values: _values,
+          //       vertical: false,
+          //     ),
+          //   ),
+          // ),
           const SizedBox(height: 32.0),
           SizedBox(
             width: 300,
             child: StreamBuilder(
                 stream: _streamController.stream,
                 builder: (context, snapshot) {
+                  final values = snapshot.data ?? const DiveAudioMeterValues();
                   return RepaintBoundary(
                     child: DiveAudioMeter(
-                      values: _input,
+                      values: values,
                       vertical: false,
                     ),
                   );

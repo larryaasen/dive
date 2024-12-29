@@ -35,8 +35,9 @@ public class AVCallbacks: NSObject {
     // To comply with channel's main thread requirement, you need to jump from a background thread to
     // the main thread to execute a channel method.
     DispatchQueue.main.async {
+      let methodName = "volmeter"
       callbacks.invokeMethod(
-        "volmeter", arguments: arguments,
+        methodName, arguments: arguments,
         result: { (r: Any?) -> Void in
           // this will be called with r = "some string" (or FlutterMethodNotImplemented)
         })

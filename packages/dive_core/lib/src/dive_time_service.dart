@@ -2,17 +2,12 @@
 
 import 'dart:async';
 
-import 'package:equatable/equatable.dart';
-
 /// The state that is output in the stream by [DiveTimeService].
-class DiveTimeState extends Equatable {
+class DiveTimeState {
   const DiveTimeState(this.now, this.nowFormatted);
 
   final DateTime now;
   final String nowFormatted;
-
-  @override
-  List<Object?> get props => [now, nowFormatted];
 }
 
 /// A wall clock time service that outputs a stream.

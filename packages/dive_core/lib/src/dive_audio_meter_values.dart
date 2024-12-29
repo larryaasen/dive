@@ -15,9 +15,9 @@ class DiveAudioMeterValues extends Equatable {
   /// Creates the input values for an audio meter.
   const DiveAudioMeterValues({
     this.channelCount = 0,
-    this.magnitude,
-    this.peak,
-    this.peakHold,
+    this.magnitude = const [],
+    this.peak = const [],
+    this.peakHold = const [],
     this.noSignal = false,
   });
 
@@ -26,14 +26,14 @@ class DiveAudioMeterValues extends Equatable {
   final int channelCount;
 
   /// The magnitude of the audio signal. It will be displayed as a thin black line.
-  final List<double>? magnitude;
+  final List<double> magnitude;
 
   /// The peak.
-  final List<double>? peak;
+  final List<double> peak;
 
   /// The peak and hold.
   /// If you do not want to use this value, set it to [DiveAudioMeterConst.minLevel].
-  final List<double>? peakHold;
+  final List<double> peakHold;
 
   /// no signal
   final bool noSignal;

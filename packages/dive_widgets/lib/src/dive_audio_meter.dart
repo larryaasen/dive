@@ -110,6 +110,17 @@ class _DiveAudioMeterPainter extends CustomPainter {
     for (var channelIndex = 0;
         channelIndex < input.channelCount;
         channelIndex++) {
+      // Get the data values from the input.
+      final magnitude = channelIndex < input.magnitude.length
+          ? input.magnitude[channelIndex]
+          : DiveAudioMeterConst.minLevel;
+      final peak = channelIndex < input.peak.length
+          ? input.peak[channelIndex]
+          : DiveAudioMeterConst.minLevel;
+      final peakHold = channelIndex < input.peakHold.length
+          ? input.peakHold[channelIndex]
+          : DiveAudioMeterConst.minLevel;
+
       if (vertical) {
         // Vertical
         int x = channelIndex * (thickness + gap);
@@ -121,9 +132,9 @@ class _DiveAudioMeterPainter extends CustomPainter {
             y: y,
             width: thickness,
             height: size.height.round() + 1,
-            magnitude: input.magnitude![channelIndex],
-            peak: input.peak![channelIndex],
-            peakHold: input.peakHold![channelIndex],
+            magnitude: magnitude,
+            peak: peak,
+            peakHold: peakHold,
             noSignal: input.noSignal,
           );
         } catch (e, s) {
@@ -143,9 +154,9 @@ class _DiveAudioMeterPainter extends CustomPainter {
             y: y,
             width: width,
             height: height,
-            magnitude: input.magnitude![channelIndex],
-            peak: input.peak![channelIndex],
-            peakHold: input.peakHold![channelIndex],
+            magnitude: magnitude,
+            peak: peak,
+            peakHold: peakHold,
             noSignal: input.noSignal,
           );
         } catch (e, s) {
@@ -436,19 +447,27 @@ class _DiveAudioMeterPainter extends CustomPainter {
 }
 
 class DiveAudioMeterStream {
-  late StreamController<double> _valuesController;
+  late StreamController<DiveAudioMeterValues> _valuesController;
 
   DiveAudioMeterStream() {
-    _valuesController = StreamController<double>(onCancel: stop);
+    _valuesController = StreamController<DiveAudioMeterValues>(onCancel: stop);
   }
 
-  Stream<double> get stream => _valuesController.stream;
+  Stream<DiveAudioMeterValues> get stream => _valuesController.stream;
 
   void audioMeterCallback(String deviceUniqueID, List<double> magnitude,
       List<double> peak, List<double> inputPeak) {
-    print('magnitude: $magnitude, peak: $peak, inputPeak: $inputPeak');
+    // print('magnitude: $magnitude, peak: $peak, inputPeak: $inputPeak');
 
-    _valuesController.add(magnitude[0]);
+    final values = DiveAudioMeterValues(
+        channelCount: magnitude.length,
+        magnitude: magnitude,
+        peak: peak,
+        peakHold: inputPeak,
+        noSignal: false);
+
+    // Send the values to the stream.
+    _valuesController.add(values);
   }
 
   // Stops the audio simulation
