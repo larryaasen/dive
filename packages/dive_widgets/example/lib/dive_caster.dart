@@ -116,7 +116,7 @@ class DiveHeaderStreamButton extends StatelessWidget {
     return DiveHeaderButton(
       title: streaming ? 'STREAMING' : 'STREAM',
       subTitle: streaming
-          ? '$duration'
+          ? duration
           : failed
               ? 'failure'
               : null,
@@ -238,7 +238,7 @@ class DiveCasterContentArea extends StatelessWidget {
   }
 
   Widget _content() {
-    return SimulatedAudio();
+    return const SimulatedAudio();
   }
 }
 

@@ -1,3 +1,4 @@
+/*
 import AVFoundation  // For AVCaptureSession and audio handling
 import Accelerate  // For vDSP functions
 import CoreMedia  // For CMSampleBuffer
@@ -81,3 +82,4 @@ if let audioDevice = AVCaptureDevice.default(for: .audio) {
     print("Error setting up audio capture: \(error)")
   }
 }
+*/

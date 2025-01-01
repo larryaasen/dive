@@ -20,6 +20,11 @@ dependencies:
   dive_widgets:
     path: ../
 
+  equatable: ^2.0.7
+
+  tide:
+    path: /Users/larry/Projects/tide/packages/tide
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

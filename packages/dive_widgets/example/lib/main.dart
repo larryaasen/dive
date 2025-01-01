@@ -1,18 +1,13 @@
-// ignore_for_file: avoid_print
+import 'package:flutter/widgets.dart';
 
-import 'dart:async';
-
-import 'package:dive_core/dive_core.dart';
-import 'package:dive_widgets/dive_widgets.dart';
-import 'package:flutter/material.dart';
-
-import 'audio_simulator.dart';
-import 'dive_caster.dart';
+import 'dive_audio_devices.dart';
+// import 'dive_caster.dart';
 
 void main() {
-  // runApp(const MyApp());
-  runApp(const DiveCasterApp());
+  runApp(DiveAudioDevicesApp());
 }
+
+/*
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -129,3 +124,4 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+*/
